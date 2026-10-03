@@ -93,6 +93,14 @@ see v1.0.1 below) are documented here.
   its result keeps Deep Clean's honesty: Moved to Quarantine is not
   Freed. It shares the remembered scan with Deep Clean, so a clean in one
   settles the rows in the other.
+- **"Prune has freed 12.4 GB since 3 Mar 2026."** A quiet lifetime total
+  under that card, kept by the backend in a small `stats.json` beside
+  settings. It counts only space that is really back: Delete now, Delete
+  permanently after an uninstall, Shred, and a Quarantine batch once it is
+  deleted for good (by hand, Empty Quarantine, or the retention window and
+  size cap). A move into Quarantine or the Recycle Bin counts nothing, so
+  nothing is counted twice, and the line says so. A damaged file reads as
+  zero instead of failing a clean.
 
 ### Changed
 

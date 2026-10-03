@@ -13,6 +13,7 @@ import { useJunkMeasure } from '../hooks/useJunkMeasure.js';
 import SpaceQuestion from './SpaceQuestion.jsx';
 import LargestPrograms from './LargestPrograms.jsx';
 import CleanRecommendedCard from './CleanRecommendedCard.jsx';
+import FreedTotal from './FreedTotal.jsx';
 import Page from './Page.jsx';
 
 /** Says something only when there is something to say.
@@ -221,7 +222,9 @@ function Chevron({ open }) {
   );
 }
 
-export default function Dashboard({ programs, programsMeasured = false, onNavigate = () => {}, onOpenHistory }) {
+/** `active` is whether this screen is the one on show: screens stay mounted once
+ * visited, so it is how the Dashboard knows to read fresh totals on coming back. */
+export default function Dashboard({ programs, programsMeasured = false, onNavigate = () => {}, onOpenHistory, active = true }) {
   const { t } = useLanguage();
 
   /* Programs left behind by a failed uninstall: an entry whose uninstaller
@@ -328,7 +331,10 @@ export default function Dashboard({ programs, programsMeasured = false, onNaviga
 
       {/* One click to clean what Deep Clean marks recommended -- after a
           confirmation that names the total and the destination. */}
-      <CleanRecommendedCard onNavigate={onNavigate} />
+      <CleanRecommendedCard onNavigate={onNavigate}>
+        {/* Quiet, under the card it follows from: what Prune has freed so far. */}
+        <FreedTotal active={active} />
+      </CleanRecommendedCard>
 
       {/* The quiet row. Three facts that are worth a glance and rarely worth
           a click, side by side under hairlines rather than in cards. Every

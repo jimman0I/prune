@@ -20,6 +20,11 @@ export default {
         confirmDelete: (a) => `Delete ${a} now? This can't be undone.`,
         progress: (a, b) => `Cleaning… ${a} of ${b}`,
         done: "Done"
+      },
+      stats: {
+        freed: (a, b) => `Prune has freed ${a} since ${b}.`,
+        freedNoDate: (a) => `Prune has freed ${a}.`,
+        note: "Files moved to Quarantine count once you empty it."
       }
     }
   },
@@ -38,6 +43,11 @@ export default {
         confirmDelete: (a) => `Verwyder ${a} nou? Dit kan nie ongedaan gemaak word nie.`,
         progress: (a, b) => `Maak skoon… ${a} van ${b}`,
         done: "Klaar"
+      },
+      stats: {
+        freed: (a, b) => `Prune het sedert ${b} ${a} vrygemaak.`,
+        freedNoDate: (a) => `Prune het ${a} vrygemaak.`,
+        note: "Lêers wat na Karantyn geskuif is, tel eers sodra jy dit leegmaak."
       }
     }
   },
@@ -56,6 +66,11 @@ export default {
         confirmDelete: (a) => `هل تريد حذف ${a} الآن؟ لا يمكن التراجع عن ذلك.`,
         progress: (a, b) => `جارٍ التنظيف… ${a} من ${b}`,
         done: "تم"
+      },
+      stats: {
+        freed: (a, b) => `حرّر Prune ما مقداره ${a} منذ ${b}.`,
+        freedNoDate: (a) => `حرّر Prune ما مقداره ${a}.`,
+        note: "لا تُحتسب الملفات المنقولة إلى الحجر الصحي إلا بعد إفراغه."
       }
     }
   },
@@ -74,6 +89,11 @@ export default {
         confirmDelete: (a) => `Vols eliminar ${a} ara? Això no es pot desfer.`,
         progress: (a, b) => `Netejant… ${a} de ${b}`,
         done: "Fet"
+      },
+      stats: {
+        freed: (a, b) => `Prune ha alliberat ${a} des del ${b}.`,
+        freedNoDate: (a) => `Prune ha alliberat ${a}.`,
+        note: "Els fitxers moguts a la Quarantena només es compten quan la buides."
       }
     }
   },
@@ -92,6 +112,11 @@ export default {
         confirmDelete: (a) => `Smazat ${a} hned? Nelze to vrátit zpět.`,
         progress: (a, b) => `Čištění… ${a} z ${b}`,
         done: "Hotovo"
+      },
+      stats: {
+        freed: (a, b) => `Prune od ${b} uvolnil ${a}.`,
+        freedNoDate: (a) => `Prune uvolnil ${a}.`,
+        note: "Soubory přesunuté do karantény se započítají, až karanténu vyprázdníte."
       }
     }
   },
@@ -110,6 +135,11 @@ export default {
         confirmDelete: (a) => `Dileu ${a} nawr? Ni ellir dadwneud hyn.`,
         progress: (a, b) => `Yn glanhau… ${a} o ${b}`,
         done: "Wedi gorffen"
+      },
+      stats: {
+        freed: (a, b) => `Mae Prune wedi rhyddhau ${a} ers ${b}.`,
+        freedNoDate: (a) => `Mae Prune wedi rhyddhau ${a}.`,
+        note: "Mae ffeiliau a symudir i'r Cwarantin yn cyfrif unwaith y byddwch yn ei wacáu."
       }
     }
   },
@@ -128,6 +158,11 @@ export default {
         confirmDelete: (a) => `Slet ${a} nu? Det kan ikke fortrydes.`,
         progress: (a, b) => `Renser… ${a} af ${b}`,
         done: "Færdig"
+      },
+      stats: {
+        freed: (a, b) => `Prune har frigjort ${a} siden ${b}.`,
+        freedNoDate: (a) => `Prune har frigjort ${a}.`,
+        note: "Filer, der er flyttet til karantæne, tæller først, når du tømmer den."
       }
     }
   },
@@ -146,6 +181,11 @@ export default {
         confirmDelete: (a) => `${a} sofort löschen? Das lässt sich nicht rückgängig machen.`,
         progress: (a, b) => `Bereinigung läuft… ${a} von ${b}`,
         done: "Fertig"
+      },
+      stats: {
+        freed: (a, b) => `Prune hat seit ${b} ${a} freigegeben.`,
+        freedNoDate: (a) => `Prune hat ${a} freigegeben.`,
+        note: "In die Quarantäne verschobene Dateien zählen erst, wenn du sie leerst."
       }
     }
   },
@@ -164,6 +204,11 @@ export default {
         confirmDelete: (a) => `Διαγραφή ${a} τώρα; Η ενέργεια δεν αναιρείται.`,
         progress: (a, b) => `Καθαρισμός… ${a} από ${b}`,
         done: "Τέλος"
+      },
+      stats: {
+        freed: (a, b) => `Το Prune έχει ελευθερώσει ${a} από τις ${b}.`,
+        freedNoDate: (a) => `Το Prune έχει ελευθερώσει ${a}.`,
+        note: "Τα αρχεία που μετακινούνται στην Καραντίνα προσμετρώνται μόλις την αδειάσετε."
       }
     }
   },
@@ -182,6 +227,11 @@ export default {
         confirmDelete: (a) => `¿Eliminar ${a} ahora? No se puede deshacer.`,
         progress: (a, b) => `Limpiando… ${a} de ${b}`,
         done: "Listo"
+      },
+      stats: {
+        freed: (a, b) => `Prune ha liberado ${a} desde el ${b}.`,
+        freedNoDate: (a) => `Prune ha liberado ${a}.`,
+        note: "Los archivos movidos a Cuarentena cuentan cuando la vacías."
       }
     }
   },
@@ -200,6 +250,11 @@ export default {
         confirmDelete: (a) => `Kustutada ${a} kohe? Seda ei saa tagasi võtta.`,
         progress: (a, b) => `Puhastamine… ${a} / ${b}`,
         done: "Valmis"
+      },
+      stats: {
+        freed: (a, b) => `Prune on alates ${b} vabastanud ${a}.`,
+        freedNoDate: (a) => `Prune on vabastanud ${a}.`,
+        note: "Karantiini teisaldatud failid lähevad arvesse alles siis, kui karantiini tühjendad."
       }
     }
   },
@@ -218,6 +273,11 @@ export default {
         confirmDelete: (a) => `Poistetaanko ${a} nyt? Tätä ei voi peruuttaa.`,
         progress: (a, b) => `Puhdistetaan… ${a} / ${b}`,
         done: "Valmis"
+      },
+      stats: {
+        freed: (a, b) => `Prune on vapauttanut ${a} päivästä ${b} lähtien.`,
+        freedNoDate: (a) => `Prune on vapauttanut ${a}.`,
+        note: "Karanteeniin siirretyt tiedostot lasketaan vasta, kun tyhjennät karanteenin."
       }
     }
   },
@@ -236,6 +296,11 @@ export default {
         confirmDelete: (a) => `Supprimer ${a} maintenant ? C'est irréversible.`,
         progress: (a, b) => `Nettoyage… ${a} sur ${b}`,
         done: "Terminé"
+      },
+      stats: {
+        freed: (a, b) => `Prune a libéré ${a} depuis le ${b}.`,
+        freedNoDate: (a) => `Prune a libéré ${a}.`,
+        note: "Les fichiers déplacés vers la Quarantaine ne comptent qu'une fois celle-ci vidée."
       }
     }
   },
@@ -254,6 +319,11 @@ export default {
         confirmDelete: (a) => `למחוק ${a} עכשיו? אי אפשר לבטל את הפעולה.`,
         progress: (a, b) => `מנקה… ${a} מתוך ${b}`,
         done: "סיום"
+      },
+      stats: {
+        freed: (a, b) => `Prune שחרר ${a} מאז ${b}.`,
+        freedNoDate: (a) => `Prune שחרר ${a}.`,
+        note: "קבצים שהועברו להסגר נספרים רק לאחר שתרוקן אותו."
       }
     }
   },
@@ -272,6 +342,11 @@ export default {
         confirmDelete: (a) => `Törlöd most a(z) ${a} mennyiséget? Ez nem vonható vissza.`,
         progress: (a, b) => `Tisztítás… ${a} / ${b}`,
         done: "Kész"
+      },
+      stats: {
+        freed: (a, b) => `A Prune ${b} óta ${a} szabadított fel.`,
+        freedNoDate: (a) => `A Prune ${a} szabadított fel.`,
+        note: "A karanténba helyezett fájlok csak a karantén kiürítése után számítanak bele."
       }
     }
   },
@@ -290,6 +365,11 @@ export default {
         confirmDelete: (a) => `Hapus ${a} sekarang? Tindakan ini tidak bisa dibatalkan.`,
         progress: (a, b) => `Membersihkan… ${a} dari ${b}`,
         done: "Selesai"
+      },
+      stats: {
+        freed: (a, b) => `Prune telah membebaskan ${a} sejak ${b}.`,
+        freedNoDate: (a) => `Prune telah membebaskan ${a}.`,
+        note: "File yang dipindahkan ke Karantina baru dihitung setelah Anda mengosongkannya."
       }
     }
   },
@@ -308,6 +388,11 @@ export default {
         confirmDelete: (a) => `Eyða ${a} núna? Ekki er hægt að afturkalla þetta.`,
         progress: (a, b) => `Hreinsa… ${a} af ${b}`,
         done: "Lokið"
+      },
+      stats: {
+        freed: (a, b) => `Prune hefur losað ${a} frá ${b}.`,
+        freedNoDate: (a) => `Prune hefur losað ${a}.`,
+        note: "Skrár sem fluttar eru í sóttkví teljast með þegar þú tæmir hana."
       }
     }
   },
@@ -326,6 +411,11 @@ export default {
         confirmDelete: (a) => `Eliminare subito ${a}? Non si può annullare.`,
         progress: (a, b) => `Pulizia in corso… ${a} di ${b}`,
         done: "Fatto"
+      },
+      stats: {
+        freed: (a, b) => `Prune ha liberato ${a} dal ${b}.`,
+        freedNoDate: (a) => `Prune ha liberato ${a}.`,
+        note: "I file spostati in Quarantena vengono conteggiati quando la svuoti."
       }
     }
   },
@@ -344,6 +434,11 @@ export default {
         confirmDelete: (a) => `${a} を今すぐ削除しますか? 元に戻せません。`,
         progress: (a, b) => `クリーン中… ${a} / ${b}`,
         done: "完了"
+      },
+      stats: {
+        freed: (a, b) => `Prune は ${b} 以降、${a} を解放しました。`,
+        freedNoDate: (a) => `Prune は ${a} を解放しました。`,
+        note: "隔離に移動したファイルは、隔離を空にした時点で加算されます。"
       }
     }
   },
@@ -362,6 +457,11 @@ export default {
         confirmDelete: (a) => `${a}을(를) 지금 삭제하시겠습니까? 되돌릴 수 없습니다.`,
         progress: (a, b) => `정리 중… ${a}/${b}`,
         done: "완료"
+      },
+      stats: {
+        freed: (a, b) => `Prune은 ${b} 이후 ${a}을(를) 확보했습니다.`,
+        freedNoDate: (a) => `Prune은 ${a}을(를) 확보했습니다.`,
+        note: "격리로 이동한 파일은 격리를 비운 뒤에 합산됩니다."
       }
     }
   },
@@ -380,6 +480,11 @@ export default {
         confirmDelete: (a) => `Ištrinti ${a} dabar? To atšaukti nebus galima.`,
         progress: (a, b) => `Valoma… ${a} iš ${b}`,
         done: "Atlikta"
+      },
+      stats: {
+        freed: (a, b) => `Nuo ${b} Prune atlaisvino ${a}.`,
+        freedNoDate: (a) => `Prune atlaisvino ${a}.`,
+        note: "Į karantiną perkelti failai įskaičiuojami, kai ištuštinate karantiną."
       }
     }
   },
@@ -398,6 +503,11 @@ export default {
         confirmDelete: (a) => `Padam ${a} sekarang? Ini tidak boleh dibuat asal.`,
         progress: (a, b) => `Membersihkan… ${a} daripada ${b}`,
         done: "Selesai"
+      },
+      stats: {
+        freed: (a, b) => `Prune telah membebaskan ${a} sejak ${b}.`,
+        freedNoDate: (a) => `Prune telah membebaskan ${a}.`,
+        note: "Fail yang dialihkan ke Kuarantin hanya dikira apabila anda mengosongkannya."
       }
     }
   },
@@ -416,6 +526,11 @@ export default {
         confirmDelete: (a) => `Slette ${a} nå? Dette kan ikke angres.`,
         progress: (a, b) => `Renser… ${a} av ${b}`,
         done: "Ferdig"
+      },
+      stats: {
+        freed: (a, b) => `Prune har frigjort ${a} siden ${b}.`,
+        freedNoDate: (a) => `Prune har frigjort ${a}.`,
+        note: "Filer som er flyttet til karantene, teller først når du tømmer den."
       }
     }
   },
@@ -434,6 +549,11 @@ export default {
         confirmDelete: (a) => `${a} nu verwijderen? Dit kan niet ongedaan worden gemaakt.`,
         progress: (a, b) => `Opschonen… ${a} van ${b}`,
         done: "Klaar"
+      },
+      stats: {
+        freed: (a, b) => `Prune heeft sinds ${b} ${a} vrijgemaakt.`,
+        freedNoDate: (a) => `Prune heeft ${a} vrijgemaakt.`,
+        note: "Bestanden die naar Quarantaine zijn verplaatst, tellen pas mee zodra je die leegmaakt."
       }
     }
   },
@@ -452,6 +572,11 @@ export default {
         confirmDelete: (a) => `Usunąć ${a} teraz? Nie można tego cofnąć.`,
         progress: (a, b) => `Czyszczenie… ${a} z ${b}`,
         done: "Gotowe"
+      },
+      stats: {
+        freed: (a, b) => `Prune zwolnił ${a} od ${b}.`,
+        freedNoDate: (a) => `Prune zwolnił ${a}.`,
+        note: "Pliki przeniesione do kwarantanny są wliczane dopiero po jej opróżnieniu."
       }
     }
   },
@@ -470,6 +595,11 @@ export default {
         confirmDelete: (a) => `${a} همدا اوس ړنګ شي؟ دا بیرته نشي راتلی.`,
         progress: (a, b) => `پاکول کیږي… ${a} له ${b} څخه`,
         done: "بشپړ شو"
+      },
+      stats: {
+        freed: (a, b) => `Prune له ${b} راهیسې ${a} خلاص کړل.`,
+        freedNoDate: (a) => `Prune ${a} خلاص کړل.`,
+        note: "هغه فایلونه چې قرنطین ته لیږدول کیږي، یوازې هغه وخت شمیرل کیږي چې قرنطین خالي کړئ."
       }
     }
   },
@@ -488,6 +618,11 @@ export default {
         confirmDelete: (a) => `Excluir ${a} agora? Isso não pode ser desfeito.`,
         progress: (a, b) => `Limpando… ${a} de ${b}`,
         done: "Concluído"
+      },
+      stats: {
+        freed: (a, b) => `O Prune liberou ${a} desde ${b}.`,
+        freedNoDate: (a) => `O Prune liberou ${a}.`,
+        note: "Os arquivos movidos para a Quarentena só contam quando você a esvazia."
       }
     }
   },
@@ -506,6 +641,11 @@ export default {
         confirmDelete: (a) => `Eliminar ${a} agora? Isto não pode ser desfeito.`,
         progress: (a, b) => `A limpar… ${a} de ${b}`,
         done: "Concluído"
+      },
+      stats: {
+        freed: (a, b) => `O Prune libertou ${a} desde ${b}.`,
+        freedNoDate: (a) => `O Prune libertou ${a}.`,
+        note: "Os ficheiros movidos para a Quarentena só contam quando a esvaziar."
       }
     }
   },
@@ -524,6 +664,11 @@ export default {
         confirmDelete: (a) => `Ștergi ${a} acum? Nu se poate anula.`,
         progress: (a, b) => `Se curăță… ${a} din ${b}`,
         done: "Gata"
+      },
+      stats: {
+        freed: (a, b) => `Prune a eliberat ${a} din ${b}.`,
+        freedNoDate: (a) => `Prune a eliberat ${a}.`,
+        note: "Fișierele mutate în Carantină se numără abia după ce golești Carantina."
       }
     }
   },
@@ -542,6 +687,11 @@ export default {
         confirmDelete: (a) => `Удалить ${a} сейчас? Отменить это нельзя.`,
         progress: (a, b) => `Очистка… ${a} из ${b}`,
         done: "Готово"
+      },
+      stats: {
+        freed: (a, b) => `Prune освободил ${a} с ${b}.`,
+        freedNoDate: (a) => `Prune освободил ${a}.`,
+        note: "Файлы, перемещённые в карантин, учитываются, когда вы очистите карантин."
       }
     }
   },
@@ -560,6 +710,11 @@ export default {
         confirmDelete: (a) => `Odstrániť ${a} hneď? Nemožno to vrátiť.`,
         progress: (a, b) => `Čistenie… ${a} z ${b}`,
         done: "Hotovo"
+      },
+      stats: {
+        freed: (a, b) => `Prune od ${b} uvoľnil ${a}.`,
+        freedNoDate: (a) => `Prune uvoľnil ${a}.`,
+        note: "Súbory presunuté do karantény sa započítajú, až keď karanténu vyprázdnite."
       }
     }
   },
@@ -578,6 +733,11 @@ export default {
         confirmDelete: (a) => `Të fshihet ${a} tani? Kjo nuk mund të zhbëhet.`,
         progress: (a, b) => `Po pastrohet… ${a} nga ${b}`,
         done: "U krye"
+      },
+      stats: {
+        freed: (a, b) => `Prune ka liruar ${a} që nga ${b}.`,
+        freedNoDate: (a) => `Prune ka liruar ${a}.`,
+        note: "Skedarët e zhvendosur në Karantinë llogariten sapo ta zbrazni."
       }
     }
   },
@@ -596,6 +756,11 @@ export default {
         confirmDelete: (a) => `Обрисати ${a} одмах? Ово не може да се опозове.`,
         progress: (a, b) => `Чишћење… ${a} од ${b}`,
         done: "Готово"
+      },
+      stats: {
+        freed: (a, b) => `Prune је ослободио ${a} од ${b}.`,
+        freedNoDate: (a) => `Prune је ослободио ${a}.`,
+        note: "Датотеке премештене у карантин рачунају се када испразните карантин."
       }
     }
   },
@@ -614,6 +779,11 @@ export default {
         confirmDelete: (a) => `Radera ${a} nu? Det kan inte ångras.`,
         progress: (a, b) => `Rensar… ${a} av ${b}`,
         done: "Klart"
+      },
+      stats: {
+        freed: (a, b) => `Prune har frigjort ${a} sedan ${b}.`,
+        freedNoDate: (a) => `Prune har frigjort ${a}.`,
+        note: "Filer som flyttats till karantän räknas först när du tömmer den."
       }
     }
   },
@@ -632,6 +802,11 @@ export default {
         confirmDelete: (a) => `ลบ ${a} ทันทีหรือไม่ ย้อนกลับไม่ได้`,
         progress: (a, b) => `กำลังล้าง… ${a} จาก ${b}`,
         done: "เสร็จสิ้น"
+      },
+      stats: {
+        freed: (a, b) => `Prune เพิ่มพื้นที่ว่างแล้ว ${a} ตั้งแต่ ${b}`,
+        freedNoDate: (a) => `Prune เพิ่มพื้นที่ว่างแล้ว ${a}`,
+        note: "ไฟล์ที่ย้ายไปยังกักกันจะนับเมื่อคุณล้างกักกัน"
       }
     }
   },
@@ -650,6 +825,11 @@ export default {
         confirmDelete: (a) => `${a} şimdi silinsin mi? Bu işlem geri alınamaz.`,
         progress: (a, b) => `Temizleniyor… ${a} / ${b}`,
         done: "Bitti"
+      },
+      stats: {
+        freed: (a, b) => `Prune ${b} tarihinden bu yana ${a} boşalttı.`,
+        freedNoDate: (a) => `Prune ${a} boşalttı.`,
+        note: "Karantinaya taşınan dosyalar, Karantinayı boşalttığınızda sayılır."
       }
     }
   },
@@ -668,6 +848,11 @@ export default {
         confirmDelete: (a) => `Видалити ${a} зараз? Скасувати це не можна.`,
         progress: (a, b) => `Очищення… ${a} із ${b}`,
         done: "Готово"
+      },
+      stats: {
+        freed: (a, b) => `Prune звільнив ${a} з ${b}.`,
+        freedNoDate: (a) => `Prune звільнив ${a}.`,
+        note: "Файли, переміщені в карантин, враховуються, коли ви очистите карантин."
       }
     }
   },
@@ -686,6 +871,11 @@ export default {
         confirmDelete: (a) => `Xóa ${a} ngay bây giờ? Không thể hoàn tác.`,
         progress: (a, b) => `Đang dọn dẹp… ${a} trên ${b}`,
         done: "Xong"
+      },
+      stats: {
+        freed: (a, b) => `Prune đã giải phóng ${a} kể từ ${b}.`,
+        freedNoDate: (a) => `Prune đã giải phóng ${a}.`,
+        note: "Các tệp được chuyển vào khu cách ly chỉ được tính khi bạn làm trống khu cách ly."
       }
     }
   },
@@ -704,6 +894,11 @@ export default {
         confirmDelete: (a) => `要立即删除 ${a} 吗？此操作无法撤销。`,
         progress: (a, b) => `正在清理… ${a}/${b}`,
         done: "完成"
+      },
+      stats: {
+        freed: (a, b) => `自 ${b} 起，Prune 已释放 ${a}。`,
+        freedNoDate: (a) => `Prune 已释放 ${a}。`,
+        note: "移至隔离区的文件在清空隔离区后才会计入。"
       }
     }
   },
@@ -722,6 +917,11 @@ export default {
         confirmDelete: (a) => `要立即刪除 ${a} 嗎？此動作無法復原。`,
         progress: (a, b) => `正在清理… ${a}/${b}`,
         done: "完成"
+      },
+      stats: {
+        freed: (a, b) => `自 ${b} 起，Prune 已釋放 ${a}。`,
+        freedNoDate: (a) => `Prune 已釋放 ${a}。`,
+        note: "移至隔離區的檔案在清空隔離區後才會計入。"
       }
     }
   }

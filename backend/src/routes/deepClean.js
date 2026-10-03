@@ -8,6 +8,7 @@ import { listInstalledPrograms } from '../services/programs.js';
 import { estimateWipe, wipeInProgress } from '../lib/cleanerActions/wipeFreeSpace.js';
 import { listFixedDrives, profileDrive } from '../services/localDrives.js';
 import { normalizePasses } from '../lib/shredFile.js';
+import { recordFreed } from '../services/stats.js';
 
 const router = Router();
 
@@ -212,11 +213,15 @@ router.get('/execute/stream', async (req, res) => {
   const controller = new AbortController();
   req.on('close', () => controller.abort());
 
+  // Added up from the rules as they report, not from the summary at the end:
+  // a clean that fails or is stopped partway has still deleted what the
+  // earlier rules say it did, and that is counted below whichever way this ends.
+  let freedBytes = 0;
   try {
     sendEvent(res, 'start', { total: ids.length });
     const summary = await executeRulesProgressively(
       ids,
-      (item) => sendEvent(res, 'rule', item),
+      (item) => { freedBytes += Number(item?.freedBytes) || 0; sendEvent(res, 'rule', item); },
       {
         signal: controller.signal,
         onProgress: (progress) => { if (!controller.signal.aborted) sendEvent(res, 'progress', progress); },
@@ -227,6 +232,11 @@ router.get('/execute/stream', async (req, res) => {
   } catch (err) {
     if (!controller.signal.aborted) sendEvent(res, 'error', { message: err.message });
   } finally {
+    // Before the response ends, so the Dashboard's total is already right when
+    // the client sees the stream close and asks for it. `freedBytes` is what was
+    // deleted or compacted; what only moved to Quarantine is `movedBytes`, which
+    // is counted later, when that Quarantine is emptied.
+    await recordFreed(freedBytes);
     res.end();
   }
 });
@@ -238,7 +248,9 @@ router.post('/execute', async (req, res) => {
     return;
   }
   try {
-    res.json(await executeRules(ruleIds, cleanGuardsFrom(await getSettings())));
+    const result = await executeRules(ruleIds, cleanGuardsFrom(await getSettings()));
+    await recordFreed(result?.freedBytes);
+    res.json(result);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -259,6 +271,9 @@ router.post('/execute-elevated', async (req, res) => {
   }
   try {
     const result = await executeRulesElevated(ruleIds, cleanGuardsFrom(await getSettings()));
+    // The elevated helper is a separate process that does not know where this
+    // app keeps its data, so what it freed is counted here, from its result.
+    if (result?.ok) await recordFreed(result.data?.freedBytes);
     res.json(result);
   } catch (err) {
     res.status(500).json({ error: err.message });

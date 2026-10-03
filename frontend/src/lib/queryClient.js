@@ -63,6 +63,7 @@ export const keys = {
   runAsAdmin: ['settings', 'runAsAdmin'],
   updateCheck: ['update-check'],
   automation: ['automation'],
+  stats: ['stats'],
   diskSpace: ['disk', 'space'],
   drives: ['disk', 'drives'],
   mftStatus: ['disk', 'mftStatus'],

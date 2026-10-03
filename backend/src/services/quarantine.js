@@ -5,6 +5,7 @@ import { execFile } from 'node:child_process';
 import { promisify } from 'node:util';
 import { isProtectedKey } from './registryLeftovers.js';
 import { schedulePendingDelete } from './pendingReboot.js';
+import { recordFreed } from './stats.js';
 
 const execFileAsync = promisify(execFile);
 
@@ -368,6 +369,11 @@ export async function deletePermanently(batchDir) {
     // freedBytes just can't be reported accurately for it.
   }
   await rm(batchDir, { recursive: true, force: true });
+  // The moment the space really comes back, and the only one: the move into
+  // Quarantine freed nothing and recorded nothing. Empty Quarantine, the
+  // retention window and the size cap all end here, so each batch is counted
+  // once however it goes. See services/stats.js.
+  await recordFreed(freedBytes);
   return { deleted: true, freedBytes };
 }
 
