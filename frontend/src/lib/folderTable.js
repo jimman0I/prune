@@ -44,6 +44,7 @@ export function folderTableRows(node) {
         : (measuresAllocation && child.type === 'file' ? 0 : null),
       // A name for a file whose bytes were charged to another name.
       hardLink: child.hardLink === true,
+      aggregated: child.aggregated === true,
       // Of the parent, not of the drive -- the question this column
       // answers is "how much of what I am looking at is this".
       percentOfParent: total > 0 ? ((child.size || 0) / total) * 100 : 0,
@@ -73,6 +74,9 @@ function countSubtree(node) {
   // could not look -- "Documents and Settings" being the everyday case.
   if (node?.readable === false) return { items: null, files: null, folders: null };
 
+  // A block of folded files is as many items as it folded.
+  if (node?.aggregated && typeof node.count === 'number') return { items: node.count, files: node.count, folders: 0 };
+
   // A file is one item and no folder, and has nothing beneath it.
   if (node?.type === 'file') return { items: 1, files: 1, folders: 0 };
 
@@ -95,7 +99,8 @@ function countSubtree(node) {
     // Counted as a folder (it is one), but nothing is claimed about what
     // is inside it.
     if (current.readable === false) { folders += 1; continue; }
-    if (current.type === 'file') files += 1;
+    if (current.aggregated && typeof current.count === 'number') files += current.count;
+    else if (current.type === 'file') files += 1;
     else {
       folders += 1;
       if (Array.isArray(current.children)) stack.push(...current.children);

@@ -43,7 +43,7 @@ export function drivesFromScan(result, requested = []) {
     const letter = String(entry?.driveLetter ?? '').toUpperCase();
     if (!letter) continue;
     if (entry.tree) scanned.push({ letter, tree: entry.tree, stats: entry.stats ?? {} });
-    else failures.push({ letter, error: entry.error ?? 'The drive could not be read.' });
+    else failures.push({ letter, error: entry.error ?? 'The drive could not be read.', ...(entry.code ? { code: entry.code } : {}) });
   }
 
   for (const asked of requested.map((l) => String(l).toUpperCase())) {

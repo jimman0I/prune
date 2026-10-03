@@ -159,3 +159,90 @@ describe('the drive chooser remembers the way you last scanned', () => {
     expect(scanDriveFast).not.toHaveBeenCalled();
   });
 });
+
+describe('the restart button only appears once Prune is known not to be elevated', () => {
+  it('is not offered while the status is still being read', async () => {
+    fetchMftStatus.mockReturnValue(new Promise(() => {}));
+    bridge({ canRelaunch: async () => true, relaunch: vi.fn() });
+    mount();
+    await screen.findByRole('button', { name: 'Fast scan (admin)' });
+    await new Promise((r) => setTimeout(r, 30));
+    expect(screen.queryByRole('button', { name: 'Restart Prune as administrator' })).toBeNull();
+  });
+
+  it('is not offered when the status could not be read', async () => {
+    fetchMftStatus.mockRejectedValue(new Error('down'));
+    bridge({ canRelaunch: async () => true, relaunch: vi.fn() });
+    mount();
+    await screen.findByText(/Needs administrator approval/);
+    await new Promise((r) => setTimeout(r, 30));
+    expect(screen.queryByRole('button', { name: 'Restart Prune as administrator' })).toBeNull();
+  });
+});
+
+describe('a fast scan of a drive with a great many files', () => {
+  const driveWithFolds = (stats) => ({
+    drives: [{
+      driveLetter: 'C',
+      stats: { recordsRead: 5_000_000, mftComplete: true, totalBytes: 1000, allocatedBytes: 1000, ...stats },
+      tree: {
+        name: 'C:', size: 1000, type: 'directory',
+        children: [{ name: 'Games', size: 1000, type: 'directory', children: [{ name: 'big.pak', size: 600, type: 'file' }], folded: { count: 4000, size: 400 } }]
+      }
+    }]
+  });
+
+  it('says in plain words that the drive was too large, never "Invalid string length", and keeps Walk folders available', async () => {
+    scanDriveFast.mockRejectedValue(new RangeError('Invalid string length'));
+    const user = userEvent.setup();
+    mount();
+    await user.click(await screen.findByRole('button', { name: 'Fast scan (admin)' }));
+    expect(await screen.findByText(/more files than Prune could hold in one scan/)).toBeTruthy();
+    expect(screen.queryByText(/Invalid string length/)).toBeNull();
+    expect((await screen.findByRole('button', { name: 'Walk folders instead' })).disabled).toBe(false);
+  });
+
+  it('words the backend\'s own code the same way', async () => {
+    scanDriveFast.mockRejectedValue(Object.assign(new Error('x'), { code: 'scan_too_large' }));
+    const user = userEvent.setup();
+    mount();
+    await user.click(await screen.findByRole('button', { name: 'Fast scan (admin)' }));
+    expect(await screen.findByText(/more files than Prune could hold in one scan/)).toBeTruthy();
+  });
+
+  it('words a drive that was too large beside the others in the same job', async () => {
+    scanDriveFast.mockResolvedValue({ drives: [{ driveLetter: 'C', error: 'raw', code: 'scan_too_large' }] });
+    const user = userEvent.setup();
+    mount();
+    await user.click(await screen.findByRole('button', { name: 'Fast scan (admin)' }));
+    expect(await screen.findByText(/Could not scan C:: The drive has more files than Prune could hold in one scan/)).toBeTruthy();
+  });
+
+  it('shows a folded scan with its smaller files as one counted row, and says what was folded', async () => {
+    scanDriveFast.mockResolvedValue(driveWithFolds({ foldedFiles: 4000, keepFilesPerFolder: 200, sizeFloorBytes: 0 }));
+    const user = userEvent.setup();
+    mount();
+    await user.click(await screen.findByRole('button', { name: 'Fast scan (admin)' }));
+    const note = await screen.findByTestId('folded-note');
+    expect(note.textContent).toMatch(/200 largest files/);
+    expect(note.textContent).toMatch(/4,000 files/);
+  });
+
+  it('names the size floor when the drive was so large that even the per-folder cap was not enough', async () => {
+    scanDriveFast.mockResolvedValue(driveWithFolds({ foldedFiles: 4000, keepFilesPerFolder: 200, sizeFloorBytes: 3_000_000 }));
+    const user = userEvent.setup();
+    mount();
+    await user.click(await screen.findByRole('button', { name: 'Fast scan (admin)' }));
+    const note = await screen.findByTestId('folded-note');
+    expect(note.textContent).toMatch(/only files of 2\.9 MB or larger/);
+  });
+
+  it('adds no note for a drive that nothing was folded from', async () => {
+    scanDriveFast.mockResolvedValue(driveWithFolds({ foldedFiles: 0 }));
+    const user = userEvent.setup();
+    mount();
+    await user.click(await screen.findByRole('button', { name: 'Fast scan (admin)' }));
+    await screen.findByTestId('scan-totals');
+    expect(screen.queryByTestId('folded-note')).toBeNull();
+  });
+});

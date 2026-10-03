@@ -30,6 +30,21 @@ export function extensionBreakdown(tree) {
   // bytes are inside tree.size but they are not a folder anyone skipped.
   let unscannedBytes = 0;
 
+  // Files a scan folded out of the tree, by type: [bytes, count] per extension.
+  const addFolded = (exts) => {
+    for (const [ext, [bytes, count]] of Object.entries(exts ?? {})) {
+      const key = ext === '' ? NO_EXTENSION : ext;
+      const row = totals.get(key) || { extension: key, sizeBytes: 0, fileCount: 0 };
+      row.sizeBytes += bytes;
+      row.fileCount += count;
+      totals.set(key, row);
+      totalBytes += bytes;
+      totalFiles += count;
+    }
+  };
+  // At a drive root every file folded anywhere is accounted for in one place.
+  addFolded(tree?.foldedExts);
+
   const stack = [tree];
   while (stack.length > 0) {
     const node = stack.pop();
@@ -48,9 +63,16 @@ export function extensionBreakdown(tree) {
       continue;
     }
 
-    // A reopened saved scan stands in for the files it did not keep with one
-    // block; it is a count of unnamed files, not a file with a type.
-    if (node.aggregated) continue;
+    // A block standing in for files that were not kept. A fast scan of a big
+    // drive says what they were, by type (`exts`: the files folded out of one
+    // folder); a reopened saved scan only counts them, and that is a count of
+    // unnamed files, not a file with a type.
+    if (node.aggregated) {
+      // The drive root already totals every folded file, so counting a folder's
+      // block as well would count it twice.
+      if (!tree?.foldedExts) addFolded(node.exts);
+      continue;
+    }
 
     // Directories carry the sum of their children, so counting them too
     // would report every byte at least twice. Only leaves are files.

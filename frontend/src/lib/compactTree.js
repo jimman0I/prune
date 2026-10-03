@@ -35,6 +35,15 @@ export function compactTree(tree, { topFiles = DEFAULT_TOP_FILES, rootName } = {
     let directBytes = 0;
     const children = [];
     for (const child of node.children) {
+      // A block of files a fast scan folded: they are files of this folder, kept
+      // only as a count and their bytes, which is exactly what the archive
+      // stores for the files it does not list.
+      if (child.aggregated && typeof child.count === 'number') {
+        files += child.count;
+        directFiles += child.count;
+        directBytes += child.size || 0;
+        continue;
+      }
       if (!isMeasured(child) || child.aggregated || child.free) continue;
       if (child.type === 'directory') {
         const compact = walk(child);

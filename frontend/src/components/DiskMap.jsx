@@ -14,6 +14,7 @@ import ContextMenu from './ContextMenu.jsx';
 import ModalOverlay from './ModalOverlay.jsx';
 import { attachFullPaths, topLevelCells } from '../lib/diskMapTree.js';
 import { subtreeForPath } from '../lib/mftSubtree.js';
+import { isScanTooLarge } from '../lib/scanTooLarge.js';
 import { NO_EXTENSION } from '../lib/extensionBreakdown.js';
 import { useDiskMapAggregates } from '../hooks/useDiskMapAggregates.js';
 import { withUnscannedRemainder, scanCoverage, localizeUnscanned } from '../lib/unscannedRemainder.js';
@@ -611,7 +612,7 @@ function DiskMap() {
       // A drive that could not be read is said so, by name, beside the ones
       // that could -- the user approved a prompt for all of them.
       if (failures.length > 0) {
-        setFastNote(failures.map((f) => t('diskMapV3.drives.failed', `${f.letter}:`, f.error)).join(' '));
+        setFastNote(failures.map((f) => t('diskMapV3.drives.failed', `${f.letter}:`, isScanTooLarge(f.code) ? t('diskMapV3.large.tooLarge') : f.error)).join(' '));
       }
       if (scanned.length === 0) return;
       // Only a scan that actually finished is remembered. A declined prompt
@@ -627,7 +628,8 @@ function DiskMap() {
       setAlsoScan(new Set());
       setCurrentPath(rootOfDrive(scanned.some((d) => d.letter === here) ? here : scanned[0].letter));
     } catch (err) {
-      setFastNote(err.message);
+      // "Invalid string length" means nothing to a person; the reason does.
+      setFastNote(isScanTooLarge(err) ? t('diskMapV3.large.tooLarge') : err.message);
     } finally {
       setFastScanning(false);
     }
@@ -784,7 +786,8 @@ function DiskMap() {
     [liveSnapshot, currentPath, t]
   );
   const rawTree = fastSubtree ?? (loading ? partialTree : scanQuery.data) ?? null;
-  const tree = useMemo(() => localizeUnscanned(rawTree, unscannedLabel), [rawTree, unscannedLabel]);
+  const foldedRowLabel = useCallback((count) => t('diskMap.aggregateCell', count.toLocaleString()), [t]);
+  const tree = useMemo(() => localizeUnscanned(rawTree, unscannedLabel, foldedRowLabel), [rawTree, unscannedLabel, foldedRowLabel]);
   // A failed crawl is not worth reporting once the fast scan has answered
   // the same question -- the old code cleared this by hand after the MFT
   // read succeeded, and a derived error has to account for that itself.
@@ -1098,6 +1101,16 @@ function DiskMap() {
                     ? t('diskMapV3.totals.line', formatBytes(fastStats.totalBytes), formatBytes(fastStats.allocatedBytes), formatBytes(fastStats.bitmapUsedBytes))
                     : t('diskMapV3.totals.lineNoVolume', formatBytes(fastStats.totalBytes), formatBytes(fastStats.allocatedBytes))}
                   {fastStats.hardLinkedFiles > 0 && <> {t('diskMapV3.totals.hardLinkNote', fastStats.hardLinkedFiles.toLocaleString())}</>}
+                </span>
+              )}
+              {/* A drive with millions of files cannot be listed file by file:
+                  each folder shows its largest and groups the rest. Said here
+                  so a missing small file is explained, not mysterious. */}
+              {fastStats.foldedFiles > 0 && (
+                <span className="block mt-0.5 text-[11.5px] text-[color:var(--text-muted)]" data-testid="folded-note">
+                  {fastStats.sizeFloorBytes > 0
+                    ? t('diskMapV3.large.foldedFloorNote', fastStats.foldedFiles.toLocaleString(), formatBytes(fastStats.sizeFloorBytes))
+                    : t('diskMapV3.large.foldedNote', fastStats.keepFilesPerFolder, fastStats.foldedFiles.toLocaleString())}
                 </span>
               )}
             </p>

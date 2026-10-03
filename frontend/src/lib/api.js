@@ -1,3 +1,4 @@
+import { isScanTooLarge, SCAN_TOO_LARGE } from './scanTooLarge.js';
 const API_URL = 'http://127.0.0.1:3101/api';
 
 export async function fetchPrograms() {
@@ -845,8 +846,16 @@ export async function scanDriveFast(driveLetters = ['C']) {
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ driveLetters: letters })
   });
-  const data = await res.json();
-  if (!res.ok) throw new Error(data.error || `Request failed: ${res.status}`);
+  let data;
+  try {
+    data = await res.json();
+  } catch (err) {
+    // A reply too big to read as text raises a RangeError ("Invalid string
+    // length"); the Disk Map words that as what it is (isScanTooLarge).
+    if (isScanTooLarge(err)) throw Object.assign(new Error(err.message), { code: SCAN_TOO_LARGE });
+    throw err;
+  }
+  if (!res.ok) throw Object.assign(new Error(data.error || `Request failed: ${res.status}`), data.code ? { code: data.code } : {});
   return data;
 }
 
