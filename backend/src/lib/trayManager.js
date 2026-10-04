@@ -50,11 +50,12 @@ async function buildTooltip() {
  * definition of "temp files" alive behind it. What it deletes counts towards
  * the lifetime total like any other clean. */
 export async function quickCleanTemp() {
-  const { loadCleanerRules, executeRule } = await import('./cleanerRules.js');
-  const rule = loadCleanerRules().find((r) => r.id === 'user_temp');
-  if (!rule) return;
-  const result = await executeRule(rule);
-  await recordFreed(result?.freedBytes);
+  // On a worker thread (cleanJobs.js): the temp folder can hold hundreds of
+  // thousands of files, and this runs inside the main process.
+  const { executeRuleById } = await import('./cleanJobs.js');
+  const result = await executeRuleById('user_temp');
+  if (!result) return;
+  await recordFreed(result.freedBytes);
 }
 
 /** Whether a Prune window is the one the person is looking at: shown, not

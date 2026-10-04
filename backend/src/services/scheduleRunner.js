@@ -1,5 +1,5 @@
 import { getSettings, updateSettings, cleanGuardsFrom } from './settings.js';
-import { scanAllRules, executeRules } from '../lib/cleanerRules.js';
+import { scanEverything, executeToSummary } from '../lib/cleanJobs.js';
 import { dueRun } from '../lib/schedule.js';
 import { recordFreed } from './stats.js';
 import { scheduledCleanDelegates } from './scheduledCleanTask.js';
@@ -38,7 +38,7 @@ async function runTask(task, guards) {
     // something in them. A scheduled clean must not act on a rule the
     // scan proved is empty -- that is work with no result, and on a list
     // of rules it is most of them.
-    const scanned = scanAllRules(guards);
+    const scanned = await scanEverything(guards);
     const ids = scanned
       .flatMap((category) => category.items ?? [])
       .filter((rule) => rule.recommended && rule.present !== false && (rule.sizeBytes ?? 0) > 0)
@@ -46,7 +46,7 @@ async function runTask(task, guards) {
 
     if (ids.length === 0) return { ok: true, task, summary: 'Nothing to clean.', freedBytes: 0 };
 
-    const result = await executeRules(ids, guards);
+    const result = await executeToSummary(ids, guards);
     await recordFreed(result.freedBytes);
     return {
       ok: true,
@@ -57,7 +57,7 @@ async function runTask(task, guards) {
     };
   }
 
-  const scanned = scanAllRules(guards);
+  const scanned = await scanEverything(guards);
   const total = scanned
     .flatMap((category) => category.items ?? [])
     .reduce((sum, rule) => sum + (rule.sizeBytes ?? 0), 0);

@@ -1,5 +1,6 @@
 import { Router } from 'express';
-import { scanAllRules, executeRules, executeRulesProgressively, scanRulesProgressively, loadCleanerRules, rulePathsExist } from '../lib/cleanerRules.js';
+import { loadCleanerRules, rulePathsExist } from '../lib/cleanerRules.js';
+import { scanRules, executeRulesStreamed, scanEverything, executeToSummary } from '../lib/cleanJobs.js';
 import { getSettings, cleanGuardsFrom } from '../services/settings.js';
 import { executeRulesElevated } from '../services/elevatedClean.js';
 import { getCleanerCategoryIcons } from '../services/cleanerCategoryIcons.js';
@@ -33,6 +34,11 @@ async function installedProgramNames() {
 
 /** The same scan as GET /scan, streamed a rule at a time.
  *
+ * The scan itself runs on a worker thread (lib/cleanJobs.js), so walking a huge
+ * cache folder never stops this process answering the window; this handler only
+ * relays what the worker reports, and Stop (or the window closing) ends the
+ * worker.
+ *
  * The one-shot version takes ~19 seconds and says nothing until it's
  * finished, which is indistinguishable from being stuck. This emits each
  * rule's real size the moment it's known, so the UI can fill the tree as
@@ -58,7 +64,7 @@ router.get('/scan/stream', async (req, res) => {
   try {
     const rules = loadCleanerRules();
     sendEvent(res, 'start', { total: rules.length });
-    const summary = await scanRulesProgressively(
+    const summary = await scanRules(
       (item) => sendEvent(res, 'rule', item),
       {
         signal: controller.signal,
@@ -179,7 +185,7 @@ router.get('/wipe-drives', async (req, res) => {
 router.get('/scan', async (req, res) => {
   try {
     res.json({
-      categories: scanAllRules({ ...cleanGuardsFrom(await getSettings()), installedProgramNames: await installedProgramNames() })
+      categories: await scanEverything({ ...cleanGuardsFrom(await getSettings()), installedProgramNames: await installedProgramNames() })
     });
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -219,7 +225,7 @@ router.get('/execute/stream', async (req, res) => {
   let freedBytes = 0;
   try {
     sendEvent(res, 'start', { total: ids.length });
-    const summary = await executeRulesProgressively(
+    const summary = await executeRulesStreamed(
       ids,
       (item) => { freedBytes += Number(item?.freedBytes) || 0; sendEvent(res, 'rule', item); },
       {
@@ -248,7 +254,7 @@ router.post('/execute', async (req, res) => {
     return;
   }
   try {
-    const result = await executeRules(ruleIds, cleanGuardsFrom(await getSettings()));
+    const result = await executeToSummary(ruleIds, cleanGuardsFrom(await getSettings()));
     await recordFreed(result?.freedBytes);
     res.json(result);
   } catch (err) {
