@@ -167,7 +167,7 @@ function ToastCard({ toast, onDismiss, onPause, onResume }) {
         type="button"
         onClick={() => onDismiss(toast.id)}
         aria-label={t('toastHost.dismiss')}
-        className="btn-ghost shrink-0 w-6 h-6 rounded-md flex items-center justify-center text-[color:var(--text-muted)]"
+        className="btn-ghost shrink-0 w-6 h-6 !p-0 rounded-md flex items-center justify-center text-[color:var(--text-muted)]"
       >
         <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round">
           <line x1="18" y1="6" x2="6" y2="18" />
