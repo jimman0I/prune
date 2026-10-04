@@ -24,6 +24,13 @@ export default defineConfig({
     // The lifetime "freed" total (services/stats.js) is bumped by every real
     // removal a test performs. Pointed at a scratch file so none of them counts
     // towards the total on the machine running the suite.
-    env: { UNREVO_STATS_PATH: join(tmpdir(), `prune-vitest-stats-${process.pid}.json`) }
+    //
+    // Deep Clean jobs run in a worker thread in the app (lib/cleanJobs.js). The
+    // tests that replace the cleaner with mocks need them in the test's own
+    // thread, where the mocks are; the worker has its own tests that opt back in.
+    env: {
+      UNREVO_STATS_PATH: join(tmpdir(), `prune-vitest-stats-${process.pid}.json`),
+      UNREVO_CLEAN_IN_THREAD: '1'
+    }
   }
 });

@@ -256,6 +256,20 @@ see v1.0.1 below) are documented here.
   very first launch, which has nothing remembered yet). Over the first 45
   seconds, 23.0 before and 0.2 on a repeat launch; the first launch of a
   day still does its re-measure, after the 20-second mark.
+- **The app no longer freezes while Deep Clean scans or cleans.** The scan
+  and the clean walked cache folders with synchronous file calls inside the
+  main process, so while Chrome's or Steam's shader cache, or Temp, was being
+  worked through (hundreds of thousands of files) the window, the tray and
+  every request stopped answering; "Clean recommended" from the Dashboard,
+  the tray's Quick Clean and the in-app scheduled clean did the same. They
+  now run on a separate worker thread and the main process only relays what
+  it reports, with the same events, the same Stop (a clean still finishes the
+  rule it is in and starts no other) and the same totals; the lifetime total
+  is still written by the main process alone. Measured on folders of small
+  files: scanning 400,000 stopped the main thread for 43.2 seconds in one
+  piece, and cleaning 200,000 for 17.8 seconds in three pieces (longest
+  15.1 s); it is now never stopped for more than 14 ms. The scan also
+  finishes sooner (28 s instead of 43 s); the clean takes about as long.
 - **Notifications leave, and no longer fight the cursor.** Warnings and
   errors used to stay on screen until dismissed, and the app raises plenty
   of them (a partial clean, locked files), so they piled up. Warnings now

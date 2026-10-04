@@ -42,7 +42,22 @@ const GiB = 1024 * MiB;
  * and both would stop early; more importantly, a second one's cleanup
  * would delete the first's files from under it. */
 let running = false;
-export function wipeInProgress() { return running; }
+/** A wipe started in a worker thread (see cleanWorkerHost.js) holds `running`
+ * in that thread's copy of this module, so the thread that serves the Wipe
+ * estimate is told about it and answers from both. */
+let runningElsewhere = false;
+export function wipeInProgress() { return running || runningElsewhere; }
+/** For the thread that hosts a clean worker: a wipe is, or is no longer,
+ * running in it. */
+export function setWipeRunningElsewhere(value) { runningElsewhere = value === true; }
+
+let wipeStateListener = null;
+/** For a clean worker: be told when a wipe starts and stops in this thread. */
+export function onWipeStateChange(listener) { wipeStateListener = listener; }
+function setRunning(value) {
+  running = value;
+  try { wipeStateListener?.(value); } catch { /* telling someone must never break the wipe */ }
+}
 
 /** Where the filler lives for the profile's own drive: a dedicated folder
  * beside Prune's settings, so nothing is ever created at the root of C:. */
@@ -156,8 +171,8 @@ export async function wipeFreeSpace({
   getFreeBytes = () => defaultFreeBytes(dir),
   writeChunk = defaultWriteChunk
 } = {}) {
-  if (running) throw new Error('A free-space wipe is already running.');
-  running = true;
+  if (wipeInProgress()) throw new Error('A free-space wipe is already running.');
+  setRunning(true);
   const passCount = normalizePasses(passes);
   const random = passCount === 3;
   const pattern = random ? 'random' : 'zeros';
@@ -254,7 +269,7 @@ export async function wipeFreeSpace({
     // Always, whatever happened above.
     await handle?.close().catch(() => {});
     await cleanupWipeLeftovers({ dir });
-    running = false;
+    setRunning(false);
   }
   return { bytesWritten, totalBytes, elapsedMs: Date.now() - started, aborted: reason === 'aborted', reason, passes: passCount, pattern };
 }
