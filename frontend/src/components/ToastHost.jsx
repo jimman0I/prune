@@ -12,6 +12,11 @@ import { useLanguage } from '../i18n/LanguageContext.jsx';
  * against the PANEL rather than the viewport. This codebase has been
  * caught by that twice.
  *
+ * Lifted 88px off the bottom so it clears the action bars pinned there (Deep
+ * Clean's Clean button and "Last measured" label, Duplicates' selection bar):
+ * at the corner itself a toast sat directly on the button that had just been
+ * pressed, hiding it for the whole life of the toast.
+ *
  * Bottom-right rather than top-centre. The top of every screen here is a
  * heading and the controls that act on it, and a toast landing over those
  * covers the thing the user is about to do next.
@@ -178,7 +183,7 @@ export default function ToastHost() {
 
   return createPortal(
     <div
-      className="fixed bottom-6 right-6 z-tooltip flex flex-col-reverse gap-2.5 pointer-events-none"
+      className="fixed bottom-[88px] right-6 z-tooltip flex flex-col-reverse gap-2.5 pointer-events-none"
       // The container never eats clicks -- only the cards do. A toast in
       // the corner must not block the button underneath it.
     >

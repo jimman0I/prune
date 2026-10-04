@@ -180,6 +180,16 @@ describe('dismissing', () => {
 });
 
 describe('what the corner does to the app underneath', () => {
+  it('sits above the action bars pinned to the bottom of a screen', async () => {
+    // Deep Clean's footer (Clean, "Last measured") is ~72px tall; a toast at
+    // the very corner covered it right after every clean.
+    mount(<Push />);
+    await push();
+    const container = document.body.querySelector('[role="status"]').parentElement;
+    expect(container.className).toMatch(/bottom-\[(\d+)px\]/);
+    expect(Number(container.className.match(/bottom-\[(\d+)px\]/)[1])).toBeGreaterThanOrEqual(80);
+  });
+
   it('lets clicks through the empty space around the cards', async () => {
     /* The container fills the bottom-right corner whether or not there is
      * a toast in it. Catching pointer events there would leave an
