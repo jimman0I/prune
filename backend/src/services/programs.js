@@ -57,6 +57,18 @@ async function enumerateViaPowerShell() {
  * comes back empty does the list end up empty, which by then really
  * would mean the machine has nothing in Add/Remove Programs. */
 export async function listInstalledPrograms() {
+  // The window asks for the list, the sizes and the Store apps together when
+  // it opens, and each of those needs the list: without this each would spawn
+  // its own PowerShell registry read. Callers who arrive while one is running
+  // share it (each gets its own copy of the rows); nothing is kept afterwards,
+  // so the next request always reads the registry fresh.
+  inflightList ??= enumerateInstalledPrograms().finally(() => { inflightList = null; });
+  return (await inflightList).map((program) => ({ ...program }));
+}
+
+let inflightList = null;
+
+async function enumerateInstalledPrograms() {
   let items = await enumerateViaPowerShell();
   if (items.length === 0) items = await enumerateViaPowerShell();
   if (items.length === 0) items = await listInstalledProgramsViaReg().catch(() => []);

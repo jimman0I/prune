@@ -12,12 +12,10 @@ import { recordFreed } from './services/stats.js';
 import { reconcileScheduledClean } from './services/scheduledCleanTask.js';
 import { repairStartWithWindows } from './services/startWithWindows.js';
 import { repairExplorerMenu } from './services/explorerMenu.js';
-import { getProgramIcons } from './services/programIcons.js';
-import { getProgramSizes } from './services/programSizes.js';
-import { getProgramVersions } from './services/programVersions.js';
-import { getProgramInstallDates } from './services/installDates.js';
-import { getStoreApps } from './services/storeApps.js';
-import { getPackageIcons } from './services/packageIcons.js';
+import { getProgramSizes, refreshStaleSizes } from './services/programSizes.js';
+import {
+  HOUSEKEEPING_DELAY_MS, SCHEDULE_CATCHUP_DELAY_MS, runLater, scheduleHousekeeping
+} from './lib/startupTasks.js';
 
 const PORT = process.env.UNREVO_BACKEND_PORT || 3101;
 
@@ -37,61 +35,82 @@ const app = createApp({ port: PORT });
 // The schedule catches up on start as well as on its timer: the window
 // most likely to have been missed is one that passed while the machine
 // was off, and the app opening is the first moment anything can notice.
+// A few seconds in rather than at once (see lib/startupTasks.js): the first
+// moments belong to the window loading.
 startScheduler();
-checkSchedule().catch(() => { /* a failed check must never stop the server booting */ });
+runLater(SCHEDULE_CATCHUP_DELAY_MS, () => {
+  checkSchedule().catch(() => { /* a failed check must never stop the server booting */ });
+});
 
-// Whatever a clean started by Task Scheduler freed while Prune was closed is
-// added to the lifetime total now (once per run: see scheduledCleanReport.js),
-// and an existing task is put back in line with the schedule and with where
-// Prune is installed -- an update into a different folder would otherwise leave
-// it pointing at the old one. It never creates a task. Both are best-effort.
-ingestReport({ recordFreed }).catch(() => {});
-getSettings()
-  .then((settings) => reconcileScheduledClean(settings.automation))
-  .catch(() => { /* the Settings switch shows the task as it really is */ });
+// Upkeep nobody is waiting for. Each of these used to start the instant the
+// server was listening -- several of them spawn a process -- right on top of
+// the window's own first load, which is a big part of why Prune felt slow and
+// busy to open. They run once, one after another, HOUSEKEEPING_DELAY_MS after
+// the server is up (scheduled in the listen callback below). Each is
+// best-effort: one that cannot run is not a reason for the app not to start,
+// and does not stop the ones after it.
+const housekeeping = [
+  // Whatever a clean started by Task Scheduler freed while Prune was closed is
+  // added to the lifetime total now (once per run: see scheduledCleanReport.js).
+  { name: 'scheduled clean report', run: () => ingestReport({ recordFreed }) },
 
-// The sign-in entry, if the person turned it on, follows Prune into a new
-// install folder. Never creates one.
-repairStartWithWindows().catch(() => { /* the Settings switch shows it as it is */ });
+  // An existing scheduled-clean task is put back in line with the schedule and
+  // with where Prune is installed -- an update into a different folder would
+  // otherwise leave it pointing at the old one. It never creates a task.
+  // A failure just means the Settings switch shows the task as it really is.
+  {
+    name: 'scheduled clean task',
+    run: async () => reconcileScheduledClean((await getSettings()).automation)
+  },
 
-// The right-click menu entries, if the person turned them on, follow Prune into
-// a new install folder and into the app's language. Never creates one.
-repairExplorerMenu().catch(() => { /* the Settings switch shows it as it is */ });
+  // The sign-in entry, if the person turned it on, follows Prune into a new
+  // install folder. Never creates one.
+  { name: 'start with Windows', run: () => repairStartWithWindows() },
 
-// A free-space wipe that was killed mid-run (power cut, crash, task kill)
-// leaves its zero-filled files on the drive, and until they are deleted the
-// drive is nearly full. They live in a folder of their own under a name only
-// the wipe uses, so removing them is safe and happens on every start.
-// The wipe can now target any local fixed drive, so the sweep looks in each
-// one's own Prune-wipe folder as well as the profile's. A drive list that
-// cannot be read just means only the profile's folder is swept this start.
-listFixedDrives()
-  .catch(() => [])
-  .then((drives) => cleanupAllWipeLeftovers({ drives: drives.map((d) => d.drive) }))
-  .then((removed) => {
-    if (removed.files > 0) console.log(`Removed ${removed.files} leftover free-space wipe files (${removed.bytes} bytes).`);
-  })
-  .catch(() => { /* they are tried again on the next start */ });
+  // The right-click menu entries, if the person turned them on, follow Prune into
+  // a new install folder and into the app's language. Never creates one.
+  { name: 'Explorer menu', run: () => repairExplorerMenu() },
 
-// The quarantine's two limits, applied once on start.
-//
-// They are also applied every time a batch is created, which is the
-// moment either can be crossed. This covers the other case: a retention
-// window that expired while the app was closed. Without it, a machine
-// left off for a month would come back holding batches it was supposed to
-// have dropped weeks ago, and would keep them until the next uninstall.
-//
-// Fire-and-forget, like checkSchedule above, and for the same reason: a
-// housekeeping pass that cannot run is not a reason for the app not to
-// start. It is a no-op when neither limit is set, which is the default.
-getSettings()
-  .then((settings) => enforceQuarantineLimits(settings))
-  .then((result) => {
-    for (const batch of result.purged) {
-      console.log(`Dropped quarantine backup for ${batch.programName} (${batch.reason}).`);
+  // A free-space wipe that was killed mid-run (power cut, crash, task kill)
+  // leaves its zero-filled files on the drive, and until they are deleted the
+  // drive is nearly full. They live in a folder of their own under a name only
+  // the wipe uses, so removing them is safe and happens on every start.
+  // The wipe can now target any local fixed drive, so the sweep looks in each
+  // one's own Prune-wipe folder as well as the profile's. A drive list that
+  // cannot be read just means only the profile's folder is swept this start.
+  // (They are tried again on the next start.)
+  {
+    name: 'free-space wipe leftovers',
+    run: async () => {
+      const drives = await listFixedDrives().catch(() => []);
+      const removed = await cleanupAllWipeLeftovers({ drives: drives.map((d) => d.drive) });
+      if (removed.files > 0) console.log(`Removed ${removed.files} leftover free-space wipe files (${removed.bytes} bytes).`);
     }
-  })
-  .catch(() => { /* the backups simply stay until the next attempt */ });
+  },
+
+  // The quarantine's two limits, applied once on start.
+  //
+  // They are also applied every time a batch is created, which is the
+  // moment either can be crossed. This covers the other case: a retention
+  // window that expired while the app was closed. Without it, a machine
+  // left off for a month would come back holding batches it was supposed to
+  // have dropped weeks ago, and would keep them until the next uninstall.
+  // It is a no-op when neither limit is set, which is the default.
+  {
+    name: 'quarantine limits',
+    run: async () => {
+      const result = await enforceQuarantineLimits(await getSettings());
+      for (const batch of result.purged) {
+        console.log(`Dropped quarantine backup for ${batch.programName} (${batch.reason}).`);
+      }
+    }
+  },
+
+  // Install-folder sizes that were shown from a day-old (or older) kept figure
+  // are measured again now, last, so the next launch has the new numbers and the
+  // walk that this replaces is not sitting on the window's first seconds.
+  { name: 'program sizes refresh', run: () => refreshStaleSizes() }
+];
 
 // Real bug, found dogfooding (2026-08-29): a `server.listen()` failure
 // (most commonly EADDRINUSE — something else, or a second copy of this
@@ -132,74 +151,33 @@ server.on('error', (err) => {
 });
 server.listen(PORT, '127.0.0.1', () => {
   console.log(`Prune backend listening on http://127.0.0.1:${PORT}`);
-  warmProgramIcons();
+  scheduleHousekeeping(housekeeping, {
+    delayMs: HOUSEKEEPING_DELAY_MS,
+    onError: (name, err) => console.error(`Start-up housekeeping (${name}) failed:`, err?.message ?? err)
+  });
   warmProgramSizes();
-  warmProgramVersions();
-  warmInstallDates();
-  warmStoreApps();
-  warmPackageIcons();
 });
 
-/** Extracts every program's icon in the background as soon as the server
- * is up, so the Application Manager has them the moment it opens instead
- * of popping them in a second or two later.
+/** Program sizes are the one lookup the first screen needs: the Dashboard's
+ * space breakdown and largest-programs list wait for them (the window asks
+ * for them as soon as it opens), so they start now and the window's request
+ * joins the same run instead of starting a second walk.
  *
- * It reads ~90 executables and takes about two seconds, which is exactly
- * why it shouldn't happen when someone clicks the tab. Fire-and-forget:
- * the cache inside programIcons.js is the point, the return value is
- * discarded, and a failure is swallowed because icons are decoration and
- * must never affect whether the backend starts. */
-function warmProgramIcons() {
-  getProgramIcons()
-    .then((icons) => console.log(`Prepared ${Object.keys(icons).length} program icons.`))
-    .catch(() => { /* decoration only */ });
-}
-
-/** Same idea for the sizes 40 of the 130 registry entries simply don't
- * record. Measuring their install folders means walking ~124 GB, about
- * thirteen seconds -- worth starting now rather than when someone opens
- * the list and waits for numbers to appear. */
+ * Everything else the Applications screen decorates its rows with -- icons,
+ * versions, install dates, Store apps, package icons -- used to be warmed here
+ * too, which cost a PowerShell pass, ~90 executables and ~100 PNGs on top of
+ * the window opening for a screen that may never be visited. Each is now
+ * computed the first time the window asks (and shared if it asks twice at
+ * once), which the window only does once Applications has been opened.
+ *
+ * The folder sizes are remembered between launches (see folderSizeStore.js),
+ * so after the first launch of the day this is a registry read, not a walk
+ * of the install folders. Fire-and-forget: a failure leaves the rows with
+ * their blank and must never affect whether the backend starts. */
 function warmProgramSizes() {
   getProgramSizes()
     .then((sizes) => console.log(`Measured ${Object.keys(sizes).length} install folders.`))
     .catch(() => { /* the rows keep their blank */ });
-}
-
-/** And the versions the other 15 entries don't record either. Reading
- * resource tables is quick -- under two seconds -- but it has to find the
- * right binary first, and that means opening install folders. Same deal
- * as the other two: better now than when someone clicks the tab. */
-function warmProgramVersions() {
-  getProgramVersions()
-    .then((versions) => console.log(`Read ${Object.keys(versions).length} versions from program binaries.`))
-    .catch(() => { /* the rows keep their blank */ });
-}
-
-/** And the install dates two thirds of the entries never declared. Opening
- * every uninstall key in three hives takes about a second and a half --
- * better spent now than when someone opens the list. */
-function warmInstallDates() {
-  getProgramInstallDates()
-    .then((dates) => console.log(`Recovered ${Object.keys(dates).length} install dates from key write times.`))
-    .catch(() => { /* the rows keep their blank */ });
-}
-
-/** And the Store apps, which the registry never mentions. Enumerating and
- * measuring 81 packages takes about five seconds -- the same argument as
- * the others for doing it before anyone asks. */
-function warmStoreApps() {
-  getStoreApps()
-    .then((apps) => console.log(`Found ${apps.length} Microsoft Store apps.`))
-    .catch(() => { /* the list still shows every registry program */ });
-}
-
-/** And the icons for those Store apps and the browser extensions. Reading
- * a hundred small PNGs out of package folders takes a few seconds, and
- * the rows look unfinished without them. */
-function warmPackageIcons() {
-  getPackageIcons()
-    .then((icons) => console.log(`Read ${Object.keys(icons).length} package icons.`))
-    .catch(() => { /* decoration only */ });
 }
 
 // trayManager.js's own initTray() is a guarded no-op outside a real

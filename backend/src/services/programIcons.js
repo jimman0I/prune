@@ -6,6 +6,7 @@ import { getFileTypeIcons } from './fileTypeIcons.js';
 import { typeIconExtension } from './iconTypeFallback.js';
 import { productCodeFrom, getMsiProductIcons } from './msiProductIcon.js';
 import { genericIconIds } from './genericIcon.js';
+import { memoizeAsync } from '../lib/memoizeAsync.js';
 
 /** Extraction is pure function of the file it reads, and those files don't
  * change while the app is open -- so this survives for the process's life
@@ -24,6 +25,21 @@ const cache = new Map();
  * A program with no icon is simply missing from the map, which the UI
  * renders as its existing lettered tile. */
 export async function getProgramIcons(programs) {
+  // Computed on the first request from the window, not at start-up (it
+  // spawns PowerShell and opens ~90 executables). Callers who arrive while
+  // it runs share the one pass, and the answer is kept briefly so the
+  // window's repeat requests do not redo the program scan. An explicit list
+  // is a caller asking about specific programs, so it always runs on its own.
+  return programs ? resolveProgramIcons(programs) : sharedLookup();
+}
+
+/** How long the icon map is reused. Per-file extractions are cached for the
+ * life of the process anyway; this only spares the program scan and the
+ * executable search in front of them when the window asks again. */
+const ICONS_REUSE_MS = 60_000;
+const sharedLookup = memoizeAsync(() => resolveProgramIcons(null), { ttlMs: ICONS_REUSE_MS });
+
+async function resolveProgramIcons(programs) {
   const list = programs ?? await listInstalledPrograms();
 
   // Windows Installer's own record, looked up once for the whole list
@@ -139,4 +155,5 @@ export async function getProgramIcons(programs) {
  * between test cases. */
 export function clearIconCache() {
   cache.clear();
+  sharedLookup.clear();
 }
