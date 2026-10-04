@@ -280,6 +280,8 @@ see v1.0.1 below) are documented here.
   notification also ignores the pointer for its first third of a second, so
   a second click aimed at the page no longer lands on its Undo or dismiss
   button, and its entrance no longer scales a blurred card past the cursor.
+  Notifications also sit above the bottom action bars now, instead of on top
+  of the Clean button right after a clean.
 - **The installer can close an administrator Prune.** Reinstalling while
   Prune ran as administrator showed "press OK to close it", and OK did
   nothing, because Windows won't let a normal program end an elevated one.
