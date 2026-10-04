@@ -14,3 +14,6 @@ electron/build/backend-prod/
 
 # Isolated worktrees for agentic feature work (superpowers using-git-worktrees)
 .worktrees/
+
+# Downloads for the release checklist (RELEASING.md: gh release download --dir verify)
+verify/

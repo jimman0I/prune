@@ -273,8 +273,8 @@ describe('does not execute anything', () => {
 
 /* The real thing: every cleaner BleachBit ships on this machine. Read only.
  * Skipped where BleachBit is not installed. */
-const REAL_DIR = 'C:\\Users\\jimmanol\\AppData\\Local\\BleachBit\\share\\cleaners';
-describe.skipIf(!existsSync(REAL_DIR))('BleachBit\'s own cleaners', () => {
+const REAL_DIR = join(process.env.LOCALAPPDATA || '', 'BleachBit', 'share', 'cleaners');
+describe.skipIf(!process.env.LOCALAPPDATA || !existsSync(REAL_DIR))('BleachBit\'s own cleaners', () => {
   const files = existsSync(REAL_DIR) ? readdirSync(REAL_DIR).filter((f) => f.endsWith('.xml')) : [];
 
   it('every one imports or is refused cleanly, and its report adds up', () => {
