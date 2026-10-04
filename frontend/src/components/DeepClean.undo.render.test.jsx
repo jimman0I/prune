@@ -81,7 +81,7 @@ beforeEach(() => {
 
 describe('Undo after a Deep Clean that moved files to Quarantine', () => {
   it('is on the toast, with the result', async () => {
-    const user = userEvent.setup();
+    const user = userEvent.setup({ pointerEventsCheck: 0 });
     seedCache();
     render();
     await clean(user);
@@ -89,7 +89,7 @@ describe('Undo after a Deep Clean that moved files to Quarantine', () => {
   });
 
   it('restores every batch the clean made', async () => {
-    const user = userEvent.setup();
+    const user = userEvent.setup({ pointerEventsCheck: 0 });
     seedCache();
     render();
     await clean(user);
@@ -100,7 +100,7 @@ describe('Undo after a Deep Clean that moved files to Quarantine', () => {
   });
 
   it('puts the rows, and the remembered scan, back to how they read before the clean', async () => {
-    const user = userEvent.setup();
+    const user = userEvent.setup({ pointerEventsCheck: 0 });
     seedCache();
     render();
     await clean(user);
@@ -115,7 +115,7 @@ describe('Undo after a Deep Clean that moved files to Quarantine', () => {
   });
 
   it('leaves the rows alone for a batch that could not come back', async () => {
-    const user = userEvent.setup();
+    const user = userEvent.setup({ pointerEventsCheck: 0 });
     seedCache();
     restoreQuarantineBatch.mockImplementation(async (dir) => {
       if (dir.endsWith('temp')) throw new Error('ENOENT: no such file or directory');
@@ -130,7 +130,7 @@ describe('Undo after a Deep Clean that moved files to Quarantine', () => {
   });
 
   it('does not overwrite a fresher scan with the picture from before the clean', async () => {
-    const user = userEvent.setup();
+    const user = userEvent.setup({ pointerEventsCheck: 0 });
     seedCache();
     streamDeepCleanScan.mockImplementation(async (onEvent) => {
       onEvent('start', { total: 2 });
@@ -150,7 +150,7 @@ describe('Undo after a Deep Clean that moved files to Quarantine', () => {
 
 describe('after Delete now', () => {
   it('offers no Undo: that mode keeps nothing', async () => {
-    const user = userEvent.setup();
+    const user = userEvent.setup({ pointerEventsCheck: 0 });
     settingsRecord = { ...baseSettings(), deepCleanRemoval: 'delete' };
     streamDeepCleanExecute.mockImplementation(async (ids, onEvent) => {
       onEvent('start', { total: ids.length });
@@ -164,7 +164,7 @@ describe('after Delete now', () => {
   });
 
   it('offers none where a rule made a backup batch either', async () => {
-    const user = userEvent.setup();
+    const user = userEvent.setup({ pointerEventsCheck: 0 });
     settingsRecord = { ...baseSettings(), deepCleanRemoval: 'delete' };
     seedCache();
     render();

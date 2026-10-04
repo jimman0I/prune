@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { UNDO_TTL, addToast, dismissToast, expireToasts, pauseToast, resumeToast, MAX_TOASTS, DEFAULT_TTL } from './toastQueue.js';
+import { UNDO_TTL, addToast, dismissToast, expireToasts, pauseToast, resumeToast, MAX_TOASTS, DEFAULT_TTL, WARNING_TTL, ERROR_TTL } from './toastQueue.js';
 
 const NOW = 1_000_000;
 
@@ -68,13 +68,17 @@ describe('how long each tone lives by default', () => {
     }
   });
 
-  it('keeps a warning and a failure until they are dismissed', () => {
-    // A warning is something to act on ("protected by Windows", "3 files
-    // locked"). Somebody who looked away must still find it.
-    for (const tone of ['warning', 'danger']) {
-      const [toast] = addToast([], { message: 'm', tone }, { now: NOW });
-      expect(toast.ttl, tone).toBe(0);
-    }
+  it('lets a warning and a failure expire too, just later than a confirmation', () => {
+    // Nothing the app raises may sit on screen for good: a pile of old
+    // notices that never leave is what people mean by "buggy". They get a
+    // longer life than a confirmation, and hovering or focusing one holds it.
+    const [warn] = addToast([], { message: 'm', tone: 'warning' }, { now: NOW });
+    const [fail] = addToast([], { message: 'm', tone: 'danger' }, { now: NOW });
+    expect(warn.ttl).toBe(WARNING_TTL);
+    expect(fail.ttl).toBe(ERROR_TTL);
+    expect(DEFAULT_TTL).toBeLessThan(WARNING_TTL);
+    expect(WARNING_TTL).toBeLessThan(ERROR_TTL);
+    expect(ERROR_TTL).toBeLessThanOrEqual(30_000);
   });
 
   it('still honours a ttl the caller states explicitly', () => {

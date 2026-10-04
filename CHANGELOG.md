@@ -237,6 +237,16 @@ see v1.0.1 below) are documented here.
 
 ### Fixed
 
+- **Notifications leave, and no longer fight the cursor.** Warnings and
+  errors used to stay on screen until dismissed, and the app raises plenty
+  of them (a partial clean, locked files), so they piled up. Warnings now
+  last 12 seconds and errors 20; hovering or tabbing to one still holds it.
+  A notification that appeared under a resting mouse (they appear exactly
+  where the Clean button is) counted as "hovered" and was held for as long
+  as the mouse stayed put; only real movement over it holds it now. A new
+  notification also ignores the pointer for its first third of a second, so
+  a second click aimed at the page no longer lands on its Undo or dismiss
+  button, and its entrance no longer scales a blurred card past the cursor.
 - **The installer can close an administrator Prune.** Reinstalling while
   Prune ran as administrator showed "press OK to close it", and OK did
   nothing, because Windows won't let a normal program end an elevated one.

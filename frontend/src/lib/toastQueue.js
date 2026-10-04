@@ -21,11 +21,18 @@ export const DEFAULT_TTL = 5000;
  * it for as long as they need. */
 export const UNDO_TTL = 15000;
 
-/** Tones that stay until dismissed. A warning is something to act on
- * ("protected by Windows", "3 files were locked"), and a failure is the
- * only account of what went wrong: neither should vanish because the
- * person looked away. Ordinary confirmations expire; these do not. */
-const PERSISTENT_TONES = new Set(['warning', 'danger']);
+/** Life of a warning. A warning is something to act on ("protected by
+ * Windows", "3 files locked"), so it stays longer than a confirmation -- but
+ * it does leave. Notices that never left piled up in the corner and read as
+ * a bug; the same facts are on the screen that raised them. Hovering or
+ * focusing a toast holds it for as long as someone needs. */
+export const WARNING_TTL = 12000;
+
+/** Life of a failure: the only account of what went wrong, so the longest. A
+ * caller that really needs one to stay passes `ttl: 0`. */
+export const ERROR_TTL = 20000;
+
+const TONE_TTL = { warning: WARNING_TTL, danger: ERROR_TTL };
 
 /** Repeats inside this window are counted rather than stacked. */
 const DEDUPE_WINDOW = 8000;
@@ -58,7 +65,7 @@ export function addToast(toasts, toast, { now = Date.now(), max = MAX_TOASTS } =
     tone: 'info',
     // Stated by the caller wins; otherwise it depends on what kind of
     // notice this is.
-    ttl: PERSISTENT_TONES.has(tone) ? 0 : toast.action ? UNDO_TTL : DEFAULT_TTL,
+    ttl: Math.max(TONE_TTL[tone] ?? DEFAULT_TTL, toast.action ? UNDO_TTL : 0),
     ...toast,
     id: `t${++sequence}`,
     createdAt: now,
@@ -79,9 +86,8 @@ export function addToast(toasts, toast, { now = Date.now(), max = MAX_TOASTS } =
 
 /** Drops whatever has run out of time.
  *
- * `ttl: 0` never expires. A failure nobody has acknowledged should not
- * vanish on a timer -- that is how someone misses the only notice that
- * three files were not cleaned.
+ * `ttl: 0` never expires; only a caller that asks for it explicitly gets
+ * that.
  *
  * Returns the SAME array when nothing changed. This runs on an interval,
  * and a fresh array every tick would re-render the host and restart every
