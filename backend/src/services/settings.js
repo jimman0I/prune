@@ -6,6 +6,7 @@ import { normalizePasses } from '../lib/shredFile.js';
 import { normalizeCustomLocations } from '../lib/customLocations.js';
 import { normalizeScanMode } from './leftoverModes.js';
 import { normalizeLowDiskPercent } from '../lib/lowDiskChoices.js';
+import { appVersion } from './updateCheck.js';
 
 /** Path to the settings file. A function, not a constant -- read at call
  * time, not import time -- so tests can point it at a scratch temp file
@@ -208,6 +209,14 @@ const DEFAULT_SETTINGS = {
      it and can say what grew. On by default; only an explicit false turns it
      off. Nothing leaves the PC either way. */
   rememberDiskMapScans: true,
+  /* The last app version whose "What's new" notice was shown (or that was
+     installed fresh, which counts as having seen it). The window compares it
+     with the running version to decide whether to announce an update, once.
+     null is "never recorded": for a settings file that already exists, which
+     is everyone updating from before this existed, that reads as an update.
+     A BRAND-NEW install is stamped with the running version instead -- see
+     getSettings -- so it is never greeted with news of what it just got. */
+  lastSeenVersion: null,
   /* What Prune's own screens are shown in -- one of languages.js's 40, or
      'en'. This default is only ever what a brand-new settings file gets;
      see detectDefaultLanguage() below for where a first-ever run actually
@@ -284,8 +293,16 @@ function normalizedChoices(settings) {
     wipeDrive: normalizeWipeDrive(settings.wipeDrive),
     wipePasses: normalizePasses(settings.wipePasses),
     customLocations: normalizeCustomLocations(settings.customLocations),
-    rememberDiskMapScans: settings.rememberDiskMapScans !== false
+    rememberDiskMapScans: settings.rememberDiskMapScans !== false,
+    lastSeenVersion: normalizeLastSeenVersion(settings.lastSeenVersion)
   };
+}
+
+/** A plain version ("3.0.0", or "3.1.0-beta.1"), or null. Exactly that shape:
+ * the value comes from a request body and a file the user can edit, and it is
+ * only ever compared with the running version, so nothing else belongs in it. */
+export function normalizeLastSeenVersion(value) {
+  return typeof value === 'string' && /^\d{1,4}\.\d{1,4}\.\d{1,4}(?:-[0-9A-Za-z.]{1,20})?$/.test(value) ? value : null;
 }
 
 /** The language Prune opens in before anyone -- the installer included --
@@ -368,7 +385,17 @@ export async function getSettings({
 } = {}) {
   const path = settingsPath();
   if (!existsSync(path)) {
-    return { ...DEFAULT_SETTINGS, language: await detectLanguage(), lowPowerMode: await detectLowPower() };
+    // A brand-new install has, by definition, seen this version's news. Done
+    // here rather than by the window on first launch because the installer's
+    // answers are saved before any window asks (services/installerChoices.js),
+    // which would otherwise make a fresh install look like an update. The
+    // first save of anything writes this stamp with it.
+    return {
+      ...DEFAULT_SETTINGS,
+      language: await detectLanguage(),
+      lowPowerMode: await detectLowPower(),
+      lastSeenVersion: normalizeLastSeenVersion(appVersion())
+    };
   }
   try {
     const stored = JSON.parse(await readFile(path, 'utf8'));
