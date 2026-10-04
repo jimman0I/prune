@@ -50,21 +50,21 @@ beforeEach(() => {
 
 describe('the toast after a move', () => {
   it('carries an Undo button', async () => {
-    const user = userEvent.setup();
+    const user = userEvent.setup({ pointerEventsCheck: 0 });
     mount({ batches: ['C:\\q\\1-a'] });
     await user.click(screen.getByText('move'));
     expect(within(toastWith('Moved 8 MB')).getByRole('button', { name: 'Undo' })).toBeTruthy();
   });
 
   it('is a plain toast when nothing went to Quarantine', async () => {
-    const user = userEvent.setup();
+    const user = userEvent.setup({ pointerEventsCheck: 0 });
     mount({ batches: [] });
     await user.click(screen.getByText('move'));
     expect(within(toastWith('Moved 8 MB')).queryByRole('button', { name: 'Undo' })).toBeNull();
   });
 
   it('keeps the detail the caller gave it', async () => {
-    const user = userEvent.setup();
+    const user = userEvent.setup({ pointerEventsCheck: 0 });
     mount({ batches: ['C:\\q\\1-a'], options: { detail: 'You can restore it from Quarantine.' } });
     await user.click(screen.getByText('move'));
     expect(screen.getByText('You can restore it from Quarantine.')).toBeTruthy();
@@ -73,7 +73,7 @@ describe('the toast after a move', () => {
 
 describe('pressing Undo', () => {
   it('restores every batch through the Quarantine API, in order', async () => {
-    const user = userEvent.setup();
+    const user = userEvent.setup({ pointerEventsCheck: 0 });
     mount({ batches: ['C:\\q\\1-a', 'C:\\q\\2-b'] });
     await user.click(screen.getByText('move'));
     await user.click(screen.getByRole('button', { name: 'Undo' }));
@@ -82,7 +82,7 @@ describe('pressing Undo', () => {
   });
 
   it('says it was put back', async () => {
-    const user = userEvent.setup();
+    const user = userEvent.setup({ pointerEventsCheck: 0 });
     mount({ batches: ['C:\\q\\1-a'] });
     await user.click(screen.getByText('move'));
     await user.click(screen.getByRole('button', { name: 'Undo' }));
@@ -90,7 +90,7 @@ describe('pressing Undo', () => {
   });
 
   it('uses the caller\'s own wording for the result when it has one', async () => {
-    const user = userEvent.setup();
+    const user = userEvent.setup({ pointerEventsCheck: 0 });
     mount({ batches: ['C:\\q\\1-a'], options: { doneMessage: 'Restored Photos.' } });
     await user.click(screen.getByText('move'));
     await user.click(screen.getByRole('button', { name: 'Undo' }));
@@ -98,7 +98,7 @@ describe('pressing Undo', () => {
   });
 
   it('removes the Undo toast, so it cannot be pressed twice', async () => {
-    const user = userEvent.setup();
+    const user = userEvent.setup({ pointerEventsCheck: 0 });
     mount({ batches: ['C:\\q\\1-a'] });
     await user.click(screen.getByText('move'));
     await user.click(screen.getByRole('button', { name: 'Undo' }));
@@ -108,7 +108,7 @@ describe('pressing Undo', () => {
   });
 
   it('tells the Quarantine screen and the callers\' own views to read again', async () => {
-    const user = userEvent.setup();
+    const user = userEvent.setup({ pointerEventsCheck: 0 });
     const client = makeTestClient();
     const invalidate = vi.spyOn(client, 'invalidateQueries');
     const onRestored = vi.fn();
@@ -120,7 +120,7 @@ describe('pressing Undo', () => {
   });
 
   it('says plainly when the batch is no longer in Quarantine', async () => {
-    const user = userEvent.setup();
+    const user = userEvent.setup({ pointerEventsCheck: 0 });
     const onRestored = vi.fn();
     restoreQuarantineBatch.mockRejectedValue(new Error("ENOENT: no such file or directory, open 'manifest.json'"));
     mount({ batches: ['C:\\q\\1-a'], options: { onRestored } });
@@ -131,7 +131,7 @@ describe('pressing Undo', () => {
   });
 
   it('says how many came back when only some could', async () => {
-    const user = userEvent.setup();
+    const user = userEvent.setup({ pointerEventsCheck: 0 });
     restoreQuarantineBatch
       .mockResolvedValueOnce({})
       .mockRejectedValueOnce(new Error('ENOENT: no such file or directory'));
@@ -142,7 +142,7 @@ describe('pressing Undo', () => {
   });
 
   it('reports a failure with its reason, and does not call it gone', async () => {
-    const user = userEvent.setup();
+    const user = userEvent.setup({ pointerEventsCheck: 0 });
     restoreQuarantineBatch.mockRejectedValue(new Error('EPERM: operation not permitted'));
     mount({ batches: ['C:\\q\\1-a'] });
     await user.click(screen.getByText('move'));
@@ -152,7 +152,7 @@ describe('pressing Undo', () => {
   });
 
   it('keeps what could not be put back on screen until it is dismissed', async () => {
-    const user = userEvent.setup();
+    const user = userEvent.setup({ pointerEventsCheck: 0 });
     restoreQuarantineBatch.mockRejectedValue(new Error('ENOENT: no such file or directory'));
     mount({ batches: ['C:\\q\\1-a'] });
     await user.click(screen.getByText('move'));
@@ -164,7 +164,7 @@ describe('pressing Undo', () => {
   });
 
   it('writes the button and the results in the chosen language', async () => {
-    const user = userEvent.setup();
+    const user = userEvent.setup({ pointerEventsCheck: 0 });
     const api = await import('../lib/api.js');
     api.fetchSettings.mockResolvedValue({ language: 'de' });
     mount({ batches: ['C:\\q\\1-a'] });

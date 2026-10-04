@@ -151,7 +151,7 @@ function Duplicates() {
       });
     }
     if (failed > 0) {
-      toasts.error(t('duplicates.toasts.failed', failed), { detail: t('duplicates.toasts.failedDetail'), ttl: 0 });
+      toasts.error(t('duplicates.toasts.failed', failed), { detail: t('duplicates.toasts.failedDetail') });
     }
   };
 

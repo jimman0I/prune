@@ -134,7 +134,7 @@ export function useCleanRecommended({ enabled = true } = {}) {
       } else {
         offerUndo(`${t('deepClean.cleanupComplete')} ${text}`, dirs, { onRestored });
         const locked = lockedFileSummary(outcome, t('deepClean.locked'));
-        if (locked) toasts.warn(locked.message, { detail: locked.detail, paths: locked.paths, ttl: 0 });
+        if (locked) toasts.warn(locked.message, { detail: locked.detail, paths: locked.paths });
       }
     } catch (err) {
       setCleanError(err.message);

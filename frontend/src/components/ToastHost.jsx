@@ -1,5 +1,5 @@
 import { createPortal } from 'react-dom';
-import { useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useToasts } from '../hooks/useToasts.jsx';
 import { useLanguage } from '../i18n/LanguageContext.jsx';
@@ -40,6 +40,13 @@ function isFocusVisible(element) {
   }
 }
 
+/** How long a new card ignores the pointer. Toasts appear in the corner
+ * where the Clean and Undo-type buttons are, under a cursor that has just
+ * pressed one: without this a second click, or a click still in flight,
+ * lands on the card's own Undo or dismiss instead of the page, and the card
+ * flickers "hovered" and "not hovered" as it slides past the cursor. */
+const ARM_MS = 350;
+
 function ToastCard({ toast, onDismiss, onPause, onResume }) {
   const { t } = useLanguage();
   const tone = TONE[toast.tone] ?? TONE.info;
@@ -53,20 +60,30 @@ function ToastCard({ toast, onDismiss, onPause, onResume }) {
    * toast whose dismiss button still has focus, and vice versa. */
   const hovered = useRef(false);
   const focused = useRef(false);
+  const [armed, setArmed] = useState(reduce);
+  useEffect(() => {
+    if (armed) return undefined;
+    const id = setTimeout(() => setArmed(true), ARM_MS);
+    return () => clearTimeout(id);
+  }, [armed]);
   const sync = () => (hovered.current || focused.current ? onPause(toast.id) : onResume(toast.id));
 
   return (
     <motion.div
       layout={!reduce}
       data-motion={reduce ? 'reduced' : 'full'}
-      initial={reduce ? { opacity: 0 } : { opacity: 0, x: 24, scale: 0.96 }}
-      animate={reduce ? { opacity: 1 } : { opacity: 1, x: 0, scale: 1 }}
-      exit={reduce ? { opacity: 0 } : { opacity: 0, x: 24, scale: 0.96 }}
+      initial={reduce ? { opacity: 0 } : { opacity: 0, x: 24 }}
+      animate={reduce ? { opacity: 1 } : { opacity: 1, x: 0 }}
+      exit={reduce ? { opacity: 0 } : { opacity: 0, x: 24 }}
       transition={{ duration: reduce ? 0.01 : 0.24, ease: EASE }}
       className="glass-panel w-[330px] px-4 py-3 flex items-start gap-3 pointer-events-auto"
-      style={{ borderColor: tone.soft }}
-      onMouseEnter={() => { hovered.current = true; sync(); }}
-      onMouseLeave={() => { hovered.current = false; sync(); }}
+      style={{ borderColor: tone.soft, pointerEvents: armed ? 'auto' : 'none' }}
+      // Held by REAL movement over the card, not by "entered": a pointer
+      // resting where a toast happened to appear reports an enter with no
+      // movement, and holding on that kept the toast there for as long as the
+      // person left the mouse alone.
+      onMouseMove={() => { if (!hovered.current) { hovered.current = true; sync(); } }}
+      onMouseLeave={() => { if (hovered.current) { hovered.current = false; sync(); } }}
       onFocus={(event) => {
         // Keyboard focus only. Clicking a control inside the card focuses it
         // too, and a toast held open by a stale mouse focus would never

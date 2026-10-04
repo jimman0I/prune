@@ -47,7 +47,7 @@ beforeEach(() => {
 });
 
 async function removeLeftovers(button = 'Remove selected') {
-  const user = userEvent.setup();
+  const user = userEvent.setup({ pointerEventsCheck: 0 });
   renderScreen(<><UninstallModal program={program} onClose={() => {}} /><ToastHost /></>);
   await user.click(screen.getByRole('button', { name: 'Start uninstalling' }));
   await user.click(await screen.findByRole('button', { name: 'Scan for leftovers' }));

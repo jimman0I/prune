@@ -1111,7 +1111,7 @@ function DiskMap() {
     // A refusal is not a failure. The guard returns a reason and the whole
     // point is to show it -- "that is Windows itself" is information, and
     // a generic error message in its place reads as the app being broken.
-    if (result.protected) toasts.warn(result.error, { detail: node.fullPath, ttl: 0 });
+    if (result.protected) toasts.warn(result.error, { detail: node.fullPath });
     else toasts.error(result.error || t('diskMap.toasts.moveFailed'), { detail: node.fullPath });
   }, [pendingRemoval, toasts, offerUndo, queryClient, currentPath, t]));
 

@@ -56,7 +56,7 @@ beforeEach(() => {
 });
 
 async function moveGamesToQuarantine() {
-  const user = userEvent.setup();
+  const user = userEvent.setup({ pointerEventsCheck: 0 });
   render(
     <QueryClientProvider client={makeTestClient()}>
       <ThemeProvider>

@@ -1,6 +1,6 @@
 // @vitest-environment jsdom
 import { describe, it, expect, afterEach, beforeEach, vi } from 'vitest';
-import { render, screen, cleanup, act, within } from '@testing-library/react';
+import { render, screen, cleanup, act, within, fireEvent } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { ToastProvider, useToasts } from '../hooks/useToasts.jsx';
 import { renderScreen } from '../testSupport/renderScreen.jsx';
@@ -39,6 +39,8 @@ const mount = (ui) => renderScreen(
 const push = async (times = 1) => {
   const user = userEvent.setup();
   for (let i = 0; i < times; i += 1) await user.click(screen.getByText('push'));
+  // A new card ignores the pointer for a moment (see ARM_MS in ToastHost.jsx).
+  await act(async () => { await new Promise((resolve) => setTimeout(resolve, 400)); });
 };
 
 describe('showing a toast', () => {
@@ -169,6 +171,7 @@ describe('dismissing', () => {
     );
     await user.click(screen.getByText('push'));
     expect(screen.getByTestId('count').textContent).toBe('1');
+    await act(async () => { await new Promise((resolve) => setTimeout(resolve, 400)); }); // the card arms
 
     await user.click(screen.getByLabelText('Dismiss notification'));
 
@@ -240,10 +243,10 @@ describe('expiry', () => {
     }
   });
 
-  it('never takes a failure away', async () => {
+  it('takes a failure away too, once its longer life is over', async () => {
     vi.useFakeTimers({ shouldAdvanceTime: true });
     try {
-      expect(await afterThirtySeconds('danger')).toBe('1');
+      expect(await afterThirtySeconds('danger')).toBe('0');
     } finally {
       vi.useRealTimers();
     }
@@ -269,6 +272,7 @@ describe('hovering or focusing a toast holds it on screen', () => {
       </ToastProvider>
     );
     await user.click(screen.getByText('push'));
+    await wait(400); // the card ignores the pointer while it arrives
     return user;
   };
   /* jsdom's :focus-visible depends on how the previous interaction went
@@ -332,10 +336,39 @@ describe('hovering or focusing a toast holds it on screen', () => {
     expect(count()).toBe('0');
   });
 
-  it('keeps a warning past any timeout without needing a hover', async () => {
+  it('takes a warning away on its own, without anyone dismissing it', async () => {
     await setup('warning');
     await wait(30_000);
-    expect(count()).toBe('1');
+    expect(count()).toBe('0');
+  });
+
+  it('is not held by a pointer that is merely resting where the toast appeared', async () => {
+    // Toasts appear in the corner where the Clean button is, under a cursor
+    // that has not moved. A browser reports that as "entered" with no mouse
+    // movement; only real movement over the card holds it.
+    await setup();
+    act(() => { fireEvent.mouseEnter(screen.getByRole('status')); });
+    await wait(30_000);
+    expect(count()).toBe('0');
+  });
+});
+
+describe('a new toast does not catch clicks meant for what is underneath it', () => {
+  it('ignores the pointer for its first moments, then becomes clickable', async () => {
+    vi.useFakeTimers({ shouldAdvanceTime: true });
+    try {
+      const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime });
+      mount(<Push />);
+      await user.click(screen.getByText('push'));
+      const card = screen.getByRole('status');
+      // The card slides in under the cursor that just pressed the button
+      // beside it; a second click in that moment must reach the page.
+      expect(card.style.pointerEvents).toBe('none');
+      await act(async () => { await vi.advanceTimersByTimeAsync(500); });
+      expect(screen.getByRole('status').style.pointerEvents).toBe('auto');
+    } finally {
+      vi.useRealTimers();
+    }
   });
 });
 
@@ -359,6 +392,7 @@ describe('a toast with an action', () => {
       </ToastProvider>
     );
     await user.click(screen.getByText('push'));
+    await act(async () => { await vi.advanceTimersByTimeAsync(400); }); // the card arms
     return { user, onClick };
   };
 

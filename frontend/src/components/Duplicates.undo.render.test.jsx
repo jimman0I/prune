@@ -43,7 +43,7 @@ beforeEach(() => {
 });
 
 async function moveTheNewerCopies() {
-  const user = userEvent.setup();
+  const user = userEvent.setup({ pointerEventsCheck: 0 });
   renderScreen(<><Duplicates /><ToastHost /></>);
   await user.type(screen.getByLabelText('Folder to search for duplicates'), FOLDER);
   await user.click(screen.getByRole('button', { name: 'Find duplicates' }));

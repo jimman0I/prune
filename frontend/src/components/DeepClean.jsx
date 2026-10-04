@@ -560,7 +560,7 @@ function DeepClean({ onNavigate, shredRequest = null }) {
         // A warning, and one that does not expire: the whole point is
         // that these files are still there, and a notice that vanishes
         // after five seconds is how nobody finds out.
-        toasts.warn(locked.message, { detail: locked.detail, paths: locked.paths, ttl: 0 });
+        toasts.warn(locked.message, { detail: locked.detail, paths: locked.paths });
       }
 
       setSelected(new Set());

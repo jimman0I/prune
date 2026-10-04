@@ -43,7 +43,7 @@ beforeEach(() => {
 });
 
 async function run() {
-  const user = userEvent.setup();
+  const user = userEvent.setup({ pointerEventsCheck: 0 });
   renderScreen(<><BatchUninstallModal programs={programs} onClose={() => {}} onFinished={() => {}} /><ToastHost /></>);
   await user.click(screen.getByRole('button', { name: 'Start uninstalling' }));
   await waitFor(() => expect(streamUninstall).toHaveBeenCalledTimes(2));

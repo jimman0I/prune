@@ -69,7 +69,7 @@ beforeEach(() => {
 
 describe('Undo after Clean recommended', () => {
   it('is on the toast, and restores the batches', async () => {
-    const user = userEvent.setup();
+    const user = userEvent.setup({ pointerEventsCheck: 0 });
     seedCache();
     render();
     await clean(user);
@@ -80,7 +80,7 @@ describe('Undo after Clean recommended', () => {
   });
 
   it('puts the remembered scan, and the card, back to how they read before', async () => {
-    const user = userEvent.setup();
+    const user = userEvent.setup({ pointerEventsCheck: 0 });
     seedCache();
     render();
     await clean(user);
@@ -96,7 +96,7 @@ describe('Undo after Clean recommended', () => {
   });
 
   it('is not offered after Delete now', async () => {
-    const user = userEvent.setup();
+    const user = userEvent.setup({ pointerEventsCheck: 0 });
     settingsRecord = { ...settingsRecord, deepCleanRemoval: 'delete' };
     seedCache();
     streamDeepCleanExecute.mockImplementation(async (ids, onEvent) => {
