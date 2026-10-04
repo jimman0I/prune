@@ -17,3 +17,4 @@ electron/build/backend-prod/
 
 # Downloads for the release checklist (RELEASING.md: gh release download --dir verify)
 verify/
+.impeccable/
