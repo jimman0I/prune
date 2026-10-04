@@ -1,5 +1,6 @@
 import { runPowerShellJson } from './powershell.js';
 import { listInstalledPrograms } from './programs.js';
+import { memoizeAsync } from '../lib/memoizeAsync.js';
 
 /** Earliest date an entry could plausibly describe. A registry key with no
  * meaningful write time reads back as the FILETIME epoch (1601), and
@@ -96,6 +97,22 @@ ConvertTo-Json -InputObject @($rows) -Compress -Depth 3
  * frequently-updated program this drifts towards "last updated". That is
  * why it is only ever a fallback -- a declared InstallDate always wins. */
 export async function getProgramInstallDates(programs) {
+  // Computed on the first request from the window, not at start-up. Callers
+  // who arrive while it runs share one registry pass, and the answer is kept
+  // briefly (the Refresh button asks again). An explicit list always runs
+  // on its own.
+  return programs ? resolveInstallDates(programs) : sharedLookup();
+}
+
+const DATES_REUSE_MS = 60_000;
+const sharedLookup = memoizeAsync(() => resolveInstallDates(null), { ttlMs: DATES_REUSE_MS });
+
+/** Testing seam -- the shared answer is process-wide. */
+export function clearInstallDateCache() {
+  sharedLookup.clear();
+}
+
+async function resolveInstallDates(programs) {
   const list = programs ?? await listInstalledPrograms();
   const wanted = list.filter((program) => !program.installDate && program.registryKey);
   if (wanted.length === 0) return {};

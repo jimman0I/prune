@@ -237,6 +237,25 @@ see v1.0.1 below) are documented here.
 
 ### Fixed
 
+- **Prune opens quickly and no longer pins the CPU for its first minute.**
+  At launch the backend ran six background jobs at once (program icons,
+  versions, install dates, Store apps, Store icons and a walk of every
+  install folder, about 125 GB and 100,000 files here) plus a handful of
+  housekeeping tasks that each start a process, all on top of the window's
+  own first load. Now only the install-folder sizes the Dashboard needs are
+  measured, and they are remembered between launches (`folder-sizes.json`
+  beside settings): a day-old figure is shown at once and measured again
+  about 20 seconds after launch, so the walk is no longer on the window's
+  first seconds. The icons, versions, install dates, Store apps and Store
+  icons are computed only when Applications is first opened (and shared
+  when asked for at once), the upkeep (leftover sweep, Task Scheduler and
+  sign-in checks, Quarantine limits) runs once, one after another, 20
+  seconds after launch, and the missed-schedule check 5 seconds after.
+  Measured on this PC, backend process only: in the first 10 seconds, when
+  the window opens, 9.6 CPU-seconds before and 0.1 to 0.3 after (8.5 on the
+  very first launch, which has nothing remembered yet). Over the first 45
+  seconds, 23.0 before and 0.2 on a repeat launch; the first launch of a
+  day still does its re-measure, after the 20-second mark.
 - **Notifications leave, and no longer fight the cursor.** Warnings and
   errors used to stay on screen until dismissed, and the app raises plenty
   of them (a partial clean, locked files), so they piled up. Warnings now

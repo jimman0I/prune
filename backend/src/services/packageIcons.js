@@ -2,6 +2,7 @@ import { readFile, readdir } from 'node:fs/promises';
 import { dirname, basename, extname, join } from 'node:path';
 import { getStoreApps } from './storeApps.js';
 import { getBrowserExtensions } from './browserExtensions.js';
+import { memoizeAsync } from '../lib/memoizeAsync.js';
 
 /** Icons for the rows that do not come from the registry.
  *
@@ -167,6 +168,20 @@ async function extensionIcon(extension) {
  * and the row keeps its lettered tile, exactly as for a registry program
  * whose icon cannot be extracted. */
 export async function getPackageIcons() {
+  // Computed on the first request from the window, not at start-up; callers
+  // who arrive while it runs share the one pass (see memoizeAsync).
+  return sharedLookup();
+}
+
+const PACKAGE_ICONS_REUSE_MS = 60_000;
+const sharedLookup = memoizeAsync(resolvePackageIcons, { ttlMs: PACKAGE_ICONS_REUSE_MS });
+
+/** Testing seam -- the shared answer is process-wide. */
+export function clearPackageIconCache() {
+  sharedLookup.clear();
+}
+
+async function resolvePackageIcons() {
   const [apps, extensions] = await Promise.all([
     getStoreApps().catch(() => []),
     getBrowserExtensions().catch(() => [])
