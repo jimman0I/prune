@@ -148,6 +148,16 @@ describe('the same thing happening twice', () => {
   });
 });
 
+describe('the dismiss button', () => {
+  it('has no padding of its own: .btn-ghost adds 8px 16px, which swallowed the 24px button and left an empty pill', async () => {
+    mount(<Push />);
+    await push();
+    const button = screen.getByLabelText('Dismiss notification');
+    expect(button.className.split(/\s+/)).toContain('!p-0');
+    expect(button.querySelector('svg')).toBeTruthy();
+  });
+});
+
 describe('dismissing', () => {
   it('takes the toast out of the queue', async () => {
     /* Asserted on the provider's own list rather than on the DOM.
