@@ -2,6 +2,7 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { screen, fireEvent, waitFor, act } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { QueryObserver } from '@tanstack/react-query';
 import { renderScreen } from './testSupport/renderScreen.jsx';
 
 /** The three removal dialogs, mounted the way App mounts them.
@@ -157,6 +158,27 @@ describe('Escape while a removal is running', () => {
     await screen.findByRole('button', { name: 'Close' });
     escape();
     await waitFor(() => expect(dialog()).toBeNull());
+  });
+
+  it('takes a removed Store app out of the Store list at once, without waiting for the re-read', async () => {
+    removeStoreApp.mockResolvedValue({ ok: true });
+    const { user, client } = await mount();
+    // the list as the Applications screen holds it: the app about to be removed, and another
+    client.setQueryData(['programs', 'store'], [
+      { id: 'store:calc', name: 'Calculator', packageFullName: 'Calc_1.0_x64__abc' },
+      { id: 'store:paint', name: 'Paint', packageFullName: 'Paint_11_x64__abc' }
+    ]);
+    // something has to be watching it, as the screen does: the test client drops unobserved data at once
+    const watcher = new QueryObserver(client, { queryKey: ['programs', 'store'], queryFn: () => new Promise(() => {}), staleTime: Infinity });
+    const stopWatching = watcher.subscribe(() => {});
+
+    await user.click(screen.getByRole('button', { name: 'open store' }));
+    await user.click(screen.getByRole('button', { name: 'Remove app' }));
+    await screen.findByRole('button', { name: 'Close' });
+
+    expect(client.getQueryData(['programs', 'store']).map((a) => a.name)).toEqual(['Paint']);
+    expect(refresh).toHaveBeenCalled();
+    stopWatching();
   });
 
   it('still closes a dialog that is only asking, as it always did', async () => {

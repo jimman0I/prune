@@ -4,7 +4,7 @@ import { getProgramIcons } from '../services/programIcons.js';
 import { getProgramSizes } from '../services/programSizes.js';
 import { getProgramVersions } from '../services/programVersions.js';
 import { getProgramInstallDates } from '../services/installDates.js';
-import { getStoreApps } from '../services/storeApps.js';
+import { getStoreApps, getStorePackage, forgetStoreApp } from '../services/storeApps.js';
 import { removeStoreApp } from '../services/removeStoreApp.js';
 import { getBrowserExtensions } from '../services/browserExtensions.js';
 import { extensionPageAddress } from '../services/extensionPage.js';
@@ -301,8 +301,9 @@ router.post('/store/remove', async (req, res) => {
 
   let app;
   try {
-    app = (await getStoreApps({ fresh: true }))
-      .find((entry) => entry.packageFullName === packageFullName);
+    // One package, asked of Windows now. Not the whole list: that walks every
+    // package folder for its size and made this button wait seconds first.
+    app = await getStorePackage(packageFullName);
   } catch (err) {
     res.status(500).json({ error: `Could not read the installed Store apps: ${err.message}` });
     return;
@@ -321,6 +322,8 @@ router.post('/store/remove', async (req, res) => {
     res.status(409).json({ error: result.error });
     return;
   }
+  // The list is cached for the session; the app is gone, so it goes from it too.
+  forgetStoreApp(app.packageFullName);
   res.json({ ok: true, name: app.name });
 });
 

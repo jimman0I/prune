@@ -1,4 +1,5 @@
 import { runPowerShellJson } from './powershell.js';
+import { isValidPackageFullName } from './removeStoreApp.js';
 
 /** Store apps live in a different world from the uninstall registry, and
  * programs.js deliberately does not read them -- Get-AppxPackage is a
@@ -171,10 +172,14 @@ export function normalizeStoreApp(raw) {
 export async function getStoreApps({ fresh = false } = {}) {
   // Held as the in-flight promise, like the versions: the start-up warm
   // and a request arriving while it still runs share one pass. Measuring
-  // 81 package folders takes about five seconds and the answer does not
-  // change while the app is open.
+  // 81 package folders takes about five seconds, so the answer is kept --
+  // but not forever. An app removed outside Prune (Windows Settings, the
+  // Store itself) never reached forgetStoreApp, and a list that was only ever
+  // read once kept showing it until the next launch.
   if (!fresh) {
+    if (cached && Date.now() - cachedAt > STORE_LIST_TTL_MS) cached = null;
     if (!cached) {
+      cachedAt = Date.now();
       cached = resolveStoreApps().catch((error) => {
         cached = null;
         throw error;
@@ -185,11 +190,70 @@ export async function getStoreApps({ fresh = false } = {}) {
   return resolveStoreApps();
 }
 
+/** How long the measured list is trusted. The folders it measured do not
+ * change in minutes, so this costs one re-measure every few minutes at most,
+ * and only when something asks. */
+export const STORE_LIST_TTL_MS = 5 * 60 * 1000;
+
 let cached = null;
+let cachedAt = 0;
 
 /** Testing seam -- the cache is process-wide. */
 export function clearStoreAppCache() {
   cached = null;
+}
+
+/** Takes one package out of the cached list after it was removed.
+ *
+ * The list is cached for the life of the process because measuring 81 package
+ * folders takes seconds and nothing changes it from outside. A removal made
+ * through Prune is the one change Prune makes itself, and without this the
+ * app stayed on screen: the screen re-read the list and was handed the stale
+ * copy. Filtering the cache keeps every other row's measured size and costs
+ * nothing, where clearing it would re-measure all of them. */
+export function forgetStoreApp(packageFullName) {
+  if (!cached) return;
+  cached = cached.then((list) => list.filter((entry) => entry.packageFullName !== packageFullName));
+}
+
+/** One installed package, or null: the identity and the NonRemovable flag
+ * Windows reports for it right now.
+ *
+ * Removal needs exactly this and nothing the full list measures. Re-running
+ * the whole Store query first (every package folder walked for its size) made
+ * the Uninstall button sit for seconds before Remove-AppxPackage even started.
+ * The name is checked against the same pattern the remover enforces, since it
+ * becomes part of a PowerShell script, and the lookup is narrowed by the
+ * package name (the part before the first underscore) so Windows is asked
+ * about one package rather than all of them. */
+export async function getStorePackage(packageFullName) {
+  if (!isValidPackageFullName(packageFullName)) return null;
+  const packageName = packageFullName.split('_')[0];
+  if (!packageName) return null;
+
+  let raw;
+  try {
+    raw = await runPowerShellJson(`
+$p = Get-AppxPackage -Name '${packageName}' -ErrorAction SilentlyContinue |
+  Where-Object { $_.PackageFullName -eq '${packageFullName}' } | Select-Object -First 1
+if ($p) {
+  [PSCustomObject]@{
+    name = [string]$p.Name
+    packageFullName = [string]$p.PackageFullName
+    nonRemovable = [bool]$p.NonRemovable
+  } | ConvertTo-Json -Compress
+}
+`);
+  } catch {
+    return null;
+  }
+  if (!raw || raw.packageFullName !== packageFullName) return null;
+  return {
+    name: friendlyStoreName(null, raw.name) || raw.name,
+    packageFullName: raw.packageFullName,
+    // Same default as normalizeStoreApp: unknown means "do not offer to remove".
+    nonRemovable: raw.nonRemovable !== false
+  };
 }
 
 async function resolveStoreApps() {

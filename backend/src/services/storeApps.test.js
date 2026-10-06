@@ -141,6 +141,103 @@ describe('getStoreApps', () => {
   });
 });
 
+describe('forgetStoreApp', () => {
+  beforeEach(() => { vi.resetModules(); });
+
+  const row = (name) => ({
+    name, packageFullName: `${name}_1.0_x64__abc`, publisher: 'CN=X', version: '1.0',
+    installLocation: `C:\\WindowsApps\\${name}`, displayName: name, architecture: 'X64', sizeBytes: 10
+  });
+
+  it('takes a removed package out of the cached list without re-reading anything', async () => {
+    const query = vi.fn(async () => [row('Alpha'), row('Beta')]);
+    vi.doMock('./powershell.js', () => ({ runPowerShellJson: query }));
+    const { getStoreApps, forgetStoreApp } = await import('./storeApps.js');
+    expect((await getStoreApps()).map((a) => a.name)).toEqual(['Alpha', 'Beta']);
+
+    forgetStoreApp('Alpha_1.0_x64__abc');
+
+    // the screen's next read gets the list without the app, and Windows is not asked again
+    expect((await getStoreApps()).map((a) => a.name)).toEqual(['Beta']);
+    expect(query).toHaveBeenCalledTimes(1);
+  });
+
+  it('re-reads the list after a few minutes, so an app removed outside Prune stops showing', async () => {
+    vi.useFakeTimers({ toFake: ['Date'] });
+    try {
+      const query = vi.fn()
+        .mockResolvedValueOnce([row('Alpha'), row('Beta')])
+        .mockResolvedValueOnce([row('Beta')]);
+      vi.doMock('./powershell.js', () => ({ runPowerShellJson: query }));
+      const { getStoreApps, STORE_LIST_TTL_MS } = await import('./storeApps.js');
+
+      expect((await getStoreApps()).map((a) => a.name)).toEqual(['Alpha', 'Beta']);
+      vi.setSystemTime(Date.now() + STORE_LIST_TTL_MS - 1000);
+      expect((await getStoreApps()).map((a) => a.name)).toEqual(['Alpha', 'Beta']); // still trusted
+      expect(query).toHaveBeenCalledTimes(1);
+
+      vi.setSystemTime(Date.now() + 2000);
+      expect((await getStoreApps()).map((a) => a.name)).toEqual(['Beta']); // Alpha was removed elsewhere
+      expect(query).toHaveBeenCalledTimes(2);
+    } finally {
+      vi.useRealTimers();
+    }
+  });
+
+  it('is a no-op before anything was cached', async () => {
+    vi.doMock('./powershell.js', () => ({ runPowerShellJson: async () => [row('Alpha')] }));
+    const { getStoreApps, forgetStoreApp } = await import('./storeApps.js');
+    expect(() => forgetStoreApp('Alpha_1.0_x64__abc')).not.toThrow();
+    expect((await getStoreApps()).map((a) => a.name)).toEqual(['Alpha']);
+  });
+});
+
+describe('getStorePackage', () => {
+  beforeEach(() => { vi.resetModules(); });
+  const FULL = 'Microsoft.Paint_11.2.0.0_x64__8wekyb3d8bbwe';
+
+  it('asks Windows about one package by name, not for the whole list', async () => {
+    const query = vi.fn(async () => ({ name: 'Microsoft.Paint', packageFullName: FULL, nonRemovable: false }));
+    vi.doMock('./powershell.js', () => ({ runPowerShellJson: query }));
+    const { getStorePackage } = await import('./storeApps.js');
+    const app = await getStorePackage(FULL);
+    expect(app).toEqual({ name: 'Paint', packageFullName: FULL, nonRemovable: false });
+    const script = query.mock.calls[0][0];
+    expect(script).toContain("-Name 'Microsoft.Paint'");
+    // none of the per-package folder measuring the full list does
+    expect(script).not.toMatch(/Get-ChildItem|Measure-Object/);
+  });
+
+  it('reports the NonRemovable flag, and treats an unknown answer as not removable', async () => {
+    vi.doMock('./powershell.js', () => ({ runPowerShellJson: async () => ({ name: 'Microsoft.SecHealthUI', packageFullName: 'Microsoft.SecHealthUI_1_x64__x', nonRemovable: true }) }));
+    const { getStorePackage } = await import('./storeApps.js');
+    expect((await getStorePackage('Microsoft.SecHealthUI_1_x64__x')).nonRemovable).toBe(true);
+  });
+
+  it('is null for a package that is gone, a failed read, or an answer about a different package', async () => {
+    for (const answer of [null, undefined, { name: 'Other', packageFullName: 'Other_1_x64__x', nonRemovable: false }]) {
+      vi.resetModules();
+      vi.doMock('./powershell.js', () => ({ runPowerShellJson: async () => answer }));
+      const { getStorePackage } = await import('./storeApps.js');
+      expect(await getStorePackage(FULL)).toBeNull();
+    }
+    vi.resetModules();
+    vi.doMock('./powershell.js', () => ({ runPowerShellJson: async () => { throw new Error('boom'); } }));
+    const { getStorePackage } = await import('./storeApps.js');
+    expect(await getStorePackage(FULL)).toBeNull();
+  });
+
+  it('never runs PowerShell for a name that could carry a command', async () => {
+    const query = vi.fn(async () => null);
+    vi.doMock('./powershell.js', () => ({ runPowerShellJson: query }));
+    const { getStorePackage } = await import('./storeApps.js');
+    for (const bad of ["x'; Remove-Item C:\\ -Recurse; '", 'a b', '', null, undefined, 5]) {
+      expect(await getStorePackage(bad)).toBeNull();
+    }
+    expect(query).not.toHaveBeenCalled();
+  });
+});
+
 describe('store app install dates', () => {
   const base = {
     name: 'Microsoft.Paint',
