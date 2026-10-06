@@ -146,6 +146,12 @@ see v1.0.1 below) are documented here.
   gone), and all of it is translated into the 39 other languages. The Firefox
   cookie rule uses the same cookie action as Chrome, which already reads
   Firefox’s `moz_cookies` table when a keep list is set.
+- **`prune-cli programs`**, the counterpart of Revo’s RevoCmd. Lists the
+  installed programs (the same list as the Applications screen), with
+  `--match "Microso*"` for a whole-name match using `*` and `?` (case is
+  ignored, and a part of a name with no wildcard matches nothing),
+  `--install-location`, `--uninstall-command`, `--store-apps` and `--json`.
+  It changes nothing and says so when the list cannot be read.
 - **Startup lists what Revo’s Autorun Manager lists.** Added the
   policy-enforced `PoliciesExplorerRun` keys (per user and all users) and
   the 32-bit RunOnce key. Policy entries are read-only and say why: Windows

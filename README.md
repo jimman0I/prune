@@ -133,7 +133,8 @@ Also: an opt-in **overwrite before deleting** (1 or 3 passes), a **Shred
 files…** tool, a free-space wipe on any local drive, locked files deleted at
 the next restart, a per-rule list of the biggest files in Preview, your own
 **Custom locations**, **BleachBit cleaner import**, and a `prune-cli` command
-line (`list`, `preview`, `clean`). Overwriting is not reliable on SSDs; Prune
+line (`list`, `preview`, `clean`, and `programs`, which lists installed
+programs by wildcard name like Revo’s RevoCmd). Overwriting is not reliable on SSDs; Prune
 says so where you turn it on.
 
 </td>
