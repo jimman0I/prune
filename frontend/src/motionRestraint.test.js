@@ -82,7 +82,7 @@ describe('nav motion', () => {
     // one element whose CSS `top` is computed from the row sizes.
     expect(nav).not.toContain('layoutId=');
     expect(nav).not.toMatch(/\.getBoundingClientRect\(|\.offsetTop/);
-    expect(nav).toContain('transition-[top]');
+    expect(nav).toContain('transition-transform');
   });
 
   it('does not use a spring on the nav buttons', () => {

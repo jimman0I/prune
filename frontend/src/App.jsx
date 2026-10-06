@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useCallback, lazy, Suspense } from 'react';
+import { useState, useEffect, useRef, useCallback, lazy, Suspense, startTransition } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
 import { keys } from './lib/queryClient.js';
 import NavRail from './components/NavRail.jsx';
@@ -59,13 +59,27 @@ function formatBytes(bytes) {
 
 export default function App() {
   const { t } = useLanguage();
-  const [screen, setScreen] = useState('dashboard');
+  // Two values for one idea. `screen` is what is RENDERED; `navTarget` is what the
+  // sidebar shows. A click sets the second at once, so the highlight starts sliding
+  // immediately, and the first inside a transition, so React builds the new screen
+  // in small interruptible slices instead of one 400ms+ block (Applications used to
+  // freeze the whole window that long on first open) and keeps showing the old
+  // screen until the new one is ready.
+  const [screen, setCommittedScreen] = useState('dashboard');
+  const [navTarget, setNavTarget] = useState('dashboard');
 
   // Which tabs have been opened. A screen is built the first time it is
   // asked for and then kept in the DOM, hidden, so switching away no
   // longer throws its state out -- the Disk Map used to rescan the drive
   // every time it was reopened, for a result it had already produced.
   const [visited, setVisited] = useState(() => new Set(['dashboard']));
+  const setScreen = useCallback((id) => {
+    setNavTarget(id);
+    startTransition(() => {
+      setCommittedScreen(id);
+      setVisited((prev) => rememberVisited(prev, id));
+    });
+  }, []);
   useEffect(() => { setVisited((prev) => rememberVisited(prev, screen)); }, [screen]);
   const [selectedProgram, setSelectedProgram] = useState(null);
   const [batchPrograms, setBatchPrograms] = useState(null);
@@ -257,7 +271,7 @@ export default function App() {
       <TitleBar />
       <div className="flex-1 flex min-h-0">
       <ToastHost />
-      <NavRail screen={screen} onNavigate={setScreen} footer={<UpdateButton />} onReportBug={openBugReport} />
+      <NavRail screen={navTarget} onNavigate={setScreen} footer={<UpdateButton />} onReportBug={openBugReport} />
       <div ref={stageRef} className="flex-1 overflow-y-auto min-h-0">
         <Screen active={screen === 'dashboard'} visited={visited.has('dashboard')}>
           <Dashboard programs={programs} programsMeasured={sizesSettled} onNavigate={setScreen} onOpenHistory={openHistory} active={screen === 'dashboard'} />

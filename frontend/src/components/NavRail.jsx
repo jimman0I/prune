@@ -128,8 +128,11 @@ export const NAV_ICONS = Object.fromEntries([...ITEMS, SETTINGS_ITEM].map((item)
  * with getBoundingClientRect() and bakes the result into a transform; under
  * fractional display scaling (Windows 150%) that measurement landed on a different
  * sub-pixel than the icon beside it, which stays in plain layout, and the two
- * drifted apart. A CSS `top` is in the same layout units as the rows, so there is
- * nothing to disagree. The numbers mirror the classes on the panel (py-6, gap-2)
+ * drifted apart. A CSS offset is in the same layout units as the rows, so there is
+ * nothing to disagree. It is applied as a `transform`, which the compositor animates on
+ * its own thread: a `top` transition is layout, runs on the main thread, and froze
+ * whenever a screen was mounting at the same moment (Applications blocks it for
+ * ~650ms on first open). The numbers mirror the classes on the panel (py-6, gap-2)
  * and the rows (h-11); NavRail.render.test.jsx reads this file and fails if the
  * two ever differ.
  *
@@ -144,8 +147,12 @@ export const NAV_ICONS = Object.fromEntries([...ITEMS, SETTINGS_ITEM].map((item)
  * keeps that out of reach except at 200% scaling on a 1080p display. */
 const RAIL_PAD = 24, ROW_HEIGHT = 44, ROW_GAP = 8;
 
-function markTop(screen) {
-  if (screen === SETTINGS_ITEM.id) return `calc(100% - ${RAIL_PAD + ROW_HEIGHT}px)`;
+function markOffset(screen) {
+  // 100cqh is the height of the rail panel's CONTENT box: container units exclude the
+  // container's own padding, here RAIL_PAD above and below. The mark is positioned from
+  // the padding box, so Settings (RAIL_PAD + ROW_HEIGHT up from the bottom edge) is
+  // 100cqh + 2 * RAIL_PAD - (RAIL_PAD + ROW_HEIGHT) = 100cqh - (ROW_HEIGHT - RAIL_PAD).
+  if (screen === SETTINGS_ITEM.id) return `calc(100cqh - ${ROW_HEIGHT - RAIL_PAD}px)`;
   const index = ITEMS.findIndex((item) => item.id === screen);
   return index < 0 ? null : `${RAIL_PAD + index * (ROW_HEIGHT + ROW_GAP)}px`;
 }
@@ -251,7 +258,7 @@ function ActionItem({ icon, label, onClick }) {
 
 export default function NavRail({ screen, onNavigate, footer = null, onReportBug = null }) {
   const { t } = useLanguage();
-  const mark = markTop(screen);
+  const mark = markOffset(screen);
   return (
     // Timing, measured frame by frame in Chromium: an expo-out curve (the first
     // version) covered 72px -> 181px in its FIRST frame and crawled the rest,
@@ -269,7 +276,7 @@ export default function NavRail({ screen, onNavigate, footer = null, onReportBug
     // (`:focus-visible`, not `:focus-within` -- see the key chip in
     // NavItem), and closes the moment both are gone.
     <nav className="relative z-flyout w-[72px] shrink-0" aria-label={t('nav.landmark')}>
-      <div className="group/rail absolute inset-y-0 left-0 w-[72px] hover:w-[200px] has-[:focus-visible]:w-[200px] flex flex-col items-stretch gap-2 py-6 px-[12px] transition-[width] duration-[320ms] ease-[cubic-bezier(0.4,0,0.2,1)] delay-100 hover:delay-0 has-[:focus-visible]:delay-0">
+      <div className="group/rail absolute inset-y-0 left-0 [container-type:size] w-[72px] hover:w-[200px] has-[:focus-visible]:w-[200px] flex flex-col items-stretch gap-2 py-6 px-[12px] transition-[width] duration-[320ms] ease-[cubic-bezier(0.4,0,0.2,1)] delay-100 hover:delay-0 has-[:focus-visible]:delay-0">
         {/* The glass is a background LAYER here, not the container itself.
             `backdrop-filter` establishes a containing block and clips
             absolutely positioned descendants to its own border box, so with
@@ -277,7 +284,7 @@ export default function NavRail({ screen, onNavigate, footer = null, onReportBug
             the rail's edge. A chip does not need a portal; it needs the
             blurred surface to be a sibling rather than an ancestor. */}
         <div className="glass-panel absolute inset-0" aria-hidden="true" />
-        {/* The active mark: one element, slid to the active row (see markTop). It
+        {/* The active mark: one element, slid to the active row (see markOffset). It
             sits behind the rows (earlier in the DOM, same stacking level) and is
             decoration for what aria-current already reports. The 3px pill is the
             part that survives squinting; the tint alone is a faint wash in light
@@ -287,8 +294,8 @@ export default function NavRail({ screen, onNavigate, footer = null, onReportBug
           <div
             data-nav-mark
             aria-hidden="true"
-            className="pointer-events-none absolute inset-x-0 h-11 transition-[top] duration-[300ms] ease-[cubic-bezier(0.4,0,0.2,1)]"
-            style={{ top: mark }}
+            className="pointer-events-none absolute inset-x-0 top-0 h-11 will-change-transform [transform:translateY(var(--mark-y))] transition-transform duration-[300ms] ease-[cubic-bezier(0.4,0,0.2,1)]"
+            style={{ '--mark-y': mark }}
           >
             <span className="absolute inset-y-0 left-[12px] right-[12px] rounded-xl bg-[color:var(--accent-primary-soft)]" />
             <span className="absolute left-[4px] top-3 h-5 w-[3px] rounded-full bg-[color:var(--accent-primary)]" />
