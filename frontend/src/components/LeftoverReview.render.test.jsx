@@ -70,6 +70,17 @@ describe('excluded folders', () => {
     expect(screen.getByText(/2 folders left out because they.re in your exclusions/i)).toBeTruthy();
   });
 
+  it('says how many registry keys were left out, apart from the folders', () => {
+    renderScreen(
+      <LeftoverReview
+        scanResult={{ ...scanResult, registryKeys: { ...scanResult.registryKeys, excluded: 3 } }}
+        selected={selected} onToggle={vi.fn()} onConfirm={vi.fn()} onSkip={vi.fn()}
+      />
+    );
+    expect(screen.getByText(/Registry keys left out because they.re in your exclusions: 3./)).toBeTruthy();
+    expect(screen.queryByText(/folders? left out/i)).toBeNull();
+  });
+
   it('says nothing when none were', () => {
     show();
     expect(screen.queryByText(/left out because/i)).toBeNull();

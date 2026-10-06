@@ -121,6 +121,7 @@ export default {
     palemoon_cache: { name: "Skyndiminni", description: "Vistaðar síður, skriftur og myndir. Byggist upp aftur á meðan þú vafrar." },
     thunderbird_cache: { name: "Skyndiminni", description: "Skyndiminni fyrir fjarefni og straumgögn. Póstur, möppur og reikningar þínir verða ekki fyrir áhrifum." },
     windows_userassist: { name: "Ræsisaga forrita (UserAssist)", description: "Talning Windows á því hversu oft og hvenær þú ræstir forrit, sem raðar listanum yfir mest notuðu forritin í Start-valmyndinni. Windows byrjar nýja talningu." },
+    windows_regedit_lastkey: { name: "Skrásetningarritill: síðasti lykill sem var opnaður", description: "Lykillinn sem Skrásetningarritill opnast á næst þegar þú ræsir hann. Skrásetningin sjálf verður ekki fyrir áhrifum." },
     paint_recent: { name: "Nýlegar skrár", description: "Listinn yfir myndir sem Paint opnaði nýlega. Myndirnar sjálfar verða ekki fyrir áhrifum." },
     wordpad_recent: { name: "Nýlegar skrár", description: "Listinn yfir skjöl sem WordPad opnaði nýlega. Skjölin sjálf verða ekki fyrir áhrifum." },
     windows_media_player_history: { name: "Nýlegar skrár og möppur", description: "Skrárnar og vefslóðirnar sem Windows Media Player spilaði nýlega og möppurnar sem það man fyrir Opna og Vista. Miðlarnir sjálfir verða ekki fyrir áhrifum." },

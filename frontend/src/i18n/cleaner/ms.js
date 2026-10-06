@@ -121,6 +121,7 @@ export default {
     palemoon_cache: { name: "Cache", description: "Halaman, skrip dan imej yang dicache. Dibina semula semasa anda melayari." },
     thunderbird_cache: { name: "Cache", description: "Kandungan jauh dan data suapan yang dicache. E-mel, folder dan akaun anda tidak disentuh." },
     windows_userassist: { name: "Sejarah pelancaran program (UserAssist)", description: "Kiraan Windows tentang kekerapan dan waktu anda melancarkan program, yang menyusun senarai paling kerap digunakan dalam menu Start. Windows memulakan yang baharu." },
+    windows_regedit_lastkey: { name: "Editor Registri: kunci terakhir dibuka", description: "Kunci tempat Editor Registri dibuka semula pada kali seterusnya anda memulakannya. Registri itu sendiri tidak disentuh." },
     paint_recent: { name: "Fail terkini", description: "Senarai imej yang baru dibuka oleh Paint. Imej itu sendiri tidak disentuh." },
     wordpad_recent: { name: "Fail terkini", description: "Senarai dokumen yang baru dibuka oleh WordPad. Dokumen itu sendiri tidak disentuh." },
     windows_media_player_history: { name: "Fail dan folder terkini", description: "Fail dan alamat web yang baru dimainkan oleh Windows Media Player, dan folder yang diingatinya untuk Buka dan Simpan. Media itu sendiri tidak disentuh." },

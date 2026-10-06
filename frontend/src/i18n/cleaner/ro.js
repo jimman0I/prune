@@ -121,6 +121,7 @@ export default {
     palemoon_cache: { name: "Cache", description: "Pagini, scripturi și imagini din cache. Se reconstruiește pe măsură ce navighezi." },
     thunderbird_cache: { name: "Cache", description: "Conținutul la distanță și datele fluxurilor păstrate în cache. Poșta, folderele și conturile dvs. nu sunt atinse." },
     windows_userassist: { name: "Istoric de pornire a programelor (UserAssist)", description: "Contorul Windows al frecvenței și momentului în care ați pornit programe, care ordonează lista celor mai utilizate din meniul Start. Windows începe unul nou." },
+    windows_regedit_lastkey: { name: "Editor de registru: ultima cheie deschisă", description: "Cheia la care se redeschide Editorul de registru la următoarea pornire. Registrul în sine nu este atins." },
     paint_recent: { name: "Fișiere recente", description: "Lista imaginilor deschise recent în Paint. Imaginile în sine nu sunt atinse." },
     wordpad_recent: { name: "Fișiere recente", description: "Lista documentelor deschise recent în WordPad. Documentele în sine nu sunt atinse." },
     windows_media_player_history: { name: "Fișiere și foldere recente", description: "Fișierele și adresele web redate recent de Windows Media Player și folderele pe care le reține pentru Deschidere și Salvare. Fișierele media în sine nu sunt atinse." },

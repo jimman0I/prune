@@ -121,6 +121,7 @@ export default {
     palemoon_cache: { name: "Önbellek", description: "Önbelleğe alınmış sayfalar, komut dosyaları ve resimler. Gezindikçe yeniden oluşturulur." },
     thunderbird_cache: { name: "Önbellek", description: "Önbelleğe alınmış uzak içerik ve akış verileri. E-postanıza, klasörlerinize ve hesaplarınıza dokunulmaz." },
     windows_userassist: { name: "Program başlatma geçmişi (UserAssist)", description: "Windows'un programları ne sıklıkla ve ne zaman başlattığınıza dair sayımı; Başlat menüsünün en çok kullanılanlar listesini sıralar. Windows yenisini başlatır." },
+    windows_regedit_lastkey: { name: "Kayıt Defteri Düzenleyicisi: son açılan anahtar", description: "Kayıt Defteri Düzenleyicisi'nin bir sonraki başlatışınızda yeniden açıldığı anahtar. Kayıt defterinin kendisine dokunulmaz." },
     paint_recent: { name: "Son dosyalar", description: "Paint'in yakın zamanda açtığı görsellerin listesi. Görsellerin kendisine dokunulmaz." },
     wordpad_recent: { name: "Son dosyalar", description: "WordPad'in yakın zamanda açtığı belgelerin listesi. Belgelerin kendisine dokunulmaz." },
     windows_media_player_history: { name: "Son dosyalar ve klasörler", description: "Windows Media Player'ın yakın zamanda oynattığı dosyalar ve web adresleri ile Aç ve Kaydet için hatırladığı klasörler. Medyanın kendisine dokunulmaz." },

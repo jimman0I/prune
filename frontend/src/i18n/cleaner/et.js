@@ -121,6 +121,7 @@ export default {
     palemoon_cache: { name: "Vahemälu", description: "Vahemällu salvestatud lehed, skriptid ja pildid. Ehitatakse sirvimise käigus uuesti üles." },
     thunderbird_cache: { name: "Vahemälu", description: "Vahemällu salvestatud kaugsisu ja voogude andmed. Teie meili, kaustu ja kontosid see ei mõjuta." },
     windows_userassist: { name: "Programmide käivitamise ajalugu (UserAssist)", description: "Windowsi loendur selle kohta, kui sageli ja millal olete programme käivitanud; see järjestab Start-menüü enimkasutatute loendi. Windows alustab uut." },
+    windows_regedit_lastkey: { name: "Registriredaktor: viimati avatud võti", description: "Võti, mille juures registriredaktor järgmisel käivitamisel uuesti avaneb. Registrit ennast see ei mõjuta." },
     paint_recent: { name: "Hiljutised failid", description: "Pildid, mille Paint hiljuti avas. Pilte endid see ei mõjuta." },
     wordpad_recent: { name: "Hiljutised failid", description: "Dokumendid, mille WordPad hiljuti avas. Dokumente endid see ei mõjuta." },
     windows_media_player_history: { name: "Hiljutised failid ja kaustad", description: "Failid ja veebiaadressid, mida Windows Media Player hiljuti esitas, ning kaustad, mida see Avamise ja Salvestamise jaoks meeles peab. Meediat ennast see ei mõjuta." },

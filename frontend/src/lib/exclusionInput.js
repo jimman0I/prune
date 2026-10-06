@@ -22,6 +22,10 @@ const LOOKS_LIKE_PATH = /[\\/]|^[a-z]:/i;
  * rather than quietly stored as a folder with a strange name. */
 const EXTENSION_BODY = /^[a-z0-9][a-z0-9_-]{0,15}$/i;
 
+/** The start of a registry key: a hive, in its short or long spelling, with an
+ * optional colon (PowerShell's HKCU:\), followed by a separator or nothing. */
+const REGISTRY_HIVE = /^(?:HKLM|HKCU|HKCR|HKU|HKCC|HKEY_(?:LOCAL_MACHINE|CURRENT_USER|CLASSES_ROOT|USERS|CURRENT_CONFIG)):?(?:[\\/]|$)/i;
+
 export function classifyExclusion(input) {
   if (typeof input !== 'string') return null;
   const text = input.trim();
@@ -34,6 +38,15 @@ export function classifyExclusion(input) {
   if (/^\*?\./.test(text)) {
     const body = text.replace(/^\*/, '').replace(/^\./, '');
     return EXTENSION_BODY.test(body) ? { kind: 'extension', value: `.${body.toLowerCase()}` } : null;
+  }
+
+  // A registry key, written the way regedit shows it: a hive, then at least one
+  // key name. Checked before the folder test because its separators would
+  // otherwise make it look like a (very strange) folder. A bare hive is refused
+  // rather than stored: excluding "HKCU" would exclude everything under it.
+  if (REGISTRY_HIVE.test(text)) {
+    const key = text.replace(/[\\/]+/g, '\\').replace(/^([^\\:]+):/, '$1').replace(/\\+$/, '');
+    return key.includes('\\') ? { kind: 'registry', value: key } : null;
   }
 
   if (LOOKS_LIKE_PATH.test(text)) return { kind: 'folder', value: text };

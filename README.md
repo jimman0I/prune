@@ -112,7 +112,7 @@ exact, a **Backups** tab to restore registry and task backups, and a full
 
 ### 🧹 Deep Clean
 
-**128 rules across 44 categories**, scanned one at a time so the tree fills
+**129 rules across 44 categories**, scanned one at a time so the tree fills
 in as it goes. A rule that cannot be measured says whether the software is
 missing or the read needs admin — never `0 B`.
 

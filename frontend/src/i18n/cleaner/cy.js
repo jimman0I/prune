@@ -121,6 +121,7 @@ export default {
     palemoon_cache: { name: "Storfa dros dro", description: "Tudalennau, sgriptiau a delweddau wedi'u storio. Yn cael eu hailadeiladu wrth i chi bori." },
     thunderbird_cache: { name: "Storfa dros dro", description: "Cynnwys o bell a data porthiant sydd wedi'u storio dros dro. Ni chaiff eich post, eich ffolderi na'ch cyfrifon eu cyffwrdd." },
     windows_userassist: { name: "Hanes lansio rhaglenni (UserAssist)", description: "Cyfrif Windows o ba mor aml a phryd y dechreuoch raglenni, sy'n trefnu rhestr y rhai a ddefnyddir fwyaf yn newislen Cychwyn. Mae Windows yn dechrau un newydd." },
+    windows_regedit_lastkey: { name: "Golygydd y Gofrestrfa: yr allwedd olaf a agorwyd", description: "Yr allwedd y bydd Golygydd y Gofrestrfa yn ailagor arni y tro nesaf y byddwch yn ei gychwyn. Ni chaiff y gofrestrfa ei hun ei chyffwrdd." },
     paint_recent: { name: "Ffeiliau diweddar", description: "Rhestr y delweddau y mae Paint wedi'u hagor yn ddiweddar. Ni chaiff y delweddau eu hunain eu cyffwrdd." },
     wordpad_recent: { name: "Ffeiliau diweddar", description: "Rhestr y dogfennau y mae WordPad wedi'u hagor yn ddiweddar. Ni chaiff y dogfennau eu hunain eu cyffwrdd." },
     windows_media_player_history: { name: "Ffeiliau a ffolderi diweddar", description: "Y ffeiliau a'r cyfeiriadau gwe y mae Windows Media Player wedi'u chwarae'n ddiweddar, a'r ffolderi y mae'n eu cofio ar gyfer Agor a Chadw. Ni chaiff y cyfryngau eu hunain eu cyffwrdd." },

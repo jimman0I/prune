@@ -121,6 +121,7 @@ export default {
     palemoon_cache: { name: "Välimuisti", description: "Välimuistiin tallennetut sivut, skriptit ja kuvat. Rakentuu uudelleen selatessasi." },
     thunderbird_cache: { name: "Välimuisti", description: "Välimuistissa oleva etäsisältö ja syötteiden tiedot. Sähköpostiasi, kansioitasi ja tilejäsi ei kosketa." },
     windows_userassist: { name: "Ohjelmien käynnistyshistoria (UserAssist)", description: "Windowsin laskuri siitä, kuinka usein ja milloin olet käynnistänyt ohjelmia; se järjestää Käynnistä-valikon eniten käytettyjen luettelon. Windows aloittaa uuden." },
+    windows_regedit_lastkey: { name: "Rekisterieditori: viimeksi avattu avain", description: "Avain, jonka kohdalla rekisterieditori avautuu seuraavan kerran käynnistettäessä. Itse rekisteriä ei kosketa." },
     paint_recent: { name: "Viimeisimmät tiedostot", description: "Luettelo kuvista, jotka Paint avasi äskettäin. Itse kuvia ei kosketa." },
     wordpad_recent: { name: "Viimeisimmät tiedostot", description: "Luettelo asiakirjoista, jotka WordPad avasi äskettäin. Itse asiakirjoja ei kosketa." },
     windows_media_player_history: { name: "Viimeisimmät tiedostot ja kansiot", description: "Tiedostot ja verkko-osoitteet, joita Windows Media Player toisti äskettäin, sekä kansiot, jotka se muistaa Avaa- ja Tallenna-toimintoja varten. Itse mediatiedostoja ei kosketa." },

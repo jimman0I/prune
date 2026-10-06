@@ -121,6 +121,7 @@ export default {
     palemoon_cache: { name: "Cache", description: "Cachade sidor, skript och bilder. Byggs upp igen medan du surfar." },
     thunderbird_cache: { name: "Cache", description: "Cachat fjärrinnehåll och flödesdata. Din e-post, dina mappar och dina konton berörs inte." },
     windows_userassist: { name: "Programstarthistorik (UserAssist)", description: "Windows räkning av hur ofta och när du har startat program, som sorterar Start-menyns lista över mest använda. Windows börjar en ny." },
+    windows_regedit_lastkey: { name: "Registerredigeraren: senast öppnade nyckel", description: "Nyckeln som Registerredigeraren öppnas vid nästa gång du startar den. Själva registret berörs inte." },
     paint_recent: { name: "Senaste filer", description: "Listan över bilder som Paint nyligen öppnade. Själva bilderna berörs inte." },
     wordpad_recent: { name: "Senaste filer", description: "Listan över dokument som WordPad nyligen öppnade. Själva dokumenten berörs inte." },
     windows_media_player_history: { name: "Senaste filer och mappar", description: "De filer och webbadresser som Windows Media Player nyligen spelade och de mappar den kommer ihåg för Öppna och Spara. Själva mediefilerna berörs inte." },

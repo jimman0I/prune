@@ -121,6 +121,7 @@ export default {
     palemoon_cache: { name: "Cache", description: "Pagine, script e immagini in cache. Viene ricostruita mentre navighi." },
     thunderbird_cache: { name: "Cache", description: "Contenuti remoti e dati dei feed memorizzati nella cache. La posta, le cartelle e gli account non vengono toccati." },
     windows_userassist: { name: "Cronologia di avvio dei programmi (UserAssist)", description: "Il conteggio di Windows di quante volte e quando hai avviato i programmi, che ordina l'elenco dei più usati nel menu Start. Windows ne inizia uno nuovo." },
+    windows_regedit_lastkey: { name: "Editor del Registro di sistema: ultima chiave aperta", description: "La chiave su cui l'Editor del Registro di sistema si riapre al prossimo avvio. Il registro stesso non viene toccato." },
     paint_recent: { name: "File recenti", description: "L'elenco delle immagini aperte di recente in Paint. Le immagini stesse non vengono toccate." },
     wordpad_recent: { name: "File recenti", description: "L'elenco dei documenti aperti di recente in WordPad. I documenti stessi non vengono toccati." },
     windows_media_player_history: { name: "File e cartelle recenti", description: "I file e gli indirizzi web riprodotti di recente da Windows Media Player e le cartelle che ricorda per Apri e Salva. I contenuti multimediali stessi non vengono toccati." },

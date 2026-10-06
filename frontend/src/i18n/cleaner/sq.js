@@ -121,6 +121,7 @@ export default {
     palemoon_cache: { name: "Memoria e fshehtë", description: "Faqe, skripte dhe imazhe të ruajtura. Rindërtohet ndërsa shfletoni." },
     thunderbird_cache: { name: "Memoria e fshehtë", description: "Përmbajtja në distancë dhe të dhënat e burimeve të ruajtura në memorien e fshehtë. Posta, dosjet dhe llogaritë tuaja nuk preken." },
     windows_userassist: { name: "Historiku i nisjes së programeve (UserAssist)", description: "Numërimi i Windows për sa shpesh dhe kur keni nisur programe, që rendit listën e më të përdorurave në menunë Start. Windows nis një të ri." },
+    windows_regedit_lastkey: { name: "Redaktori i regjistrit: çelësi i hapur së fundmi", description: "Çelësi ku hapet sërish Redaktori i regjistrit herën tjetër që e nisni. Vetë regjistri nuk preket." },
     paint_recent: { name: "Skedarët e fundit", description: "Lista e imazheve që Paint ka hapur së fundmi. Vetë imazhet nuk preken." },
     wordpad_recent: { name: "Skedarët e fundit", description: "Lista e dokumenteve që WordPad ka hapur së fundmi. Vetë dokumentet nuk preken." },
     windows_media_player_history: { name: "Skedarët dhe dosjet e fundit", description: "Skedarët dhe adresat e uebit që Windows Media Player ka luajtur së fundmi dhe dosjet që mban mend për Hap dhe Ruaj. Vetë media nuk preket." },

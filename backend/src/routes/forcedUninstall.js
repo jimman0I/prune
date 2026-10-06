@@ -4,6 +4,7 @@ import { normalizeScanMode } from '../services/leftoverModes.js';
 import { getSettings } from '../services/settings.js';
 import { anchorsFrom } from './leftovers.js';
 import { listInstalledPrograms } from '../services/programs.js';
+import { withoutExcluded } from '../services/leftoverExclusions.js';
 
 const router = Router();
 
@@ -16,12 +17,15 @@ router.post('/scan', async (req, res) => {
   const { name, publisher, registryKey, mode, anchors } = req.body || {};
   try {
     const settings = await getSettings().catch(() => ({}));
-    res.json(await scanForcedUninstall({
+    // The exclusions the normal uninstall scan honours apply here too: a forced
+    // removal is the broadest search Prune makes, so it most needs them.
+    const scan = await scanForcedUninstall({
       name, publisher, registryKey,
       mode: normalizeScanMode(mode ?? settings?.leftoverScanMode),
       anchors: anchorsFrom(anchors),
       installedPrograms: listInstalledPrograms().catch(() => [])
-    }));
+    });
+    res.json(withoutExcluded(scan, settings));
   } catch (err) {
     // A missing name is the caller's mistake, not a server fault.
     const status = /required/i.test(err.message) ? 400 : 500;
