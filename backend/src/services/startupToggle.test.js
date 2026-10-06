@@ -49,6 +49,34 @@ describe('toggleRefusal', () => {
     expect(refusal).toMatch(/RunOnce/);
   });
 
+  it('refuses a 32-bit RunOnce entry the same way', () => {
+    const refusal = toggleRefusal(runEntry({
+      location: 'RunOnce (32-bit)',
+      rawScope: 'machine',
+      registryKey: 'HKLM:\\SOFTWARE\\WOW6432Node\\Microsoft\\Windows\\CurrentVersion\\RunOnce'
+    }));
+    expect(refusal).toMatch(/RunOnce/);
+    expect(approvedKeyPath(runEntry({
+      location: 'RunOnce (32-bit)',
+      registryKey: 'HKLM:\\SOFTWARE\\WOW6432Node\\Microsoft\\Windows\\CurrentVersion\\RunOnce'
+    }))).toBeNull();
+  });
+
+  it('refuses a Policies\\Explorer\\Run entry with its own reason, never filing it under Run', () => {
+    // Policy-enforced entries sit outside StartupApproved. Treating one as
+    // an ordinary Run value would read, and a toggle would write, the state
+    // of whichever unrelated Run entry shares its name.
+    for (const [rawScope, hive] of [['user', 'HKCU'], ['machine', 'HKLM']]) {
+      const entry = runEntry({
+        location: 'Run (policy)',
+        rawScope,
+        registryKey: `${hive}:\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer\\Run`
+      });
+      expect(toggleRefusal(entry)).toMatch(/policy/i);
+      expect(approvedKeyPath(entry)).toBeNull();
+    }
+  });
+
   it('refuses an entry with no name to file the decision under', () => {
     expect(toggleRefusal(runEntry({ name: '', approvedName: '' }))).toBeTruthy();
   });

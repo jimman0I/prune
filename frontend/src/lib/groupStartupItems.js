@@ -16,8 +16,11 @@ const GROUP_ORDER = [
   'Run|user',
   'Run|machine',
   'Run (32-bit)|machine',
+  'Run (policy)|user',
+  'Run (policy)|machine',
   'RunOnce|user',
-  'RunOnce|machine'
+  'RunOnce|machine',
+  'RunOnce (32-bit)|machine'
 ];
 
 /** The English these labels carry when no translated set is passed in --
@@ -36,7 +39,10 @@ export const DEFAULT_GROUP_LABELS = {
   'Run|machine': 'Registry: HKLM Run',
   'Run (32-bit)|machine': 'Registry: HKLM Run (32-bit)',
   'RunOnce|user': 'Registry: HKCU RunOnce',
-  'RunOnce|machine': 'Registry: HKLM RunOnce'
+  'RunOnce|machine': 'Registry: HKLM RunOnce',
+  'RunOnce (32-bit)|machine': 'Registry: HKLM RunOnce (32-bit)',
+  'Run (policy)|user': 'Registry: HKCU Policies\\Explorer\\Run',
+  'Run (policy)|machine': 'Registry: HKLM Policies\\Explorer\\Run'
 };
 
 function groupKeyFor(item) {

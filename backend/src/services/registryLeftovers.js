@@ -62,7 +62,27 @@ const RUN_ROOTS = [
   'HKLM:\\Software\\Microsoft\\Windows\\CurrentVersion\\Run',
   'HKLM:\\Software\\Microsoft\\Windows\\CurrentVersion\\RunOnce',
   'HKLM:\\Software\\WOW6432Node\\Microsoft\\Windows\\CurrentVersion\\Run',
-  'HKLM:\\Software\\WOW6432Node\\Microsoft\\Windows\\CurrentVersion\\RunOnce'
+  'HKLM:\\Software\\WOW6432Node\\Microsoft\\Windows\\CurrentVersion\\RunOnce',
+  // Revo's Autorun Manager reads these too. The first two are the policy-
+  // enforced Run list; RunServices(Once) are legacy keys that old installers
+  // still write and nothing ever removes.
+  'HKCU:\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer\\Run',
+  'HKLM:\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer\\Run',
+  'HKCU:\\Software\\Microsoft\\Windows\\CurrentVersion\\RunServices',
+  'HKLM:\\Software\\Microsoft\\Windows\\CurrentVersion\\RunServices',
+  'HKCU:\\Software\\Microsoft\\Windows\\CurrentVersion\\RunServicesOnce',
+  'HKLM:\\Software\\Microsoft\\Windows\\CurrentVersion\\RunServicesOnce'
+];
+
+/** SharedDLLs: a reference count per shared file, keyed by the file's full
+ * path. An installer adds one for every shared DLL it drops and an
+ * uninstaller is meant to take it away again; one that does not leaves a
+ * count for a file that is gone. Revo's leftover scan reads this list, and
+ * so does Prune now. The entries are VALUES inside a key every program
+ * shares, so they come out one value at a time, like Run. */
+export const SHARED_DLL_ROOTS = [
+  'HKLM:\\Software\\Microsoft\\Windows\\CurrentVersion\\SharedDLLs',
+  'HKLM:\\Software\\WOW6432Node\\Microsoft\\Windows\\CurrentVersion\\SharedDLLs'
 ];
 
 /** One comparable spelling for a registry path.
@@ -99,7 +119,7 @@ export function canonicalKeyPath(path) {
  * container itself never is. Values are exempt from the rule -- removing
  * one value out of the Run key is the entire point of reading it. */
 const PROTECTED_KEYS = new Set([
-  ...SOFTWARE_ROOTS, ...CLASSES_ROOTS, ...UNINSTALL_ROOTS, ...APP_PATH_ROOTS, ...RUN_ROOTS,
+  ...SOFTWARE_ROOTS, ...CLASSES_ROOTS, ...UNINSTALL_ROOTS, ...APP_PATH_ROOTS, ...RUN_ROOTS, ...SHARED_DLL_ROOTS,
   ...CLSID_ROOTS, ...REGISTERED_APPLICATIONS_ROOTS,
   'HKLM:\\Software\\Classes\\Installer',
   'HKLM:\\Software\\Classes\\Interface',
@@ -201,7 +221,7 @@ foreach ($root in ${psArray(REGISTERED_APPLICATIONS_ROOTS)}) {
  * powershell.exe would spend more time starting processes than searching.
  * Exported so a test can run it against real PowerShell -- a mocked test
  * cannot see a script that does not parse. */
-export function buildRegistryScript(pattern, { advanced = false, anchors = [] } = {}) {
+export function buildRegistryScript(pattern, { advanced = false, anchors = [], sharedDllRoots = SHARED_DLL_ROOTS } = {}) {
   return `
 $ErrorActionPreference = 'SilentlyContinue'
 $pattern = '${psQuote(pattern)}'
@@ -274,6 +294,23 @@ foreach ($root in ${psArray(RUN_ROOTS)}) {
         Add-Found $key.Name $valueName $false 'anchor' ($valueName + ' ' + $data)
       } elseif ($valueName -match $pattern -or $data -match $pattern) {
         Add-Found $key.Name $valueName $false 'name' ($valueName + ' ' + $data)
+      }
+    }
+  }
+}
+
+# Shared-file reference counts. The value NAME is the file's full path. One in
+# the program's own folder is anchored; one that only matches by name must also
+# be a file that no longer exists, because a shared DLL that is still on disk
+# may well be in use by something else.
+foreach ($root in ${psArray(sharedDllRoots)}) {
+  $key = Get-Item -Path $root -ErrorAction SilentlyContinue
+  if ($key) {
+    foreach ($valueName in $key.GetValueNames()) {
+      if (Test-Anchored $valueName) {
+        Add-Found $key.Name $valueName $false 'anchor' $valueName
+      } elseif ($valueName -match $pattern -and -not (Test-Path -LiteralPath $valueName)) {
+        Add-Found $key.Name $valueName $false 'name' $valueName
       }
     }
   }

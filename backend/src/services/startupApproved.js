@@ -59,6 +59,11 @@ function firstByteOf(value) {
   return null;
 }
 
+/** Whether this is a Policies\Explorer\Run entry, which policy enforces. */
+export function isPolicyRunEntry(item) {
+  return /\\Policies\\Explorer\\Run$/i.test(item?.registryKey || '');
+}
+
 /** Which StartupApproved key holds the decision for one entry, or null
  * when Windows keeps no decision for it at all.
  *
@@ -77,9 +82,13 @@ function firstByteOf(value) {
  * the same answer would switch that other entry off. */
 export function approvedKindFor(item) {
   if (item?.source === 'folder') return 'StartupFolder';
-  if (/^RunOnce$/i.test(item?.location || '') || /\\RunOnce$/i.test(item?.registryKey || '')) {
+  if (/^RunOnce/i.test(item?.location || '') || /\\RunOnce$/i.test(item?.registryKey || '')) {
     return null;
   }
+  // Policies\Explorer\Run is enforced by policy and is not part of the
+  // Run/Run32/StartupFolder set Task Manager reads, so there is no decision
+  // to look up -- answering "Run" would read some other entry's state.
+  if (isPolicyRunEntry(item)) return null;
   // The registry path, not the display label. `location` is the friendly
   // kind ("Run (32-bit)"), and matching WOW6432Node against that finds
   // nothing -- which reads as enabled, the silent wrong answer again.

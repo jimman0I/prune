@@ -554,7 +554,10 @@ export const CATALOG = {
         'Run|machine': 'Registry: HKLM Run',
         'Run (32-bit)|machine': 'Registry: HKLM Run (32-bit)',
         'RunOnce|user': 'Registry: HKCU RunOnce',
-        'RunOnce|machine': 'Registry: HKLM RunOnce'
+        'RunOnce|machine': 'Registry: HKLM RunOnce',
+        'RunOnce (32-bit)|machine': 'Registry: HKLM RunOnce (32-bit)',
+        'Run (policy)|user': 'Registry: HKCU Policies\\Explorer\\Run',
+        'Run (policy)|machine': 'Registry: HKLM Policies\\Explorer\\Run'
       },
       groupEnabledOf: (enabledCount, total) => `${enabledCount} of ${total} enabled`,
       groupAdminNote: 'Changing these asks for administrator',
@@ -1442,7 +1445,10 @@ export const CATALOG = {
         'Run|machine': 'Register: HKLM Run',
         'Run (32-bit)|machine': 'Register: HKLM Run (32-bis)',
         'RunOnce|user': 'Register: HKCU RunOnce',
-        'RunOnce|machine': 'Register: HKLM RunOnce'
+        'RunOnce|machine': 'Register: HKLM RunOnce',
+        'RunOnce (32-bit)|machine': 'Register: HKLM RunOnce (32-bis)',
+        'Run (policy)|user': 'Register: HKCU Policies\\Explorer\\Run',
+        'Run (policy)|machine': 'Register: HKLM Policies\\Explorer\\Run'
       },
       groupEnabledOf: (enabledCount, total) => `${enabledCount} van ${total} geaktiveer`,
       groupAdminNote: 'Om dit te verander vra administrateurregte',
@@ -2330,7 +2336,10 @@ export const CATALOG = {
         'Run|machine': 'السجل: HKLM Run',
         'Run (32-bit)|machine': 'السجل: HKLM Run (32-بت)',
         'RunOnce|user': 'السجل: HKCU RunOnce',
-        'RunOnce|machine': 'السجل: HKLM RunOnce'
+        'RunOnce|machine': 'السجل: HKLM RunOnce',
+        'RunOnce (32-bit)|machine': 'السجل: HKLM RunOnce (32-بت)',
+        'Run (policy)|user': 'السجل: HKCU Policies\\Explorer\\Run',
+        'Run (policy)|machine': 'السجل: HKLM Policies\\Explorer\\Run'
       },
       groupEnabledOf: (enabledCount, total) => `${enabledCount} من ${total} مفعّل`,
       groupAdminNote: 'تغيير هذه يطلب صلاحيات المسؤول',
@@ -3218,7 +3227,10 @@ export const CATALOG = {
         'Run|machine': 'Registre: HKLM Run',
         'Run (32-bit)|machine': 'Registre: HKLM Run (32 bits)',
         'RunOnce|user': 'Registre: HKCU RunOnce',
-        'RunOnce|machine': 'Registre: HKLM RunOnce'
+        'RunOnce|machine': 'Registre: HKLM RunOnce',
+        'RunOnce (32-bit)|machine': 'Registre: HKLM RunOnce (32 bits)',
+        'Run (policy)|user': 'Registre: HKCU Policies\\Explorer\\Run',
+        'Run (policy)|machine': 'Registre: HKLM Policies\\Explorer\\Run'
       },
       groupEnabledOf: (enabledCount, total) => `${enabledCount} de ${total} activades`,
       groupAdminNote: 'Canviar-les demana permisos d\'administrador',
@@ -4106,7 +4118,10 @@ export const CATALOG = {
         'Run|machine': 'Registr: HKLM Run',
         'Run (32-bit)|machine': 'Registr: HKLM Run (32bitový)',
         'RunOnce|user': 'Registr: HKCU RunOnce',
-        'RunOnce|machine': 'Registr: HKLM RunOnce'
+        'RunOnce|machine': 'Registr: HKLM RunOnce',
+        'RunOnce (32-bit)|machine': 'Registr: HKLM RunOnce (32bitový)',
+        'Run (policy)|user': 'Registr: HKCU Policies\\Explorer\\Run',
+        'Run (policy)|machine': 'Registr: HKLM Policies\\Explorer\\Run'
       },
       groupEnabledOf: (enabledCount, total) => `${enabledCount} z ${total} povoleno`,
       groupAdminNote: 'Změna vyžaduje oprávnění správce',
@@ -4992,7 +5007,10 @@ export const CATALOG = {
         'Run|machine': 'Cofrestrfa: HKLM Run',
         'Run (32-bit)|machine': 'Cofrestrfa: HKLM Run (32-did)',
         'RunOnce|user': 'Cofrestrfa: HKCU RunOnce',
-        'RunOnce|machine': 'Cofrestrfa: HKLM RunOnce'
+        'RunOnce|machine': 'Cofrestrfa: HKLM RunOnce',
+        'RunOnce (32-bit)|machine': 'Cofrestrfa: HKLM RunOnce (32-did)',
+        'Run (policy)|user': 'Cofrestrfa: HKCU Policies\\Explorer\\Run',
+        'Run (policy)|machine': 'Cofrestrfa: HKLM Policies\\Explorer\\Run'
       },
       groupEnabledOf: (enabledCount, total) => `${enabledCount} o ${total} wedi'u galluogi`,
       groupAdminNote: 'Mae newid y rhain yn gofyn am hawliau gweinyddwr',
@@ -5880,7 +5898,10 @@ export const CATALOG = {
         'Run|machine': 'Register: HKLM Run',
         'Run (32-bit)|machine': 'Register: HKLM Run (32-bit)',
         'RunOnce|user': 'Register: HKCU RunOnce',
-        'RunOnce|machine': 'Register: HKLM RunOnce'
+        'RunOnce|machine': 'Register: HKLM RunOnce',
+        'RunOnce (32-bit)|machine': 'Register: HKLM RunOnce (32-bit)',
+        'Run (policy)|user': 'Register: HKCU Policies\\Explorer\\Run',
+        'Run (policy)|machine': 'Register: HKLM Policies\\Explorer\\Run'
       },
       groupEnabledOf: (enabledCount, total) => `${enabledCount} af ${total} aktiveret`,
       groupAdminNote: 'Ændring af disse kræver administratorrettigheder',
@@ -6768,7 +6789,10 @@ export const CATALOG = {
         'Run|machine': 'Registrierung: HKLM Run',
         'Run (32-bit)|machine': 'Registrierung: HKLM Run (32-Bit)',
         'RunOnce|user': 'Registrierung: HKCU RunOnce',
-        'RunOnce|machine': 'Registrierung: HKLM RunOnce'
+        'RunOnce|machine': 'Registrierung: HKLM RunOnce',
+        'RunOnce (32-bit)|machine': 'Registrierung: HKLM RunOnce (32-Bit)',
+        'Run (policy)|user': 'Registrierung: HKCU Policies\\Explorer\\Run',
+        'Run (policy)|machine': 'Registrierung: HKLM Policies\\Explorer\\Run'
       },
       groupEnabledOf: (enabledCount, total) => `${enabledCount} von ${total} aktiviert`,
       groupAdminNote: 'Das Ändern erfordert Administratorrechte',
@@ -7656,7 +7680,10 @@ export const CATALOG = {
         'Run|machine': 'Μητρώο: HKLM Run',
         'Run (32-bit)|machine': 'Μητρώο: HKLM Run (32-bit)',
         'RunOnce|user': 'Μητρώο: HKCU RunOnce',
-        'RunOnce|machine': 'Μητρώο: HKLM RunOnce'
+        'RunOnce|machine': 'Μητρώο: HKLM RunOnce',
+        'RunOnce (32-bit)|machine': 'Μητρώο: HKLM RunOnce (32-bit)',
+        'Run (policy)|user': 'Μητρώο: HKCU Policies\\Explorer\\Run',
+        'Run (policy)|machine': 'Μητρώο: HKLM Policies\\Explorer\\Run'
       },
       groupEnabledOf: (enabledCount, total) => `${enabledCount} από ${total} ενεργοποιημένες`,
       groupAdminNote: 'Η αλλαγή τους ζητά δικαιώματα διαχειριστή',
@@ -8544,7 +8571,10 @@ export const CATALOG = {
         'Run|machine': 'Registro: HKLM Run',
         'Run (32-bit)|machine': 'Registro: HKLM Run (32 bits)',
         'RunOnce|user': 'Registro: HKCU RunOnce',
-        'RunOnce|machine': 'Registro: HKLM RunOnce'
+        'RunOnce|machine': 'Registro: HKLM RunOnce',
+        'RunOnce (32-bit)|machine': 'Registro: HKLM RunOnce (32 bits)',
+        'Run (policy)|user': 'Registro: HKCU Policies\\Explorer\\Run',
+        'Run (policy)|machine': 'Registro: HKLM Policies\\Explorer\\Run'
       },
       groupEnabledOf: (enabledCount, total) => `${enabledCount} de ${total} habilitadas`,
       groupAdminNote: 'Cambiarlas solicita permisos de administrador',
@@ -9432,7 +9462,10 @@ export const CATALOG = {
         'Run|machine': 'Register: HKLM Run',
         'Run (32-bit)|machine': 'Register: HKLM Run (32-bitine)',
         'RunOnce|user': 'Register: HKCU RunOnce',
-        'RunOnce|machine': 'Register: HKLM RunOnce'
+        'RunOnce|machine': 'Register: HKLM RunOnce',
+        'RunOnce (32-bit)|machine': 'Register: HKLM RunOnce (32-bitine)',
+        'Run (policy)|user': 'Register: HKCU Policies\\Explorer\\Run',
+        'Run (policy)|machine': 'Register: HKLM Policies\\Explorer\\Run'
       },
       groupEnabledOf: (enabledCount, total) => `${enabledCount}/${total} lubatud`,
       groupAdminNote: 'Muutmine küsib administraatoriõigusi',
@@ -10320,7 +10353,10 @@ export const CATALOG = {
         'Run|machine': 'Rekisteri: HKLM Run',
         'Run (32-bit)|machine': 'Rekisteri: HKLM Run (32-bit)',
         'RunOnce|user': 'Rekisteri: HKCU RunOnce',
-        'RunOnce|machine': 'Rekisteri: HKLM RunOnce'
+        'RunOnce|machine': 'Rekisteri: HKLM RunOnce',
+        'RunOnce (32-bit)|machine': 'Rekisteri: HKLM RunOnce (32-bit)',
+        'Run (policy)|user': 'Rekisteri: HKCU Policies\\Explorer\\Run',
+        'Run (policy)|machine': 'Rekisteri: HKLM Policies\\Explorer\\Run'
       },
       groupEnabledOf: (enabledCount, total) => `${enabledCount}/${total} käytössä`,
       groupAdminNote: "Näiden muuttaminen pyytää järjestelmänvalvojan oikeuksia",
@@ -11208,7 +11244,10 @@ export const CATALOG = {
         'Run|machine': 'Registre : HKLM Run',
         'Run (32-bit)|machine': 'Registre : HKLM Run (32 bits)',
         'RunOnce|user': 'Registre : HKCU RunOnce',
-        'RunOnce|machine': 'Registre : HKLM RunOnce'
+        'RunOnce|machine': 'Registre : HKLM RunOnce',
+        'RunOnce (32-bit)|machine': 'Registre : HKLM RunOnce (32 bits)',
+        'Run (policy)|user': 'Registre : HKCU Policies\\Explorer\\Run',
+        'Run (policy)|machine': 'Registre : HKLM Policies\\Explorer\\Run'
       },
       groupEnabledOf: (enabledCount, total) => `${enabledCount} sur ${total} activées`,
       groupAdminNote: 'Les modifier demande des droits administrateur',
@@ -12096,7 +12135,10 @@ export const CATALOG = {
         'Run|machine': 'רישום: HKLM Run',
         'Run (32-bit)|machine': 'רישום: HKLM Run (32 סיביות)',
         'RunOnce|user': 'רישום: HKCU RunOnce',
-        'RunOnce|machine': 'רישום: HKLM RunOnce'
+        'RunOnce|machine': 'רישום: HKLM RunOnce',
+        'RunOnce (32-bit)|machine': 'רישום: HKLM RunOnce (32 סיביות)',
+        'Run (policy)|user': 'רישום: HKCU Policies\\Explorer\\Run',
+        'Run (policy)|machine': 'רישום: HKLM Policies\\Explorer\\Run'
       },
       groupEnabledOf: (enabledCount, total) => `${enabledCount} מתוך ${total} מופעלות`,
       groupAdminNote: 'שינוי אלה דורש הרשאות מנהל',
@@ -12984,7 +13026,10 @@ export const CATALOG = {
         'Run|machine': 'Rendszerleíró adatbázis: HKLM Run',
         'Run (32-bit)|machine': 'Rendszerleíró adatbázis: HKLM Run (32 bites)',
         'RunOnce|user': 'Rendszerleíró adatbázis: HKCU RunOnce',
-        'RunOnce|machine': 'Rendszerleíró adatbázis: HKLM RunOnce'
+        'RunOnce|machine': 'Rendszerleíró adatbázis: HKLM RunOnce',
+        'RunOnce (32-bit)|machine': 'Rendszerleíró adatbázis: HKLM RunOnce (32 bites)',
+        'Run (policy)|user': 'Rendszerleíró adatbázis: HKCU Policies\\Explorer\\Run',
+        'Run (policy)|machine': 'Rendszerleíró adatbázis: HKLM Policies\\Explorer\\Run'
       },
       groupEnabledOf: (enabledCount, total) => `${enabledCount}/${total} engedélyezve`,
       groupAdminNote: 'Ezek módosítása rendszergazdai jogosultságot kér',
@@ -13872,7 +13917,10 @@ export const CATALOG = {
         'Run|machine': 'Registry: HKLM Run',
         'Run (32-bit)|machine': 'Registry: HKLM Run (32-bit)',
         'RunOnce|user': 'Registry: HKCU RunOnce',
-        'RunOnce|machine': 'Registry: HKLM RunOnce'
+        'RunOnce|machine': 'Registry: HKLM RunOnce',
+        'RunOnce (32-bit)|machine': 'Registry: HKLM RunOnce (32-bit)',
+        'Run (policy)|user': 'Registry: HKCU Policies\\Explorer\\Run',
+        'Run (policy)|machine': 'Registry: HKLM Policies\\Explorer\\Run'
       },
       groupEnabledOf: (enabledCount, total) => `${enabledCount} dari ${total} diaktifkan`,
       groupAdminNote: 'Mengubah ini meminta hak administrator',
@@ -14760,7 +14808,10 @@ export const CATALOG = {
         'Run|machine': 'Skráningarhluti: HKLM Run',
         'Run (32-bit)|machine': 'Skráningarhluti: HKLM Run (32-bita)',
         'RunOnce|user': 'Skráningarhluti: HKCU RunOnce',
-        'RunOnce|machine': 'Skráningarhluti: HKLM RunOnce'
+        'RunOnce|machine': 'Skráningarhluti: HKLM RunOnce',
+        'RunOnce (32-bit)|machine': 'Skráningarhluti: HKLM RunOnce (32-bita)',
+        'Run (policy)|user': 'Skráningarhluti: HKCU Policies\\Explorer\\Run',
+        'Run (policy)|machine': 'Skráningarhluti: HKLM Policies\\Explorer\\Run'
       },
       groupEnabledOf: (enabledCount, total) => `${enabledCount} af ${total} virkjaðar`,
       groupAdminNote: 'Að breyta þessu biður um kerfisstjórnarréttindi',
@@ -15648,7 +15699,10 @@ export const CATALOG = {
         'Run|machine': 'Registro: HKLM Run',
         'Run (32-bit)|machine': 'Registro: HKLM Run (32 bit)',
         'RunOnce|user': 'Registro: HKCU RunOnce',
-        'RunOnce|machine': 'Registro: HKLM RunOnce'
+        'RunOnce|machine': 'Registro: HKLM RunOnce',
+        'RunOnce (32-bit)|machine': 'Registro: HKLM RunOnce (32 bit)',
+        'Run (policy)|user': 'Registro: HKCU Policies\\Explorer\\Run',
+        'Run (policy)|machine': 'Registro: HKLM Policies\\Explorer\\Run'
       },
       groupEnabledOf: (enabledCount, total) => `${enabledCount} di ${total} abilitate`,
       groupAdminNote: 'Modificarle richiede i permessi di amministratore',
@@ -16536,7 +16590,10 @@ export const CATALOG = {
         'Run|machine': 'レジストリ: HKLM Run',
         'Run (32-bit)|machine': 'レジストリ: HKLM Run (32 ビット)',
         'RunOnce|user': 'レジストリ: HKCU RunOnce',
-        'RunOnce|machine': 'レジストリ: HKLM RunOnce'
+        'RunOnce|machine': 'レジストリ: HKLM RunOnce',
+        'RunOnce (32-bit)|machine': 'レジストリ: HKLM RunOnce (32 ビット)',
+        'Run (policy)|user': 'レジストリ: HKCU Policies\\Explorer\\Run',
+        'Run (policy)|machine': 'レジストリ: HKLM Policies\\Explorer\\Run'
       },
       groupEnabledOf: (enabledCount, total) => `${total} 件中 ${enabledCount} 件有効`,
       groupAdminNote: '変更には管理者権限が必要です',
@@ -17424,7 +17481,10 @@ export const CATALOG = {
         'Run|machine': '레지스트리: HKLM Run',
         'Run (32-bit)|machine': '레지스트리: HKLM Run (32비트)',
         'RunOnce|user': '레지스트리: HKCU RunOnce',
-        'RunOnce|machine': '레지스트리: HKLM RunOnce'
+        'RunOnce|machine': '레지스트리: HKLM RunOnce',
+        'RunOnce (32-bit)|machine': '레지스트리: HKLM RunOnce (32비트)',
+        'Run (policy)|user': '레지스트리: HKCU Policies\\Explorer\\Run',
+        'Run (policy)|machine': '레지스트리: HKLM Policies\\Explorer\\Run'
       },
       groupEnabledOf: (enabledCount, total) => `${total}개 중 ${enabledCount}개 사용`,
       groupAdminNote: '이 항목을 변경하려면 관리자 권한이 필요합니다',
@@ -18312,7 +18372,10 @@ export const CATALOG = {
         'Run|machine': 'Registras: HKLM Run',
         'Run (32-bit)|machine': 'Registras: HKLM Run (32 bitų)',
         'RunOnce|user': 'Registras: HKCU RunOnce',
-        'RunOnce|machine': 'Registras: HKLM RunOnce'
+        'RunOnce|machine': 'Registras: HKLM RunOnce',
+        'RunOnce (32-bit)|machine': 'Registras: HKLM RunOnce (32 bitų)',
+        'Run (policy)|user': 'Registras: HKCU Policies\\Explorer\\Run',
+        'Run (policy)|machine': 'Registras: HKLM Policies\\Explorer\\Run'
       },
       groupEnabledOf: (enabledCount, total) => `${enabledCount} iš ${total} įjungta`,
       groupAdminNote: 'Keičiant reikės administratoriaus teisių',
@@ -19198,7 +19261,10 @@ export const CATALOG = {
         'Run|machine': 'Registri: HKLM Run',
         'Run (32-bit)|machine': 'Registri: HKLM Run (32-bit)',
         'RunOnce|user': 'Registri: HKCU RunOnce',
-        'RunOnce|machine': 'Registri: HKLM RunOnce'
+        'RunOnce|machine': 'Registri: HKLM RunOnce',
+        'RunOnce (32-bit)|machine': 'Registri: HKLM RunOnce (32-bit)',
+        'Run (policy)|user': 'Registri: HKCU Policies\\Explorer\\Run',
+        'Run (policy)|machine': 'Registri: HKLM Policies\\Explorer\\Run'
       },
       groupEnabledOf: (enabledCount, total) => `${enabledCount} daripada ${total} didayakan`,
       groupAdminNote: 'Mengubah ini meminta hak pentadbir',
@@ -20086,7 +20152,10 @@ export const CATALOG = {
         'Run|machine': 'Register: HKLM Run',
         'Run (32-bit)|machine': 'Register: HKLM Run (32-bit)',
         'RunOnce|user': 'Register: HKCU RunOnce',
-        'RunOnce|machine': 'Register: HKLM RunOnce'
+        'RunOnce|machine': 'Register: HKLM RunOnce',
+        'RunOnce (32-bit)|machine': 'Register: HKLM RunOnce (32-bit)',
+        'Run (policy)|user': 'Register: HKCU Policies\\Explorer\\Run',
+        'Run (policy)|machine': 'Register: HKLM Policies\\Explorer\\Run'
       },
       groupEnabledOf: (enabledCount, total) => `${enabledCount} av ${total} aktivert`,
       groupAdminNote: 'Å endre disse krever administratorrettigheter',
@@ -20972,7 +21041,10 @@ export const CATALOG = {
         'Run|machine': 'Register: HKLM Run',
         'Run (32-bit)|machine': 'Register: HKLM Run (32-bits)',
         'RunOnce|user': 'Register: HKCU RunOnce',
-        'RunOnce|machine': 'Register: HKLM RunOnce'
+        'RunOnce|machine': 'Register: HKLM RunOnce',
+        'RunOnce (32-bit)|machine': 'Register: HKLM RunOnce (32-bits)',
+        'Run (policy)|user': 'Register: HKCU Policies\\Explorer\\Run',
+        'Run (policy)|machine': 'Register: HKLM Policies\\Explorer\\Run'
       },
       groupEnabledOf: (enabledCount, total) => `${enabledCount} van ${total} ingeschakeld`,
       groupAdminNote: 'Wijzigen hiervan vraagt om beheerdersrechten',
@@ -21858,7 +21930,10 @@ export const CATALOG = {
         'Run|machine': 'Rejestr: HKLM Run',
         'Run (32-bit)|machine': 'Rejestr: HKLM Run (32-bitowy)',
         'RunOnce|user': 'Rejestr: HKCU RunOnce',
-        'RunOnce|machine': 'Rejestr: HKLM RunOnce'
+        'RunOnce|machine': 'Rejestr: HKLM RunOnce',
+        'RunOnce (32-bit)|machine': 'Rejestr: HKLM RunOnce (32-bitowy)',
+        'Run (policy)|user': 'Rejestr: HKCU Policies\\Explorer\\Run',
+        'Run (policy)|machine': 'Rejestr: HKLM Policies\\Explorer\\Run'
       },
       groupEnabledOf: (enabledCount, total) => `${enabledCount} z ${total} włączonych`,
       groupAdminNote: 'Zmiana tych wpisów wymaga uprawnień administratora',
@@ -22744,7 +22819,10 @@ export const CATALOG = {
         'Run|machine': 'راجستري: HKLM Run',
         'Run (32-bit)|machine': 'راجستري: HKLM Run (32-bit)',
         'RunOnce|user': 'راجستري: HKCU RunOnce',
-        'RunOnce|machine': 'راجستري: HKLM RunOnce'
+        'RunOnce|machine': 'راجستري: HKLM RunOnce',
+        'RunOnce (32-bit)|machine': 'راجستري: HKLM RunOnce (32-bit)',
+        'Run (policy)|user': 'راجستري: HKCU Policies\\Explorer\\Run',
+        'Run (policy)|machine': 'راجستري: HKLM Policies\\Explorer\\Run'
       },
       groupEnabledOf: (enabledCount, total) => `${enabledCount} د ${total} څخه فعالې`,
       groupAdminNote: 'د دې بدلول د اډمین اجازې غواړي',
@@ -23632,7 +23710,10 @@ export const CATALOG = {
         'Run|machine': 'Registro: HKLM Run',
         'Run (32-bit)|machine': 'Registro: HKLM Run (32 bits)',
         'RunOnce|user': 'Registro: HKCU RunOnce',
-        'RunOnce|machine': 'Registro: HKLM RunOnce'
+        'RunOnce|machine': 'Registro: HKLM RunOnce',
+        'RunOnce (32-bit)|machine': 'Registro: HKLM RunOnce (32 bits)',
+        'Run (policy)|user': 'Registro: HKCU Policies\\Explorer\\Run',
+        'Run (policy)|machine': 'Registro: HKLM Policies\\Explorer\\Run'
       },
       groupEnabledOf: (enabledCount, total) => `${enabledCount} de ${total} habilitadas`,
       groupAdminNote: 'Alterá-las pede permissões de administrador',
@@ -24518,7 +24599,10 @@ export const CATALOG = {
         'Run|machine': 'Registo: HKLM Run',
         'Run (32-bit)|machine': 'Registo: HKLM Run (32 bits)',
         'RunOnce|user': 'Registo: HKCU RunOnce',
-        'RunOnce|machine': 'Registo: HKLM RunOnce'
+        'RunOnce|machine': 'Registo: HKLM RunOnce',
+        'RunOnce (32-bit)|machine': 'Registo: HKLM RunOnce (32 bits)',
+        'Run (policy)|user': 'Registo: HKCU Policies\\Explorer\\Run',
+        'Run (policy)|machine': 'Registo: HKLM Policies\\Explorer\\Run'
       },
       groupEnabledOf: (enabledCount, total) => `${enabledCount} de ${total} ativadas`,
       groupAdminNote: 'Alterá-las pede permissões de administrador',
@@ -25406,7 +25490,10 @@ export const CATALOG = {
         'Run|machine': 'Registru: HKLM Run',
         'Run (32-bit)|machine': 'Registru: HKLM Run (32 de biți)',
         'RunOnce|user': 'Registru: HKCU RunOnce',
-        'RunOnce|machine': 'Registru: HKLM RunOnce'
+        'RunOnce|machine': 'Registru: HKLM RunOnce',
+        'RunOnce (32-bit)|machine': 'Registru: HKLM RunOnce (32 de biți)',
+        'Run (policy)|user': 'Registru: HKCU Policies\\Explorer\\Run',
+        'Run (policy)|machine': 'Registru: HKLM Policies\\Explorer\\Run'
       },
       groupEnabledOf: (enabledCount, total) => `${enabledCount} din ${total} activate`,
       groupAdminNote: 'Modificarea acestora solicită drepturi de administrator',
@@ -26294,7 +26381,10 @@ export const CATALOG = {
         'Run|machine': 'Реестр: HKLM Run',
         'Run (32-bit)|machine': 'Реестр: HKLM Run (32-бит)',
         'RunOnce|user': 'Реестр: HKCU RunOnce',
-        'RunOnce|machine': 'Реестр: HKLM RunOnce'
+        'RunOnce|machine': 'Реестр: HKLM RunOnce',
+        'RunOnce (32-bit)|machine': 'Реестр: HKLM RunOnce (32-бит)',
+        'Run (policy)|user': 'Реестр: HKCU Policies\\Explorer\\Run',
+        'Run (policy)|machine': 'Реестр: HKLM Policies\\Explorer\\Run'
       },
       groupEnabledOf: (enabledCount, total) => `Включено ${enabledCount} из ${total}`,
       groupAdminNote: 'Изменение требует прав администратора',
@@ -27180,7 +27270,10 @@ export const CATALOG = {
         'Run|machine': 'Register: HKLM Run',
         'Run (32-bit)|machine': 'Register: HKLM Run (32-bitové)',
         'RunOnce|user': 'Register: HKCU RunOnce',
-        'RunOnce|machine': 'Register: HKLM RunOnce'
+        'RunOnce|machine': 'Register: HKLM RunOnce',
+        'RunOnce (32-bit)|machine': 'Register: HKLM RunOnce (32-bitové)',
+        'Run (policy)|user': 'Register: HKCU Policies\\Explorer\\Run',
+        'Run (policy)|machine': 'Register: HKLM Policies\\Explorer\\Run'
       },
       groupEnabledOf: (enabledCount, total) => `${enabledCount} z ${total} povolených`,
       groupAdminNote: 'Zmena vyžaduje oprávnenia správcu',
@@ -28066,7 +28159,10 @@ export const CATALOG = {
         'Run|machine': 'Regjistri: HKLM Run',
         'Run (32-bit)|machine': 'Regjistri: HKLM Run (32-bit)',
         'RunOnce|user': 'Regjistri: HKCU RunOnce',
-        'RunOnce|machine': 'Regjistri: HKLM RunOnce'
+        'RunOnce|machine': 'Regjistri: HKLM RunOnce',
+        'RunOnce (32-bit)|machine': 'Regjistri: HKLM RunOnce (32-bit)',
+        'Run (policy)|user': 'Regjistri: HKCU Policies\\Explorer\\Run',
+        'Run (policy)|machine': 'Regjistri: HKLM Policies\\Explorer\\Run'
       },
       groupEnabledOf: (enabledCount, total) => `${enabledCount} nga ${total} të aktivizuara`,
       groupAdminNote: 'Ndryshimi i tyre kërkon të drejta administratori',
@@ -28954,7 +29050,10 @@ export const CATALOG = {
         'Run|machine': 'Регистар: HKLM Run',
         'Run (32-bit)|machine': 'Регистар: HKLM Run (32-бита)',
         'RunOnce|user': 'Регистар: HKCU RunOnce',
-        'RunOnce|machine': 'Регистар: HKLM RunOnce'
+        'RunOnce|machine': 'Регистар: HKLM RunOnce',
+        'RunOnce (32-bit)|machine': 'Регистар: HKLM RunOnce (32-бита)',
+        'Run (policy)|user': 'Регистар: HKCU Policies\\Explorer\\Run',
+        'Run (policy)|machine': 'Регистар: HKLM Policies\\Explorer\\Run'
       },
       groupEnabledOf: (enabledCount, total) => `${enabledCount} од ${total} омогућено`,
       groupAdminNote: 'Промена ових захтева администраторска права',
@@ -29840,7 +29939,10 @@ export const CATALOG = {
         'Run|machine': 'Register: HKLM Run',
         'Run (32-bit)|machine': 'Register: HKLM Run (32-bitars)',
         'RunOnce|user': 'Register: HKCU RunOnce',
-        'RunOnce|machine': 'Register: HKLM RunOnce'
+        'RunOnce|machine': 'Register: HKLM RunOnce',
+        'RunOnce (32-bit)|machine': 'Register: HKLM RunOnce (32-bitars)',
+        'Run (policy)|user': 'Register: HKCU Policies\\Explorer\\Run',
+        'Run (policy)|machine': 'Register: HKLM Policies\\Explorer\\Run'
       },
       groupEnabledOf: (enabledCount, total) => `${enabledCount} av ${total} aktiverade`,
       groupAdminNote: 'Att ändra dessa kräver administratörsrättigheter',
@@ -30726,7 +30828,10 @@ export const CATALOG = {
         'Run|machine': 'รีจิสทรี: HKLM Run',
         'Run (32-bit)|machine': 'รีจิสทรี: HKLM Run (32 บิต)',
         'RunOnce|user': 'รีจิสทรี: HKCU RunOnce',
-        'RunOnce|machine': 'รีจิสทรี: HKLM RunOnce'
+        'RunOnce|machine': 'รีจิสทรี: HKLM RunOnce',
+        'RunOnce (32-bit)|machine': 'รีจิสทรี: HKLM RunOnce (32 บิต)',
+        'Run (policy)|user': 'รีจิสทรี: HKCU Policies\\Explorer\\Run',
+        'Run (policy)|machine': 'รีจิสทรี: HKLM Policies\\Explorer\\Run'
       },
       groupEnabledOf: (enabledCount, total) => `เปิดใช้งาน ${enabledCount} จาก ${total}`,
       groupAdminNote: 'การเปลี่ยนแปลงรายการเหล่านี้ต้องมีสิทธิ์ผู้ดูแลระบบ',
@@ -31614,7 +31719,10 @@ export const CATALOG = {
         'Run|machine': 'Kayıt defteri: HKLM Run',
         'Run (32-bit)|machine': 'Kayıt defteri: HKLM Run (32 bit)',
         'RunOnce|user': 'Kayıt defteri: HKCU RunOnce',
-        'RunOnce|machine': 'Kayıt defteri: HKLM RunOnce'
+        'RunOnce|machine': 'Kayıt defteri: HKLM RunOnce',
+        'RunOnce (32-bit)|machine': 'Kayıt defteri: HKLM RunOnce (32 bit)',
+        'Run (policy)|user': 'Kayıt defteri: HKCU Policies\\Explorer\\Run',
+        'Run (policy)|machine': 'Kayıt defteri: HKLM Policies\\Explorer\\Run'
       },
       groupEnabledOf: (enabledCount, total) => `${total} öğeden ${enabledCount} tanesi etkin`,
       groupAdminNote: 'Bunları değiştirmek yönetici izni ister',
@@ -32502,7 +32610,10 @@ export const CATALOG = {
         'Run|machine': 'Реєстр: HKLM Run',
         'Run (32-bit)|machine': 'Реєстр: HKLM Run (32-біт)',
         'RunOnce|user': 'Реєстр: HKCU RunOnce',
-        'RunOnce|machine': 'Реєстр: HKLM RunOnce'
+        'RunOnce|machine': 'Реєстр: HKLM RunOnce',
+        'RunOnce (32-bit)|machine': 'Реєстр: HKLM RunOnce (32-біт)',
+        'Run (policy)|user': 'Реєстр: HKCU Policies\\Explorer\\Run',
+        'Run (policy)|machine': 'Реєстр: HKLM Policies\\Explorer\\Run'
       },
       groupEnabledOf: (enabledCount, total) => `Увімкнено ${enabledCount} з ${total}`,
       groupAdminNote: 'Зміна цього вимагає прав адміністратора',
@@ -33388,7 +33499,10 @@ export const CATALOG = {
         'Run|machine': 'Registry: HKLM Run',
         'Run (32-bit)|machine': 'Registry: HKLM Run (32-bit)',
         'RunOnce|user': 'Registry: HKCU RunOnce',
-        'RunOnce|machine': 'Registry: HKLM RunOnce'
+        'RunOnce|machine': 'Registry: HKLM RunOnce',
+        'RunOnce (32-bit)|machine': 'Registry: HKLM RunOnce (32-bit)',
+        'Run (policy)|user': 'Registry: HKCU Policies\\Explorer\\Run',
+        'Run (policy)|machine': 'Registry: HKLM Policies\\Explorer\\Run'
       },
       groupEnabledOf: (enabledCount, total) => `${enabledCount}/${total} được bật`,
       groupAdminNote: 'Thay đổi các mục này cần quyền quản trị',
@@ -34276,7 +34390,10 @@ export const CATALOG = {
         'Run|machine': '注册表：HKLM Run',
         'Run (32-bit)|machine': '注册表：HKLM Run（32 位）',
         'RunOnce|user': '注册表：HKCU RunOnce',
-        'RunOnce|machine': '注册表：HKLM RunOnce'
+        'RunOnce|machine': '注册表：HKLM RunOnce',
+        'RunOnce (32-bit)|machine': '注册表：HKLM RunOnce（32 位）',
+        'Run (policy)|user': '注册表：HKCU Policies\\Explorer\\Run',
+        'Run (policy)|machine': '注册表：HKLM Policies\\Explorer\\Run'
       },
       groupEnabledOf: (enabledCount, total) => `${total} 个中已启用 ${enabledCount} 个`,
       groupAdminNote: '更改这些需要管理员权限',
@@ -35164,7 +35281,10 @@ export const CATALOG = {
         'Run|machine': '登錄檔：HKLM Run',
         'Run (32-bit)|machine': '登錄檔：HKLM Run（32 位元）',
         'RunOnce|user': '登錄檔：HKCU RunOnce',
-        'RunOnce|machine': '登錄檔：HKLM RunOnce'
+        'RunOnce|machine': '登錄檔：HKLM RunOnce',
+        'RunOnce (32-bit)|machine': '登錄檔：HKLM RunOnce（32 位元）',
+        'Run (policy)|user': '登錄檔：HKCU Policies\\Explorer\\Run',
+        'Run (policy)|machine': '登錄檔：HKLM Policies\\Explorer\\Run'
       },
       groupEnabledOf: (enabledCount, total) => `${total} 個中已啟用 ${enabledCount} 個`,
       groupAdminNote: '變更這些需要系統管理員權限',

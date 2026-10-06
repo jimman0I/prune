@@ -1,6 +1,6 @@
 import { runPowerShellJson } from './powershell.js';
 import { runElevatedPowerShellJson } from '../lib/elevated.js';
-import { approvedKindFor } from './startupApproved.js';
+import { approvedKindFor, isPolicyRunEntry } from './startupApproved.js';
 
 /** Switching a startup entry on and off, the way Windows does it.
  *
@@ -49,6 +49,10 @@ export function toggleRefusal(item) {
   const name = item.approvedName || item.name;
   if (!name) {
     return 'Windows files its decision under the entry name, and this entry has none.';
+  }
+
+  if (isPolicyRunEntry(item)) {
+    return 'This entry is set by policy (Policies\\Explorer\\Run). Windows does not keep an on/off record for it, so it cannot be switched here — it is removed in the Registry Editor or by the policy that wrote it.';
   }
 
   if (approvedKindFor(item) === null) {
