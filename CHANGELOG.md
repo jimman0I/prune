@@ -157,11 +157,14 @@ see v1.0.1 below) are documented here.
   the 32-bit RunOnce key. Policy entries are read-only and say why: Windows
   keeps no on/off record for them, so a switch would have written to the
   wrong place.
-- **The leftover scan reads more of the registry.** `SharedDLLs` reference
-  counts (offered when the file sits in the program’s own folder, or when it
-  matches by name and the file is gone, never while the DLL is still on
-  disk), the policy Run keys and the legacy `RunServices` / `RunServicesOnce`
-  keys. Their containers stay protected: only the one value is ever offered.
+- **The leftover scan reads more of the machine, as Revo’s does.** `SharedDLLs`
+  reference counts (offered when the file sits in the program’s own folder, or
+  when it matches by name and the file is gone, never while the DLL is still on
+  disk); Windows Firewall rules for a program in its own folder (and, in
+  Advanced, by name once the program is gone); msconfig’s records of startup
+  entries it switched off; Event Log sources whose message file is gone (Advanced);
+  and the policy Run and legacy `RunServices` / `RunServicesOnce` keys. Their
+  containers stay protected: only the one value or subkey is ever offered.
 - **"Clean as administrator" for rules that need it.** A locked file no
   longer forces a full admin relaunch of the app. Deep Clean now shows a
   targeted elevation button only for the specific rules that hit a

@@ -85,6 +85,27 @@ export const SHARED_DLL_ROOTS = [
   'HKLM:\\Software\\WOW6432Node\\Microsoft\\Windows\\CurrentVersion\\SharedDLLs'
 ];
 
+/** Three more places Revo's leftover scan reads, all machine-wide.
+ *
+ *  - Firewall rules. Installing a networked program usually adds an allow
+ *    rule; uninstalling it rarely removes it. Each rule is one VALUE in the
+ *    FirewallRules key, whose data is a `|`-separated list that includes the
+ *    `App=` executable path and the `Name=` the rule was given.
+ *  - MSConfig's disabled-startup records. When a startup entry is switched
+ *    off in msconfig the entry moves into one subkey here, and stays after
+ *    the program is gone.
+ *  - Event Log sources. A program that logs to the Application log registers
+ *    a source key naming the file that holds its message text. */
+export const FIREWALL_RULE_ROOTS = [
+  'HKLM:\\System\\CurrentControlSet\\Services\\SharedAccess\\Parameters\\FirewallPolicy\\FirewallRules'
+];
+export const MSCONFIG_STARTUP_ROOTS = [
+  'HKLM:\\Software\\Microsoft\\Shared Tools\\MSConfig\\startupreg'
+];
+export const EVENT_LOG_ROOTS = [
+  'HKLM:\\System\\CurrentControlSet\\Services\\EventLog\\Application'
+];
+
 /** One comparable spelling for a registry path.
  *
  * The same key has several: PowerShell's providers say HKLM:\Software,
@@ -120,6 +141,9 @@ export function canonicalKeyPath(path) {
  * one value out of the Run key is the entire point of reading it. */
 const PROTECTED_KEYS = new Set([
   ...SOFTWARE_ROOTS, ...CLASSES_ROOTS, ...UNINSTALL_ROOTS, ...APP_PATH_ROOTS, ...RUN_ROOTS, ...SHARED_DLL_ROOTS,
+  ...FIREWALL_RULE_ROOTS, ...MSCONFIG_STARTUP_ROOTS, ...EVENT_LOG_ROOTS,
+  'HKLM:\\System\\CurrentControlSet\\Services\\EventLog',
+  'HKLM:\\System\\CurrentControlSet\\Services',
   ...CLSID_ROOTS, ...REGISTERED_APPLICATIONS_ROOTS,
   'HKLM:\\Software\\Classes\\Installer',
   'HKLM:\\Software\\Classes\\Interface',
@@ -170,7 +194,7 @@ function psArray(paths) {
  *    so they are matched on their label and on the path of the server they
  *    load, which is where the program's name actually appears.
  *  - RegisteredApplications, a list of values rather than keys. */
-const ADVANCED_REGISTRY_PASSES = `
+const advancedRegistryPasses = ({ firewallRoots, eventLogRoots }) => `
 # Advanced: Vendor\\Product\\Sub, still without entering Microsoft.
 foreach ($root in ${psArray(SOFTWARE_ROOTS)}) {
   foreach ($vendor in (Get-ChildItem -Path $root -ErrorAction SilentlyContinue)) {
@@ -213,6 +237,38 @@ foreach ($root in ${psArray(REGISTERED_APPLICATIONS_ROOTS)}) {
     }
   }
 }
+
+# Advanced: a firewall rule that matches by the name it was given, but only when
+# the program it points at is gone. A rule for an executable that still exists
+# belongs to something installed, whatever it is called.
+foreach ($root in ${psArray(firewallRoots)}) {
+  $key = Get-Item -Path $root -ErrorAction SilentlyContinue
+  if ($key) {
+    foreach ($valueName in $key.GetValueNames()) {
+      $data = [string]$key.GetValue($valueName)
+      $name = [regex]::Match($data, '(?:^|\\|)Name=([^|]*)').Groups[1].Value
+      $app = [regex]::Match($data, '(?:^|\\|)App=([^|]*)').Groups[1].Value
+      if (-not (Test-Anchored $app) -and $app -and $name -match $pattern -and -not (Test-Path -LiteralPath ([Environment]::ExpandEnvironmentVariables($app)))) {
+        Add-Found $key.Name $valueName $false 'name' ($name + ' ' + $app)
+      }
+    }
+  }
+}
+
+# Advanced: Event Log sources. A source is the program's name for itself in the
+# Application log. Anchored when the file holding its message text is in the
+# program's own folder; otherwise matched by name only when that file is gone.
+foreach ($root in ${psArray(eventLogRoots)}) {
+  foreach ($key in (Get-ChildItem -Path $root -ErrorAction SilentlyContinue)) {
+    $message = [string]$key.GetValue('EventMessageFile')
+    if (Test-Anchored $message) {
+      Add-Found $key.Name $null $false 'anchor' $key.PSChildName
+    } elseif ($key.PSChildName -match $pattern -and $message) {
+      $first = [Environment]::ExpandEnvironmentVariables(($message -split ';')[0].Trim('"'))
+      if ($first -and -not (Test-Path -LiteralPath $first)) { Add-Found $key.Name $null $false 'name' $key.PSChildName }
+    }
+  }
+}
 `;
 
 /** The whole registry sweep as one script.
@@ -221,7 +277,10 @@ foreach ($root in ${psArray(REGISTERED_APPLICATIONS_ROOTS)}) {
  * powershell.exe would spend more time starting processes than searching.
  * Exported so a test can run it against real PowerShell -- a mocked test
  * cannot see a script that does not parse. */
-export function buildRegistryScript(pattern, { advanced = false, anchors = [], sharedDllRoots = SHARED_DLL_ROOTS } = {}) {
+export function buildRegistryScript(pattern, {
+  advanced = false, anchors = [], sharedDllRoots = SHARED_DLL_ROOTS,
+  firewallRoots = FIREWALL_RULE_ROOTS, msconfigRoots = MSCONFIG_STARTUP_ROOTS, eventLogRoots = EVENT_LOG_ROOTS
+} = {}) {
   return `
 $ErrorActionPreference = 'SilentlyContinue'
 $pattern = '${psQuote(pattern)}'
@@ -260,7 +319,7 @@ foreach ($root in ${psArray(SOFTWARE_ROOTS)}) {
     }
   }
 }
-${advanced ? ADVANCED_REGISTRY_PASSES : ''}
+${advanced ? advancedRegistryPasses({ firewallRoots, eventLogRoots }) : ''}
 # The Add/Remove Programs entry. GetValue on the key object rather than
 # Get-ItemProperty: this runs for every one of several hundred entries, and
 # the cmdlet costs far more per call than the method it wraps.
@@ -296,6 +355,33 @@ foreach ($root in ${psArray(RUN_ROOTS)}) {
         Add-Found $key.Name $valueName $false 'name' ($valueName + ' ' + $data)
       }
     }
+  }
+}
+
+# Firewall rules whose program lives in the program's own folder. The rule is a
+# value; its data carries the executable as App=<path>.
+foreach ($root in ${psArray(firewallRoots)}) {
+  $key = Get-Item -Path $root -ErrorAction SilentlyContinue
+  if ($key) {
+    foreach ($valueName in $key.GetValueNames()) {
+      $data = [string]$key.GetValue($valueName)
+      $app = [regex]::Match($data, '(?:^|\\|)App=([^|]*)').Groups[1].Value
+      if ($app -and (Test-Anchored ([Environment]::ExpandEnvironmentVariables($app)))) {
+        $name = [regex]::Match($data, '(?:^|\\|)Name=([^|]*)').Groups[1].Value
+        Add-Found $key.Name $valueName $false 'anchor' ($name + ' ' + $app)
+      }
+    }
+  }
+}
+
+# Records msconfig keeps for startup entries it switched off. One subkey per
+# entry, so the whole subkey goes; matched on its name or on a command that
+# points into the program's own folder.
+foreach ($root in ${psArray(msconfigRoots)}) {
+  foreach ($key in (Get-ChildItem -Path $root -ErrorAction SilentlyContinue)) {
+    $command = [string]$key.GetValue('command')
+    if (Test-Anchored $command) { Add-Found $key.Name $null $false 'anchor' ($key.PSChildName + ' ' + $command) }
+    elseif ($key.PSChildName -match $pattern -or $command -match $pattern) { Add-Found $key.Name $null $false 'name' ($key.PSChildName + ' ' + $command) }
   }
 }
 
