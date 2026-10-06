@@ -331,6 +331,87 @@ describe('clean --report (what Task Scheduler runs while Prune is closed)', () =
   });
 });
 
+describe('programs (what Revo\'s RevoCmd lists)', () => {
+  // The real installed-programs read, on whatever machine runs the tests: the
+  // assertions are about the shape and the wildcard rule, never about which
+  // programs happen to be here. 7-Zip, say, may not be.
+  let all;
+  beforeAll(() => {
+    const r = run(['programs', '--json']);
+    expect(r.code).toBe(0);
+    all = json(r).programs;
+  }, 60000);
+
+  it('lists the installed programs, each with a name and a source', () => {
+    expect(all.length).toBeGreaterThan(0);
+    for (const row of all) {
+      expect(typeof row.name).toBe('string');
+      expect(row.source).toBe('registry');
+      expect(row).not.toHaveProperty('installLocation');
+      expect(row).not.toHaveProperty('uninstallCommand');
+    }
+  });
+
+  it('is sorted by name', () => {
+    const names = all.map((p) => p.name);
+    const sorted = [...names].sort((a, b) => a.localeCompare(b, undefined, { sensitivity: 'base' }));
+    expect(names).toEqual(sorted);
+  });
+
+  it('--match takes the whole name with * and ?, and ignores case', () => {
+    const first = all[0].name;
+    const exact = json(run(['programs', '--match', first.toUpperCase(), '--json'])).programs;
+    expect(exact.length).toBeGreaterThan(0);
+    expect(exact.every((p) => p.name.toLowerCase() === first.toLowerCase())).toBe(true);
+
+    const prefix = first.slice(0, 3);
+    const starred = json(run(['programs', '--match', `${prefix}*`, '--json'])).programs;
+    expect(starred.length).toBeGreaterThan(0);
+    expect(starred.every((p) => p.name.toLowerCase().startsWith(prefix.toLowerCase()))).toBe(true);
+
+    // a part of a name with no wildcard is not a match (--match= keeps a leading dash from reading as a flag)
+    const part = first.slice(1, 4);
+    expect(json(run(['programs', `--match=${part}`, '--json'])).programs.every(
+      (p) => p.name.toLowerCase() === part.toLowerCase()
+    )).toBe(true);
+  });
+
+  it('--install-location and --uninstall-command add their fields', () => {
+    const rows = json(run(['programs', '--install-location', '--uninstall-command', '--json'])).programs;
+    expect(rows.length).toBe(all.length);
+    for (const row of rows) {
+      expect(row).toHaveProperty('installLocation');
+      expect(row).toHaveProperty('uninstallCommand');
+    }
+  });
+
+  it('a pattern that matches nothing is an empty list and success, not an error', () => {
+    const r = run(['programs', '--match', 'zzz-no-such-program-*', '--json']);
+    expect(r.code).toBe(0);
+    expect(json(r).programs).toEqual([]);
+  });
+
+  it('prints a readable list without --json', () => {
+    const r = run(['programs', '--match', 'zzz-no-such-program-*']);
+    expect(r.code).toBe(0);
+    expect(r.out).toMatch(/0 programs\./);
+  });
+
+  it('--store-apps adds the Store apps, marked as such', () => {
+    const rows = json(run(['programs', '--store-apps', '--json'])).programs;
+    expect(rows.length).toBeGreaterThanOrEqual(all.length);
+    expect(rows.filter((p) => p.source === 'registry').length).toBe(all.length);
+  }, 60000);
+
+  it('the program flags are refused on the other commands', () => {
+    for (const flag of [['--match', 'x'], ['--install-location'], ['--uninstall-command'], ['--store-apps']]) {
+      const r = run(['list', ...flag]);
+      expect(r.code).toBe(2);
+      expect(r.err).toMatch(/only for programs/);
+    }
+  });
+});
+
 describe('usage', () => {
   it('no command prints help and is a usage error', () => {
     const r = run([]);

@@ -2,8 +2,10 @@ import { parseArgs } from 'node:util';
 import { pathToFileURL, fileURLToPath } from 'node:url';
 import { packagedDefaults } from './lib/cliPaths.js';
 
-/** The Prune command line: list, preview, clean.
+/** The Prune command line: list, preview, clean, programs.
  *
+ *   prune-cli programs [--match "Microso*"] [--install-location]
+ *                      [--uninstall-command] [--store-apps] [--json]
  *   prune-cli list    [--json]
  *   prune-cli preview [--rules a,b | --preset recommended] [--except x,y] [--json]
  *   prune-cli clean   (--rules a,b | --preset recommended) [--except x,y]
@@ -33,6 +35,7 @@ Commands
   list                 List the Deep Clean rules.
   preview              Measure rules without changing anything.
   clean                Clean rules (moves files to Quarantine, or deletes).
+  programs             List installed programs (what Revo's RevoCmd does).
   help                 Show this text.
 
 Selecting rules
@@ -53,6 +56,14 @@ Options
   --settings <file>    Use this settings file.
   --quarantine-dir <d> Use this Quarantine folder.
   --cleaners <file>    Use this rule file instead of the built-in rules.
+
+Listing programs
+  --match <pattern>    Only programs whose whole name matches: * is any run of
+                       characters, ? is one. Case is ignored.
+                       Example: prune-cli programs --match "Microso*"
+  --install-location   Include each program's install folder.
+  --uninstall-command  Include each program's uninstall command.
+  --store-apps         Include Microsoft Store apps.
 
 Exit codes: 0 ok, 1 a rule failed, 2 bad usage.`;
 
@@ -104,6 +115,49 @@ const bytes = (n) => {
   return `${parseFloat((n / 1024 ** i).toFixed(1))} ${sizes[i]}`;
 };
 
+/** `prune-cli programs`: the installed programs, as RevoCmd lists them.
+ *
+ * Reads the same registry list the Applications screen does (and, with
+ * --store-apps, the Store packages), so the two never disagree about what is
+ * installed. Nothing here changes anything. A failed read is exit code 1 with
+ * the reason, never an empty list that looks like "nothing is installed". */
+async function runPrograms(values, out, err) {
+  const { listInstalledPrograms } = await import('./services/programs.js');
+  const { matchPrograms, describeProgram } = await import('./lib/programFilter.js');
+
+  let programs;
+  try {
+    programs = await listInstalledPrograms();
+    if (values['store-apps']) {
+      const { getStoreApps } = await import('./services/storeApps.js');
+      programs = [...programs, ...(await getStoreApps())];
+    }
+  } catch (e) {
+    err(`Could not read the installed programs: ${e.message}\n`);
+    return 1;
+  }
+
+  const rows = matchPrograms(programs, values.match)
+    .sort((a, b) => a.name.localeCompare(b.name, undefined, { sensitivity: 'base' }))
+    .map((program) => describeProgram(program, {
+      installLocation: values['install-location'], uninstallCommand: values['uninstall-command']
+    }));
+
+  if (values.json) {
+    out(`${JSON.stringify({ programs: rows }, null, 2)}\n`);
+    return 0;
+  }
+  const lines = rows.map((row) => {
+    const head = `${row.name}${row.version ? `  ${row.version}` : ''}${row.publisher ? `  (${row.publisher})` : ''}`;
+    const extra = [];
+    if ('installLocation' in row) extra.push(`    Install location: ${row.installLocation ?? '-'}`);
+    if ('uninstallCommand' in row) extra.push(`    Uninstall command: ${row.uninstallCommand ?? '-'}`);
+    return [head, ...extra].join('\n');
+  });
+  out(`${lines.join('\n')}${lines.length ? '\n' : ''}${rows.length} program${rows.length === 1 ? '' : 's'}.\n`);
+  return 0;
+}
+
 /** Runs the CLI. `io.out` / `io.err` receive text; returns the exit code. */
 export async function runCli(argv, io = {}) {
   const out = io.out ?? ((s) => process.stdout.write(s));
@@ -127,6 +181,10 @@ export async function runCli(argv, io = {}) {
         settings: { type: 'string' },
         'quarantine-dir': { type: 'string' },
         cleaners: { type: 'string' },
+        match: { type: 'string' },
+        'install-location': { type: 'boolean', default: false },
+        'uninstall-command': { type: 'boolean', default: false },
+        'store-apps': { type: 'boolean', default: false },
         help: { type: 'boolean', default: false }
       }
     }));
@@ -138,7 +196,7 @@ export async function runCli(argv, io = {}) {
   const command = positionals[0];
   if (values.help || command === 'help') { out(`${USAGE}\n`); return 0; }
   if (!command) { err(`${USAGE}\n`); return 2; }
-  if (!['list', 'preview', 'clean'].includes(command) || positionals.length > 1) {
+  if (!['list', 'preview', 'clean', 'programs'].includes(command) || positionals.length > 1) {
     err(`Unknown command "${positionals.join(' ')}".\n\n${USAGE}\n`);
     return 2;
   }
@@ -149,6 +207,13 @@ export async function runCli(argv, io = {}) {
 
   if (values.report && command !== 'clean') {
     err('--report is only for clean.\n');
+    return 2;
+  }
+
+  if (command === 'programs') return runPrograms(values, out, err);
+  const programFlags = ['match', 'install-location', 'uninstall-command', 'store-apps'].filter((flag) => values[flag]);
+  if (programFlags.length > 0) {
+    err(`--${programFlags[0]} is only for programs.\n`);
     return 2;
   }
 
