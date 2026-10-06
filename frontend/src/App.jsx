@@ -11,6 +11,8 @@ import ToastHost from './components/ToastHost.jsx';
 import UpdateButton from './components/UpdateButton.jsx';
 import ShortcutsModal from './components/ShortcutsModal.jsx';
 import BugReportModal from './components/BugReportModal.jsx';
+import WhatsNewDialog from './components/WhatsNewDialog.jsx';
+import { useWhatsNew } from './hooks/useWhatsNew.js';
 import { useKeyboardShortcuts } from './hooks/useKeyboardShortcuts.js';
 import BatchUninstallModal from './components/BatchUninstallModal.jsx';
 import ModalOverlay from './components/ModalOverlay.jsx';
@@ -203,6 +205,19 @@ export default function App() {
   const [showBugReport, setShowBugReport] = useState(false);
   const openBugReport = useCallback(() => setShowBugReport(true), []);
 
+  /* The "What's new" notice after an update (hooks/useWhatsNew.js). It waits
+     while one of this component's own dialogs is up; a screen's own is found
+     in the DOM. "Show me" lands on a screen and, for Settings, a tab. */
+  const [settingsTabRequest, setSettingsTabRequest] = useState({ tab: null, nonce: 0 });
+  const whatsNew = useWhatsNew({
+    blocked: showShortcuts || showBugReport || Boolean(selectedProgram || batchPrograms || storeAppToRemove)
+  });
+  const openWhatsNew = whatsNew.openManual;
+  const goToWhatsNewTarget = useCallback((target) => {
+    if (target.settingsTab) setSettingsTabRequest((current) => ({ tab: target.settingsTab, nonce: current.nonce + 1 }));
+    setScreen(target.screen);
+  }, []);
+
   /** The app's global chords.
    *
    * Search focuses whichever search box is on screen rather than jumping
@@ -254,7 +269,7 @@ export default function App() {
           <Suspense fallback={null}><QuarantineManager initialTab={quarantineTab.tab} tabNonce={quarantineTab.nonce} /></Suspense>
         </Screen>
         <Screen active={screen === 'settings'} visited={visited.has('settings')}>
-          <Suspense fallback={null}><SettingsPage onReportBug={openBugReport} /></Suspense>
+          <Suspense fallback={null}><SettingsPage onReportBug={openBugReport} onShowWhatsNew={openWhatsNew} tabRequest={settingsTabRequest} /></Suspense>
         </Screen>
         <Screen active={screen === 'startup'} visited={visited.has('startup')}>
           <Suspense fallback={null}><StartupItems /></Suspense>
@@ -308,6 +323,13 @@ export default function App() {
           from while the dialog was still up. */}
       {showShortcuts && <ShortcutsModal onClose={() => setShowShortcuts(false)} />}
       {showBugReport && <BugReportModal onClose={() => setShowBugReport(false)} />}
+      {whatsNew.mode && (
+        <WhatsNewDialog
+          version={whatsNew.version}
+          onClose={whatsNew.dismiss}
+          onShowMe={(target) => whatsNew.showMe(target, goToWhatsNewTarget)}
+        />
+      )}
 
       {batchPrograms && (
         <ModalOverlay
