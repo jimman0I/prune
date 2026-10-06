@@ -120,15 +120,16 @@ export const CATALOG = {
         ariaLabel: 'Maximum quarantine size in gigabytes'
       },
       exclusions: {
-        title: 'Exclude folders',
-        description: "Folders and file types Prune will leave alone — skipped by Deep Clean and left out of the Disk Map — on top of the ones it already protects: System Volume Information, antivirus quarantines, the component store and a dozen others.",
-        ariaLabel: 'Folder path or file type to exclude',
+        title: "Exclusions",
+        description: "Folders and file types Prune will leave alone — skipped by Deep Clean and left out of the Disk Map — on top of the ones it already protects: System Volume Information, antivirus quarantines, the component store and a dozen others. Folders and registry keys listed here are also never offered as leftovers after an uninstall.",
+        ariaLabel: "Folder path, file type or registry key to exclude",
         add: 'Add',
-        invalidFormat: 'Write a full folder path (D:\\Games) or a file type (*.iso).',
-        formatHint: 'A full folder path, or a file type written as *.iso',
+        invalidFormat: "Write a full folder path (D:\\Games), a file type (*.iso) or a registry key (HKCU\\Software\\Vendor).",
+        formatHint: "A full folder path, a file type written as *.iso, or a registry key such as HKCU\\Software\\Vendor",
         none: 'Nothing excluded.',
         typeBadge: 'Type',
         folderBadge: 'Folder',
+        registryBadge: "Registry",
         removeAriaLabel: (value) => `Stop excluding ${value}`
       },
       cookiesToPreserve: {
@@ -750,6 +751,7 @@ export const CATALOG = {
       done: 'Done',
       foundWarning: (count) => `Found ${count} leftover item${count === 1 ? '' : 's'} the native uninstaller missed. Review before removing.`,
       excludedNote: (count) => `${count} folder${count === 1 ? '' : 's'} left out because ${count === 1 ? "it's" : "they're"} in your exclusions.`,
+      registryExcludedNote: (count) => `Registry keys left out because they're in your exclusions: ${count}.`,
       itemsSelected: 'items selected',
       reclaimable: 'reclaimable',
       skip: 'Skip'
@@ -1016,15 +1018,16 @@ export const CATALOG = {
         ariaLabel: 'Maksimum karantyngrootte in gigagrepe'
       },
       exclusions: {
-        title: "Sluit vouers uit",
-        description: "Vouers en lêertipes wat Prune sal uitlos — oorgeslaan deur Diep Skoonmaak en uitgesluit van die Skyfkaart — bo en behalwe die wat dit reeds beskerm: System Volume Information, antivirus-karantyne, die komponentwinkel en 'n dosyn ander.",
-        ariaLabel: "Vouerpad of lêertipe om uit te sluit",
+        title: "Uitsluitings",
+        description: "Vouers en lêertipes wat Prune sal uitlos — oorgeslaan deur Diep Skoonmaak en uitgesluit van die Skyfkaart — bo en behalwe die wat dit reeds beskerm: System Volume Information, antivirus-karantyne, die komponentwinkel en 'n dosyn ander. Vouers en registersleutels wat hier gelys word, word ook ná 'n deïnstallasie nooit as oorblyfsels aangebied nie.",
+        ariaLabel: "Vouerpad, lêertipe of registersleutel om uit te sluit",
         add: 'Voeg by',
-        invalidFormat: "Skryf 'n volle vouerpad (D:\\Games) of 'n lêertipe (*.iso).",
-        formatHint: "'n Volle vouerpad, of 'n lêertipe geskryf as *.iso",
+        invalidFormat: "Skryf 'n volle vouerpad (D:\\Games), 'n lêertipe (*.iso) of 'n registersleutel (HKCU\\Software\\Vendor).",
+        formatHint: "'n Volle vouerpad, 'n lêertipe geskryf as *.iso, of 'n registersleutel soos HKCU\\Software\\Vendor",
         none: 'Niks uitgesluit nie.',
         typeBadge: 'Tipe',
         folderBadge: 'Vouer',
+        registryBadge: "Register",
         removeAriaLabel: (value) => `Hou op om ${value} uit te sluit`
       },
       cookiesToPreserve: {
@@ -1641,6 +1644,7 @@ export const CATALOG = {
       done: 'Klaar',
       foundWarning: (count) => `${count} ${count === 1 ? 'oorblyfsel' : 'oorblyfsels'} gevind wat die oorspronklike deïnstalleerder gemis het. Hersien voor jy verwyder.`,
       excludedNote: (count) => `${count} vouer${count === 1 ? '' : 's'} uitgelaat omdat dit in jou uitsluitings ${count === 1 ? 'is' : 'is'}.`,
+      registryExcludedNote: (count) => `Registersleutels uitgelaat omdat hulle in jou uitsluitings is: ${count}.`,
       itemsSelected: 'items geselekteer',
       reclaimable: 'herwinbaar',
       skip: 'Slaan oor'
@@ -1907,15 +1911,16 @@ export const CATALOG = {
         ariaLabel: 'الحد الأقصى لحجم الحجر الصحي بالجيجابايت'
       },
       exclusions: {
-        title: 'استبعاد المجلدات',
-        description: "المجلدات وأنواع الملفات التي سيتركها Prune وشأنها — يتخطاها التنظيف العميق ويستبعدها من خريطة القرص — بالإضافة إلى ما يحميه بالفعل: معلومات وحدة تخزين النظام، الحجر الصحي لمكافحات الفيروسات، مخزن المكونات وحوالي اثني عشر غيرها.",
-        ariaLabel: 'مسار المجلد أو نوع الملف المراد استبعاده',
+        title: "الاستثناءات",
+        description: "المجلدات وأنواع الملفات التي سيتركها Prune وشأنها — يتخطاها التنظيف العميق ويستبعدها من خريطة القرص — بالإضافة إلى ما يحميه بالفعل: معلومات وحدة تخزين النظام، الحجر الصحي لمكافحات الفيروسات، مخزن المكونات وحوالي اثني عشر غيرها. المجلدات ومفاتيح التسجيل المدرجة هنا لا تُعرض أيضًا كبقايا بعد إلغاء التثبيت.",
+        ariaLabel: "مسار مجلد أو نوع ملف أو مفتاح تسجيل للاستبعاد",
         add: 'إضافة',
-        invalidFormat: 'اكتب مسار مجلد كاملاً (D:\\Games) أو نوع ملف (*.iso).',
-        formatHint: 'مسار مجلد كامل، أو نوع ملف مكتوب كـ *.iso',
+        invalidFormat: "اكتب مسار مجلد كاملاً (D:\\Games) أو نوع ملف (*.iso) أو مفتاح تسجيل (HKCU\\Software\\Vendor).",
+        formatHint: "مسار مجلد كامل، أو نوع ملف مكتوب كـ *.iso، أو مفتاح تسجيل مثل HKCU\\Software\\Vendor",
         none: 'لا شيء مستبعد.',
         typeBadge: 'نوع',
         folderBadge: 'مجلد',
+        registryBadge: "السجل",
         removeAriaLabel: (value) => `التوقف عن استبعاد ${value}`
       },
       cookiesToPreserve: {
@@ -2532,6 +2537,7 @@ export const CATALOG = {
       done: 'تم',
       foundWarning: (count) => `عثر Prune على مخلفات (${count}) فاتت برنامج إلغاء التثبيت الأصلي. راجعها قبل الإزالة.`,
       excludedNote: (count) => `تم استبعاد ${count} مجلد لأنه ضمن استثناءاتك.`,
+      registryExcludedNote: (count) => `مفاتيح التسجيل التي استُبعدت لأنها ضمن استثناءاتك: ${count}.`,
       itemsSelected: 'عناصر محددة',
       reclaimable: 'قابل للاسترداد',
       skip: 'تخطّي'
@@ -2798,15 +2804,16 @@ export const CATALOG = {
         ariaLabel: 'Mida màxima de la quarantena en gigabytes'
       },
       exclusions: {
-        title: "Exclou carpetes",
-        description: "Carpetes i tipus de fitxer que el Prune deixarà en pau — omesos per la Neteja profunda i exclosos del Mapa del disc — a més dels que ja protegeix: Informació del volum del sistema, quarantenes d'antivirus, el magatzem de components i una dotzena més.",
-        ariaLabel: 'Camí de carpeta o tipus de fitxer a excloure',
+        title: "Exclusions",
+        description: "Carpetes i tipus de fitxer que el Prune deixarà en pau — omesos per la Neteja profunda i exclosos del Mapa del disc — a més dels que ja protegeix: Informació del volum del sistema, quarantenes d'antivirus, el magatzem de components i una dotzena més. Les carpetes i les claus del registre que apareixen aquí tampoc no s'ofereixen mai com a restes després d'una desinstal·lació.",
+        ariaLabel: "Camí de carpeta, tipus de fitxer o clau del registre a excloure",
         add: 'Afegeix',
-        invalidFormat: "Escriu un camí de carpeta complet (D:\\Games) o un tipus de fitxer (*.iso).",
-        formatHint: "Un camí de carpeta complet, o un tipus de fitxer escrit com *.iso",
+        invalidFormat: "Escriu un camí de carpeta complet (D:\\Games), un tipus de fitxer (*.iso) o una clau del registre (HKCU\\Software\\Vendor).",
+        formatHint: "Un camí de carpeta complet, un tipus de fitxer escrit com *.iso, o una clau del registre com HKCU\\Software\\Vendor",
         none: 'Res exclòs.',
         typeBadge: 'Tipus',
         folderBadge: 'Carpeta',
+        registryBadge: "Registre",
         removeAriaLabel: (value) => `Deixa d'excloure ${value}`
       },
       cookiesToPreserve: {
@@ -3423,6 +3430,7 @@ export const CATALOG = {
       done: 'Fet',
       foundWarning: (count) => `S'${count === 1 ? 'ha' : 'han'} trobat ${count} ${count === 1 ? 'resta' : 'restes'} que el desinstal·lador original no ha eliminat. Revisa-ho abans d'eliminar-ho.`,
       excludedNote: (count) => `${count} carpet${count === 1 ? 'a deixada' : 'es deixades'} fora perquè ${count === 1 ? 'és' : 'són'} a les teves exclusions.`,
+      registryExcludedNote: (count) => `Claus del registre omeses perquè són a les teves exclusions: ${count}.`,
       itemsSelected: 'elements seleccionats',
       reclaimable: 'recuperable',
       skip: 'Omet'
@@ -3689,15 +3697,16 @@ export const CATALOG = {
         ariaLabel: 'Maximální velikost karantény v gigabajtech'
       },
       exclusions: {
-        title: 'Vyloučit složky',
-        description: "Složky a typy souborů, které Prune nechá na pokoji — přeskočené Důkladným čištěním a vynechané z Mapy disku — navíc k těm, které již chrání: System Volume Information, karantény antivirů, úložiště komponent a další.",
-        ariaLabel: 'Cesta ke složce nebo typ souboru k vyloučení',
+        title: "Vyloučení",
+        description: "Složky a typy souborů, které Prune nechá na pokoji — přeskočené Důkladným čištěním a vynechané z Mapy disku — navíc k těm, které již chrání: System Volume Information, karantény antivirů, úložiště komponent a další. Složky a klíče registru uvedené zde se také nikdy nenabízejí jako zbytky po odinstalaci.",
+        ariaLabel: "Cesta ke složce, typ souboru nebo klíč registru k vyloučení",
         add: 'Přidat',
-        invalidFormat: 'Napište úplnou cestu ke složce (D:\\Hry) nebo typ souboru (*.iso).',
-        formatHint: 'Úplná cesta ke složce nebo typ souboru zapsaný jako *.iso',
+        invalidFormat: "Napište úplnou cestu ke složce (D:\\Hry), typ souboru (*.iso) nebo klíč registru (HKCU\\Software\\Vendor).",
+        formatHint: "Úplná cesta ke složce, typ souboru zapsaný jako *.iso nebo klíč registru, například HKCU\\Software\\Vendor",
         none: 'Nic není vyloučeno.',
         typeBadge: 'Typ',
         folderBadge: 'Složka',
+        registryBadge: "Registr",
         removeAriaLabel: (value) => `Přestat vylučovat ${value}`
       },
       cookiesToPreserve: {
@@ -4314,6 +4323,7 @@ export const CATALOG = {
       done: 'Hotovo',
       foundWarning: (count) => `Zbytky, které nativní odinstalátor přehlédl: ${count}. Před odstraněním je zkontrolujte.`,
       excludedNote: (count) => `Vynecháno složek nacházejících se ve vašich výjimkách: ${count}.`,
+      registryExcludedNote: (count) => `Klíče registru vynechané, protože jsou ve vašich vyloučeních: ${count}.`,
       itemsSelected: 'vybraných položek',
       reclaimable: 'lze uvolnit',
       skip: 'Přeskočit'
@@ -4578,15 +4588,16 @@ export const CATALOG = {
         ariaLabel: "Maint mwyaf y Cwarantin mewn gigabeitiau"
       },
       exclusions: {
-        title: "Eithrio ffolderi",
-        description: "Ffolderi a mathau o ffeiliau y bydd Prune yn eu gadael yn llonydd — wedi'u hepgor gan Lanhau Dwfn ac wedi'u heithrio o'r Map Disg — ar ben y rhai mae eisoes yn eu diogelu: System Volume Information, cwarantinau gwrthfeirws, y storfa gydrannau a dwsin arall.",
-        ariaLabel: 'Llwybr ffolder neu fath o ffeil i\'w eithrio',
+        title: "Eithriadau",
+        description: "Ffolderi a mathau o ffeiliau y bydd Prune yn eu gadael yn llonydd — wedi'u hepgor gan Lanhau Dwfn ac wedi'u heithrio o'r Map Disg — ar ben y rhai mae eisoes yn eu diogelu: System Volume Information, cwarantinau gwrthfeirws, y storfa gydrannau a dwsin arall. Ni chaiff y ffolderi na'r allweddi cofrestrfa a restrir yma byth eu cynnig fel gweddillion ar ôl dadosod chwaith.",
+        ariaLabel: "Llwybr ffolder, math o ffeil neu allwedd cofrestrfa i'w eithrio",
         add: 'Ychwanegu',
-        invalidFormat: "Ysgrifennwch lwybr ffolder llawn (D:\\Games) neu fath o ffeil (*.iso).",
-        formatHint: "Llwybr ffolder llawn, neu fath o ffeil wedi'i ysgrifennu fel *.iso",
+        invalidFormat: "Ysgrifennwch lwybr ffolder llawn (D:\\Games), math o ffeil (*.iso) neu allwedd cofrestrfa (HKCU\\Software\\Vendor).",
+        formatHint: "Llwybr ffolder llawn, math o ffeil wedi'i ysgrifennu fel *.iso, neu allwedd cofrestrfa fel HKCU\\Software\\Vendor",
         none: "Dim byd wedi'i eithrio.",
         typeBadge: 'Math',
         folderBadge: 'Ffolder',
+        registryBadge: "Cofrestrfa",
         removeAriaLabel: (value) => `Stopio eithrio ${value}`
       },
       cookiesToPreserve: {
@@ -5203,6 +5214,7 @@ export const CATALOG = {
       done: 'Wedi gorffen',
       foundWarning: (count) => `Canfuwyd ${count} eitem a adawyd ar ôl gan y dadosodwr gwreiddiol. Adolygwch cyn eu tynnu.`,
       excludedNote: (count) => `Gadawyd ${count} ffolder allan ${count === 1 ? 'am ei fod' : 'am eu bod'} yn eich eithriadau.`,
+      registryExcludedNote: (count) => `Allweddi cofrestrfa a adawyd allan am eu bod yn eich eithriadau: ${count}.`,
       itemsSelected: 'eitem wedi\'u dewis',
       reclaimable: 'adenilladwy',
       skip: 'Hepgor'
@@ -5469,15 +5481,16 @@ export const CATALOG = {
         ariaLabel: 'Maksimal karantænestørrelse i gigabyte'
       },
       exclusions: {
-        title: 'Ekskluder mapper',
-        description: "Mapper og filtyper, som Prune lader være i fred — Dybderensning springer dem over, og Diskkortet udelader dem — ud over dem, den allerede beskytter: System Volume Information, antivirus-karantæner, komponentlageret og et dusin andre.",
-        ariaLabel: 'Mappesti eller filtype at ekskludere',
+        title: "Undtagelser",
+        description: "Mapper og filtyper, som Prune lader være i fred — Dybderensning springer dem over, og Diskkortet udelader dem — ud over dem, den allerede beskytter: System Volume Information, antivirus-karantæner, komponentlageret og et dusin andre. Mapper og registreringsdatabasenøgler, der står her, tilbydes heller aldrig som rester efter en afinstallation.",
+        ariaLabel: "Mappesti, filtype eller registreringsdatabasenøgle at ekskludere",
         add: 'Tilføj',
-        invalidFormat: 'Skriv en fuld mappesti (D:\\Games) eller en filtype (*.iso).',
-        formatHint: 'En fuld mappesti, eller en filtype skrevet som *.iso',
+        invalidFormat: "Skriv en fuld mappesti (D:\\Games), en filtype (*.iso) eller en registreringsdatabasenøgle (HKCU\\Software\\Vendor).",
+        formatHint: "En fuld mappesti, en filtype skrevet som *.iso eller en registreringsdatabasenøgle som HKCU\\Software\\Vendor",
         none: 'Intet ekskluderet.',
         typeBadge: 'Type',
         folderBadge: 'Mappe',
+        registryBadge: "Registreringsdatabase",
         removeAriaLabel: (value) => `Stop med at ekskludere ${value}`
       },
       cookiesToPreserve: {
@@ -6094,6 +6107,7 @@ export const CATALOG = {
       done: 'Færdig',
       foundWarning: (count) => `Fandt ${count} ${count === 1 ? 'rest' : 'rester'}, som det oprindelige afinstallationsprogram ikke fjernede. Gennemgå dem, før du fjerner dem.`,
       excludedNote: (count) => `${count} mappe${count === 1 ? '' : 'r'} udeladt, fordi ${count === 1 ? 'den er' : 'de er'} i dine undtagelser.`,
+      registryExcludedNote: (count) => `Registreringsdatabasenøgler udeladt, fordi de er i dine undtagelser: ${count}.`,
       itemsSelected: 'elementer valgt',
       reclaimable: 'kan frigøres',
       skip: 'Spring over'
@@ -6360,15 +6374,16 @@ export const CATALOG = {
         ariaLabel: 'Maximale Quarantänegröße in Gigabyte'
       },
       exclusions: {
-        title: 'Ordner ausschließen',
-        description: "Ordner und Dateitypen, die Prune in Ruhe lässt — von der Gründlichen Bereinigung übersprungen und von der Festplattenkarte ausgeschlossen — zusätzlich zu denen, die es bereits schützt: Systemvolumeninformationen, Antivirus-Quarantänen, der Komponentenspeicher und ein Dutzend andere.",
-        ariaLabel: 'Ordnerpfad oder Dateityp zum Ausschließen',
+        title: "Ausschlüsse",
+        description: "Ordner und Dateitypen, die Prune in Ruhe lässt — von der Gründlichen Bereinigung übersprungen und von der Festplattenkarte ausgeschlossen — zusätzlich zu denen, die es bereits schützt: Systemvolumeninformationen, Antivirus-Quarantänen, der Komponentenspeicher und ein Dutzend andere. Ordner und Registrierungsschlüssel, die hier stehen, werden auch nach einer Deinstallation nie als Überreste angeboten.",
+        ariaLabel: "Auszuschließender Ordnerpfad, Dateityp oder Registrierungsschlüssel",
         add: 'Hinzufügen',
-        invalidFormat: 'Gib einen vollständigen Ordnerpfad (D:\\Games) oder einen Dateityp (*.iso) ein.',
-        formatHint: 'Ein vollständiger Ordnerpfad oder ein Dateityp geschrieben als *.iso',
+        invalidFormat: "Gib einen vollständigen Ordnerpfad (D:\\Games), einen Dateityp (*.iso) oder einen Registrierungsschlüssel (HKCU\\Software\\Vendor) ein.",
+        formatHint: "Ein vollständiger Ordnerpfad, ein Dateityp geschrieben als *.iso oder ein Registrierungsschlüssel wie HKCU\\Software\\Vendor",
         none: 'Nichts ausgeschlossen.',
         typeBadge: 'Typ',
         folderBadge: 'Ordner',
+        registryBadge: "Registrierung",
         removeAriaLabel: (value) => `${value} nicht mehr ausschließen`
       },
       cookiesToPreserve: {
@@ -6985,6 +7000,7 @@ export const CATALOG = {
       done: 'Fertig',
       foundWarning: (count) => `${count} ${count === 1 ? 'Rückstand' : 'Rückstände'} gefunden, ${count === 1 ? 'den' : 'die'} der Deinstaller übersehen hat. Vor dem Entfernen prüfen.`,
       excludedNote: (count) => `${count} Ordner ausgelassen, da ${count === 1 ? 'er sich in deinen Ausnahmen befindet' : 'sie sich in deinen Ausnahmen befinden'}.`,
+      registryExcludedNote: (count) => `Registrierungsschlüssel ausgelassen, weil sie in deinen Ausschlüssen stehen: ${count}.`,
       itemsSelected: 'Elemente ausgewählt',
       reclaimable: "einsparbar",
       skip: 'Überspringen'
@@ -7251,15 +7267,16 @@ export const CATALOG = {
         ariaLabel: 'Μέγιστο μέγεθος καραντίνας σε gigabyte'
       },
       exclusions: {
-        title: "Εξαίρεση φακέλων",
-        description: "Φάκελοι και τύποι αρχείων που το Prune θα αφήσει ήσυχους — παραλείπονται από τον Βαθύ καθαρισμό και εξαιρούνται από τον Χάρτη δίσκου — επιπλέον αυτών που ήδη προστατεύει: Πληροφορίες τόμου συστήματος, καραντίνες προγραμμάτων προστασίας από ιούς, η αποθήκη στοιχείων των Windows (component store) και μια δωδεκάδα άλλων.",
-        ariaLabel: 'Διαδρομή φακέλου ή τύπος αρχείου προς εξαίρεση',
+        title: "Εξαιρέσεις",
+        description: "Φάκελοι και τύποι αρχείων που το Prune θα αφήσει ήσυχους — παραλείπονται από τον Βαθύ καθαρισμό και εξαιρούνται από τον Χάρτη δίσκου — επιπλέον αυτών που ήδη προστατεύει: Πληροφορίες τόμου συστήματος, καραντίνες προγραμμάτων προστασίας από ιούς, η αποθήκη στοιχείων των Windows (component store) και μια δωδεκάδα άλλων. Οι φάκελοι και τα κλειδιά μητρώου που αναφέρονται εδώ δεν προτείνονται ποτέ ως υπολείμματα μετά από μια απεγκατάσταση.",
+        ariaLabel: "Διαδρομή φακέλου, τύπος αρχείου ή κλειδί μητρώου προς εξαίρεση",
         add: 'Προσθήκη',
-        invalidFormat: 'Γράψτε μια πλήρη διαδρομή φακέλου (D:\\Games) ή έναν τύπο αρχείου (*.iso).',
-        formatHint: 'Μια πλήρης διαδρομή φακέλου, ή ένας τύπος αρχείου γραμμένος ως *.iso',
+        invalidFormat: "Γράψτε μια πλήρη διαδρομή φακέλου (D:\\Games), έναν τύπο αρχείου (*.iso) ή ένα κλειδί μητρώου (HKCU\\Software\\Vendor).",
+        formatHint: "Μια πλήρης διαδρομή φακέλου, ένας τύπος αρχείου γραμμένος ως *.iso ή ένα κλειδί μητρώου όπως HKCU\\Software\\Vendor",
         none: 'Τίποτα δεν εξαιρείται.',
         typeBadge: 'Τύπος',
         folderBadge: 'Φάκελος',
+        registryBadge: "Μητρώο",
         removeAriaLabel: (value) => `Διακοπή εξαίρεσης του ${value}`
       },
       cookiesToPreserve: {
@@ -7876,6 +7893,7 @@ export const CATALOG = {
       done: 'Τέλος',
       foundWarning: (count) => `Βρέθηκ${count === 1 ? 'ε' : 'αν'} ${count} στοιχεί${count === 1 ? 'ο' : 'α'} που δεν αφαίρεσε ο απεγκαταστάτης του προγράμματος. Ελέγξτε ${count === 1 ? 'το' : 'τα'} πριν από την αφαίρεση.`,
       excludedNote: (count) => `${count} φάκελ${count === 1 ? 'ος παραλείφθηκε' : 'οι παραλείφθηκαν'} επειδή ${count === 1 ? 'βρίσκεται' : 'βρίσκονται'} στις εξαιρέσεις σας.`,
+      registryExcludedNote: (count) => `Κλειδιά μητρώου που παραλείφθηκαν επειδή βρίσκονται στις εξαιρέσεις σας: ${count}.`,
       itemsSelected: 'επιλεγμένα στοιχεία',
       reclaimable: 'ανακτήσιμο',
       skip: 'Παράλειψη'
@@ -8142,15 +8160,16 @@ export const CATALOG = {
         ariaLabel: 'Tamaño máximo de cuarentena en gigabytes'
       },
       exclusions: {
-        title: "Excluir carpetas",
-        description: "Carpetas y tipos de archivo que Prune dejará en paz — omitidos por la Limpieza profunda y excluidos del Mapa del disco — además de los que ya protege: Información de volumen del sistema, cuarentenas de antivirus, el almacén de componentes y una docena más.",
-        ariaLabel: 'Ruta de carpeta o tipo de archivo a excluir',
+        title: "Exclusiones",
+        description: "Carpetas y tipos de archivo que Prune dejará en paz — omitidos por la Limpieza profunda y excluidos del Mapa del disco — además de los que ya protege: Información de volumen del sistema, cuarentenas de antivirus, el almacén de componentes y una docena más. Las carpetas y claves del Registro que aparecen aquí tampoco se ofrecen nunca como restos después de una desinstalación.",
+        ariaLabel: "Ruta de carpeta, tipo de archivo o clave del Registro a excluir",
         add: 'Añadir',
-        invalidFormat: 'Escribe una ruta de carpeta completa (D:\\Games) o un tipo de archivo (*.iso).',
-        formatHint: 'Una ruta de carpeta completa, o un tipo de archivo escrito como *.iso',
+        invalidFormat: "Escribe una ruta de carpeta completa (D:\\Games), un tipo de archivo (*.iso) o una clave del Registro (HKCU\\Software\\Vendor).",
+        formatHint: "Una ruta de carpeta completa, un tipo de archivo escrito como *.iso o una clave del Registro como HKCU\\Software\\Vendor",
         none: 'Nada excluido.',
         typeBadge: 'Tipo',
         folderBadge: 'Carpeta',
+        registryBadge: "Registro",
         removeAriaLabel: (value) => `Dejar de excluir ${value}`
       },
       cookiesToPreserve: {
@@ -8767,6 +8786,7 @@ export const CATALOG = {
       done: 'Listo',
       foundWarning: (count) => `Se encontr${count === 1 ? 'ó' : 'aron'} ${count} resto${count === 1 ? '' : 's'} que el desinstalador del programa pasó por alto. Revisa antes de eliminar.`,
       excludedNote: (count) => `${count} carpeta${count === 1 ? '' : 's'} omitida${count === 1 ? '' : 's'} porque ${count === 1 ? 'está' : 'están'} en tus exclusiones.`,
+      registryExcludedNote: (count) => `Claves del Registro omitidas porque están en tus exclusiones: ${count}.`,
       itemsSelected: 'elementos seleccionados',
       reclaimable: 'recuperable',
       skip: 'Omitir'
@@ -9033,15 +9053,16 @@ export const CATALOG = {
         ariaLabel: 'Karantiini maksimaalne suurus gigabaitides'
       },
       exclusions: {
-        title: 'Jäta kaustad välja',
-        description: 'Kaustad ja failitüübid, mille Prune rahule jätab — süvapuhastus jätab need vahele ja kettakaart jätab need välja — lisaks nendele, mida see juba kaitseb: süsteemiköite teave, viirusetõrje karantiinid, komponendipood ja tosin muud.',
-        ariaLabel: 'Väljajäetav kausta tee või failitüüp',
+        title: "Erandid",
+        description: 'Kaustad ja failitüübid, mille Prune rahule jätab — süvapuhastus jätab need vahele ja kettakaart jätab need välja — lisaks nendele, mida see juba kaitseb: süsteemiköite teave, viirusetõrje karantiinid, komponendipood ja tosin muud. Siin loetletud kaustu ja registrivõtmeid ei pakuta pärast eemaldamist kunagi ka jääkidena.',
+        ariaLabel: "Väljajäetav kausta tee, failitüüp või registrivõti",
         add: 'Lisa',
-        invalidFormat: 'Kirjuta täielik kausta tee (D:\\Games) või failitüüp (*.iso).',
-        formatHint: 'Täielik kausta tee või failitüüp kujul *.iso',
+        invalidFormat: "Kirjuta täielik kausta tee (D:\\Games), failitüüp (*.iso) või registrivõti (HKCU\\Software\\Vendor).",
+        formatHint: "Täielik kausta tee, failitüüp kujul *.iso või registrivõti, näiteks HKCU\\Software\\Vendor",
         none: 'Miski pole välja jäetud.',
         typeBadge: 'Tüüp',
         folderBadge: 'Kaust',
+        registryBadge: "Register",
         removeAriaLabel: (value) => `Lõpeta ${value} väljajätmine`
       },
       cookiesToPreserve: {
@@ -9658,6 +9679,7 @@ export const CATALOG = {
       done: 'Valmis',
       foundWarning: (count) => `Leiti ${count} ${count === 1 ? 'jääk' : 'jääki'}, mille algne desinstallija maha jättis. Vaata üle enne eemaldamist.`,
       excludedNote: (count) => `${count} ${count === 1 ? 'kaust' : 'kausta'} jäeti välja, kuna ${count === 1 ? 'see on' : 'need on'} sinu välistuste hulgas.`,
+      registryExcludedNote: (count) => `Registrivõtmed, mis jäeti välja, sest need on sinu erandites: ${count}.`,
       itemsSelected: 'üksust valitud',
       reclaimable: 'vabastatav',
       skip: 'Jäta vahele'
@@ -9924,15 +9946,16 @@ export const CATALOG = {
         ariaLabel: 'Karanteenin enimmäiskoko gigatavuina'
       },
       exclusions: {
-        title: 'Sulje kansioita pois',
-        description: "Kansiot ja tiedostotyypit, jotka Prune jättää rauhaan — syväpuhdistus ohittaa ne ja levykartta jättää ne pois — niiden lisäksi, joita se jo suojaa: System Volume Information, virustorjunnan karanteenit, komponenttivarasto ja tusina muuta.",
-        ariaLabel: 'Poissuljettava kansiopolku tai tiedostotyyppi',
+        title: "Poikkeukset",
+        description: "Kansiot ja tiedostotyypit, jotka Prune jättää rauhaan — syväpuhdistus ohittaa ne ja levykartta jättää ne pois — niiden lisäksi, joita se jo suojaa: System Volume Information, virustorjunnan karanteenit, komponenttivarasto ja tusina muuta. Tässä luetteloituja kansioita ja rekisteriavaimia ei myöskään koskaan tarjota jäämiksi asennuksen poiston jälkeen.",
+        ariaLabel: "Poissuljettava kansiopolku, tiedostotyyppi tai rekisteriavain",
         add: 'Lisää',
-        invalidFormat: 'Kirjoita täydellinen kansiopolku (D:\\Games) tai tiedostotyyppi (*.iso).',
-        formatHint: 'Täydellinen kansiopolku tai tiedostotyyppi muodossa *.iso',
+        invalidFormat: "Kirjoita täydellinen kansiopolku (D:\\Games), tiedostotyyppi (*.iso) tai rekisteriavain (HKCU\\Software\\Vendor).",
+        formatHint: "Täydellinen kansiopolku, tiedostotyyppi muodossa *.iso tai rekisteriavain, kuten HKCU\\Software\\Vendor",
         none: 'Ei mitään poissuljettuna.',
         typeBadge: 'Tyyppi',
         folderBadge: 'Kansio',
+        registryBadge: "Rekisteri",
         removeAriaLabel: (value) => `Lopeta kohteen ${value} poissulkeminen`
       },
       cookiesToPreserve: {
@@ -10549,6 +10572,7 @@ export const CATALOG = {
       done: 'Valmis',
       foundWarning: (count) => `Jäänteitä löytyi: ${count}. Alkuperäinen poisto-ohjelma ei poistanut niitä. Tarkista ennen poistamista.`,
       excludedNote: (count) => `${count} kansio${count === 1 ? '' : 'ta'} jätettiin pois, koska ${count === 1 ? 'se on' : 'ne ovat'} poissulkemissasi.`,
+      registryExcludedNote: (count) => `Rekisteriavaimet, jotka jätettiin pois, koska ne ovat poikkeuksissasi: ${count}.`,
       itemsSelected: 'kohdetta valittu',
       reclaimable: 'vapautettavissa',
       skip: 'Ohita'
@@ -10815,15 +10839,16 @@ export const CATALOG = {
         ariaLabel: 'Taille maximale de la quarantaine en gigaoctets'
       },
       exclusions: {
-        title: 'Exclure des dossiers',
-        description: "Dossiers et types de fichiers que Prune laissera tranquilles — ignorés par le Nettoyage approfondi et exclus de la Carte du disque — en plus de ceux qu'il protège déjà : Informations de volume système, quarantaines antivirus, le magasin de composants et une douzaine d'autres.",
-        ariaLabel: 'Chemin de dossier ou type de fichier à exclure',
+        title: "Exclusions",
+        description: "Dossiers et types de fichiers que Prune laissera tranquilles — ignorés par le Nettoyage approfondi et exclus de la Carte du disque — en plus de ceux qu'il protège déjà : Informations de volume système, quarantaines antivirus, le magasin de composants et une douzaine d'autres. Les dossiers et clés de registre listés ici ne sont jamais proposés non plus comme restes après une désinstallation.",
+        ariaLabel: "Chemin de dossier, type de fichier ou clé de registre à exclure",
         add: 'Ajouter',
-        invalidFormat: 'Écrivez un chemin de dossier complet (D:\\Games) ou un type de fichier (*.iso).',
-        formatHint: 'Un chemin de dossier complet, ou un type de fichier écrit comme *.iso',
+        invalidFormat: "Écrivez un chemin de dossier complet (D:\\Games), un type de fichier (*.iso) ou une clé de registre (HKCU\\Software\\Vendor).",
+        formatHint: "Un chemin de dossier complet, un type de fichier écrit comme *.iso ou une clé de registre comme HKCU\\Software\\Vendor",
         none: 'Rien n\'est exclu.',
         typeBadge: 'Type',
         folderBadge: 'Dossier',
+        registryBadge: "Registre",
         removeAriaLabel: (value) => `Ne plus exclure ${value}`
       },
       cookiesToPreserve: {
@@ -11440,6 +11465,7 @@ export const CATALOG = {
       done: 'Terminé',
       foundWarning: (count) => `${count} élément${count === 1 ? '' : 's'} résiduel${count === 1 ? '' : 's'} trouvé${count === 1 ? '' : 's'}, oublié${count === 1 ? '' : 's'} par le désinstalleur du programme. Vérifiez avant de supprimer.`,
       excludedNote: (count) => `${count} dossier${count === 1 ? '' : 's'} laissé${count === 1 ? '' : 's'} de côté car ${count === 1 ? 'il figure' : 'ils figurent'} dans vos exclusions.`,
+      registryExcludedNote: (count) => `Clés de registre ignorées car elles figurent dans vos exclusions : ${count}.`,
       itemsSelected: 'éléments sélectionnés',
       reclaimable: 'récupérable',
       skip: 'Ignorer'
@@ -11706,15 +11732,16 @@ export const CATALOG = {
         ariaLabel: 'גודל מרבי של הסגר בגיגה-בייט'
       },
       exclusions: {
-        title: "החרגת תיקיות",
-        description: "תיקיות וסוגי קבצים ש-Prune ישאיר לנפשם — ידולגו על ידי הניקוי המעמיק ויוחרגו ממפת הדיסק — בנוסף לאלה שהוא כבר מגן עליהם: מידע על כרך המערכת, הסגרי אנטי-וירוס, מאגר הרכיבים ותריסר נוספים.",
-        ariaLabel: 'נתיב תיקייה או סוג קובץ להחרגה',
+        title: "החרגות",
+        description: "תיקיות וסוגי קבצים ש-Prune ישאיר לנפשם — ידולגו על ידי הניקוי המעמיק ויוחרגו ממפת הדיסק — בנוסף לאלה שהוא כבר מגן עליהם: מידע על כרך המערכת, הסגרי אנטי-וירוס, מאגר הרכיבים ותריסר נוספים. תיקיות ומפתחות רישום שמופיעים כאן גם לעולם לא יוצעו כשאריות לאחר הסרת התקנה.",
+        ariaLabel: "נתיב תיקייה, סוג קובץ או מפתח רישום להחרגה",
         add: 'הוסף',
-        invalidFormat: 'כתוב נתיב תיקייה מלא (D:\\Games) או סוג קובץ (*.iso).',
-        formatHint: 'נתיב תיקייה מלא, או סוג קובץ שנכתב כמו *.iso',
+        invalidFormat: "כתוב נתיב תיקייה מלא (D:\\Games), סוג קובץ (*.iso) או מפתח רישום (HKCU\\Software\\Vendor).",
+        formatHint: "נתיב תיקייה מלא, סוג קובץ שנכתב כמו *.iso, או מפתח רישום כמו HKCU\\Software\\Vendor",
         none: 'שום דבר לא הוחרג.',
         typeBadge: 'סוג',
         folderBadge: 'תיקייה',
+        registryBadge: "רישום",
         removeAriaLabel: (value) => `הפסק להחריג את ${value}`
       },
       cookiesToPreserve: {
@@ -12331,6 +12358,7 @@ export const CATALOG = {
       done: 'סיום',
       foundWarning: (count) => `נמצאו שאריות שתוכנית ההסרה המקורית פספסה (${count}). סקור לפני ההסרה.`,
       excludedNote: (count) => count === 1 ? 'תיקייה אחת הושמטה כי היא ברשימת ההחרגות שלך.' : count === 2 ? 'שתי תיקיות הושמטו כי הן ברשימת ההחרגות שלך.' : `${count} תיקיות הושמטו כי הן ברשימת ההחרגות שלך.`,
+      registryExcludedNote: (count) => `מפתחות רישום שהושמטו כי הם נמצאים בהחרגות שלך: ${count}.`,
       itemsSelected: 'פריטים נבחרו',
       reclaimable: 'ניתן לשחרור',
       skip: 'דלג'
@@ -12597,15 +12625,16 @@ export const CATALOG = {
         ariaLabel: 'Maximális karantén-méret gigabájtban'
       },
       exclusions: {
-        title: 'Mappák kizárása',
-        description: "Mappák és fájltípusok, amiket a Prune békén hagy — a Mélytisztítás kihagyja őket, és a Lemeztérkép kizárja őket — azok mellett, amiket már véd: System Volume Information, vírusirtó-karanténok, a komponenttár és még egy tucat másik.",
-        ariaLabel: 'Kizárandó mappaútvonal vagy fájltípus',
+        title: "Kizárások",
+        description: "Mappák és fájltípusok, amiket a Prune békén hagy — a Mélytisztítás kihagyja őket, és a Lemeztérkép kizárja őket — azok mellett, amiket már véd: System Volume Information, vírusirtó-karanténok, a komponenttár és még egy tucat másik. Az itt felsorolt mappákat és beállításjegyzék-kulcsokat az eltávolítás után sem ajánlja fel maradványként.",
+        ariaLabel: "Kizárandó mappaútvonal, fájltípus vagy beállításjegyzék-kulcs",
         add: 'Hozzáadás',
-        invalidFormat: 'Adj meg egy teljes mappaútvonalat (D:\\Games) vagy egy fájltípust (*.iso).',
-        formatHint: 'Egy teljes mappaútvonal, vagy egy *.iso formában írt fájltípus',
+        invalidFormat: "Adj meg egy teljes mappaútvonalat (D:\\Games), egy fájltípust (*.iso) vagy egy beállításjegyzék-kulcsot (HKCU\\Software\\Vendor).",
+        formatHint: "Egy teljes mappaútvonal, egy *.iso formában írt fájltípus vagy egy beállításjegyzék-kulcs, például HKCU\\Software\\Vendor",
         none: 'Semmi sincs kizárva.',
         typeBadge: 'Típus',
         folderBadge: 'Mappa',
+        registryBadge: "Beállításjegyzék",
         removeAriaLabel: (value) => `${value} kizárásának megszüntetése`
       },
       cookiesToPreserve: {
@@ -13222,6 +13251,7 @@ export const CATALOG = {
       done: 'Kész',
       foundWarning: (count) => `A natív eltávolító ${count} maradványt hagyott hátra. Nézd át, mielőtt eltávolítod.`,
       excludedNote: (count) => `${count} mappa kimaradt, mert szerepel a kizárásaid között.`,
+      registryExcludedNote: (count) => `Kihagyott beállításjegyzék-kulcsok, mert szerepelnek a kizárásaid között: ${count}.`,
       itemsSelected: 'elem kijelölve',
       reclaimable: 'felszabadítható',
       skip: 'Kihagyás'
@@ -13488,15 +13518,16 @@ export const CATALOG = {
         ariaLabel: "Ukuran Karantina maksimum dalam gigabyte"
       },
       exclusions: {
-        title: "Kecualikan folder",
-        description: "Folder dan tipe file yang akan dibiarkan Prune — dilewati oleh Pembersihan Mendalam dan dikecualikan dari Peta Disk — selain yang sudah dilindunginya: System Volume Information, karantina antivirus, penyimpanan komponen, dan selusin lainnya.",
-        ariaLabel: 'Jalur folder atau tipe file untuk dikecualikan',
+        title: "Pengecualian",
+        description: "Folder dan tipe file yang akan dibiarkan Prune — dilewati oleh Pembersihan Mendalam dan dikecualikan dari Peta Disk — selain yang sudah dilindunginya: System Volume Information, karantina antivirus, penyimpanan komponen, dan selusin lainnya. Folder dan kunci registri yang tercantum di sini juga tidak pernah ditawarkan sebagai sisa setelah penghapusan instalasi.",
+        ariaLabel: "Jalur folder, tipe file, atau kunci registri untuk dikecualikan",
         add: 'Tambah',
-        invalidFormat: 'Tulis jalur folder lengkap (D:\\Games) atau tipe file (*.iso).',
-        formatHint: 'Jalur folder lengkap, atau tipe file yang ditulis sebagai *.iso',
+        invalidFormat: "Tulis jalur folder lengkap (D:\\Games), tipe file (*.iso), atau kunci registri (HKCU\\Software\\Vendor).",
+        formatHint: "Jalur folder lengkap, tipe file yang ditulis sebagai *.iso, atau kunci registri seperti HKCU\\Software\\Vendor",
         none: 'Tidak ada yang dikecualikan.',
         typeBadge: 'Tipe',
         folderBadge: 'Folder',
+        registryBadge: "Registri",
         removeAriaLabel: (value) => `Berhenti mengecualikan ${value}`
       },
       cookiesToPreserve: {
@@ -14113,6 +14144,7 @@ export const CATALOG = {
       done: 'Selesai',
       foundWarning: (count) => `Ditemukan ${count} item sisa yang terlewat oleh uninstaller asli. Tinjau sebelum menghapus.`,
       excludedNote: (count) => `${count} folder dikecualikan karena ada dalam pengecualianmu.`,
+      registryExcludedNote: (count) => `Kunci registri yang dilewati karena ada di pengecualian Anda: ${count}.`,
       itemsSelected: 'item dipilih',
       reclaimable: 'dapat dibebaskan',
       skip: 'Lewati'
@@ -14379,15 +14411,16 @@ export const CATALOG = {
         ariaLabel: 'Hámarksstærð sóttkvíar í gígabætum'
       },
       exclusions: {
-        title: 'Útiloka möppur',
-        description: "Möppur og skráartegundir sem Prune lætur í friði — sleppt af Djúphreinsun og útilokað úr Diskakortinu — til viðbótar við það sem það verndar nú þegar: System Volume Information, veirueyðingarsóttkvíar, íhlutageymslan og tugur annarra.",
-        ariaLabel: 'Möppuslóð eða skráartegund til að útiloka',
+        title: "Undantekningar",
+        description: "Möppur og skráartegundir sem Prune lætur í friði — sleppt af Djúphreinsun og útilokað úr Diskakortinu — til viðbótar við það sem það verndar nú þegar: System Volume Information, veirueyðingarsóttkvíar, íhlutageymslan og tugur annarra. Möppur og skrásetningarlyklar sem eru skráðir hér eru heldur aldrei boðnir sem leifar eftir að forrit er fjarlægt.",
+        ariaLabel: "Möppuslóð, skráartegund eða skrásetningarlykill til að útiloka",
         add: 'Bæta við',
-        invalidFormat: 'Skrifaðu heila möppuslóð (D:\\Games) eða skráartegund (*.iso).',
-        formatHint: 'Heil möppuslóð, eða skráartegund skrifuð sem *.iso',
+        invalidFormat: "Skrifaðu heila möppuslóð (D:\\Games), skráartegund (*.iso) eða skrásetningarlykil (HKCU\\Software\\Vendor).",
+        formatHint: "Heil möppuslóð, skráartegund skrifuð sem *.iso eða skrásetningarlykill eins og HKCU\\Software\\Vendor",
         none: 'Ekkert útilokað.',
         typeBadge: 'Tegund',
         folderBadge: 'Mappa',
+        registryBadge: "Skrásetning",
         removeAriaLabel: (value) => `Hætta að útiloka ${value}`
       },
       cookiesToPreserve: {
@@ -15004,6 +15037,7 @@ export const CATALOG = {
       done: 'Lokið',
       foundWarning: (count) => `Leifar fundust: ${count}. Upprunalega fjarlægingarforritið fjarlægði þær ekki. Farðu yfir þær áður en þú fjarlægir.`,
       excludedNote: (count) => `${count} ${count === 1 ? 'mappa var skilin' : 'möppur voru skildar'} eftir því ${count === 1 ? 'hún er' : 'þær eru'} í útilokunum þínum.`,
+      registryExcludedNote: (count) => `Skrásetningarlyklar sem var sleppt því þeir eru í undantekningunum þínum: ${count}.`,
       itemsSelected: 'hlutir valdir',
       reclaimable: "hægt að losa",
       skip: 'Sleppa'
@@ -15270,15 +15304,16 @@ export const CATALOG = {
         ariaLabel: 'Dimensione massima della quarantena in gigabyte'
       },
       exclusions: {
-        title: 'Escludi cartelle',
-        description: "Cartelle e tipi di file che Prune lascerà stare — saltati dalla Pulizia approfondita ed esclusi dalla Mappa del disco — oltre a quelli che già protegge: Informazioni sul volume di sistema, quarantene antivirus, l'archivio componenti e una dozzina di altri.",
-        ariaLabel: 'Percorso cartella o tipo di file da escludere',
+        title: "Esclusioni",
+        description: "Cartelle e tipi di file che Prune lascerà stare — saltati dalla Pulizia approfondita ed esclusi dalla Mappa del disco — oltre a quelli che già protegge: Informazioni sul volume di sistema, quarantene antivirus, l'archivio componenti e una dozzina di altri. Le cartelle e le chiavi del registro elencate qui non vengono mai proposte nemmeno come residui dopo una disinstallazione.",
+        ariaLabel: "Percorso cartella, tipo di file o chiave del registro da escludere",
         add: 'Aggiungi',
-        invalidFormat: 'Scrivi un percorso di cartella completo (D:\\Games) o un tipo di file (*.iso).',
-        formatHint: 'Un percorso di cartella completo, o un tipo di file scritto come *.iso',
+        invalidFormat: "Scrivi un percorso di cartella completo (D:\\Games), un tipo di file (*.iso) o una chiave del registro (HKCU\\Software\\Vendor).",
+        formatHint: "Un percorso di cartella completo, un tipo di file scritto come *.iso o una chiave del registro come HKCU\\Software\\Vendor",
         none: 'Nulla è escluso.',
         typeBadge: 'Tipo',
         folderBadge: 'Cartella',
+        registryBadge: "Registro",
         removeAriaLabel: (value) => `Smetti di escludere ${value}`
       },
       cookiesToPreserve: {
@@ -15895,6 +15930,7 @@ export const CATALOG = {
       done: 'Fatto',
       foundWarning: (count) => `Trovat${count === 1 ? 'o' : 'i'} ${count} element${count === 1 ? 'o residuo' : 'i residui'} che il disinstallatore del programma non ha rimosso. Controlla prima di eliminare.`,
       excludedNote: (count) => `${count} cartell${count === 1 ? 'a esclusa' : 'e escluse'} perché ${count === 1 ? 'è' : 'sono'} nelle tue esclusioni.`,
+      registryExcludedNote: (count) => `Chiavi del registro escluse perché presenti nelle tue esclusioni: ${count}.`,
       itemsSelected: 'elementi selezionati',
       reclaimable: 'recuperabile',
       skip: 'Salta'
@@ -16161,15 +16197,16 @@ export const CATALOG = {
         ariaLabel: "隔離の最大サイズ（ギガバイト）"
       },
       exclusions: {
-        title: "フォルダーを除外",
-        description: 'Prune がそのままにしておくフォルダとファイルタイプ — ディープクリーンでスキップされ、ディスクマップから除外されます — すでに保護されているもの（システムボリューム情報、アンチウイルスの隔離場所、コンポーネントストアなど十数個）に加えて指定できます。',
-        ariaLabel: '除外するフォルダパスまたはファイルタイプ',
+        title: "除外",
+        description: 'Prune がそのままにしておくフォルダとファイルタイプ — ディープクリーンでスキップされ、ディスクマップから除外されます — すでに保護されているもの（システムボリューム情報、アンチウイルスの隔離場所、コンポーネントストアなど十数個）に加えて指定できます。 ここに登録したフォルダーとレジストリ キーは、アンインストール後の残骸としても提示されません。',
+        ariaLabel: "除外するフォルダー パス、ファイルタイプ、またはレジストリ キー",
         add: '追加',
-        invalidFormat: '完全なフォルダパス（D:\\Games）またはファイルタイプ（*.iso）を入力してください。',
-        formatHint: '完全なフォルダパス、または *.iso のように書かれたファイルタイプ',
+        invalidFormat: "完全なフォルダーパス（D:\\Games）、ファイルタイプ（*.iso）、またはレジストリ キー（HKCU\\Software\\Vendor）を入力してください。",
+        formatHint: "完全なフォルダーパス、*.iso のように書かれたファイルタイプ、または HKCU\\Software\\Vendor のようなレジストリ キー",
         none: '除外されているものはありません。',
         typeBadge: 'タイプ',
         folderBadge: 'フォルダ',
+        registryBadge: "レジストリ",
         removeAriaLabel: (value) => `${value} の除外を解除`
       },
       cookiesToPreserve: {
@@ -16786,6 +16823,7 @@ export const CATALOG = {
       done: '完了',
       foundWarning: (count) => `アンインストーラーが取り残した項目が ${count} 件見つかりました。削除する前に確認してください。`,
       excludedNote: (count) => `${count}個のフォルダーが除外設定に含まれているため除外されました。`,
+      registryExcludedNote: (count) => `除外設定に含まれているため除外されたレジストリ キー: ${count}`,
       itemsSelected: '項目を選択中',
       reclaimable: '回収可能',
       skip: 'スキップ'
@@ -17052,15 +17090,16 @@ export const CATALOG = {
         ariaLabel: '기가바이트 단위의 최대 격리 크기'
       },
       exclusions: {
-        title: '폴더 제외',
-        description: "Prune이 건드리지 않을 폴더와 파일 유형입니다 — 딥 클린에서 건너뛰고 디스크 맵에서 제외됩니다 — 이미 보호하고 있는 것들(시스템 볼륨 정보, 백신 격리 공간, 구성 요소 저장소 등 12개 이상) 외에 추가로 지정할 수 있습니다.",
-        ariaLabel: '제외할 폴더 경로 또는 파일 유형',
+        title: "제외 항목",
+        description: "Prune이 건드리지 않을 폴더와 파일 유형입니다 — 딥 클린에서 건너뛰고 디스크 맵에서 제외됩니다 — 이미 보호하고 있는 것들(시스템 볼륨 정보, 백신 격리 공간, 구성 요소 저장소 등 12개 이상) 외에 추가로 지정할 수 있습니다. 여기에 나열한 폴더와 레지스트리 키는 제거 후에도 남은 항목으로 표시되지 않습니다.",
+        ariaLabel: "제외할 폴더 경로, 파일 유형 또는 레지스트리 키",
         add: '추가',
-        invalidFormat: '전체 폴더 경로(D:\\Games) 또는 파일 유형(*.iso)을 입력하세요.',
-        formatHint: '전체 폴더 경로 또는 *.iso와 같이 작성된 파일 유형',
+        invalidFormat: "전체 폴더 경로(D:\\Games), 파일 유형(*.iso) 또는 레지스트리 키(HKCU\\Software\\Vendor)를 입력하세요.",
+        formatHint: "전체 폴더 경로, *.iso와 같이 작성된 파일 유형 또는 HKCU\\Software\\Vendor와 같은 레지스트리 키",
         none: '제외된 것이 없습니다.',
         typeBadge: '유형',
         folderBadge: '폴더',
+        registryBadge: "레지스트리",
         removeAriaLabel: (value) => `${value} 제외 중지`
       },
       cookiesToPreserve: {
@@ -17677,6 +17716,7 @@ export const CATALOG = {
       done: '완료',
       foundWarning: (count) => `제거 프로그램이 놓친 남은 항목 ${count}개를 찾았습니다. 삭제하기 전에 검토하세요.`,
       excludedNote: (count) => `제외 목록에 있어 ${count}개의 폴더가 제외되었습니다.`,
+      registryExcludedNote: (count) => `제외 항목에 있어 제외된 레지스트리 키: ${count}개`,
       itemsSelected: '개 항목 선택됨',
       reclaimable: '확보 가능',
       skip: '건너뛰기'
@@ -17943,15 +17983,16 @@ export const CATALOG = {
         ariaLabel: 'Maksimalus karantino dydis gigabaitais'
       },
       exclusions: {
-        title: 'Neįtraukti aplankų',
-        description: "Aplankai ir failų tipai, kuriuos Prune paliks ramybėje — praleidžiami Gilaus valymo ir neįtraukiami į disko žemėlapį — be tų, kuriuos jau saugo: System Volume Information, antivirusinių programų karantinai, komponentų saugykla ir dar tuzinas kitų.",
-        ariaLabel: 'Neįtrauktinas aplanko kelias arba failo tipas',
+        title: "Išimtys",
+        description: "Aplankai ir failų tipai, kuriuos Prune paliks ramybėje — praleidžiami Gilaus valymo ir neįtraukiami į disko žemėlapį — be tų, kuriuos jau saugo: System Volume Information, antivirusinių programų karantinai, komponentų saugykla ir dar tuzinas kitų. Čia išvardyti aplankai ir registro raktai taip pat niekada nesiūlomi kaip likučiai pašalinus programą.",
+        ariaLabel: "Neįtrauktinas aplanko kelias, failo tipas arba registro raktas",
         add: 'Pridėti',
-        invalidFormat: 'Įrašykite pilną aplanko kelią (D:\\Games) arba failo tipą (*.iso).',
-        formatHint: 'Pilnas aplanko kelias arba failo tipas, parašytas kaip *.iso',
+        invalidFormat: "Įrašykite pilną aplanko kelią (D:\\Games), failo tipą (*.iso) arba registro raktą (HKCU\\Software\\Vendor).",
+        formatHint: "Pilnas aplanko kelias, failo tipas, parašytas kaip *.iso, arba registro raktas, pvz., HKCU\\Software\\Vendor",
         none: 'Nieko neįtraukta.',
         typeBadge: 'Tipas',
         folderBadge: 'Aplankas',
+        registryBadge: "Registras",
         removeAriaLabel: (value) => `Panaikinti išimtį: ${value}`
       },
       cookiesToPreserve: {
@@ -18568,6 +18609,7 @@ export const CATALOG = {
       done: 'Atlikta',
       foundWarning: (count) => `Originali šalinimo priemonė nepastebėjo liekanų: ${count}. Peržiūrėkite prieš šalindami.`,
       excludedNote: (count) => { const lt = (n, a, b, c) => n % 10 === 1 && n % 100 !== 11 ? a : (n % 10 === 0 || (n % 100 >= 11 && n % 100 <= 19)) ? c : b; return `${count} ${lt(count, 'aplankas praleistas, nes yra', 'aplankai praleisti, nes yra', 'aplankų praleista, nes yra')} jūsų išimtyse.`; },
+      registryExcludedNote: (count) => `Registro raktai, praleisti, nes yra jūsų išimtyse: ${count}.`,
       itemsSelected: 'pasirinkti elementai',
       reclaimable: 'atlaisvinama',
       skip: 'Praleisti'
@@ -18832,15 +18874,16 @@ export const CATALOG = {
         ariaLabel: "Saiz maksimum Kuarantin dalam gigabait"
       },
       exclusions: {
-        title: "Kecualikan folder",
-        description: "Folder dan jenis fail yang akan dibiarkan oleh Prune — dilangkau oleh Pembersihan Mendalam dan dikecualikan daripada Peta Cakera — sebagai tambahan kepada yang sudah dilindungi: System Volume Information, kuarantin antivirus, stor komponen dan selusin lagi.",
-        ariaLabel: 'Laluan folder atau jenis fail untuk dikecualikan',
+        title: "Pengecualian",
+        description: "Folder dan jenis fail yang akan dibiarkan oleh Prune — dilangkau oleh Pembersihan Mendalam dan dikecualikan daripada Peta Cakera — sebagai tambahan kepada yang sudah dilindungi: System Volume Information, kuarantin antivirus, stor komponen dan selusin lagi. Folder dan kunci registri yang disenaraikan di sini juga tidak pernah ditawarkan sebagai sisa selepas nyahpasang.",
+        ariaLabel: "Laluan folder, jenis fail atau kunci registri untuk dikecualikan",
         add: 'Tambah',
-        invalidFormat: 'Tulis laluan folder penuh (D:\\Games) atau jenis fail (*.iso).',
-        formatHint: 'Laluan folder penuh, atau jenis fail ditulis sebagai *.iso',
+        invalidFormat: "Tulis laluan folder penuh (D:\\Games), jenis fail (*.iso) atau kunci registri (HKCU\\Software\\Vendor).",
+        formatHint: "Laluan folder penuh, jenis fail ditulis sebagai *.iso, atau kunci registri seperti HKCU\\Software\\Vendor",
         none: 'Tiada yang dikecualikan.',
         typeBadge: 'Jenis',
         folderBadge: 'Folder',
+        registryBadge: "Registri",
         removeAriaLabel: (value) => `Berhenti mengecualikan ${value}`
       },
       cookiesToPreserve: {
@@ -19457,6 +19500,7 @@ export const CATALOG = {
       done: 'Selesai',
       foundWarning: (count) => `Ditemui ${count} item baki yang tidak dialih keluar oleh penyahpasang asal. Semak sebelum mengalih keluar.`,
       excludedNote: (count) => `${count} folder ditinggalkan kerana berada dalam pengecualian anda.`,
+      registryExcludedNote: (count) => `Kunci registri yang ditinggalkan kerana berada dalam pengecualian anda: ${count}.`,
       itemsSelected: 'item dipilih',
       reclaimable: 'boleh dituntut semula',
       skip: 'Langkau'
@@ -19723,15 +19767,16 @@ export const CATALOG = {
         ariaLabel: 'Maksimal karantenestørrelse i gigabyte'
       },
       exclusions: {
-        title: 'Ekskluder mapper',
-        description: "Mapper og filtyper Prune vil la være i fred — hoppet over av Grundig opprydding og utelatt fra Diskkartet — i tillegg til de den allerede beskytter: Systemvolumsinformasjon, antiviruskaranterne, komponentlageret og et dusin andre.",
-        ariaLabel: 'Mappesti eller filtype å ekskludere',
+        title: "Unntak",
+        description: "Mapper og filtyper Prune vil la være i fred — hoppet over av Grundig opprydding og utelatt fra Diskkartet — i tillegg til de den allerede beskytter: Systemvolumsinformasjon, antiviruskaranterne, komponentlageret og et dusin andre. Mapper og registernøkler som står her tilbys heller aldri som rester etter en avinstallering.",
+        ariaLabel: "Mappesti, filtype eller registernøkkel å ekskludere",
         add: 'Legg til',
-        invalidFormat: 'Skriv en fullstendig mappesti (D:\\Games) eller en filtype (*.iso).',
-        formatHint: 'En fullstendig mappesti, eller en filtype skrevet som *.iso',
+        invalidFormat: "Skriv en fullstendig mappesti (D:\\Games), en filtype (*.iso) eller en registernøkkel (HKCU\\Software\\Vendor).",
+        formatHint: "En fullstendig mappesti, en filtype skrevet som *.iso eller en registernøkkel som HKCU\\Software\\Vendor",
         none: 'Ingenting ekskludert.',
         typeBadge: 'Type',
         folderBadge: 'Mappe',
+        registryBadge: "Register",
         removeAriaLabel: (value) => `Slutt å ekskludere ${value}`
       },
       cookiesToPreserve: {
@@ -20348,6 +20393,7 @@ export const CATALOG = {
       done: 'Ferdig',
       foundWarning: (count) => `Fant ${count} ${count === 1 ? 'rest' : 'rester'} som avinstallasjonsprogrammet gikk glipp av. Se dem over før du fjerner dem.`,
       excludedNote: (count) => `${count} mappe${count === 1 ? '' : 'r'} utelatt fordi ${count === 1 ? 'den er' : 'de er'} i unntakene dine.`,
+      registryExcludedNote: (count) => `Registernøkler utelatt fordi de står i unntakene dine: ${count}.`,
       itemsSelected: 'elementer valgt',
       reclaimable: 'kan frigjøres',
       skip: 'Hopp over'
@@ -20612,15 +20658,16 @@ export const CATALOG = {
         ariaLabel: 'Maximale quarantainegrootte in gigabytes'
       },
       exclusions: {
-        title: 'Mappen uitsluiten',
-        description: "Mappen en bestandstypen die Prune met rust laat — overgeslagen door Grondige opschoning en uitgesloten van de Schijfkaart — bovenop degene die het al beschermt: Systeemvolume-informatie, antivirusquarantaines, de onderdelenopslag en een tiental andere.",
-        ariaLabel: 'Uit te sluiten mappad of bestandstype',
+        title: "Uitsluitingen",
+        description: "Mappen en bestandstypen die Prune met rust laat — overgeslagen door Grondige opschoning en uitgesloten van de Schijfkaart — bovenop degene die het al beschermt: Systeemvolume-informatie, antivirusquarantaines, de onderdelenopslag en een tiental andere. Mappen en registersleutels die hier staan, worden na een verwijdering ook nooit als restanten aangeboden.",
+        ariaLabel: "Uit te sluiten mappad, bestandstype of registersleutel",
         add: 'Toevoegen',
-        invalidFormat: 'Schrijf een volledig mappad (D:\\Games) of een bestandstype (*.iso).',
-        formatHint: 'Een volledig mappad, of een bestandstype geschreven als *.iso',
+        invalidFormat: "Schrijf een volledig mappad (D:\\Games), een bestandstype (*.iso) of een registersleutel (HKCU\\Software\\Vendor).",
+        formatHint: "Een volledig mappad, een bestandstype geschreven als *.iso of een registersleutel zoals HKCU\\Software\\Vendor",
         none: 'Niets uitgesloten.',
         typeBadge: 'Type',
         folderBadge: 'Map',
+        registryBadge: "Register",
         removeAriaLabel: (value) => `${value} niet langer uitsluiten`
       },
       cookiesToPreserve: {
@@ -21237,6 +21284,7 @@ export const CATALOG = {
       done: 'Klaar',
       foundWarning: (count) => `${count} ${count === 1 ? 'restant' : 'restanten'} gevonden die het eigen verwijderprogramma heeft gemist. Controleer ze voordat je ze verwijdert.`,
       excludedNote: (count) => `${count} map${count === 1 ? '' : 'pen'} weggelaten omdat ${count === 1 ? 'deze zich' : 'ze zich'} in je uitsluitingen bevind${count === 1 ? 't' : 'en'}.`,
+      registryExcludedNote: (count) => `Registersleutels weggelaten omdat ze in uw uitsluitingen staan: ${count}.`,
       itemsSelected: 'items geselecteerd',
       reclaimable: 'terug te winnen',
       skip: 'Overslaan'
@@ -21501,15 +21549,16 @@ export const CATALOG = {
         ariaLabel: 'Maksymalny rozmiar kwarantanny w gigabajtach'
       },
       exclusions: {
-        title: 'Wyklucz foldery',
-        description: "Foldery i typy plików, które Prune zostawi w spokoju — pomijane przez Głębokie czyszczenie i wykluczone z Mapy dysku — oprócz tych, które już chroni: System Volume Information, kwarantanny antywirusowe, magazyn składników i tuzin innych.",
-        ariaLabel: 'Ścieżka folderu lub typ pliku do wykluczenia',
+        title: "Wykluczenia",
+        description: "Foldery i typy plików, które Prune zostawi w spokoju — pomijane przez Głębokie czyszczenie i wykluczone z Mapy dysku — oprócz tych, które już chroni: System Volume Information, kwarantanny antywirusowe, magazyn składników i tuzin innych. Foldery i klucze rejestru wymienione tutaj nie są też nigdy proponowane jako pozostałości po odinstalowaniu.",
+        ariaLabel: "Ścieżka folderu, typ pliku lub klucz rejestru do wykluczenia",
         add: 'Dodaj',
-        invalidFormat: 'Wpisz pełną ścieżkę folderu (D:\\Games) lub typ pliku (*.iso).',
-        formatHint: 'Pełna ścieżka folderu lub typ pliku zapisany jako *.iso',
+        invalidFormat: "Wpisz pełną ścieżkę folderu (D:\\Games), typ pliku (*.iso) lub klucz rejestru (HKCU\\Software\\Vendor).",
+        formatHint: "Pełna ścieżka folderu, typ pliku zapisany jako *.iso lub klucz rejestru, na przykład HKCU\\Software\\Vendor",
         none: 'Nic nie jest wykluczone.',
         typeBadge: 'Typ',
         folderBadge: 'Folder',
+        registryBadge: "Rejestr",
         removeAriaLabel: (value) => `Przestań wykluczać ${value}`
       },
       cookiesToPreserve: {
@@ -22126,6 +22175,7 @@ export const CATALOG = {
       done: 'Gotowe',
       foundWarning: (count) => `Pozostałości pominięte przez dezinstalator: ${count}. Sprawdź je przed usunięciem.`,
       excludedNote: (count) => `Pominięto foldery znajdujące się w Twoich wykluczeniach: ${count}.`,
+      registryExcludedNote: (count) => `Klucze rejestru pominięte, ponieważ są na liście wykluczeń: ${count}.`,
       itemsSelected: 'zaznaczonych elementów',
       reclaimable: 'do odzyskania',
       skip: 'Pomiń'
@@ -22390,15 +22440,16 @@ export const CATALOG = {
         ariaLabel: 'د قرنطین اعظمي اندازه په ګیګابایټونو کې'
       },
       exclusions: {
-        title: 'فولډرونه استثنا کول',
-        description: "فولډرونه او د فایل ډولونه چې Prune به یې پرېږدي — د ژور پاکولو لخوا پریښودل شوي او د ډیسک نقشې څخه استثنا شوي — د هغو سربیره چې دمخه یې ساتي: د سیسټم حجم معلومات، انټي ویروس قرنطینونه، د اجزاوو زیرمه، او دولس نور.",
-        ariaLabel: 'د استثنا کولو لپاره فولډر پته یا د فایل ډول',
+        title: "استثناوې",
+        description: "فولډرونه او د فایل ډولونه چې Prune به یې پرېږدي — د ژور پاکولو لخوا پریښودل شوي او د ډیسک نقشې څخه استثنا شوي — د هغو سربیره چې دمخه یې ساتي: د سیسټم حجم معلومات، انټي ویروس قرنطینونه، د اجزاوو زیرمه، او دولس نور. دلته لیست شوي فولډرونه او د ریجستري کیلي هم د لرې کولو وروسته هیڅکله د پاتې شونو په توګه نه وړاندې کیږي.",
+        ariaLabel: "د استثنا کولو لپاره فولډر پته، د فایل ډول یا د ریجستري کیلي",
         add: 'اضافه کول',
-        invalidFormat: 'یو بشپړ فولډر پته (D:\\Games) یا د فایل ډول (*.iso) ولیکئ.',
-        formatHint: 'یو بشپړ فولډر پته، یا د فایل ډول لکه *.iso لیکل شوی',
+        invalidFormat: "یو بشپړ فولډر پته (D:\\Games)، د فایل ډول (*.iso) یا د ریجستري کیلي (HKCU\\Software\\Vendor) ولیکئ.",
+        formatHint: "یو بشپړ فولډر پته، د فایل ډول لکه *.iso لیکل شوی، یا د ریجستري کیلي لکه HKCU\\Software\\Vendor",
         none: 'هیڅ شی استثنا شوی نه دی.',
         typeBadge: 'ډول',
         folderBadge: 'فولډر',
+        registryBadge: "ریجستري",
         removeAriaLabel: (value) => `د ${value} استثنا کول ودروئ`
       },
       cookiesToPreserve: {
@@ -23015,6 +23066,7 @@ export const CATALOG = {
       done: "بشپړ",
       foundWarning: (count) => `${count === 1 ? '1 پاتې شونه وموندل شوه' : count + ' پاتې شونې وموندل شوې'} چې د اصلي لرې کوونکي پرېښودې. مخکې له لرې کولو یې وڅېړئ.`,
       excludedNote: (count) => count === 1 ? '1 فولډر پریښودل شو ځکه چې دا ستاسو په استثناوو کې دی.' : `${count} فولډرونه پریښودل شول ځکه چې دوی ستاسو په استثناوو کې دي.`,
+      registryExcludedNote: (count) => `د ریجستري کیلي چې پریښودل شوې ځکه چې ستاسو په استثناوو کې دي: ${count}.`,
       itemsSelected: 'توکي ټاکل شوي',
       reclaimable: 'بیا ترلاسه کیدونکی',
       skip: 'پریښودل'
@@ -23281,15 +23333,16 @@ export const CATALOG = {
         ariaLabel: 'Tamanho máximo de quarentena em gigabytes'
       },
       exclusions: {
-        title: "Ignorar pastas",
-        description: "Pastas e tipos de arquivo que o Prune deixará em paz — ignorados pela Limpeza profunda e excluídos do Mapa do disco — além dos que ele já protege: Informações do Volume do Sistema, quarentenas de antivírus, o repositório de componentes e uma dúzia de outros.",
-        ariaLabel: 'Caminho de pasta ou tipo de arquivo para excluir',
+        title: "Exclusões",
+        description: "Pastas e tipos de arquivo que o Prune deixará em paz — ignorados pela Limpeza profunda e excluídos do Mapa do disco — além dos que ele já protege: Informações do Volume do Sistema, quarentenas de antivírus, o repositório de componentes e uma dúzia de outros. As pastas e chaves do Registro listadas aqui também nunca são oferecidas como restos após uma desinstalação.",
+        ariaLabel: "Caminho de pasta, tipo de arquivo ou chave do Registro para excluir",
         add: 'Adicionar',
-        invalidFormat: 'Escreva um caminho de pasta completo (D:\\Games) ou um tipo de arquivo (*.iso).',
-        formatHint: 'Um caminho de pasta completo, ou um tipo de arquivo escrito como *.iso',
+        invalidFormat: "Escreva um caminho de pasta completo (D:\\Games), um tipo de arquivo (*.iso) ou uma chave do Registro (HKCU\\Software\\Vendor).",
+        formatHint: "Um caminho de pasta completo, um tipo de arquivo escrito como *.iso ou uma chave do Registro como HKCU\\Software\\Vendor",
         none: 'Nada excluído.',
         typeBadge: 'Tipo',
         folderBadge: 'Pasta',
+        registryBadge: "Registro",
         removeAriaLabel: (value) => `Parar de excluir ${value}`
       },
       cookiesToPreserve: {
@@ -23906,6 +23959,7 @@ export const CATALOG = {
       done: 'Concluído',
       foundWarning: (count) => `${count} ${count === 1 ? 'resíduo encontrado que o desinstalador nativo não removeu' : 'resíduos encontrados que o desinstalador nativo não removeu'}. Revise antes de remover.`,
       excludedNote: (count) => `${count} past${count === 1 ? 'a deixada' : 'as deixadas'} de fora porque ${count === 1 ? 'está' : 'estão'} nas suas exclusões.`,
+      registryExcludedNote: (count) => `Chaves do Registro ignoradas porque estão nas suas exclusões: ${count}.`,
       itemsSelected: 'itens selecionados',
       reclaimable: 'recuperável',
       skip: 'Pular'
@@ -24170,15 +24224,16 @@ export const CATALOG = {
         ariaLabel: 'Tamanho máximo de quarentena em gigabytes'
       },
       exclusions: {
-        title: "Ignorar pastas",
-        description: "Pastas e tipos de ficheiro que o Prune deixará em paz — ignorados pela Limpeza profunda e excluídos do Mapa do disco — além dos que já protege: Informações de Volume do Sistema, quarentenas de antivírus, o repositório de componentes e mais uma dezena.",
-        ariaLabel: 'Caminho de pasta ou tipo de ficheiro a excluir',
+        title: "Exclusões",
+        description: "Pastas e tipos de ficheiro que o Prune deixará em paz — ignorados pela Limpeza profunda e excluídos do Mapa do disco — além dos que já protege: Informações de Volume do Sistema, quarentenas de antivírus, o repositório de componentes e mais uma dezena. As pastas e chaves de registo listadas aqui também nunca são oferecidas como restos após uma desinstalação.",
+        ariaLabel: "Caminho de pasta, tipo de ficheiro ou chave de registo a excluir",
         add: 'Adicionar',
-        invalidFormat: 'Escreva um caminho de pasta completo (D:\\Games) ou um tipo de ficheiro (*.iso).',
-        formatHint: 'Um caminho de pasta completo, ou um tipo de ficheiro escrito como *.iso',
+        invalidFormat: "Escreva um caminho de pasta completo (D:\\Games), um tipo de ficheiro (*.iso) ou uma chave de registo (HKCU\\Software\\Vendor).",
+        formatHint: "Um caminho de pasta completo, um tipo de ficheiro escrito como *.iso ou uma chave de registo como HKCU\\Software\\Vendor",
         none: 'Nada excluído.',
         typeBadge: 'Tipo',
         folderBadge: 'Pasta',
+        registryBadge: "Registo",
         removeAriaLabel: (value) => `Deixar de excluir ${value}`
       },
       cookiesToPreserve: {
@@ -24795,6 +24850,7 @@ export const CATALOG = {
       done: 'Concluído',
       foundWarning: (count) => `${count} ${count === 1 ? 'resíduo encontrado que o desinstalador nativo não removeu' : 'resíduos encontrados que o desinstalador nativo não removeu'}. Reveja antes de remover.`,
       excludedNote: (count) => `${count} past${count === 1 ? 'a deixada' : 'as deixadas'} de fora porque ${count === 1 ? 'está' : 'estão'} nas suas exclusões.`,
+      registryExcludedNote: (count) => `Chaves de registo ignoradas porque estão nas suas exclusões: ${count}.`,
       itemsSelected: 'itens selecionados',
       reclaimable: 'recuperável',
       skip: 'Ignorar'
@@ -25061,15 +25117,16 @@ export const CATALOG = {
         ariaLabel: 'Dimensiunea maximă a carantinei în gigabytes'
       },
       exclusions: {
-        title: "Exclude foldere",
-        description: "Foldere și tipuri de fișiere pe care Prune le va lăsa în pace — sărite de Curățarea profundă și excluse din Harta discului — pe lângă cele pe care le protejează deja: System Volume Information, carantine antivirus, depozitul de componente și încă o duzină.",
-        ariaLabel: 'Calea folderului sau tipul de fișier de exclus',
+        title: "Excepții",
+        description: "Foldere și tipuri de fișiere pe care Prune le va lăsa în pace — sărite de Curățarea profundă și excluse din Harta discului — pe lângă cele pe care le protejează deja: System Volume Information, carantine antivirus, depozitul de componente și încă o duzină. Folderele și cheile de registru enumerate aici nu sunt oferite niciodată nici ca resturi după o dezinstalare.",
+        ariaLabel: "Calea folderului, tipul de fișier sau cheia de registru de exclus",
         add: 'Adaugă',
-        invalidFormat: 'Scrie o cale de folder completă (D:\\Games) sau un tip de fișier (*.iso).',
-        formatHint: 'O cale de folder completă, sau un tip de fișier scris ca *.iso',
+        invalidFormat: "Scrie o cale de folder completă (D:\\Games), un tip de fișier (*.iso) sau o cheie de registru (HKCU\\Software\\Vendor).",
+        formatHint: "O cale de folder completă, un tip de fișier scris ca *.iso sau o cheie de registru precum HKCU\\Software\\Vendor",
         none: 'Nimic exclus.',
         typeBadge: 'Tip',
         folderBadge: 'Folder',
+        registryBadge: "Registru",
         removeAriaLabel: (value) => `Nu mai exclude ${value}`
       },
       cookiesToPreserve: {
@@ -25686,6 +25743,7 @@ export const CATALOG = {
       done: 'Terminat',
       foundWarning: (count) => count === 1 ? `Dezinstalatorul nativ a ratat un rest. Revizuiește înainte de eliminare.` : `Dezinstalatorul nativ a ratat ${count} ${count % 100 >= 1 && count % 100 < 20 ? '' : 'de '}resturi. Revizuiește înainte de eliminare.`,
       excludedNote: (count) => { const d = count % 100 >= 1 && count % 100 < 20 ? '' : 'de '; return count === 1 ? '1 folder lăsat deoparte pentru că se află în excluderile tale.' : `${count} ${d}foldere lăsate deoparte pentru că se află în excluderile tale.`; },
+      registryExcludedNote: (count) => `Chei de registru omise pentru că se află în excepțiile tale: ${count}.`,
       itemsSelected: 'elemente selectate',
       reclaimable: 'recuperabil',
       skip: 'Omite'
@@ -25952,15 +26010,16 @@ export const CATALOG = {
         ariaLabel: 'Максимальный размер карантина в гигабайтах'
       },
       exclusions: {
-        title: 'Исключить папки',
-        description: "Папки и типы файлов, которые Prune оставит без внимания — пропускаются Глубокой очисткой и исключаются из Карты диска — в дополнение к тем, что уже защищены: System Volume Information, карантины антивирусов, хранилище компонентов и ещё дюжина других.",
-        ariaLabel: 'Путь к папке или тип файла для исключения',
+        title: "Исключения",
+        description: "Папки и типы файлов, которые Prune оставит без внимания — пропускаются Глубокой очисткой и исключаются из Карты диска — в дополнение к тем, что уже защищены: System Volume Information, карантины антивирусов, хранилище компонентов и ещё дюжина других. Перечисленные здесь папки и разделы реестра также никогда не предлагаются как остатки после удаления программы.",
+        ariaLabel: "Путь к папке, тип файла или раздел реестра для исключения",
         add: 'Добавить',
-        invalidFormat: 'Введите полный путь к папке (D:\\Games) или тип файла (*.iso).',
-        formatHint: 'Полный путь к папке или тип файла, записанный как *.iso',
+        invalidFormat: "Введите полный путь к папке (D:\\Games), тип файла (*.iso) или раздел реестра (HKCU\\Software\\Vendor).",
+        formatHint: "Полный путь к папке, тип файла, записанный как *.iso, или раздел реестра, например HKCU\\Software\\Vendor",
         none: 'Ничего не исключено.',
         typeBadge: 'Тип',
         folderBadge: 'Папка',
+        registryBadge: "Реестр",
         removeAriaLabel: (value) => `Прекратить исключать ${value}`
       },
       cookiesToPreserve: {
@@ -26577,6 +26636,7 @@ export const CATALOG = {
       done: 'Готово',
       foundWarning: (count) => `Найдено остатков, которые пропустил деинсталлятор: ${count}. Проверьте их перед удалением.`,
       excludedNote: (count) => `Пропущено папок, так как они в ваших исключениях: ${count}.`,
+      registryExcludedNote: (count) => `Разделы реестра, пропущенные, так как они в ваших исключениях: ${count}.`,
       itemsSelected: 'элементов выбрано',
       reclaimable: 'можно освободить',
       skip: 'Пропустить'
@@ -26841,15 +26901,16 @@ export const CATALOG = {
         ariaLabel: 'Maximálna veľkosť karantény v gigabajtoch'
       },
       exclusions: {
-        title: 'Vylúčiť priečinky',
-        description: "Priečinky a typy súborov, ktoré Prune nechá na pokoji — Hĺbkové čistenie ich preskočí a Mapa disku ich vynechá — okrem tých, ktoré už chráni: System Volume Information, karantény antivírusov, úložisko komponentov a ďalší tucet.",
-        ariaLabel: 'Cesta k priečinku alebo typ súboru na vylúčenie',
+        title: "Vylúčenia",
+        description: "Priečinky a typy súborov, ktoré Prune nechá na pokoji — Hĺbkové čistenie ich preskočí a Mapa disku ich vynechá — okrem tých, ktoré už chráni: System Volume Information, karantény antivírusov, úložisko komponentov a ďalší tucet. Priečinky a kľúče registra uvedené tu sa tiež nikdy nenúkajú ako zvyšky po odinštalovaní.",
+        ariaLabel: "Cesta k priečinku, typ súboru alebo kľúč registra na vylúčenie",
         add: 'Pridať',
-        invalidFormat: 'Zadajte úplnú cestu k priečinku (D:\\Games) alebo typ súboru (*.iso).',
-        formatHint: 'Úplná cesta k priečinku alebo typ súboru zapísaný ako *.iso',
+        invalidFormat: "Zadajte úplnú cestu k priečinku (D:\\Games), typ súboru (*.iso) alebo kľúč registra (HKCU\\Software\\Vendor).",
+        formatHint: "Úplná cesta k priečinku, typ súboru zapísaný ako *.iso alebo kľúč registra, napríklad HKCU\\Software\\Vendor",
         none: 'Nič nie je vylúčené.',
         typeBadge: 'Typ',
         folderBadge: 'Priečinok',
+        registryBadge: "Register",
         removeAriaLabel: (value) => `Prestať vylučovať ${value}`
       },
       cookiesToPreserve: {
@@ -27466,6 +27527,7 @@ export const CATALOG = {
       done: 'Hotovo',
       foundWarning: (count) => `Zvyšky, ktoré natívny odinštalátor prehliadol: ${count}. Pred odstránením ich skontrolujte.`,
       excludedNote: (count) => `Vynechané priečinky, ktoré sú vo vašich výnimkách: ${count}.`,
+      registryExcludedNote: (count) => `Kľúče registra vynechané, pretože sú vo vašich vylúčeniach: ${count}.`,
       itemsSelected: 'vybraných položiek',
       reclaimable: 'možno uvoľniť',
       skip: 'Preskočiť'
@@ -27730,15 +27792,16 @@ export const CATALOG = {
         ariaLabel: "Madhësia maksimale e Karantinës në gigabajt"
       },
       exclusions: {
-        title: "Përjashto dosje",
-        description: "Dosje dhe lloje skedarësh që Prune do t'i lërë qetë — anashkaluar nga Pastrimi i thellë dhe të përjashtuara nga Harta e Diskut — përveç atyre që tashmë mbron: System Volume Information, karantinat antivirus, depoja e komponentëve dhe një duzinë të tjera.",
-        ariaLabel: 'Shtegu i dosjes ose lloji i skedarit për t\'u përjashtuar',
+        title: "Përjashtimet",
+        description: "Dosje dhe lloje skedarësh që Prune do t'i lërë qetë — anashkaluar nga Pastrimi i thellë dhe të përjashtuara nga Harta e Diskut — përveç atyre që tashmë mbron: System Volume Information, karantinat antivirus, depoja e komponentëve dhe një duzinë të tjera. Dosjet dhe çelësat e regjistrit që renditen këtu nuk ofrohen kurrë as si mbetje pas një çinstalimi.",
+        ariaLabel: "Shtegu i dosjes, lloji i skedarit ose çelësi i regjistrit për t'u përjashtuar",
         add: 'Shto',
-        invalidFormat: "Shkruaj një shteg të plotë dosjeje (D:\\Games) ose një lloj skedari (*.iso).",
-        formatHint: 'Një shteg i plotë dosjeje, ose një lloj skedari i shkruar si *.iso',
+        invalidFormat: "Shkruaj një shteg të plotë dosjeje (D:\\Games), një lloj skedari (*.iso) ose një çelës regjistri (HKCU\\Software\\Vendor).",
+        formatHint: "Një shteg i plotë dosjeje, një lloj skedari i shkruar si *.iso ose një çelës regjistri si HKCU\\Software\\Vendor",
         none: 'Asgjë e përjashtuar.',
         typeBadge: 'Lloji',
         folderBadge: 'Dosja',
+        registryBadge: "Regjistri",
         removeAriaLabel: (value) => `Ndalo së përjashtuari ${value}`
       },
       cookiesToPreserve: {
@@ -28355,6 +28418,7 @@ export const CATALOG = {
       done: 'Përfundoi',
       foundWarning: (count) => count === 1 ? `U gjet ${count} mbetje që çinstaluesi origjinal nuk e hoqi. Rishikoje para se ta heqësh.` : `U gjetën ${count} mbetje që çinstaluesi origjinal nuk i hoqi. Rishikoji para se t'i heqësh.`,
       excludedNote: (count) => `${count} ${count === 1 ? 'dosje u la' : 'dosje u lanë'} jashtë sepse ${count === 1 ? 'është' : 'janë'} në përjashtimet e tua.`,
+      registryExcludedNote: (count) => `Çelësat e regjistrit që u lanë jashtë sepse janë te përjashtimet e tua: ${count}.`,
       itemsSelected: 'artikuj të zgjedhur',
       reclaimable: 'i rikuperueshëm',
       skip: 'Anashkalo'
@@ -28621,15 +28685,16 @@ export const CATALOG = {
         ariaLabel: "Максимална величина карантина у гигабајтима"
       },
       exclusions: {
-        title: "Изузми фасцикле",
-        description: "Фасцикле и типови датотека које ће Prune оставити на миру — прескочени од стране Дубоког чишћења и изузети из Мапе диска — поред оних које већ штити: System Volume Information, карантине антивируса, складиште компоненти и још десетак других.",
-        ariaLabel: "Путања фасцикле или тип датотеке за изузимање",
+        title: "Изузеци",
+        description: "Фасцикле и типови датотека које ће Prune оставити на миру — прескочени од стране Дубоког чишћења и изузети из Мапе диска — поред оних које већ штити: System Volume Information, карантине антивируса, складиште компоненти и још десетак других. Фасцикле и кључеви регистра наведени овде се такође никада не нуде као остаци након деинсталације.",
+        ariaLabel: "Путања фасцикле, тип датотеке или кључ регистра за изузимање",
         add: 'Додај',
-        invalidFormat: "Унесите пуну путању фасцикле (D:\\Games) или тип датотеке (*.iso).",
-        formatHint: "Пуна путања фасцикле, или тип датотеке написан као *.iso",
+        invalidFormat: "Унесите пуну путању фасцикле (D:\\Games), тип датотеке (*.iso) или кључ регистра (HKCU\\Software\\Vendor).",
+        formatHint: "Пуна путања фасцикле, тип датотеке написан као *.iso или кључ регистра, на пример HKCU\\Software\\Vendor",
         none: 'Ништа није изузето.',
         typeBadge: 'Тип',
         folderBadge: "Фасцикла",
+        registryBadge: "Регистар",
         removeAriaLabel: (value) => `Престани да изузимаш ${value}`
       },
       cookiesToPreserve: {
@@ -29246,6 +29311,7 @@ export const CATALOG = {
       done: 'Готово',
       foundWarning: (count) => `Изворни деинсталатер је пропустио ${count} ${count % 10 === 1 && count % 100 !== 11 ? 'остатак' : (count % 10 >= 2 && count % 10 <= 4 && (count % 100 < 12 || count % 100 > 14)) ? 'остатка' : 'остатака'}. Прегледајте пре уклањања.`,
       excludedNote: (count) => { const p = (n, a, b, c) => n % 10 === 1 && n % 100 !== 11 ? a : (n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 12 || n % 100 > 14)) ? b : c; return `${count} ${p(count, 'фасцикла је изостављена јер је', 'фасцикле су изостављене јер су', 'фасцикли је изостављено јер су')} у вашим изузецима.`; },
+      registryExcludedNote: (count) => `Кључеви регистра изостављени јер су у вашим изузецима: ${count}.`,
       itemsSelected: 'ставки означено',
       reclaimable: 'може се ослободити',
       skip: 'Прескочи'
@@ -29510,15 +29576,16 @@ export const CATALOG = {
         ariaLabel: 'Maximal karantänstorlek i gigabyte'
       },
       exclusions: {
-        title: "Undanta mappar",
-        description: "Mappar och filtyper som Prune lämnar i fred — hoppas över av Grundlig rensning och utesluts från Diskkartan — utöver de den redan skyddar: Systemvolyminformation, antiviruskaranterner, komponentlagret och ett dussin till.",
-        ariaLabel: 'Mappsökväg eller filtyp att utesluta',
+        title: "Undantag",
+        description: "Mappar och filtyper som Prune lämnar i fred — hoppas över av Grundlig rensning och utesluts från Diskkartan — utöver de den redan skyddar: Systemvolyminformation, antiviruskaranterner, komponentlagret och ett dussin till. Mappar och registernycklar som listas här erbjuds heller aldrig som kvarlevor efter en avinstallation.",
+        ariaLabel: "Mappsökväg, filtyp eller registernyckel att utesluta",
         add: 'Lägg till',
-        invalidFormat: 'Skriv en fullständig mappsökväg (D:\\Games) eller en filtyp (*.iso).',
-        formatHint: 'En fullständig mappsökväg, eller en filtyp skriven som *.iso',
+        invalidFormat: "Skriv en fullständig mappsökväg (D:\\Games), en filtyp (*.iso) eller en registernyckel (HKCU\\Software\\Vendor).",
+        formatHint: "En fullständig mappsökväg, en filtyp skriven som *.iso eller en registernyckel som HKCU\\Software\\Vendor",
         none: 'Inget uteslutet.',
         typeBadge: 'Typ',
         folderBadge: 'Mapp',
+        registryBadge: "Register",
         removeAriaLabel: (value) => `Sluta utesluta ${value}`
       },
       cookiesToPreserve: {
@@ -30135,6 +30202,7 @@ export const CATALOG = {
       done: 'Klar',
       foundWarning: (count) => `${count} ${count === 1 ? 'rest hittades' : 'rester hittades'} som avinstallationsprogrammet missade. Granska dem innan du tar bort dem.`,
       excludedNote: (count) => count === 1 ? `1 mapp utelämnades eftersom den finns i dina undantag.` : `${count} mappar utelämnades eftersom de finns i dina undantag.`,
+      registryExcludedNote: (count) => `Registernycklar som utelämnats eftersom de finns bland dina undantag: ${count}.`,
       itemsSelected: 'objekt valda',
       reclaimable: 'kan frigöras',
       skip: 'Hoppa över'
@@ -30399,15 +30467,16 @@ export const CATALOG = {
         ariaLabel: 'ขนาดกักกันสูงสุดเป็นกิกะไบต์'
       },
       exclusions: {
-        title: 'ยกเว้นโฟลเดอร์',
-        description: "โฟลเดอร์และประเภทไฟล์ที่ Prune จะปล่อยไว้ — ถูกข้ามโดยการทำความสะอาดเชิงลึกและถูกยกเว้นจากแผนที่ดิสก์ — นอกเหนือจากสิ่งที่มันปกป้องอยู่แล้ว: System Volume Information, กักกันของแอนตี้ไวรัส, คลังส่วนประกอบ และอีกสิบกว่าอย่าง",
-        ariaLabel: 'เส้นทางโฟลเดอร์หรือประเภทไฟล์ที่จะยกเว้น',
+        title: "การยกเว้น",
+        description: "โฟลเดอร์และประเภทไฟล์ที่ Prune จะปล่อยไว้ — ถูกข้ามโดยการทำความสะอาดเชิงลึกและถูกยกเว้นจากแผนที่ดิสก์ — นอกเหนือจากสิ่งที่มันปกป้องอยู่แล้ว: System Volume Information, กักกันของแอนตี้ไวรัส, คลังส่วนประกอบ และอีกสิบกว่าอย่าง โฟลเดอร์และคีย์รีจิสทรีที่อยู่ในรายการนี้จะไม่ถูกเสนอเป็นเศษที่เหลือหลังการถอนการติดตั้งเช่นกัน",
+        ariaLabel: "เส้นทางโฟลเดอร์ ประเภทไฟล์ หรือคีย์รีจิสทรีที่จะยกเว้น",
         add: 'เพิ่ม',
-        invalidFormat: 'เขียนเส้นทางโฟลเดอร์แบบเต็ม (D:\\Games) หรือประเภทไฟล์ (*.iso)',
-        formatHint: 'เส้นทางโฟลเดอร์แบบเต็ม หรือประเภทไฟล์ที่เขียนเป็น *.iso',
+        invalidFormat: "เขียนเส้นทางโฟลเดอร์แบบเต็ม (D:\\Games) ประเภทไฟล์ (*.iso) หรือคีย์รีจิสทรี (HKCU\\Software\\Vendor)",
+        formatHint: "เส้นทางโฟลเดอร์แบบเต็ม ประเภทไฟล์ที่เขียนเป็น *.iso หรือคีย์รีจิสทรี เช่น HKCU\\Software\\Vendor",
         none: 'ไม่มีการยกเว้น',
         typeBadge: 'ประเภท',
         folderBadge: 'โฟลเดอร์',
+        registryBadge: "รีจิสทรี",
         removeAriaLabel: (value) => `หยุดยกเว้น ${value}`
       },
       cookiesToPreserve: {
@@ -31024,6 +31093,7 @@ export const CATALOG = {
       done: 'เสร็จสิ้น',
       foundWarning: (count) => `พบสิ่งตกค้าง ${count} รายการที่ตัวถอนการติดตั้งเดิมพลาดไป ตรวจสอบก่อนลบ`,
       excludedNote: (count) => `${count} โฟลเดอร์ถูกละไว้เพราะอยู่ในรายการยกเว้นของคุณ`,
+      registryExcludedNote: (count) => `คีย์รีจิสทรีที่ถูกข้ามเพราะอยู่ในรายการยกเว้นของคุณ: ${count}`,
       itemsSelected: 'รายการที่เลือก',
       reclaimable: 'สามารถเรียกคืนได้',
       skip: 'ข้าม'
@@ -31290,15 +31360,16 @@ export const CATALOG = {
         ariaLabel: 'Gigabayt cinsinden maksimum karantina boyutu'
       },
       exclusions: {
-        title: "Klasörleri hariç tut",
-        description: "Prune'un rahat bırakacağı klasörler ve dosya türleri — Derin Temizlik tarafından atlanır ve Disk Haritasından hariç tutulur — zaten koruduklarına ek olarak: System Volume Information, antivirüs karantinaları, bileşen deposu ve bir düzine daha fazlası.",
-        ariaLabel: 'Hariç tutulacak klasör yolu veya dosya türü',
+        title: "Dışlamalar",
+        description: "Prune'un rahat bırakacağı klasörler ve dosya türleri — Derin Temizlik tarafından atlanır ve Disk Haritasından hariç tutulur — zaten koruduklarına ek olarak: System Volume Information, antivirüs karantinaları, bileşen deposu ve bir düzine daha fazlası. Burada listelenen klasörler ve kayıt defteri anahtarları, kaldırma işleminden sonra da asla kalıntı olarak sunulmaz.",
+        ariaLabel: "Hariç tutulacak klasör yolu, dosya türü veya kayıt defteri anahtarı",
         add: 'Ekle',
-        invalidFormat: 'Tam bir klasör yolu (D:\\Games) veya bir dosya türü (*.iso) yazın.',
-        formatHint: 'Tam bir klasör yolu, veya *.iso olarak yazılmış bir dosya türü',
+        invalidFormat: "Tam bir klasör yolu (D:\\Games), bir dosya türü (*.iso) veya bir kayıt defteri anahtarı (HKCU\\Software\\Vendor) yazın.",
+        formatHint: "Tam bir klasör yolu, *.iso olarak yazılmış bir dosya türü veya HKCU\\Software\\Vendor gibi bir kayıt defteri anahtarı",
         none: 'Hiçbir şey hariç tutulmadı.',
         typeBadge: 'Tür',
         folderBadge: 'Klasör',
+        registryBadge: "Kayıt defteri",
         removeAriaLabel: (value) => `${value} hariç tutmayı durdur`
       },
       cookiesToPreserve: {
@@ -31915,6 +31986,7 @@ export const CATALOG = {
       done: 'Tamamlandı',
       foundWarning: (count) => `Yerel kaldırma programının gözden kaçırdığı ${count} artık öğe bulundu. Kaldırmadan önce inceleyin.`,
       excludedNote: (count) => `${count} klasör hariç tutulduğu için atlandı.`,
+      registryExcludedNote: (count) => `Dışlamalarınızda olduğu için atlanan kayıt defteri anahtarları: ${count}.`,
       itemsSelected: 'öğe seçildi',
       reclaimable: 'geri kazanılabilir',
       skip: 'Atla'
@@ -32181,15 +32253,16 @@ export const CATALOG = {
         ariaLabel: 'Максимальний розмір карантину в гігабайтах'
       },
       exclusions: {
-        title: 'Виключити папки',
-        description: "Папки та типи файлів, які Prune залишить без уваги — пропускаються Глибоким очищенням і виключаються з Карти диска — на додаток до тих, які він вже захищає: System Volume Information, карантини антивірусів, сховище компонентів і ще дюжина інших.",
-        ariaLabel: 'Шлях до папки або тип файлу для виключення',
+        title: "Винятки",
+        description: "Папки та типи файлів, які Prune залишить без уваги — пропускаються Глибоким очищенням і виключаються з Карти диска — на додаток до тих, які він вже захищає: System Volume Information, карантини антивірусів, сховище компонентів і ще дюжина інших. Перелічені тут папки та розділи реєстру також ніколи не пропонуються як залишки після видалення програми.",
+        ariaLabel: "Шлях до папки, тип файлу або розділ реєстру для виключення",
         add: 'Додати',
-        invalidFormat: 'Введіть повний шлях до папки (D:\\Games) або тип файлу (*.iso).',
-        formatHint: 'Повний шлях до папки, або тип файлу, записаний як *.iso',
+        invalidFormat: "Введіть повний шлях до папки (D:\\Games), тип файлу (*.iso) або розділ реєстру (HKCU\\Software\\Vendor).",
+        formatHint: "Повний шлях до папки, тип файлу, записаний як *.iso, або розділ реєстру, наприклад HKCU\\Software\\Vendor",
         none: 'Нічого не виключено.',
         typeBadge: 'Тип',
         folderBadge: 'Папка',
+        registryBadge: "Реєстр",
         removeAriaLabel: (value) => `Припинити виключати ${value}`
       },
       cookiesToPreserve: {
@@ -32806,6 +32879,7 @@ export const CATALOG = {
       done: 'Готово',
       foundWarning: (count) => `Знайдено залишків, які пропустив деінсталятор: ${count}. Перевірте їх перед видаленням.`,
       excludedNote: (count) => `Пропущено папок, які входять до ваших винятків: ${count}.`,
+      registryExcludedNote: (count) => `Розділи реєстру, пропущені, бо вони у ваших винятках: ${count}.`,
       itemsSelected: 'елементів вибрано',
       reclaimable: 'можна звільнити',
       skip: 'Пропустити'
@@ -33070,15 +33144,16 @@ export const CATALOG = {
         ariaLabel: 'Kích thước cách ly tối đa tính bằng gigabyte'
       },
       exclusions: {
-        title: "Loại trừ thư mục",
-        description: "Các thư mục và loại tệp mà Prune sẽ để yên — được Dọn dẹp sâu bỏ qua và bị loại khỏi Bản đồ ổ đĩa — ngoài những gì nó đã bảo vệ: Thông tin ổ đĩa hệ thống, khu cách ly của phần mềm diệt vi-rút, kho lưu trữ thành phần và khoảng một chục mục khác.",
-        ariaLabel: 'Đường dẫn thư mục hoặc loại tệp cần loại trừ',
+        title: "Loại trừ",
+        description: "Các thư mục và loại tệp mà Prune sẽ để yên — được Dọn dẹp sâu bỏ qua và bị loại khỏi Bản đồ ổ đĩa — ngoài những gì nó đã bảo vệ: Thông tin ổ đĩa hệ thống, khu cách ly của phần mềm diệt vi-rút, kho lưu trữ thành phần và khoảng một chục mục khác. Các thư mục và khóa Registry được liệt kê ở đây cũng sẽ không bao giờ được đề xuất là phần còn sót lại sau khi gỡ cài đặt.",
+        ariaLabel: "Đường dẫn thư mục, loại tệp hoặc khóa Registry cần loại trừ",
         add: 'Thêm',
-        invalidFormat: 'Nhập đường dẫn thư mục đầy đủ (D:\\Games) hoặc loại tệp (*.iso).',
-        formatHint: 'Một đường dẫn thư mục đầy đủ, hoặc loại tệp được viết như *.iso',
+        invalidFormat: "Nhập đường dẫn thư mục đầy đủ (D:\\Games), loại tệp (*.iso) hoặc khóa Registry (HKCU\\Software\\Vendor).",
+        formatHint: "Một đường dẫn thư mục đầy đủ, loại tệp được viết như *.iso, hoặc khóa Registry như HKCU\\Software\\Vendor",
         none: 'Không có gì bị loại trừ.',
         typeBadge: 'Loại',
         folderBadge: 'Thư mục',
+        registryBadge: "Registry",
         removeAriaLabel: (value) => `Ngừng loại trừ ${value}`
       },
       cookiesToPreserve: {
@@ -33695,6 +33770,7 @@ export const CATALOG = {
       done: 'Xong',
       foundWarning: (count) => `Tìm thấy ${count} mục sót lại mà trình gỡ cài đặt của chương trình đã bỏ sót. Hãy xem lại trước khi xóa.`,
       excludedNote: (count) => `${count} thư mục đã bị loại trừ vì chúng nằm trong danh sách loại trừ của bạn.`,
+      registryExcludedNote: (count) => `Các khóa Registry bị bỏ qua vì nằm trong danh sách loại trừ của bạn: ${count}.`,
       itemsSelected: 'mục đã chọn',
       reclaimable: 'có thể thu hồi',
       skip: 'Bỏ qua'
@@ -33961,15 +34037,16 @@ export const CATALOG = {
         ariaLabel: '最大隔离区大小（GB）'
       },
       exclusions: {
-        title: '排除文件夹',
-        description: 'Prune 将不予处理的文件夹和文件类型——深度清理会跳过它们，磁盘地图也会将其排除——这是在已经保护的内容（系统卷信息、防病毒隔离区、组件存储以及另外十几个）之外的额外选项。',
-        ariaLabel: '要排除的文件夹路径或文件类型',
+        title: "排除项",
+        description: 'Prune 将不予处理的文件夹和文件类型——深度清理会跳过它们，磁盘地图也会将其排除——这是在已经保护的内容（系统卷信息、防病毒隔离区、组件存储以及另外十几个）之外的额外选项。 此处列出的文件夹和注册表项在卸载后也绝不会作为残留项提供。',
+        ariaLabel: "要排除的文件夹路径、文件类型或注册表项",
         add: '添加',
-        invalidFormat: '请输入完整的文件夹路径（D:\\Games）或文件类型（*.iso）。',
-        formatHint: '完整的文件夹路径，或写作 *.iso 形式的文件类型',
+        invalidFormat: "请输入完整的文件夹路径（D:\\Games）、文件类型（*.iso）或注册表项（HKCU\\Software\\Vendor）。",
+        formatHint: "完整的文件夹路径、写作 *.iso 形式的文件类型，或类似 HKCU\\Software\\Vendor 的注册表项",
         none: '未排除任何内容。',
         typeBadge: '类型',
         folderBadge: '文件夹',
+        registryBadge: "注册表",
         removeAriaLabel: (value) => `停止排除 ${value}`
       },
       cookiesToPreserve: {
@@ -34586,6 +34663,7 @@ export const CATALOG = {
       done: '完成',
       foundWarning: (count) => `找到 ${count} 个卸载程序遗漏的残留项。删除前请先查看。`,
       excludedNote: (count) => `因为在你的排除列表中，已排除 ${count} 个文件夹。`,
+      registryExcludedNote: (count) => `因在你的排除项中而被略过的注册表项：${count}。`,
       itemsSelected: '个项目已选择',
       reclaimable: '可释放',
       skip: '跳过'
@@ -34852,15 +34930,16 @@ export const CATALOG = {
         ariaLabel: '最大隔離區大小（GB）'
       },
       exclusions: {
-        title: '排除資料夾',
-        description: 'Prune 將不予處理的資料夾和檔案類型——深度清理會略過它們，磁碟地圖也會將其排除——這是在已經保護的內容（系統磁碟區資訊、防毒軟體隔離區、元件存放區以及另外十幾個）之外的額外選項。',
-        ariaLabel: '要排除的資料夾路徑或檔案類型',
+        title: "排除項目",
+        description: 'Prune 將不予處理的資料夾和檔案類型——深度清理會略過它們，磁碟地圖也會將其排除——這是在已經保護的內容（系統磁碟區資訊、防毒軟體隔離區、元件存放區以及另外十幾個）之外的額外選項。 此處列出的資料夾和登錄機碼在解除安裝後也絕不會作為殘留項目提供。',
+        ariaLabel: "要排除的資料夾路徑、檔案類型或登錄機碼",
         add: '新增',
-        invalidFormat: '請輸入完整的資料夾路徑（D:\\Games）或檔案類型（*.iso）。',
-        formatHint: '完整的資料夾路徑，或寫成 *.iso 形式的檔案類型',
+        invalidFormat: "請輸入完整的資料夾路徑（D:\\Games）、檔案類型（*.iso）或登錄機碼（HKCU\\Software\\Vendor）。",
+        formatHint: "完整的資料夾路徑、寫成 *.iso 形式的檔案類型，或類似 HKCU\\Software\\Vendor 的登錄機碼",
         none: '未排除任何內容。',
         typeBadge: '類型',
         folderBadge: '資料夾',
+        registryBadge: "登錄",
         removeAriaLabel: (value) => `停止排除 ${value}`
       },
       cookiesToPreserve: {
@@ -35477,6 +35556,7 @@ export const CATALOG = {
       done: '完成',
       foundWarning: (count) => `找到 ${count} 個解除安裝程式遺漏的殘留項目。刪除前請先檢查。`,
       excludedNote: (count) => `因為在你的排除清單中，已排除 ${count} 個資料夾。`,
+      registryExcludedNote: (count) => `因在你的排除項目中而被略過的登錄機碼：${count}。`,
       itemsSelected: '個項目已選取',
       reclaimable: '可釋放',
       skip: '略過'

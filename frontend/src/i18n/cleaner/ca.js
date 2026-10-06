@@ -121,6 +121,7 @@ export default {
     palemoon_cache: { name: "Memòria cau", description: "Pàgines, scripts i imatges emmagatzemats a la memòria cau. Es reconstrueix mentre navegues." },
     thunderbird_cache: { name: "Memòria cau", description: "Contingut remot i dades de canals emmagatzemats a la memòria cau. El teu correu, les carpetes i els comptes no es toquen." },
     windows_userassist: { name: "Historial d'execució de programes (UserAssist)", description: "El recompte de Windows de cada cop i quan has iniciat programes, que ordena la llista de més usats del menú Inici. Windows en comença un de nou." },
+    windows_regedit_lastkey: { name: "Editor del registre: última clau oberta", description: "La clau on l'Editor del registre es torna a obrir la propera vegada que l'inicis. El registre en si no es toca." },
     paint_recent: { name: "Fitxers recents", description: "La llista d'imatges que el Paint ha obert recentment. Les imatges en si no es toquen." },
     wordpad_recent: { name: "Fitxers recents", description: "La llista de documents que el WordPad ha obert recentment. Els documents en si no es toquen." },
     windows_media_player_history: { name: "Fitxers i carpetes recents", description: "Els fitxers i adreces web que el Windows Media Player ha reproduït recentment, i les carpetes que recorda per a Obre i Desa. Els mitjans en si no es toquen." },

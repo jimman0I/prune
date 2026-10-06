@@ -121,6 +121,7 @@ export default {
     palemoon_cache: { name: "Cache", description: "Páginas, scripts e imagens em cache. Recriado conforme você navega." },
     thunderbird_cache: { name: "Cache", description: "Conteúdo remoto e dados de feeds em cache. Seu e-mail, suas pastas e suas contas não são tocados." },
     windows_userassist: { name: "Histórico de inicialização de programas (UserAssist)", description: "A contagem do Windows de quantas vezes e quando você iniciou programas, que ordena a lista de mais usados do menu Iniciar. O Windows começa uma nova." },
+    windows_regedit_lastkey: { name: "Editor do Registro: última chave aberta", description: "A chave em que o Editor do Registro reabre na próxima vez que você o iniciar. O Registro em si não é tocado." },
     paint_recent: { name: "Arquivos recentes", description: "A lista de imagens que o Paint abriu recentemente. As imagens em si não são tocadas." },
     wordpad_recent: { name: "Arquivos recentes", description: "A lista de documentos que o WordPad abriu recentemente. Os documentos em si não são tocados." },
     windows_media_player_history: { name: "Arquivos e pastas recentes", description: "Os arquivos e endereços da web que o Windows Media Player reproduziu recentemente e as pastas que ele lembra para Abrir e Salvar. A mídia em si não é tocada." },

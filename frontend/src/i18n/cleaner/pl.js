@@ -121,6 +121,7 @@ export default {
     palemoon_cache: { name: "Pamięć podręczna", description: "Strony, skrypty i obrazy zapisane w pamięci podręcznej. Odbudowywana podczas przeglądania." },
     thunderbird_cache: { name: "Pamięć podręczna", description: "Zawartość zdalna i dane kanałów zapisane w pamięci podręcznej. Twoja poczta, foldery i konta nie są ruszane." },
     windows_userassist: { name: "Historia uruchamiania programów (UserAssist)", description: "Licznik Windows określający, jak często i kiedy uruchamiano programy, według którego porządkowana jest lista najczęściej używanych w menu Start. Windows zaczyna nowy." },
+    windows_regedit_lastkey: { name: "Edytor rejestru: ostatnio otwarty klucz", description: "Klucz, przy którym Edytor rejestru otworzy się ponownie przy następnym uruchomieniu. Sam rejestr nie jest ruszany." },
     paint_recent: { name: "Ostatnie pliki", description: "Lista obrazów ostatnio otwartych w Paint. Same obrazy nie są ruszane." },
     wordpad_recent: { name: "Ostatnie pliki", description: "Lista dokumentów ostatnio otwartych w WordPad. Same dokumenty nie są ruszane." },
     windows_media_player_history: { name: "Ostatnie pliki i foldery", description: "Pliki i adresy internetowe ostatnio odtwarzane w Windows Media Player oraz foldery zapamiętane dla Otwórz i Zapisz. Same multimedia nie są ruszane." },

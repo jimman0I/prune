@@ -121,6 +121,7 @@ export default {
     palemoon_cache: { name: "Bộ nhớ đệm", description: "Trang, tập lệnh và hình ảnh được lưu đệm. Được tạo lại khi bạn duyệt web." },
     thunderbird_cache: { name: "Bộ nhớ đệm", description: "Nội dung từ xa và dữ liệu nguồn cấp được lưu trong bộ nhớ đệm. Thư, thư mục và tài khoản của bạn không bị ảnh hưởng." },
     windows_userassist: { name: "Lịch sử khởi chạy chương trình (UserAssist)", description: "Bộ đếm của Windows về tần suất và thời điểm bạn khởi chạy chương trình, dùng để sắp xếp danh sách dùng nhiều nhất trong menu Start. Windows sẽ bắt đầu bộ đếm mới." },
+    windows_regedit_lastkey: { name: "Registry Editor: khóa mở gần nhất", description: "Khóa mà Registry Editor mở lại vào lần khởi động tiếp theo. Bản thân Registry không bị ảnh hưởng." },
     paint_recent: { name: "Tệp gần đây", description: "Danh sách ảnh mà Paint đã mở gần đây. Bản thân các ảnh không bị ảnh hưởng." },
     wordpad_recent: { name: "Tệp gần đây", description: "Danh sách tài liệu mà WordPad đã mở gần đây. Bản thân các tài liệu không bị ảnh hưởng." },
     windows_media_player_history: { name: "Tệp và thư mục gần đây", description: "Các tệp và địa chỉ web mà Windows Media Player đã phát gần đây, cùng các thư mục nó ghi nhớ cho Open và Save. Bản thân phương tiện không bị ảnh hưởng." },

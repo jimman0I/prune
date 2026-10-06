@@ -35,6 +35,33 @@ describe('classifyExclusion', () => {
     expect(classifyExclusion('D:\\Games\\Half-Life 2').kind).toBe('folder');
   });
 
+  it('reads a registry key in any spelling, as a registry key and not a folder', () => {
+    for (const input of [
+      'HKCU\\Software\\Vendor', 'hkcu\\software\\vendor', 'HKEY_CURRENT_USER\\Software\\Vendor',
+      'HKCU:\\Software\\Vendor', 'HKCU/Software/Vendor', '  HKCU\\Software\\Vendor\\  '
+    ]) {
+      const parsed = classifyExclusion(input);
+      expect(parsed?.kind, input).toBe('registry');
+      expect(parsed.value.endsWith('\\')).toBe(false);
+      expect(parsed.value.includes(':'), input).toBe(false);
+      expect(parsed.value.includes('/'), input).toBe(false);
+    }
+    expect(classifyExclusion('HKLM\\SOFTWARE\\Vendor\\Sub')).toEqual({ kind: 'registry', value: 'HKLM\\SOFTWARE\\Vendor\\Sub' });
+    expect(classifyExclusion('HKCU:\\Software\\Vendor')).toEqual({ kind: 'registry', value: 'HKCU\\Software\\Vendor' });
+  });
+
+  it('refuses a bare hive, which would exclude the whole registry', () => {
+    for (const input of ['HKCU', 'HKLM\\', 'HKEY_LOCAL_MACHINE', 'hkcu:', 'HKCU:\\', 'HKEY_USERS/']) {
+      expect(classifyExclusion(input), input).toBeNull();
+    }
+  });
+
+  it('does not mistake a folder or an extension for a registry key', () => {
+    expect(classifyExclusion('D:\\HKCU\\Software')).toEqual({ kind: 'folder', value: 'D:\\HKCU\\Software' });
+    expect(classifyExclusion('*.hkcu')).toEqual({ kind: 'extension', value: '.hkcu' });
+    expect(classifyExclusion('HKCUish\\Games')).toEqual({ kind: 'folder', value: 'HKCUish\\Games' });
+  });
+
   it('refuses nothing, and refuses a lone dot or star', () => {
     for (const input of ['', '   ', null, undefined, '.', '*', '*.', 42]) {
       expect(classifyExclusion(input), String(input)).toBeNull();

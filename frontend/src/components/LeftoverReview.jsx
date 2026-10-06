@@ -78,6 +78,7 @@ export default function LeftoverReview({ scanResult, selected, onToggle, onConfi
   // exclusions (routes/leftovers.js). Said, so a leftover the user expected
   // to see is not simply missing.
   const excluded = Number(scanResult?.files?.excluded) || 0;
+  const excludedKeys = Number(scanResult?.registryKeys?.excluded) || 0;
   const selectedSize = groupsWithItems.reduce((sum, g) =>
     sum + g.group.items.reduce((s, item, i) =>
       selected.has(`${g.key}:${i}`) ? s + (item.sizeBytes || 0) : s, 0), 0);
@@ -210,6 +211,11 @@ export default function LeftoverReview({ scanResult, selected, onToggle, onConfi
       {excluded > 0 && (
         <p className="text-[12px] text-[color:var(--text-muted)] mt-4">
           {t('leftoverReview.excludedNote', excluded)}
+        </p>
+      )}
+      {excludedKeys > 0 && (
+        <p className="text-[12px] text-[color:var(--text-muted)] mt-2">
+          {t('leftoverReview.registryExcludedNote', excludedKeys)}
         </p>
       )}
       {/* Sticky to the bottom of the dialog body, which is the scroll

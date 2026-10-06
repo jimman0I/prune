@@ -161,6 +161,29 @@ describe('POST /leftovers/scan', () => {
     expect(res.body.registryKeys.items).toHaveLength(1);
   });
 
+  it('leaves out an excluded registry key and what is under it, and says how many', async () => {
+    scanForLeftovers.mockResolvedValue({
+      files: { ok: true, items: [] },
+      registryKeys: { ok: true, items: [
+        { path: 'HKEY_CURRENT_USER\\Software\\Thing' },
+        { path: 'HKEY_CURRENT_USER\\Software\\Thing\\Sub' },
+        { path: 'HKEY_CURRENT_USER\\Software\\ThingTwo' }
+      ] },
+      scheduledTasks: { ok: true, items: [] }
+    });
+    settings = { excludeRegistryKeys: ['HKCU\\Software\\Thing'] };
+    const res = await scan();
+    expect(res.body.registryKeys.items.map((i) => i.path)).toEqual(['HKEY_CURRENT_USER\\Software\\ThingTwo']);
+    expect(res.body.registryKeys.excluded).toBe(2);
+  });
+
+  it('does not read a registry exclusion as a folder, or a folder as a registry key', async () => {
+    settings = { excludeRegistryKeys: ['D:\\Keep'], excludeFolders: ['HKCU\\Software\\Thing'] };
+    const res = await scan();
+    expect(res.body.files.items).toHaveLength(4);
+    expect(res.body.registryKeys.items).toHaveLength(1);
+  });
+
   it('ignores an exclusion list that is not a list', async () => {
     settings = { excludeFolders: 'D:\\Keep' };
     const res = await scan();

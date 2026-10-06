@@ -279,12 +279,12 @@ describe('the settings screen, in Greek', () => {
 
     it('translates the exclusions panel entirely', async () => {
       const user = await openTab('Καθαρισμός');
-      expect(screen.getByText('Εξαίρεση φακέλων')).toBeTruthy();
+      expect(screen.getByText('Εξαιρέσεις')).toBeTruthy();
       expect(screen.getByText(/Φάκελοι και τύποι αρχείων που το Prune θα αφήσει ήσυχους/)).toBeTruthy();
-      expect(screen.getByText('Μια πλήρης διαδρομή φακέλου, ή ένας τύπος αρχείου γραμμένος ως *.iso')).toBeTruthy();
+      expect(screen.getByText('Μια πλήρης διαδρομή φακέλου, ένας τύπος αρχείου γραμμένος ως *.iso ή ένα κλειδί μητρώου όπως HKCU\\Software\\Vendor')).toBeTruthy();
       expect(screen.getByText('Τίποτα δεν εξαιρείται.')).toBeTruthy();
 
-      const input = screen.getByLabelText('Διαδρομή φακέλου ή τύπος αρχείου προς εξαίρεση');
+      const input = screen.getByLabelText('Διαδρομή φακέλου, τύπος αρχείου ή κλειδί μητρώου προς εξαίρεση');
       await user.type(input, 'notavalidvalue');
       await user.click(screen.getAllByRole('button', { name: 'Προσθήκη' }).at(-1));
       expect(screen.getByText(/Γράψτε μια πλήρη διαδρομή φακέλου/)).toBeTruthy();

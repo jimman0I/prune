@@ -460,7 +460,7 @@ describe('the remembered Settings tab', () => {
     renderScreen(<SettingsPage />);
     // The Cleanup tab's own content (its exclusions panel) should be
     // visible without ever clicking the Cleanup button.
-    expect(await screen.findByText('Exclude folders')).toBeTruthy();
+    expect(await screen.findByText('Exclusions')).toBeTruthy();
   });
 
   it('writes the choice when a tab is clicked, so it survives the next relaunch', async () => {

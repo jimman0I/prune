@@ -121,6 +121,7 @@ export default {
     palemoon_cache: { name: "缓存", description: "缓存的网页、脚本和图片。浏览时会重新生成。" },
     thunderbird_cache: { name: "缓存", description: "已缓存的远程内容和订阅源数据。你的邮件、文件夹和账户不受影响。" },
     windows_userassist: { name: "程序启动历史记录 (UserAssist)", description: "Windows 对你启动程序的频率和时间的计数，用于排列“开始”菜单中常用项目的顺序。Windows 会重新开始计数。" },
+    windows_regedit_lastkey: { name: "注册表编辑器：上次打开的项", description: "注册表编辑器下次启动时重新打开的注册表项。注册表本身不受影响。" },
     paint_recent: { name: "最近的文件", description: "画图最近打开的图片列表。图片本身不受影响。" },
     wordpad_recent: { name: "最近的文件", description: "写字板最近打开的文档列表。文档本身不受影响。" },
     windows_media_player_history: { name: "最近的文件和文件夹", description: "Windows Media Player 最近播放的文件和网址，以及它为“打开”和“保存”记住的文件夹。媒体文件本身不受影响。" },

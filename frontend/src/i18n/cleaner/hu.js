@@ -121,6 +121,7 @@ export default {
     palemoon_cache: { name: "Gyorsítótár", description: "Gyorsítótárazott oldalak, szkriptek és képek. Böngészés közben újraépül." },
     thunderbird_cache: { name: "Gyorsítótár", description: "A gyorsítótárazott távoli tartalom és hírcsatornaadatok. Az e-mailjeit, mappáit és fiókjait nem érinti." },
     windows_userassist: { name: "Programindítási előzmények (UserAssist)", description: "A Windows számlálója arról, hogy milyen gyakran és mikor indított programokat; ez rendezi a Start menü leggyakrabban használt programjainak listáját. A Windows újat kezd." },
+    windows_regedit_lastkey: { name: "Rendszerleíróadatbázis-szerkesztő: utoljára megnyitott kulcs", description: "Az a kulcs, amelynél a Rendszerleíróadatbázis-szerkesztő a következő indításkor újra megnyílik. Magát a beállításjegyzéket nem érinti." },
     paint_recent: { name: "Legutóbbi fájlok", description: "A Paint által nemrég megnyitott képek listája. Magukat a képeket nem érinti." },
     wordpad_recent: { name: "Legutóbbi fájlok", description: "A WordPad által nemrég megnyitott dokumentumok listája. Magukat a dokumentumokat nem érinti." },
     windows_media_player_history: { name: "Legutóbbi fájlok és mappák", description: "A Windows Media Player által nemrég lejátszott fájlok és webcímek, valamint a Megnyitás és Mentés párbeszédekhez megjegyzett mappák. Magukat a médiafájlokat nem érinti." },

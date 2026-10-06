@@ -121,6 +121,7 @@ export default {
     palemoon_cache: { name: "キャッシュ", description: "キャッシュされたページ、スクリプト、画像です。閲覧中に再作成されます。" },
     thunderbird_cache: { name: "キャッシュ", description: "キャッシュされたリモート コンテンツとフィード データ。メール、フォルダー、アカウントには影響しません。" },
     windows_userassist: { name: "プログラム起動履歴 (UserAssist)", description: "プログラムを起動した頻度と時刻に関する Windows の記録で、スタート メニューの「よく使うアプリ」の順序を決めています。Windows が新しく記録を始めます。" },
+    windows_regedit_lastkey: { name: "レジストリ エディター: 最後に開いたキー", description: "レジストリ エディターを次に起動したときに開くキー。レジストリ自体には影響しません。" },
     paint_recent: { name: "最近使ったファイル", description: "ペイントで最近開いた画像の一覧。画像そのものには影響しません。" },
     wordpad_recent: { name: "最近使ったファイル", description: "ワードパッドで最近開いたドキュメントの一覧。ドキュメントそのものには影響しません。" },
     windows_media_player_history: { name: "最近使ったファイルとフォルダー", description: "Windows Media Player が最近再生したファイルと Web アドレス、および「開く」と「保存」で記憶しているフォルダー。メディアそのものには影響しません。" },

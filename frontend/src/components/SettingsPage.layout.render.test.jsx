@@ -147,7 +147,7 @@ describe('the restore-point switch moved to Uninstall, its behaviour did not', (
 
   it('is no longer on the Cleanup tab', async () => {
     await open('Cleanup');
-    await screen.findByText('Exclude folders');
+    await screen.findByText('Exclusions');
     expect(screen.queryByRole('switch', { name: NAME })).toBeNull();
   });
 

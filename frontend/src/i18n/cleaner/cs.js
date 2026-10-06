@@ -121,6 +121,7 @@ export default {
     palemoon_cache: { name: "Mezipaměť", description: "Stránky, skripty a obrázky uložené v mezipaměti. Obnovuje se při procházení." },
     thunderbird_cache: { name: "Mezipaměť", description: "Mezipaměť vzdáleného obsahu a dat kanálů. Vaše pošta, složky a účty zůstanou nedotčeny." },
     windows_userassist: { name: "Historie spouštění programů (UserAssist)", description: "Počítadlo Windows, jak často a kdy jste spouštěli programy, podle kterého se řadí seznam nejpoužívanějších v nabídce Start. Windows začne nové." },
+    windows_regedit_lastkey: { name: "Editor registru: naposledy otevřený klíč", description: "Klíč, u kterého se Editor registru znovu otevře při dalším spuštění. Samotný registr zůstane nedotčen." },
     paint_recent: { name: "Nedávné soubory", description: "Seznam obrázků, které Malování nedávno otevřelo. Samotné obrázky zůstanou nedotčeny." },
     wordpad_recent: { name: "Nedávné soubory", description: "Seznam dokumentů, které WordPad nedávno otevřel. Samotné dokumenty zůstanou nedotčeny." },
     windows_media_player_history: { name: "Nedávné soubory a složky", description: "Soubory a webové adresy, které Windows Media Player nedávno přehrál, a složky, které si pamatuje pro Otevřít a Uložit. Samotná média zůstanou nedotčena." },

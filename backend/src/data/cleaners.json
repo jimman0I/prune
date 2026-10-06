@@ -1182,6 +1182,17 @@
     "recommended": false
   },
   {
+    "id": "windows_regedit_lastkey",
+    "category": "Windows",
+    "name": "Registry Editor: last opened key",
+    "description": "The key Registry Editor reopens at the next time you start it. The registry itself is not touched.",
+    "actions": [
+      { "type": "winreg", "key": "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Applets\\Regedit", "value": "LastKey" }
+    ],
+    "is_safe": true,
+    "recommended": false
+  },
+  {
     "id": "windows_explorer_shellbags",
     "category": "Windows",
     "name": "Explorer Shellbags",

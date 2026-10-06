@@ -121,6 +121,7 @@ export default {
     palemoon_cache: { name: "Vyrovnávacia pamäť", description: "Stránky, skripty a obrázky uložené vo vyrovnávacej pamäti. Obnovuje sa pri prehliadaní." },
     thunderbird_cache: { name: "Vyrovnávacia pamäť", description: "Vzdialený obsah a údaje kanálov vo vyrovnávacej pamäti. Vaša pošta, priečinky a účty ostanú nedotknuté." },
     windows_userassist: { name: "História spúšťania programov (UserAssist)", description: "Počítadlo Windows, ako často a kedy ste spúšťali programy, podľa ktorého sa radí zoznam najpoužívanejších v ponuke Štart. Windows začne nové." },
+    windows_regedit_lastkey: { name: "Editor registra: naposledy otvorený kľúč", description: "Kľúč, pri ktorom sa Editor registra znova otvorí pri ďalšom spustení. Samotný register ostane nedotknutý." },
     paint_recent: { name: "Nedávne súbory", description: "Zoznam obrázkov, ktoré Skicár nedávno otvoril. Samotné obrázky ostanú nedotknuté." },
     wordpad_recent: { name: "Nedávne súbory", description: "Zoznam dokumentov, ktoré WordPad nedávno otvoril. Samotné dokumenty ostanú nedotknuté." },
     windows_media_player_history: { name: "Nedávne súbory a priečinky", description: "Súbory a webové adresy, ktoré Windows Media Player nedávno prehral, a priečinky, ktoré si pamätá pre Otvoriť a Uložiť. Samotné médiá ostanú nedotknuté." },

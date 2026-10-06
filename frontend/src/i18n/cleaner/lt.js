@@ -121,6 +121,7 @@ export default {
     palemoon_cache: { name: "Talpykla", description: "Talpykloje saugomi puslapiai, scenarijai ir vaizdai. Atkuriama jums naršant." },
     thunderbird_cache: { name: "Talpykla", description: "Talpykloje saugomas nuotolinis turinys ir kanalų duomenys. Jūsų paštas, aplankai ir paskyros neliečiami." },
     windows_userassist: { name: "Programų paleidimo istorija (UserAssist)", description: "„Windows“ skaitiklis, kaip dažnai ir kada paleidote programas; pagal jį išdėstomas dažniausiai naudojamų programų sąrašas meniu Pradžia. „Windows“ pradeda naują." },
+    windows_regedit_lastkey: { name: "Registro rengyklė: paskutinis atidarytas raktas", description: "Raktas, prie kurio Registro rengyklė vėl atsidaro kitą kartą ją paleidus. Pats registras neliečiamas." },
     paint_recent: { name: "Neseniai naudoti failai", description: "Neseniai „Paint“ atidarytų paveikslėlių sąrašas. Patys paveikslėliai neliečiami." },
     wordpad_recent: { name: "Neseniai naudoti failai", description: "Neseniai „WordPad“ atidarytų dokumentų sąrašas. Patys dokumentai neliečiami." },
     windows_media_player_history: { name: "Neseniai naudoti failai ir aplankai", description: "Failai ir interneto adresai, kuriuos neseniai grojo „Windows Media Player“, ir aplankai, kuriuos jis prisimena atidarymui ir įrašymui. Pati medija neliečiama." },

@@ -121,6 +121,7 @@ export default {
     palemoon_cache: { name: "Cache", description: "Zwischengespeicherte Seiten, Skripte und Bilder. Wird beim Surfen neu aufgebaut." },
     thunderbird_cache: { name: "Cache", description: "Zwischengespeicherte Remote-Inhalte und Feed-Daten. Ihre E-Mails, Ordner und Konten bleiben unberührt." },
     windows_userassist: { name: "Programmstartverlauf (UserAssist)", description: "Windows’ Zähler dafür, wie oft und wann Sie Programme gestartet haben; er sortiert die Liste der meistgenutzten Programme im Startmenü. Windows beginnt einen neuen." },
+    windows_regedit_lastkey: { name: "Registrierungs-Editor: zuletzt geöffneter Schlüssel", description: "Der Schlüssel, an dem der Registrierungs-Editor beim nächsten Start wieder öffnet. Die Registrierung selbst bleibt unberührt." },
     paint_recent: { name: "Zuletzt verwendete Dateien", description: "Die Liste der Bilder, die Paint zuletzt geöffnet hat. Die Bilder selbst bleiben unberührt." },
     wordpad_recent: { name: "Zuletzt verwendete Dateien", description: "Die Liste der Dokumente, die WordPad zuletzt geöffnet hat. Die Dokumente selbst bleiben unberührt." },
     windows_media_player_history: { name: "Zuletzt verwendete Dateien und Ordner", description: "Die Dateien und Webadressen, die der Windows Media Player zuletzt abgespielt hat, und die Ordner, die er sich für Öffnen und Speichern merkt. Die Medien selbst bleiben unberührt." },

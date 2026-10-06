@@ -27,6 +27,16 @@ const APP_NAME = 'Prune';
 
 const TAB_IDS = ['general', 'uninstall', 'cleanup', 'about'];
 
+// The three kinds of exclusion, each kept in its own settings list (a folder is
+// matched as a path prefix, an extension as a name suffix, a registry key as a
+// key-path prefix) and each with its own badge on the row.
+const EXCLUSION_KEYS = { folder: 'excludeFolders', extension: 'excludeExtensions', registry: 'excludeRegistryKeys' };
+const EXCLUSION_BADGES = {
+  folder: 'settings.exclusions.folderBadge',
+  extension: 'settings.exclusions.typeBadge',
+  registry: 'settings.exclusions.registryBadge'
+};
+
 /** The style every group heading on this screen shares -- the same small
  * mono uppercase label as "Scan output" on Deep Clean, so a panel's heading
  * reads as a label for the rows under it rather than as one more setting. */
@@ -194,7 +204,7 @@ function SettingsPage({ onReportBug = null, onShowWhatsNew = null, tabRequest = 
     }
 
     setExclusionError(null);
-    const key = parsed.kind === 'extension' ? 'excludeExtensions' : 'excludeFolders';
+    const key = EXCLUSION_KEYS[parsed.kind];
     const current = settings[key] ?? [];
     if (current.includes(parsed.value)) { setNewExclusion(''); return; }
 
@@ -203,7 +213,7 @@ function SettingsPage({ onReportBug = null, onShowWhatsNew = null, tabRequest = 
   };
 
   const handleRemoveExclusion = (kind, value) => {
-    const key = kind === 'extension' ? 'excludeExtensions' : 'excludeFolders';
+    const key = EXCLUSION_KEYS[kind];
     save({ [key]: (settings[key] ?? []).filter((v) => v !== value) });
   };
 
@@ -211,7 +221,8 @@ function SettingsPage({ onReportBug = null, onShowWhatsNew = null, tabRequest = 
   // from so removing it puts the change back in the right place.
   const exclusions = [
     ...(settings?.excludeFolders ?? []).map((value) => ({ kind: 'folder', value })),
-    ...(settings?.excludeExtensions ?? []).map((value) => ({ kind: 'extension', value }))
+    ...(settings?.excludeExtensions ?? []).map((value) => ({ kind: 'extension', value })),
+    ...(settings?.excludeRegistryKeys ?? []).map((value) => ({ kind: 'registry', value }))
   ];
 
   const handleRunSandboxTest = async () => {
@@ -669,7 +680,7 @@ function SettingsPage({ onReportBug = null, onShowWhatsNew = null, tabRequest = 
                     value={newExclusion}
                     onChange={(e) => { setNewExclusion(e.target.value); setExclusionError(null); }}
                     onKeyDown={(e) => { if (e.key === 'Enter') handleAddExclusion(); }}
-                    placeholder="D:\Games   or   *.iso"
+                    placeholder="D:\Games   or   *.iso   or   HKCU\Software\Vendor"
                     aria-label={t('settings.exclusions.ariaLabel')}
                     aria-invalid={Boolean(exclusionError)}
                     className="flex-1 min-w-0 font-mono text-[12.5px] px-3 py-2 rounded-lg bg-[color:var(--surface-hover)] border border-[color:var(--border-subtle)] text-[color:var(--text-primary)] placeholder:text-[color:var(--text-muted)] focus:border-[color:var(--accent-primary)]/50"
@@ -697,9 +708,12 @@ function SettingsPage({ onReportBug = null, onShowWhatsNew = null, tabRequest = 
                               differently and the row should not need to be
                               parsed to tell them apart. */}
                           <span className="text-[11px] font-mono uppercase tracking-wider px-1.5 py-px rounded border shrink-0 border-[color:var(--border-subtle)] text-[color:var(--text-muted)]">
-                            {kind === 'extension' ? t('settings.exclusions.typeBadge') : t('settings.exclusions.folderBadge')}
+                            {t(EXCLUSION_BADGES[kind])}
                           </span>
-                          <span className="font-mono text-[12px] text-[color:var(--text-secondary)] truncate min-w-0">{value}</span>
+                          {/* A registry key is long and its tail is the part that
+                              tells one vendor from another, so it wraps; a path
+                              or a file type is short enough to truncate. */}
+                          <span className={`font-mono text-[12px] text-[color:var(--text-secondary)] min-w-0 ${kind === 'registry' ? 'break-all' : 'truncate'}`}>{value}</span>
                         </div>
                         <button
                           aria-label={t('settings.exclusions.removeAriaLabel', value)}

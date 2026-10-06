@@ -121,6 +121,7 @@ export default {
     palemoon_cache: { name: "Kas", description: "Gekaste bladsye, skrifte en beelde. Word herbou terwyl jy blaai." },
     thunderbird_cache: { name: "Kas", description: "Gekaste afstandinhoud en voerdata. Jou pos, vouers en rekeninge word nie geraak nie." },
     windows_userassist: { name: "Programlanseringsgeskiedenis (UserAssist)", description: "Windows se telling van hoe gereeld en wanneer jy programme begin het, wat die Begin-kieslys se mees gebruikte lys orden. Windows begin 'n nuwe een." },
+    windows_regedit_lastkey: { name: "Registerredigeerder: laaste geopende sleutel", description: "Die sleutel waar die Registerredigeerder oopmaak die volgende keer wat jy dit begin. Die register self word nie geraak nie." },
     paint_recent: { name: "Onlangse lêers", description: "Die lys beelde wat Paint onlangs oopgemaak het. Die beelde self word nie geraak nie." },
     wordpad_recent: { name: "Onlangse lêers", description: "Die lys dokumente wat WordPad onlangs oopgemaak het. Die dokumente self word nie geraak nie." },
     windows_media_player_history: { name: "Onlangse lêers en vouers", description: "Die lêers en webadresse wat Windows Media Player onlangs gespeel het, en die vouers wat dit vir Maak oop en Stoor onthou. Die media self word nie geraak nie." },

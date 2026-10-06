@@ -121,6 +121,7 @@ export default {
     palemoon_cache: { name: "מטמון", description: "דפים, סקריפטים ותמונות שנשמרו במטמון. נבנה מחדש תוך כדי גלישה." },
     thunderbird_cache: { name: "מטמון", description: "תוכן מרוחק ונתוני עדכונים שנשמרו במטמון. הדואר, התיקיות והחשבונות שלך אינם נפגעים." },
     windows_userassist: { name: "היסטוריית הפעלת תוכניות (UserAssist)", description: "המונה של Windows לכמה פעמים ומתי הפעלת תוכניות, הקובע את סדר רשימת הנפוצות בתפריט התחלה. Windows מתחיל מונה חדש." },
+    windows_regedit_lastkey: { name: "עורך הרישום: המפתח האחרון שנפתח", description: "המפתח שבו עורך הרישום נפתח מחדש בפעם הבאה שתפעיל אותו. הרישום עצמו אינו נפגע." },
     paint_recent: { name: "קבצים אחרונים", description: "רשימת התמונות ש-Paint פתח לאחרונה. התמונות עצמן אינן נפגעות." },
     wordpad_recent: { name: "קבצים אחרונים", description: "רשימת המסמכים ש-WordPad פתח לאחרונה. המסמכים עצמם אינם נפגעים." },
     windows_media_player_history: { name: "קבצים ותיקיות אחרונים", description: "הקבצים וכתובות האינטרנט ש-Windows Media Player הפעיל לאחרונה, והתיקיות שהוא זוכר עבור פתיחה ושמירה. קובצי המדיה עצמם אינם נפגעים." },

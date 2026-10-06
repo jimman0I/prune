@@ -57,6 +57,11 @@ const DEFAULT_SETTINGS = {
      and a single list would have to guess which at match time, on every
      file of every scan. See lib/exclusionInput.js. */
   excludeExtensions: [],
+  /* Registry keys the uninstall leftover scans never offer, with everything
+     under them (Revo's RegExclude). Stored as the person wrote them; matched
+     canonically in services/leftoverExclusions.js. Registry keys are not files,
+     so Deep Clean and the Disk Map have nothing to do with this list. */
+  excludeRegistryKeys: [],
   /** Cookie domains a `cookie` action must NEVER delete rows for -- an
    * exact-domain-or-any-subdomain match against each entry (so keeping
    * "example.com" also keeps "sub.example.com", matching BleachBit's own

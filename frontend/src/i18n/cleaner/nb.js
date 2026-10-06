@@ -121,6 +121,7 @@ export default {
     palemoon_cache: { name: "Hurtigbuffer", description: "Bufrede sider, skript og bilder. Bygges opp igjen mens du surfer." },
     thunderbird_cache: { name: "Hurtigbuffer", description: "Bufret eksternt innhold og strømdata. E-posten, mappene og kontoene dine berøres ikke." },
     windows_userassist: { name: "Programstarthistorikk (UserAssist)", description: "Windows’ telling av hvor ofte og når du har startet programmer, som sorterer Start-menyens liste over mest brukte. Windows starter en ny." },
+    windows_regedit_lastkey: { name: "Registerredigering: sist åpnede nøkkel", description: "Nøkkelen Registerredigering åpner ved neste gang du starter den. Selve registeret berøres ikke." },
     paint_recent: { name: "Nylige filer", description: "Listen over bilder Paint nylig åpnet. Selve bildene berøres ikke." },
     wordpad_recent: { name: "Nylige filer", description: "Listen over dokumenter WordPad nylig åpnet. Selve dokumentene berøres ikke." },
     windows_media_player_history: { name: "Nylige filer og mapper", description: "Filene og nettadressene Windows Media Player nylig spilte av, og mappene den husker for Åpne og Lagre. Selve mediene berøres ikke." },

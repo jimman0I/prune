@@ -135,17 +135,24 @@ see v1.0.1 below) are documented here.
   capability Prune doesn't have yet, and every `claude.*` option, since
   that's real conversation history, not a general-purpose cache.
 - **More Deep Clean rules, found by reading what BleachBit and Revo clean.**
-  19 new rules: Firefox cookies, form history, open tabs and crash reports;
+  20 new rules: Firefox cookies, form history, open tabs and crash reports;
   the cache of LibreWolf, Waterfox, Zen, Pale Moon and Thunderbird; the
   recent-file lists of Paint, WordPad and Windows Media Player (and its
   cache); WinZip and TortoiseSVN history; TeamViewer logs and connection
   history; FileZilla recent servers; and Windows’ program launch history
-  (UserAssist), which Revo calls Start Menu click logs. Every location was
+  (UserAssist), which Revo calls Start Menu click logs, and the key Registry
+  Editor reopens at. Every location was
   checked against BleachBit’s cleaner definitions and each rule was run
   through the real engine (a planted fixture was cleaned, backed up and
   gone), and all of it is translated into the 39 other languages. The Firefox
   cookie rule uses the same cookie action as Chrome, which already reads
   Firefox’s `moz_cookies` table when a keep list is set.
+- **Exclusions can name registry keys.** Settings -> Cleanup takes a registry key
+  (`HKCUSoftwareVendor`, in any spelling) in the same field as folders and file
+  types, as Revo’s RegExclude list does. A key excluded there, everything under it
+  and every value inside it is never offered as a leftover, and the review says how
+  many were left out. The same folder and key exclusions now also apply to a forced
+  uninstall, whose scan ignored them before.
 - **`prune-cli programs`**, the counterpart of Revo’s RevoCmd. Lists the
   installed programs (the same list as the Applications screen), with
   `--match "Microso*"` for a whole-name match using `*` and `?` (case is

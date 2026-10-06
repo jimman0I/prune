@@ -121,6 +121,7 @@ export default {
     palemoon_cache: { name: "快取", description: "快取的網頁、指令碼和圖片。瀏覽時會重新產生。" },
     thunderbird_cache: { name: "快取", description: "已快取的遠端內容和摘要來源資料。你的郵件、資料夾和帳戶不受影響。" },
     windows_userassist: { name: "程式啟動記錄 (UserAssist)", description: "Windows 對你啟動程式的頻率和時間的計數，用於排列「開始」功能表中常用項目的順序。Windows 會重新開始計數。" },
+    windows_regedit_lastkey: { name: "登錄編輯程式：上次開啟的機碼", description: "登錄編輯程式下次啟動時重新開啟的機碼。登錄本身不受影響。" },
     paint_recent: { name: "最近的檔案", description: "小畫家最近開啟的圖片清單。圖片本身不受影響。" },
     wordpad_recent: { name: "最近的檔案", description: "WordPad 最近開啟的文件清單。文件本身不受影響。" },
     windows_media_player_history: { name: "最近的檔案和資料夾", description: "Windows Media Player 最近播放的檔案和網址，以及它為「開啟」和「儲存」記住的資料夾。媒體檔案本身不受影響。" },

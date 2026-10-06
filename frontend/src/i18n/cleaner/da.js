@@ -121,6 +121,7 @@ export default {
     palemoon_cache: { name: "Cache", description: "Cachede sider, scripts og billeder. Genopbygges, mens du browser." },
     thunderbird_cache: { name: "Cache", description: "Cachet fjernindhold og feeddata. Din mail, dine mapper og dine konti berøres ikke." },
     windows_userassist: { name: "Programstarthistorik (UserAssist)", description: "Windows' optælling af, hvor ofte og hvornår du har startet programmer, som sorterer Start-menuens mest brugte liste. Windows starter en ny." },
+    windows_regedit_lastkey: { name: "Registreringseditor: sidst åbnede nøgle", description: "Den nøgle, Registreringseditor åbner ved, næste gang du starter den. Selve registreringsdatabasen berøres ikke." },
     paint_recent: { name: "Seneste filer", description: "Listen over billeder, som Paint har åbnet for nylig. Selve billederne berøres ikke." },
     wordpad_recent: { name: "Seneste filer", description: "Listen over dokumenter, som WordPad har åbnet for nylig. Selve dokumenterne berøres ikke." },
     windows_media_player_history: { name: "Seneste filer og mapper", description: "De filer og webadresser, som Windows Media Player har afspillet for nylig, og de mapper, det husker til Åbn og Gem. Selve medierne berøres ikke." },

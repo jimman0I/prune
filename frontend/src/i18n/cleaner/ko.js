@@ -121,6 +121,7 @@ export default {
     palemoon_cache: { name: "캐시", description: "캐시된 페이지, 스크립트, 이미지입니다. 탐색하는 동안 다시 만들어집니다." },
     thunderbird_cache: { name: "캐시", description: "캐시된 원격 콘텐츠와 피드 데이터입니다. 메일, 폴더, 계정은 영향을 받지 않습니다." },
     windows_userassist: { name: "프로그램 실행 기록(UserAssist)", description: "프로그램을 얼마나 자주, 언제 실행했는지에 대한 Windows의 기록으로, 시작 메뉴의 자주 사용하는 앱 순서를 정합니다. Windows가 새로 기록을 시작합니다." },
+    windows_regedit_lastkey: { name: "레지스트리 편집기: 마지막으로 연 키", description: "레지스트리 편집기를 다음에 시작할 때 다시 열리는 키입니다. 레지스트리 자체는 영향을 받지 않습니다." },
     paint_recent: { name: "최근 파일", description: "그림판에서 최근에 연 이미지 목록입니다. 이미지 자체는 영향을 받지 않습니다." },
     wordpad_recent: { name: "최근 파일", description: "워드패드에서 최근에 연 문서 목록입니다. 문서 자체는 영향을 받지 않습니다." },
     windows_media_player_history: { name: "최근 파일 및 폴더", description: "Windows Media Player가 최근에 재생한 파일과 웹 주소, 그리고 열기 및 저장에 기억하는 폴더입니다. 미디어 자체는 영향을 받지 않습니다." },

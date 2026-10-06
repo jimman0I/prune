@@ -121,6 +121,7 @@ export default {
     palemoon_cache: { name: "Cache", description: "Gecachte pagina's, scripts en afbeeldingen. Wordt opnieuw opgebouwd terwijl je surft." },
     thunderbird_cache: { name: "Cache", description: "In de cache opgeslagen externe inhoud en feedgegevens. Uw e-mail, mappen en accounts blijven ongemoeid." },
     windows_userassist: { name: "Programmastartgeschiedenis (UserAssist)", description: "De teller van Windows voor hoe vaak en wanneer u programma's hebt gestart, die de lijst met meest gebruikte programma's in het Startmenu ordent. Windows begint een nieuwe." },
+    windows_regedit_lastkey: { name: "Register-editor: laatst geopende sleutel", description: "De sleutel waarop de Register-editor de volgende keer opent. Het register zelf blijft ongemoeid." },
     paint_recent: { name: "Recente bestanden", description: "De lijst met afbeeldingen die Paint onlangs heeft geopend. De afbeeldingen zelf blijven ongemoeid." },
     wordpad_recent: { name: "Recente bestanden", description: "De lijst met documenten die WordPad onlangs heeft geopend. De documenten zelf blijven ongemoeid." },
     windows_media_player_history: { name: "Recente bestanden en mappen", description: "De bestanden en webadressen die Windows Media Player onlangs heeft afgespeeld en de mappen die het onthoudt voor Openen en Opslaan. De media zelf blijven ongemoeid." },
