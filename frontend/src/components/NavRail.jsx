@@ -120,6 +120,36 @@ export const NAV_ICONS = Object.fromEntries([...ITEMS, SETTINGS_ITEM].map((item)
  *
  * The flyout carries only the Ctrl+N key: the name is already printed in
  * the row the moment the pointer or keyboard focus reaches the rail. */
+/** Where the sliding active mark sits, from the rows' own sizes.
+ *
+ * The blue tint and the 3px edge pill are ONE element that slides to the active
+ * row, placed by arithmetic: row N is RAIL_PAD + N * (ROW_HEIGHT + ROW_GAP) from
+ * the top. It was a shared framer-motion `layoutId`, which measures each element
+ * with getBoundingClientRect() and bakes the result into a transform; under
+ * fractional display scaling (Windows 150%) that measurement landed on a different
+ * sub-pixel than the icon beside it, which stays in plain layout, and the two
+ * drifted apart. A CSS `top` is in the same layout units as the rows, so there is
+ * nothing to disagree. The numbers mirror the classes on the panel (py-6, gap-2)
+ * and the rows (h-11); NavRail.render.test.jsx reads this file and fails if the
+ * two ever differ.
+ *
+ * Settings is anchored to the BOTTOM of the rail (it sits in the footer), so its
+ * row is measured up from there; `top` transitions between a length and a calc()
+ * just as it does between two lengths.
+ *
+ * Verified in Chromium at 100/125/150/175% display scaling: the mark's box matches
+ * the active row's to 0.000 device px. The one case it cannot follow is a viewport
+ * so short that the rail's own content (about 492px) overflows its panel -- there
+ * Settings itself is pushed down by the overflow; the window's 560px minimum height
+ * keeps that out of reach except at 200% scaling on a 1080p display. */
+const RAIL_PAD = 24, ROW_HEIGHT = 44, ROW_GAP = 8;
+
+function markTop(screen) {
+  if (screen === SETTINGS_ITEM.id) return `calc(100% - ${RAIL_PAD + ROW_HEIGHT}px)`;
+  const index = ITEMS.findIndex((item) => item.id === screen);
+  return index < 0 ? null : `${RAIL_PAD + index * (ROW_HEIGHT + ROW_GAP)}px`;
+}
+
 /** The in-row label. Fixed width (see NavItem), faded in by the rail's own
  * hover or keyboard focus, and `pointer-events-none` because at rest it
  * overflows the 72px column invisibly and must never catch a click meant
@@ -151,34 +181,6 @@ function NavItem({ item, screen, onNavigate, label }) {
           active ? 'text-[color:var(--accent-primary)]' : 'text-[color:var(--text-secondary)] hover:text-[color:var(--text-primary)] hover:bg-[color:var(--surface-hover)]'
         }`}
       >
-        {/* The active tint and the edge pill below, always mounted and
-            toggled by opacity rather than a shared layoutId.
-
-            Used to be `layoutId`-animated so framer-motion would slide the
-            mark down the rail between buttons instead of fading. Dropped:
-            that mechanism measures each element's rect with
-            getBoundingClientRect() and bakes the result into a `transform`
-            matrix to FLIP from the old position to the new one, and under
-            fractional OS display scaling (confirmed broken at Windows'
-            150%) that measurement can land on a different sub-pixel
-            boundary than the icon beside it, which stays in plain static
-            layout and is rounded by the browser's own layout engine
-            instead -- the two drift apart, visibly. inset-0 already pins
-            this element exactly to its own button's box in ordinary CSS,
-            with no JS-measured rect in between; opacity cannot desync
-            from that the way a transform can. Behind the glyph and
-            aria-hidden: it is decoration for a state `aria-current`
-            already reports. */}
-        <span
-          aria-hidden="true"
-          className={`absolute inset-0 rounded-xl bg-[color:var(--accent-primary-soft)] transition-opacity duration-150 ${active ? 'opacity-100' : 'opacity-0'}`}
-        />
-        {/* The 3px pill at the rail's edge: the tint alone is a faint wash
-            in light mode, and this is the mark that survives squinting. */}
-        <span
-          aria-hidden="true"
-          className={`absolute -left-[8px] top-3 h-5 w-[3px] rounded-full bg-[color:var(--accent-primary)] transition-opacity duration-150 ${active ? 'opacity-100' : 'opacity-0'}`}
-        />
         <span className="relative">{item.icon}</span>
         <span aria-hidden="true" className={LABEL_CLASS}>
           {label}
@@ -249,6 +251,7 @@ function ActionItem({ icon, label, onClick }) {
 
 export default function NavRail({ screen, onNavigate, footer = null, onReportBug = null }) {
   const { t } = useLanguage();
+  const mark = markTop(screen);
   return (
     // Timing, measured frame by frame in Chromium: an expo-out curve (the first
     // version) covered 72px -> 181px in its FIRST frame and crawled the rest,
@@ -274,6 +277,23 @@ export default function NavRail({ screen, onNavigate, footer = null, onReportBug
             the rail's edge. A chip does not need a portal; it needs the
             blurred surface to be a sibling rather than an ancestor. */}
         <div className="glass-panel absolute inset-0" aria-hidden="true" />
+        {/* The active mark: one element, slid to the active row (see markTop). It
+            sits behind the rows (earlier in the DOM, same stacking level) and is
+            decoration for what aria-current already reports. The 3px pill is the
+            part that survives squinting; the tint alone is a faint wash in light
+            mode. `transition-[top]` is collapsed to 1ms by the reduced-motion and
+            low-power rules like every other transition. */}
+        {mark !== null && (
+          <div
+            data-nav-mark
+            aria-hidden="true"
+            className="pointer-events-none absolute inset-x-0 h-11 transition-[top] duration-[300ms] ease-[cubic-bezier(0.4,0,0.2,1)]"
+            style={{ top: mark }}
+          >
+            <span className="absolute inset-y-0 left-[12px] right-[12px] rounded-xl bg-[color:var(--accent-primary-soft)]" />
+            <span className="absolute left-[4px] top-3 h-5 w-[3px] rounded-full bg-[color:var(--accent-primary)]" />
+          </div>
+        )}
         {/* The mark lives in the window's title bar (TitleBar.jsx), which is
             full width and has room for the wordmark; the rail's 72px does
             not. */}

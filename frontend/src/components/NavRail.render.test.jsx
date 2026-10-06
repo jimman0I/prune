@@ -1,6 +1,9 @@
 // @vitest-environment jsdom
+import { useState } from 'react';
 import { describe, it, expect, vi } from 'vitest';
 import { screen, fireEvent } from '@testing-library/react';
+import { readFileSync } from 'node:fs';
+import { resolve } from 'node:path';
 import { renderScreen } from '../testSupport/renderScreen.jsx';
 import NavRail from './NavRail.jsx';
 import { SCREEN_ORDER } from '../lib/screenOrder.js';
@@ -192,21 +195,74 @@ describe('the hover rail', () => {
 });
 
 describe('the active mark', () => {
-  // Always mounted now, one per nav item, toggled by opacity rather than
-  // conditional rendering (see NavRail.jsx's own comment on why: a
-  // shared layoutId measured and transformed this element, and that
-  // measurement could land on a different sub-pixel boundary than the
-  // icon beside it under fractional OS display scaling). So every item
-  // has its own pill in the DOM; exactly one is visible.
-  it('is a 3px pill on the active item only, alongside the tint', () => {
+  // ONE mark that slides to the active row, placed by arithmetic from the row
+  // sizes rather than measured. A shared framer-motion layoutId measured each
+  // element with getBoundingClientRect and baked the result into a transform,
+  // which drifted from the icon beside it at fractional display scaling (150%).
+  // Here the mark's `top` is a plain CSS length in the same layout units as the
+  // rows, so the two cannot disagree.
+  const markOf = (container) => container.querySelector('nav [data-nav-mark]');
+  const px = (el) => el.style.top;
+
+  it('is a single element, not one per item, and hidden from assistive tech', () => {
     const { container } = renderScreen(<NavRail screen="quarantine" onNavigate={() => {}} />);
-    const pills = [...container.querySelectorAll('span[class*="w-[3px]"]')];
-    expect(pills).toHaveLength(LABELS.length);
-    const visible = pills.filter((p) => p.className.includes('opacity-100'));
-    expect(visible).toHaveLength(1);
-    expect(screen.getByRole('button', { name: 'Quarantine' }).contains(visible[0])).toBe(true);
-    expect(visible[0].getAttribute('aria-hidden')).toBe('true');
-    expect(pills.filter((p) => p !== visible[0]).every((p) => p.className.includes('opacity-0'))).toBe(true);
+    expect(container.querySelectorAll('nav [data-nav-mark]')).toHaveLength(1);
+    expect(markOf(container).getAttribute('aria-hidden')).toBe('true');
+    // The tint and the 3px edge pill travel together inside it.
+    expect(markOf(container).querySelector('span[class*="w-[3px]"]')).toBeTruthy();
+    expect(markOf(container).querySelector('span[class*="accent-primary-soft"]')).toBeTruthy();
+  });
+
+  it('sits at row N: top padding + N rows of height + gap', () => {
+    const rows = ['dashboard', 'diskmap', 'applications', 'quarantine', 'startup', 'duplicates', 'deepclean'];
+    rows.forEach((id, index) => {
+      const { container, unmount } = renderScreen(<NavRail screen={id} onNavigate={() => {}} />);
+      expect(px(markOf(container)), id).toBe(`${24 + index * 52}px`);
+      unmount();
+    });
+  });
+
+  it('sits on Settings by measuring up from the bottom of the rail, where Settings is anchored', () => {
+    const { container } = renderScreen(<NavRail screen="settings" onNavigate={() => {}} />);
+    expect(px(markOf(container))).toBe('calc(100% - 68px)');
+  });
+
+  it('slides: its top is a CSS transition, which the reduced-motion and low-power rules already collapse', () => {
+    const { container } = renderScreen(<NavRail screen="dashboard" onNavigate={() => {}} />);
+    expect(markOf(container).className).toContain('transition-[top]');
+  });
+
+  it('moves to the new row when the screen changes, rather than remounting', () => {
+    function Harness() {
+      const [screenId, setScreenId] = useState('dashboard');
+      return (
+        <>
+          <button type="button" onClick={() => setScreenId('applications')}>go</button>
+          <NavRail screen={screenId} onNavigate={() => {}} />
+        </>
+      );
+    }
+    const { container } = renderScreen(<Harness />);
+    const before = markOf(container);
+    expect(px(before)).toBe('24px');
+    fireEvent.click(screen.getByText('go'));
+    expect(markOf(container)).toBe(before); // same element: that is what lets the CSS transition run
+    expect(px(before)).toBe(`${24 + 2 * 52}px`);
+  });
+
+  it('is placed from the same numbers the rows are laid out with', () => {
+    // The arithmetic above is only right while these classes are. Read from the
+    // source so changing a row's size without the mark's constants fails here.
+    const src = readFileSync(resolve(process.cwd(), 'src/components/NavRail.jsx'), 'utf8');
+    expect(src).toMatch(/flex flex-col items-stretch gap-2 py-6/);      // 8px gap, 24px top and bottom
+    expect(src).toMatch(/className=\{`peer relative w-full h-11 /);     // 44px rows
+    expect(src).toMatch(/const RAIL_PAD = 24, ROW_HEIGHT = 44, ROW_GAP = 8;/);
+  });
+
+  it('marks the active button for assistive tech with aria-current, and only that one', () => {
+    renderScreen(<NavRail screen="quarantine" onNavigate={() => {}} />);
+    const current = screen.getAllByRole('button').filter((b) => b.getAttribute('aria-current') === 'page');
+    expect(current.map((b) => b.getAttribute('aria-label'))).toEqual(['Quarantine']);
   });
 });
 
