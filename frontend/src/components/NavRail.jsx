@@ -100,6 +100,10 @@ const SETTINGS_ITEM = { id: 'settings', icon: (
     </svg>
   ) };
 
+/** The rail's glyphs by screen id, for anywhere else that points at a screen
+ * (the What's new dialog), so a screen has one icon in the whole app. */
+export const NAV_ICONS = Object.fromEntries([...ITEMS, SETTINGS_ITEM].map((item) => [item.id, item.icon]));
+
 /** One place in the rail.
  *
  * The rail is icons only at rest and widens over the page on hover (see

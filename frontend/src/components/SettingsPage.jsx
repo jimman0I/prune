@@ -1,4 +1,4 @@
-import { useRef, useState, memo } from 'react';
+import { useEffect, useRef, useState, memo } from 'react';
 import { runSandboxTest, openUpdatePage } from '../lib/api.js';
 import { classifyExclusion } from '../lib/exclusionInput.js';
 import { positiveOrOff } from '../lib/limitInput.js';
@@ -16,6 +16,8 @@ import { leftoverDestinationFrom } from '../lib/leftoverDestination.js';
 import { removalModeFrom } from '../lib/cleanOutcome.js';
 import { useLanguage, LANGUAGES } from '../i18n/LanguageContext.jsx';
 import { readStoredSettingsTab, writeStoredSettingsTab } from '../lib/settingsTab.js';
+import { entryFor } from '../lib/whatsNew.js';
+import { APP_VERSION } from '../lib/appVersion.js';
 
 // The version is NOT kept here. It used to be a hand-copied constant that
 // had to be bumped with the three package.json files, nothing failed when
@@ -77,7 +79,7 @@ function StepRow({ step }) {
 const numberFieldClass =
   'font-mono text-[12.5px] px-2.5 py-2 rounded-lg bg-[color:var(--surface-hover)] border border-[color:var(--border-subtle)] text-[color:var(--text-primary)] focus:border-[color:var(--accent-primary)]/50';
 
-function SettingsPage({ onReportBug = null }) {
+function SettingsPage({ onReportBug = null, onShowWhatsNew = null, tabRequest = null }) {
   const [tab, setTab] = useState(() => readStoredSettingsTab(window.localStorage, TAB_IDS) ?? 'general');
   const [saveError, setSaveError] = useState(null);
   const [newExclusion, setNewExclusion] = useState('');
@@ -121,6 +123,16 @@ function SettingsPage({ onReportBug = null }) {
     setTab(id);
     writeStoredSettingsTab(window.localStorage, id);
   };
+
+  // "Show me" in the What's new dialog opens Settings on a given tab. Asked for
+  // by a value rather than a call so this screen, kept mounted once visited,
+  // can follow it; the nonce makes a second request for the same tab count.
+  useEffect(() => {
+    if (tabRequest?.tab && TAB_IDS.includes(tabRequest.tab)) {
+      setTab(tabRequest.tab);
+      writeStoredSettingsTab(window.localStorage, tabRequest.tab);
+    }
+  }, [tabRequest]);
 
   /** Arrow keys move between the tabs and select as they go, Home and End
    * jump to the ends -- the standard tablist contract, with the tab that is
@@ -861,6 +873,17 @@ function SettingsPage({ onReportBug = null }) {
               </p>
               {/* The dialog itself belongs to App, so the rail's item and
                   this row open the same one and two can never be up at once. */}
+              {onShowWhatsNew && entryFor(APP_VERSION) && (
+                <div className="mt-5 pt-4 border-t border-[color:var(--border-subtle)] flex items-center justify-between gap-4">
+                  <div className="min-w-0">
+                    <div className="text-[13px] font-medium text-[color:var(--text-primary)]">{t('whatsNewV3.ui.about.title')}</div>
+                    <p className="text-[12px] text-[color:var(--text-muted)] mt-0.5 max-w-[110ch]">{t('whatsNewV3.ui.about.description')}</p>
+                  </div>
+                  <button type="button" aria-haspopup="dialog" className="btn-ghost shrink-0 px-3 py-1.5 rounded-lg text-[12.5px] min-h-[24px]" onClick={onShowWhatsNew}>
+                    {t('whatsNewV3.ui.about.button')}
+                  </button>
+                </div>
+              )}
               {onReportBug && (
                 <div className="mt-5 pt-4 border-t border-[color:var(--border-subtle)] flex items-center justify-between gap-4">
                   <div className="min-w-0">
@@ -890,8 +913,9 @@ function SettingsPage({ onReportBug = null }) {
  * switches, once per switch, and that cost grows with every tab the user
  * has visited.
  *
- * Safe here specifically because its one prop, onReportBug, is a stable
- * callback from App (useCallback), so the comparison can never produce a
+ * Safe here specifically because its props (onReportBug, onShowWhatsNew, and
+ * tabRequest, which only changes when something asks) are stable
+ * from App (useCallback / state), so the comparison can never produce a
  * stale screen. A component with unstable props would gain nothing from
  * this and is deliberately left alone. */
 export default memo(SettingsPage);
