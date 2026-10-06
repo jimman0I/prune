@@ -181,6 +181,17 @@ see v1.0.1 below) are documented here.
   the Recycle Bin or Delete permanently, which keep nothing to restore. The
   toast only fades, without sliding, when Windows asks for reduced motion.
 
+**What's new**
+
+- **A one-time "What's new" notice after an update.** The first time Prune opens
+  on a new feature release (3.0, not 3.0.1) it shows six cards with what is
+  new and where it lives, most with a "Show me" button that goes there. It
+  waits until the window is actually visible (not hidden in the tray), never
+  opens over another dialog, and is not shown on a fresh install. Got it,
+  Escape or a click outside records the version in settings, so it does not
+  return; Settings -> About has a "What's new in this version" button that
+  opens it again without recording anything.
+
 ### Changed
 
 - **Hunter is a draggable crosshair, and no longer watches the keyboard.**
