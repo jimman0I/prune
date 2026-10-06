@@ -124,7 +124,7 @@ export const NAV_ICONS = Object.fromEntries([...ITEMS, SETTINGS_ITEM].map((item)
  * hover or keyboard focus, and `pointer-events-none` because at rest it
  * overflows the 72px column invisibly and must never catch a click meant
  * for the page underneath. */
-const LABEL_CLASS = 'relative w-[118px] shrink-0 pointer-events-none text-left text-[13px] leading-[1.15] font-medium [display:-webkit-box] [-webkit-line-clamp:2] [-webkit-box-orient:vertical] overflow-hidden opacity-0 transition-opacity duration-200 group-hover/rail:opacity-100 group-has-[:focus-visible]/rail:opacity-100';
+const LABEL_CLASS = 'relative w-[118px] shrink-0 pointer-events-none text-left text-[13px] leading-[1.15] font-medium [display:-webkit-box] [-webkit-line-clamp:2] [-webkit-box-orient:vertical] overflow-hidden opacity-0 transition-opacity duration-200 group-hover/rail:delay-100 group-has-[:focus-visible]/rail:delay-100 group-hover/rail:opacity-100 group-has-[:focus-visible]/rail:opacity-100';
 
 function NavItem({ item, screen, onNavigate, label }) {
   const active = screen === item.id;
@@ -250,6 +250,14 @@ function ActionItem({ icon, label, onClick }) {
 export default function NavRail({ screen, onNavigate, footer = null, onReportBug = null }) {
   const { t } = useLanguage();
   return (
+    // Timing, measured frame by frame in Chromium: an expo-out curve (the first
+    // version) covered 72px -> 181px in its FIRST frame and crawled the rest,
+    // which reads as a snap, not a transition; a drawer curve was better but still
+    // spent most of its distance in the first two frames. A standard ease-in-out
+    // over 320ms spreads the motion across the whole duration. Opening starts
+    // immediately; closing waits 100ms so a pointer skimming across the edge does
+    // not make it flicker; the labels fade in 100ms after it starts opening and
+    // out at once.
     // The <nav> only RESERVES the 72px column the page lays out beside.
     // The panel inside it is what grows, absolutely positioned so it widens
     // OVER the page: animating the width of something in the flow would
@@ -258,7 +266,7 @@ export default function NavRail({ screen, onNavigate, footer = null, onReportBug
     // (`:focus-visible`, not `:focus-within` -- see the key chip in
     // NavItem), and closes the moment both are gone.
     <nav className="relative z-flyout w-[72px] shrink-0" aria-label={t('nav.landmark')}>
-      <div className="group/rail absolute inset-y-0 left-0 w-[72px] hover:w-[200px] has-[:focus-visible]:w-[200px] flex flex-col items-stretch gap-2 py-6 px-[12px] transition-[width] duration-200 ease-[cubic-bezier(0.16,1,0.3,1)]">
+      <div className="group/rail absolute inset-y-0 left-0 w-[72px] hover:w-[200px] has-[:focus-visible]:w-[200px] flex flex-col items-stretch gap-2 py-6 px-[12px] transition-[width] duration-[320ms] ease-[cubic-bezier(0.4,0,0.2,1)] delay-100 hover:delay-0 has-[:focus-visible]:delay-0">
         {/* The glass is a background LAYER here, not the container itself.
             `backdrop-filter` establishes a containing block and clips
             absolutely positioned descendants to its own border box, so with
