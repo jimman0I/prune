@@ -28,6 +28,23 @@ describe('groupStartupItems', () => {
     ]);
   });
 
+  it('names and orders the policy and 32-bit RunOnce locations, never as a raw key', () => {
+    const groups = groupStartupItems([
+      item({ location: 'RunOnce (32-bit)', rawScope: 'machine', name: 'e' }),
+      item({ location: 'RunOnce', rawScope: 'machine', name: 'd' }),
+      item({ location: 'Run (policy)', rawScope: 'machine', name: 'c' }),
+      item({ location: 'Run (policy)', rawScope: 'user', name: 'b' }),
+      item({ location: 'Run', rawScope: 'user', name: 'a' })
+    ]);
+    expect(groups.map((g) => g.label)).toEqual([
+      'Registry: HKCU Run',
+      'Registry: HKCU Policies\\Explorer\\Run',
+      'Registry: HKLM Policies\\Explorer\\Run',
+      'Registry: HKLM RunOnce',
+      'Registry: HKLM RunOnce (32-bit)'
+    ]);
+  });
+
   it('leaves out a location with nothing in it', () => {
     const groups = groupStartupItems([item({ name: 'only' })]);
     expect(groups).toHaveLength(1);

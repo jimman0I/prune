@@ -16,7 +16,9 @@ import { appxDisplayName } from './appxName.js';
  * there at every single sign-in.
  *
  * Read from seven places: the Run and RunOnce keys in both machine hives
- * and the user hive, the two Startup folders, scheduled tasks, services
+ * and the user hive (plus the Policies\Explorer\Run key Group Policy and
+ * some installers write, which Revo's Autorun Manager also lists), the two
+ * Startup folders, scheduled tasks, services
  * set to start automatically, and the startup tasks Windows Store apps
  * register.
  *
@@ -43,7 +45,10 @@ $keys = @(
   @{ path = 'HKLM:\\SOFTWARE\\WOW6432Node\\Microsoft\\Windows\\CurrentVersion\\Run'; scope = 'machine'; kind = 'Run (32-bit)' },
   @{ path = 'HKCU:\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run'; scope = 'user'; kind = 'Run' },
   @{ path = 'HKLM:\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\RunOnce'; scope = 'machine'; kind = 'RunOnce' },
-  @{ path = 'HKCU:\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\RunOnce'; scope = 'user'; kind = 'RunOnce' }
+  @{ path = 'HKLM:\\SOFTWARE\\WOW6432Node\\Microsoft\\Windows\\CurrentVersion\\RunOnce'; scope = 'machine'; kind = 'RunOnce (32-bit)' },
+  @{ path = 'HKCU:\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\RunOnce'; scope = 'user'; kind = 'RunOnce' },
+  @{ path = 'HKLM:\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer\\Run'; scope = 'machine'; kind = 'Run (policy)' },
+  @{ path = 'HKCU:\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer\\Run'; scope = 'user'; kind = 'Run (policy)' }
 )
 
 foreach ($k in $keys) {
