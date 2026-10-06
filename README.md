@@ -220,15 +220,21 @@ anything leaves the app.
 
 <table>
 <tr>
-<td width="50%"><img src="docs/screenshots/applications-dark.png" alt="The Applications screen: 210 installed programs with real icons, measured sizes, versions and install dates, filterable by Unused, Store, Extensions and Broken" /></td>
+<td colspan="2"><img src="docs/screenshots/disk-map-dark.png" alt="The Disk Map reopened on its last scan of drive C: with Size, Allocated and Modified columns, a search box, Export CSV and Save map as PNG buttons, and a breakdown by file type beside the folder tree" /></td>
+</tr>
+<tr>
+<td colspan="2" align="center"><b>Disk Map</b><br/><sub>Any drive, size on disk, search and export — and it reopens on the last scan instead of starting empty</sub></td>
+</tr>
+<tr>
+<td width="50%"><img src="docs/screenshots/applications-dark.png" alt="The Applications screen: 210 installed programs with real icons, measured sizes, versions and install dates, with Hunter, Install with monitoring, Forced uninstall and Quarantine buttons above the list" /></td>
 <td width="50%"><img src="docs/screenshots/deep-clean-dark.png" alt="Deep Clean after a scan: measured sizes per rule, a Loses data badge on the ones that sign you out or clear history, the new Deep scan group of backup, Office temp, Vim swap, .DS_Store and Thumbs.db rules, a scan log beside the tree, and a footer saying Deletes immediately when Delete now is chosen" /></td>
 </tr>
 <tr>
-<td align="center"><b>Applications</b><br/><sub>Every hive, plus Store apps and extensions</sub></td>
+<td align="center"><b>Applications</b><br/><sub>Every hive, plus Store apps and extensions — with Hunter, install monitoring and forced uninstall</sub></td>
 <td align="center"><b>Deep Clean</b><br/><sub>Measured sizes; rules that lose something are marked and never ticked by default</sub></td>
 </tr>
 <tr>
-<td width="50%"><img src="docs/screenshots/startup-dark.png" alt="The Startup screen: 56 sign-in entries grouped by registry hive and Startup folder, showing which are enabled and which are running now" /></td>
+<td width="50%"><img src="docs/screenshots/startup-dark.png" alt="The Startup screen: 58 sign-in entries grouped by registry hive and Startup folder, showing which are enabled and which are running now" /></td>
 <td width="50%"><img src="docs/screenshots/dashboard-light.png" alt="The dashboard in the light theme: the same space bar, largest programs and quiet row on a light ground" /></td>
 </tr>
 <tr>
