@@ -181,6 +181,16 @@ export default function App() {
     setScreen('quarantine');
   }, []);
 
+  // A Store app that was just removed leaves the list at once, without waiting
+  // for the re-read: Windows takes a moment to catch up and the row it was
+  // asked to remove should not sit there looking untouched.
+  const handleStoreAppRemoved = useCallback((app) => {
+    queryClient.setQueryData(keys.storeApps, (list) => (Array.isArray(list)
+      ? list.filter((entry) => entry.packageFullName !== app.packageFullName)
+      : list));
+    refreshPrograms();
+  }, [refreshPrograms, queryClient]);
+
   // The Applications tools (forced uninstall and the rest) change what is on
   // the machine and what is in Quarantine; this is what closing one does.
   const handleToolsChanged = useCallback(() => {
@@ -367,7 +377,7 @@ export default function App() {
           <StoreRemoveDialog
             app={storeAppToRemove}
             onClose={closeDialog(setStoreAppToRemove)}
-            onRemoved={refreshPrograms}
+            onRemoved={handleStoreAppRemoved}
             onBusyChange={setDialogBusy}
           />
         </ModalOverlay>

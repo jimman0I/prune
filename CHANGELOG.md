@@ -118,6 +118,13 @@ see v1.0.1 below) are documented here.
   Defender flag it as `Behavior:Win32/WebBrowserCredAccess.E2`, and a test
   now guards against it.)
 - Fixed: program names with an apostrophe broke the leftover scan.
+- Fixed: a Store app you had just removed stayed in the Applications list, and the
+  Uninstall button waited several seconds before doing anything. The list of Store
+  apps was kept for the whole session and never told about the removal, and the
+  removal first re-scanned every Store package (measuring each folder) only to look
+  up one. The removed app now leaves the list at once, removal asks Windows about
+  just that package (0.8 s instead of 7.4 s here), and the list is re-read every
+  five minutes so an app removed from Windows Settings stops showing too.
 
 **Cleaner rules**
 
