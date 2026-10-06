@@ -18,8 +18,11 @@ import { FOCUSABLE_SELECTOR, visibleFocusable, nextFocusIndex, initialFocusTarge
  * leftover review the user has been reading. Escape and the close button
  * are the ways out, and both are explicit.
  */
-export default function ModalOverlay({ label, onClose, dismissible = true, children }) {
+export default function ModalOverlay({ label, onClose, dismissible = true, closeOnBackdrop = false, initialFocus = null, children }) {
   const dialogRef = useRef(null);
+  // Where the last mouse press started, so a drag that begins in the panel
+  // (selecting text) and lets go on the scrim does not count as a click on it.
+  const pressedOnScrim = useRef(false);
   // Whatever had focus before the dialog opened, so it can be given back.
   // Without this, closing a dialog drops focus to <body> and the next Tab
   // starts from the top of the app rather than from the row you were on.
@@ -37,7 +40,10 @@ export default function ModalOverlay({ label, onClose, dismissible = true, child
     // after the children have actually rendered their controls -- on the
     // first paint the panel is often still empty.
     const raf = requestAnimationFrame(() => {
-      const target = initialFocusTarget(
+      // A dialog may name the control it wants first (its harmless primary
+      // button); anything that does not match falls back to the first one.
+      const chosen = initialFocus ? dialogRef.current?.querySelector(initialFocus) : null;
+      const target = chosen || initialFocusTarget(
         dialogRef.current?.querySelectorAll(FOCUSABLE_SELECTOR),
         dialogRef.current
       );
@@ -101,8 +107,17 @@ export default function ModalOverlay({ label, onClose, dismissible = true, child
   return createPortal(
     <div
       className="fixed inset-0 z-modal flex items-center justify-center p-6 bg-[color:var(--scrim)] backdrop-blur-[2px]"
-      // The backdrop is inert on purpose; see the note above.
+      // Inert unless a dialog opts in with closeOnBackdrop (one that is safe to
+      // wave away); see the note above.
       aria-hidden="false"
+      onMouseDown={(event) => {
+        pressedOnScrim.current = event.target === event.currentTarget || event.target === dialogRef.current;
+      }}
+      onClick={(event) => {
+        const onScrim = event.target === event.currentTarget || event.target === dialogRef.current;
+        if (closeOnBackdrop && dismissible && onScrim && pressedOnScrim.current) onClose?.();
+        pressedOnScrim.current = false;
+      }}
     >
       {/* Deliberately NOT `display: contents`, which would be the tidy way
           to let the child own its own width: an element with
