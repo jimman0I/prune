@@ -27,6 +27,26 @@
     "%LOCALAPPDATA%\\Vivaldi\\Application\\vivaldi.exe",
     "%PROGRAMFILES%\\Vivaldi\\Application\\vivaldi.exe"
   ],
+  "LibreWolf": [
+    "%PROGRAMFILES%\\LibreWolf\\librewolf.exe",
+    "%LOCALAPPDATA%\\Programs\\LibreWolf\\librewolf.exe"
+  ],
+  "Waterfox": [
+    "%PROGRAMFILES%\\Waterfox\\waterfox.exe",
+    "%LOCALAPPDATA%\\Waterfox\\waterfox.exe"
+  ],
+  "Zen": [
+    "%PROGRAMFILES%\\Zen Browser\\zen.exe",
+    "%LOCALAPPDATA%\\Zen Browser\\zen.exe"
+  ],
+  "Pale Moon": [
+    "%PROGRAMFILES%\\Pale Moon\\palemoon.exe",
+    "%PROGRAMFILES(X86)%\\Pale Moon\\palemoon.exe"
+  ],
+  "Thunderbird": [
+    "%PROGRAMFILES%\\Mozilla Thunderbird\\thunderbird.exe",
+    "%PROGRAMFILES(X86)%\\Mozilla Thunderbird\\thunderbird.exe"
+  ],
 
   "Discord": [
     "%LOCALAPPDATA%\\Discord\\app.ico",
@@ -132,6 +152,32 @@
   "WinRAR": [
     "%PROGRAMFILES%\\WinRAR\\WinRAR.exe",
     "%PROGRAMFILES(X86)%\\WinRAR\\WinRAR.exe"
+  ],
+  "Paint": [
+    "%SYSTEMROOT%\\System32\\mspaint.exe"
+  ],
+  "WordPad": [
+    "%PROGRAMFILES%\\Windows NT\\Accessories\\wordpad.exe",
+    "%PROGRAMFILES(X86)%\\Windows NT\\Accessories\\wordpad.exe"
+  ],
+  "Windows Media Player": [
+    "%PROGRAMFILES%\\Windows Media Player\\wmplayer.exe",
+    "%PROGRAMFILES(X86)%\\Windows Media Player\\wmplayer.exe"
+  ],
+  "WinZip": [
+    "%PROGRAMFILES%\\WinZip\\winzip64.exe",
+    "%PROGRAMFILES(X86)%\\WinZip\\winzip32.exe"
+  ],
+  "TortoiseSVN": [
+    "%PROGRAMFILES%\\TortoiseSVN\\bin\\TortoiseProc.exe"
+  ],
+  "TeamViewer": [
+    "%PROGRAMFILES%\\TeamViewer\\TeamViewer.exe",
+    "%PROGRAMFILES(X86)%\\TeamViewer\\TeamViewer.exe"
+  ],
+  "FileZilla": [
+    "%PROGRAMFILES%\\FileZilla FTP Client\\filezilla.exe",
+    "%PROGRAMFILES(X86)%\\FileZilla FTP Client\\filezilla.exe"
   ],
   "Deep scan": []
 }

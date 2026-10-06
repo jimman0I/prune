@@ -804,6 +804,125 @@
     "recommended": false
   },
   {
+    "id": "firefox_cookies",
+    "category": "Firefox",
+    "name": "Cookies",
+    "description": "Signs you out of every site that remembered you.",
+    "actions": [
+      { "type": "cookie", "path": "%APPDATA%\\Mozilla\\Firefox\\Profiles\\*\\cookies.sqlite" },
+      { "type": "delete", "paths": [
+        "%APPDATA%\\Mozilla\\Firefox\\Profiles\\*\\cookies.sqlite-wal",
+        "%APPDATA%\\Mozilla\\Firefox\\Profiles\\*\\cookies.sqlite-shm",
+        "%APPDATA%\\Mozilla\\Firefox\\Profiles\\*\\cookies.txt"
+      ] }
+    ],
+    "is_safe": false,
+    "risky": true,
+    "recommended": false
+  },
+  {
+    "id": "firefox_form_history",
+    "category": "Firefox",
+    "name": "Form history",
+    "description": "Text you typed into web forms and search boxes, offered back as suggestions. Saved logins are not touched.",
+    "paths": [
+      "%APPDATA%\\Mozilla\\Firefox\\Profiles\\*\\formhistory.sqlite",
+      "%APPDATA%\\Mozilla\\Firefox\\Profiles\\*\\formhistory.dat"
+    ],
+    "is_safe": false,
+    "risky": true,
+    "recommended": false
+  },
+  {
+    "id": "firefox_sessions",
+    "category": "Firefox",
+    "name": "Open tabs and session",
+    "description": "Loses the tabs currently open and the ones \"restore last session\" would bring back.",
+    "paths": [
+      "%APPDATA%\\Mozilla\\Firefox\\Profiles\\*\\sessionstore*",
+      "%APPDATA%\\Mozilla\\Firefox\\Profiles\\*\\sessionCheckpoints.json"
+    ],
+    "is_safe": false,
+    "risky": true,
+    "recommended": false
+  },
+  {
+    "id": "firefox_crash_reports",
+    "category": "Firefox",
+    "name": "Crash reports",
+    "description": "Crash dumps and reports Firefox keeps after it has crashed. Only useful when sending one to Mozilla.",
+    "paths": [
+      "%APPDATA%\\Mozilla\\Firefox\\Crash Reports",
+      "%APPDATA%\\Mozilla\\Firefox\\Profiles\\*\\minidumps"
+    ],
+    "is_safe": true,
+    "recommended": true
+  },
+  {
+    "id": "librewolf_cache",
+    "category": "LibreWolf",
+    "name": "Cache",
+    "description": "Cached pages, scripts and images. Rebuilt as you browse.",
+    "paths": [
+      "%LOCALAPPDATA%\\librewolf\\Profiles\\*\\cache2",
+      "%LOCALAPPDATA%\\librewolf\\Profiles\\*\\jumpListCache",
+      "%LOCALAPPDATA%\\librewolf\\Profiles\\*\\OfflineCache"
+    ],
+    "is_safe": true,
+    "recommended": true
+  },
+  {
+    "id": "waterfox_cache",
+    "category": "Waterfox",
+    "name": "Cache",
+    "description": "Cached pages, scripts and images. Rebuilt as you browse.",
+    "paths": [
+      "%LOCALAPPDATA%\\Waterfox\\Profiles\\*\\cache2",
+      "%LOCALAPPDATA%\\Waterfox\\Profiles\\*\\jumpListCache",
+      "%LOCALAPPDATA%\\Waterfox\\Profiles\\*\\OfflineCache"
+    ],
+    "is_safe": true,
+    "recommended": true
+  },
+  {
+    "id": "zen_cache",
+    "category": "Zen",
+    "name": "Cache",
+    "description": "Cached pages, scripts and images. Rebuilt as you browse.",
+    "paths": [
+      "%LOCALAPPDATA%\\Zen\\Profiles\\*\\cache2",
+      "%LOCALAPPDATA%\\Zen\\Profiles\\*\\jumpListCache",
+      "%LOCALAPPDATA%\\Zen\\Profiles\\*\\OfflineCache"
+    ],
+    "is_safe": true,
+    "recommended": true
+  },
+  {
+    "id": "palemoon_cache",
+    "category": "Pale Moon",
+    "name": "Cache",
+    "description": "Cached pages, scripts and images. Rebuilt as you browse.",
+    "paths": [
+      "%LOCALAPPDATA%\\Moonchild Productions\\Pale Moon\\Profiles\\*\\cache2",
+      "%LOCALAPPDATA%\\Moonchild Productions\\Pale Moon\\Profiles\\*\\jumpListCache",
+      "%LOCALAPPDATA%\\Moonchild Productions\\Pale Moon\\Profiles\\*\\OfflineCache"
+    ],
+    "is_safe": true,
+    "recommended": true
+  },
+  {
+    "id": "thunderbird_cache",
+    "category": "Thunderbird",
+    "name": "Cache",
+    "description": "Cached remote content and feed data. Your mail, folders and accounts are not touched.",
+    "paths": [
+      "%LOCALAPPDATA%\\Thunderbird\\Profiles\\*\\cache2",
+      "%LOCALAPPDATA%\\Thunderbird\\Profiles\\*\\startupCache"
+    ],
+    "is_safe": true,
+    "recommended": true
+  },
+  {
     "id": "opera_cache",
     "category": "Opera",
     "name": "Opera Cache",
@@ -1050,6 +1169,17 @@
     ],
     "is_safe": true,
     "recommended": true
+  },
+  {
+    "id": "windows_userassist",
+    "category": "Windows",
+    "name": "Program launch history (UserAssist)",
+    "description": "Windows’ count of how often and when you started programs, which orders the Start menu’s most-used list. Windows starts a fresh one.",
+    "actions": [
+      { "type": "winreg", "key": "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\UserAssist" }
+    ],
+    "is_safe": true,
+    "recommended": false
   },
   {
     "id": "windows_explorer_shellbags",
@@ -1392,6 +1522,115 @@
     ],
     "is_safe": true,
     "recommended": true
+  },
+  {
+    "id": "paint_recent",
+    "category": "Paint",
+    "name": "Recent files",
+    "description": "The list of images Paint recently opened. The images themselves are not touched.",
+    "actions": [
+      { "type": "winreg", "key": "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Applets\\Paint\\Recent File List" }
+    ],
+    "is_safe": true,
+    "recommended": true
+  },
+  {
+    "id": "wordpad_recent",
+    "category": "WordPad",
+    "name": "Recent files",
+    "description": "The list of documents WordPad recently opened. The documents themselves are not touched.",
+    "actions": [
+      { "type": "winreg", "key": "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Applets\\Wordpad\\Recent File List" }
+    ],
+    "is_safe": true,
+    "recommended": true
+  },
+  {
+    "id": "windows_media_player_history",
+    "category": "Windows Media Player",
+    "name": "Recent files and folders",
+    "description": "The files and web addresses Windows Media Player recently played, and the folders it remembers for Open and Save. The media itself is not touched.",
+    "actions": [
+      { "type": "winreg", "key": "HKCU\\Software\\Microsoft\\MediaPlayer\\Player\\RecentFileList" },
+      { "type": "winreg", "key": "HKCU\\Software\\Microsoft\\MediaPlayer\\Player\\RecentURLList" },
+      { "type": "winreg", "key": "HKCU\\Software\\Microsoft\\MediaPlayer\\Player\\Settings", "value": "OpenDir" },
+      { "type": "winreg", "key": "HKCU\\Software\\Microsoft\\MediaPlayer\\Player\\Settings", "value": "SaveAsDir" }
+    ],
+    "is_safe": true,
+    "recommended": true
+  },
+  {
+    "id": "windows_media_player_cache",
+    "category": "Windows Media Player",
+    "name": "Cache",
+    "description": "Cached album art and transcoded files. Rebuilt the next time you play or sync.",
+    "paths": [
+      "%LOCALAPPDATA%\\Microsoft\\Media Player\\Cache*",
+      "%LOCALAPPDATA%\\Microsoft\\Media Player\\Transcoded Files Cache",
+      "%LOCALAPPDATA%\\Microsoft\\Media Player\\Grafikcache\\LocalMLS"
+    ],
+    "is_safe": true,
+    "recommended": true
+  },
+  {
+    "id": "winzip_history",
+    "category": "WinZip",
+    "name": "History",
+    "description": "WinZip’s remembered archive names and jobs. The archives themselves are not touched.",
+    "actions": [
+      { "type": "winreg", "key": "HKCU\\Software\\Nico Mak Computing\\WinZip\\mru\\jobs" },
+      { "type": "winreg", "key": "HKCU\\Software\\Nico Mak Computing\\WinZip\\mru\\archives" }
+    ],
+    "is_safe": true,
+    "recommended": false
+  },
+  {
+    "id": "tortoisesvn_history",
+    "category": "TortoiseSVN",
+    "name": "History",
+    "description": "The repository addresses and commit messages TortoiseSVN remembers for its dialogs. Your working copies are not touched.",
+    "actions": [
+      { "type": "winreg", "key": "HKCU\\Software\\TortoiseSVN\\History" }
+    ],
+    "is_safe": true,
+    "recommended": false
+  },
+  {
+    "id": "teamviewer_logs",
+    "category": "TeamViewer",
+    "name": "Logs",
+    "description": "TeamViewer’s own diagnostic log files. Your settings and saved connections are not touched.",
+    "paths": [
+      "%APPDATA%\\TeamViewer\\TeamViewer*_Logfile.log"
+    ],
+    "is_safe": true,
+    "recommended": true
+  },
+  {
+    "id": "teamviewer_history",
+    "category": "TeamViewer",
+    "name": "Connection history",
+    "description": "The list of computers you recently connected to. The computers stay in your computer list.",
+    "actions": [
+      { "type": "delete", "paths": [
+        "%APPDATA%\\TeamViewer\\MRU",
+        "%APPDATA%\\TeamViewer\\Connections.txt"
+      ] },
+      { "type": "winreg", "key": "HKCU\\Software\\TeamViewer\\Version4", "value": "Last_Machine_Connections" }
+    ],
+    "is_safe": true,
+    "recommended": false
+  },
+  {
+    "id": "filezilla_recent_servers",
+    "category": "FileZilla",
+    "name": "Recent servers",
+    "description": "The servers FileZilla lists under “Recent servers” in its connect dropdown. Site Manager entries are not touched.",
+    "paths": [
+      "%APPDATA%\\FileZilla\\recentservers.xml"
+    ],
+    "is_safe": true,
+    "recommended": false
   },
   {
     "id": "deepscan_backup",

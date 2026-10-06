@@ -134,6 +134,28 @@ see v1.0.1 below) are documented here.
   covered by an existing rule, anything needing a directory-whole-match
   capability Prune doesn't have yet, and every `claude.*` option, since
   that's real conversation history, not a general-purpose cache.
+- **More Deep Clean rules, found by reading what BleachBit and Revo clean.**
+  19 new rules: Firefox cookies, form history, open tabs and crash reports;
+  the cache of LibreWolf, Waterfox, Zen, Pale Moon and Thunderbird; the
+  recent-file lists of Paint, WordPad and Windows Media Player (and its
+  cache); WinZip and TortoiseSVN history; TeamViewer logs and connection
+  history; FileZilla recent servers; and Windows’ program launch history
+  (UserAssist), which Revo calls Start Menu click logs. Every location was
+  checked against BleachBit’s cleaner definitions and each rule was run
+  through the real engine (a planted fixture was cleaned, backed up and
+  gone), and all of it is translated into the 39 other languages. The Firefox
+  cookie rule uses the same cookie action as Chrome, which already reads
+  Firefox’s `moz_cookies` table when a keep list is set.
+- **Startup lists what Revo’s Autorun Manager lists.** Added the
+  policy-enforced `PoliciesExplorerRun` keys (per user and all users) and
+  the 32-bit RunOnce key. Policy entries are read-only and say why: Windows
+  keeps no on/off record for them, so a switch would have written to the
+  wrong place.
+- **The leftover scan reads more of the registry.** `SharedDLLs` reference
+  counts (offered when the file sits in the program’s own folder, or when it
+  matches by name and the file is gone, never while the DLL is still on
+  disk), the policy Run keys and the legacy `RunServices` / `RunServicesOnce`
+  keys. Their containers stay protected: only the one value is ever offered.
 - **"Clean as administrator" for rules that need it.** A locked file no
   longer forces a full admin relaunch of the app. Deep Clean now shows a
   targeted elevation button only for the specific rules that hit a
