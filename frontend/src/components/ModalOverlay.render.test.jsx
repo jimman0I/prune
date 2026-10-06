@@ -224,3 +224,75 @@ describe('the ways out', () => {
     expect(onClose).not.toHaveBeenCalled();
   });
 });
+
+describe('opting in to a backdrop click and a chosen first focus', () => {
+  it('closes on a click on the scrim when asked to', async () => {
+    const onClose = vi.fn();
+    const user = userEvent.setup();
+    render(
+      <ModalOverlay label="News" onClose={onClose} closeOnBackdrop>
+        <button type="button">inside</button>
+      </ModalOverlay>
+    );
+
+    await user.click(document.body.querySelector('.fixed.inset-0'));
+    expect(onClose).toHaveBeenCalledTimes(1);
+  });
+
+  it('does not close when the click lands inside the panel, or a press started there ends on the scrim', async () => {
+    const onClose = vi.fn();
+    const user = userEvent.setup();
+    render(
+      <ModalOverlay label="News" onClose={onClose} closeOnBackdrop>
+        <button type="button">inside</button>
+      </ModalOverlay>
+    );
+
+    await user.click(screen.getByText('inside'));
+    expect(onClose).not.toHaveBeenCalled();
+
+    // A text selection dragged out of the panel releases on the scrim; the
+    // browser reports a click on their common ancestor.
+    const scrim = document.body.querySelector('.fixed.inset-0');
+    const inside = screen.getByText('inside');
+    inside.dispatchEvent(new MouseEvent('mousedown', { bubbles: true }));
+    scrim.dispatchEvent(new MouseEvent('mouseup', { bubbles: true }));
+    scrim.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+    expect(onClose).not.toHaveBeenCalled();
+  });
+
+  it('ignores the scrim while the dialog is not dismissible', async () => {
+    const onClose = vi.fn();
+    const user = userEvent.setup();
+    render(
+      <ModalOverlay label="News" onClose={onClose} closeOnBackdrop dismissible={false}>
+        <button type="button">inside</button>
+      </ModalOverlay>
+    );
+
+    await user.click(document.body.querySelector('.fixed.inset-0'));
+    expect(onClose).not.toHaveBeenCalled();
+  });
+
+  it('focuses the control the selector names instead of the first one', async () => {
+    render(
+      <ModalOverlay label="News" onClose={() => {}} initialFocus="[data-primary]">
+        <button type="button">first</button>
+        <button type="button" data-primary>primary</button>
+      </ModalOverlay>
+    );
+
+    await waitFor(() => expect(document.activeElement).toBe(screen.getByText('primary')));
+  });
+
+  it('falls back to the first control when the selector matches nothing', async () => {
+    render(
+      <ModalOverlay label="News" onClose={() => {}} initialFocus="[data-nothing]">
+        <button type="button">first</button>
+        <button type="button">second</button>
+      </ModalOverlay>
+    );
+
+    await waitFor(() => expect(document.activeElement).toBe(screen.getByText('first')));
+  });
+});
