@@ -248,6 +248,13 @@ see v1.0.1 below) are documented here.
 
 ### Fixed
 
+- **The sidebar's blue highlight and edge line slide to the item you click.**
+  They had been fading in place since the 150%-display-scaling fix. They are now
+  one element positioned by arithmetic from the row sizes instead of by measuring
+  rectangles, which is what had drifted at fractional scaling; checked in Chromium
+  at 100%, 125%, 150% and 175% to 0.000 device pixels. The sidebar's own
+  expand-on-hover also now uses an ease-in-out curve: the first one covered most
+  of its distance in a single frame and read as a snap.
 - **Prune opens quickly and no longer pins the CPU for its first minute.**
   At launch the backend ran six background jobs at once (program icons,
   versions, install dates, Store apps, Store icons and a walk of every

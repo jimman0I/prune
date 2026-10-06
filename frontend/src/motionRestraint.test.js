@@ -76,15 +76,13 @@ describe('nav motion', () => {
   it('has no hover motion: only a tap, and the active mark stays', () => {
     expect(nav).not.toContain('whileHover');
     expect(nav).toMatch(/whileTap=\{\{ scale: 0\.96 \}\}/);
-    // The active tint/pill used to be framer-motion `layoutId` elements
-    // that slid between buttons -- dropped because that mechanism
-    // measures a DOM rect and bakes it into a `transform`, which could
-    // land on a different sub-pixel boundary than the icon beside it
-    // under fractional OS display scaling (confirmed broken at Windows'
-    // 150%) and visibly drift from it. Opacity on an always-mounted,
-    // statically-positioned span can't desync that way.
+    // The active mark slides again, but not through framer-motion `layoutId`
+    // (which measures a DOM rect and bakes it into a transform that drifted from
+    // the icon at fractional display scaling, confirmed at Windows' 150%): it is
+    // one element whose CSS `top` is computed from the row sizes.
     expect(nav).not.toContain('layoutId=');
-    expect(nav).toMatch(/opacity-100.*:.*opacity-0/);
+    expect(nav).not.toMatch(/\.getBoundingClientRect\(|\.offsetTop/);
+    expect(nav).toContain('transition-[top]');
   });
 
   it('does not use a spring on the nav buttons', () => {
