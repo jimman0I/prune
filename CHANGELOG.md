@@ -248,6 +248,14 @@ see v1.0.1 below) are documented here.
 
 ### Fixed
 
+- **The sidebar highlight no longer stutters while a screen is opening.** It
+  slides as a compositor transform instead of a layout property, so it keeps
+  gliding when the page is busy (measured: with the page frozen for 700 ms right
+  after a click, the old highlight sat still and then jumped; the new one moved
+  through intermediate positions and finished), and the click now builds the new
+  screen as an interruptible background transition while the highlight starts at
+  once. Alignment with the row is unchanged: 0.008 device pixels or better at
+  100%, 125%, 150% and 175% display scaling.
 - **The sidebar's blue highlight and edge line slide to the item you click.**
   They had been fading in place since the 150%-display-scaling fix. They are now
   one element positioned by arithmetic from the row sizes instead of by measuring

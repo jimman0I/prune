@@ -202,7 +202,9 @@ describe('the active mark', () => {
   // Here the mark's `top` is a plain CSS length in the same layout units as the
   // rows, so the two cannot disagree.
   const markOf = (container) => container.querySelector('nav [data-nav-mark]');
-  const px = (el) => el.style.top;
+  // The offset travels as a custom property (verbatim), so the calc()/cqh form for
+  // Settings is checkable in jsdom, which drops units it does not know from a real style.
+  const px = (el) => el.style.getPropertyValue('--mark-y');
 
   it('is a single element, not one per item, and hidden from assistive tech', () => {
     const { container } = renderScreen(<NavRail screen="quarantine" onNavigate={() => {}} />);
@@ -224,12 +226,17 @@ describe('the active mark', () => {
 
   it('sits on Settings by measuring up from the bottom of the rail, where Settings is anchored', () => {
     const { container } = renderScreen(<NavRail screen="settings" onNavigate={() => {}} />);
-    expect(px(markOf(container))).toBe('calc(100% - 68px)');
+    expect(px(markOf(container))).toBe('calc(100cqh - 20px)');
   });
 
-  it('slides: its top is a CSS transition, which the reduced-motion and low-power rules already collapse', () => {
+  it('slides on the compositor: a transform transition, not a layout one, so a busy main thread cannot freeze it', () => {
     const { container } = renderScreen(<NavRail screen="dashboard" onNavigate={() => {}} />);
-    expect(markOf(container).className).toContain('transition-[top]');
+    const mark = markOf(container);
+    expect(mark.className).toContain('transition-transform');
+    expect(mark.className).not.toContain('transition-[top]');
+    expect(mark.className).toContain('[transform:translateY(var(--mark-y))]');
+    // And the rail is the size container its offset for Settings is measured against.
+    expect(container.querySelector('nav > div').className).toContain('[container-type:size]');
   });
 
   it('moves to the new row when the screen changes, rather than remounting', () => {
