@@ -344,12 +344,13 @@ export default function Dashboard({ programs, programsMeasured = false, onNaviga
       </CleanRecommendedCard>
 
       {/* The quiet row. Three facts that are worth a glance and rarely worth
-          a click, side by side under hairlines rather than in cards. Every
-          button in it is secondary: nothing on this screen is the one thing
-          to do. Stacks to one column below ~720px of content (888px window
-          with the icon rail). */}
+          a click, stacked under hairlines rather than in cards or in a
+          three-up strip -- side by side at wide windows still read as the
+          three-equal-stat-cards shape the design brief forbids, chrome or
+          no chrome. Every button in it is secondary: nothing on this
+          screen is the one thing to do. */}
       <div className="glass-panel mb-6 overflow-hidden">
-        <div className="grid grid-cols-1 min-[888px]:grid-cols-3 divide-y min-[888px]:divide-y-0 min-[888px]:divide-x divide-[color:var(--border-subtle)]">
+        <div data-testid="quiet-row" className="grid grid-cols-1 divide-y divide-[color:var(--border-subtle)]">
           <QuietItem title={t('dashboard.driveHealth.title')}>
             {diskHealthError && (
               <div className="text-[13px] text-[color:var(--text-secondary)] select-text">{t('dashboard.driveHealth.error', diskHealthError)}</div>

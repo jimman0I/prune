@@ -130,13 +130,15 @@ describe('the space bar', () => {
 });
 
 describe('the quiet row', () => {
-  it('is one bordered row with dividers that stacks on narrow windows, not three cards', async () => {
+  it('is one bordered row of stacked list rows, never a three-up grid', async () => {
     const { container } = render();
     await screen.findByRole('button', { name: 'Measure' });
-    const row = container.querySelector('.min-\\[888px\\]\\:grid-cols-3');
-    expect(row).toBeTruthy();
+    const row = screen.getByTestId('quiet-row');
     expect(row.className).toContain('grid-cols-1');
-    expect(row.className).toContain('min-[888px]:divide-x');
+    // Side by side at any width is still the three-equal-stat-cards shape
+    // the brief forbids, chrome or no chrome -- there is no wide-window
+    // column variant to check for any more.
+    expect(row.className).not.toMatch(/grid-cols-3|divide-x/);
     expect(row.children).toHaveLength(3);
     for (const cell of row.children) expect(cell.className).not.toContain('glass-panel');
     // One surface holds all three.
@@ -144,9 +146,9 @@ describe('the quiet row', () => {
   });
 
   it('gives each of its three items a title and a secondary button at most', async () => {
-    const { container } = render();
+    render();
     await screen.findByRole('button', { name: 'Measure' });
-    const row = container.querySelector('.min-\\[888px\\]\\:grid-cols-3');
+    const row = screen.getByTestId('quiet-row');
     const titles = [...row.children].map((c) => c.firstElementChild.textContent);
     expect(titles).toEqual(['Drive health', 'Junk files', 'Left behind']);
     for (const button of row.querySelectorAll('button')) expect(button.className).toContain('btn-ghost');

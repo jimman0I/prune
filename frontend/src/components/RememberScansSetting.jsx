@@ -44,10 +44,10 @@ export default function RememberScansSetting({ remembering, onChange }) {
   };
 
   return (
-    <div className="glass-panel p-6">
+    <div className="py-3 first:pt-0 last:pb-0">
       <div className="flex items-center justify-between gap-4">
         <div className="min-w-0">
-          <div className="text-[14px] font-medium text-[color:var(--text-primary)]">{title}</div>
+          <div className="text-[13.5px] font-medium text-[color:var(--text-primary)]">{title}</div>
           <p className="text-[12.5px] text-[color:var(--text-secondary)] mt-1 leading-relaxed max-w-[110ch]">
             {t('diskMapQolV3.setting.description')}
           </p>
