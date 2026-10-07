@@ -366,9 +366,13 @@ function CategorySection({ category, items, allItems = items, iconSrc, selected,
                   everything to Quarantine first, so nothing here is
                   unrecoverable -- but being signed out of every site is
                   not a surprise a cleaning tool should spring on anyone.
-                  None of these is ticked by default; this says why. */}
+                  None of these is ticked by default; this says why.
+                  Neutral, not amber: amber is reserved for irreversible
+                  mode (Delete now) and real faults now, and this rule is
+                  neither -- it still goes to Quarantine first, same as
+                  every other row. */}
               {item.risky && (
-                <span className="text-[11px] font-mono uppercase tracking-wider px-1 rounded bg-[color:var(--warning-soft)] text-[color:var(--warning)] border border-[color:var(--warning)]/25 shrink-0">
+                <span className="text-[11px] font-mono uppercase tracking-wider px-1 rounded bg-[color:var(--surface-hover)] text-[color:var(--text-secondary)] border border-[color:var(--border-subtle)] shrink-0">
                   {t('deepClean.tree.losesData')}
                 </span>
               )}
