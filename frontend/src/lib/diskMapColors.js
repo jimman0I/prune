@@ -10,7 +10,7 @@ const DOCUMENT_EXTENSIONS = new Set(['pdf', 'docx', 'doc', 'txt', 'md']);
 
 const COLOR_APP = '#3b82f6';
 const COLOR_MEDIA = '#8b5cf6';
-const COLOR_DOCUMENT = '#06b6d4';
+const COLOR_DOCUMENT = '#18a9c2'; // The app's own accent -- kept in sync by hand, see the note above.
 const COLOR_UNKNOWN = '#545f6c';
 // Deliberately not one of the palette colors above: an unscanned region
 // is not a category of content, it's an absence of knowledge, and it has
