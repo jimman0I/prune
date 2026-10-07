@@ -3,6 +3,7 @@ import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { fetchDuplicates, quarantineDiskPath, pickPath } from '../lib/api.js';
 import { selectForRemoval, KEEP } from '../lib/duplicateSelection.js';
 import { splitPath } from '../lib/pathDisplay.js';
+import { readRecentFolders, addRecentFolder } from '../lib/duplicatesRecentFolders.js';
 import { useToasts } from '../hooks/useToasts.jsx';
 import { useQuarantineUndo } from '../hooks/useQuarantineUndo.js';
 import ModalOverlay from './ModalOverlay.jsx';
@@ -26,6 +27,14 @@ function formatBytes(bytes) {
   const sizes = ['B', 'KB', 'MB', 'GB', 'TB'];
   const i = Math.floor(Math.log(bytes) / Math.log(k));
   return `${parseFloat((bytes / Math.pow(k, i)).toFixed(1))} ${sizes[i]}`;
+}
+
+/** localStorage, or null where even touching it throws (site data blocked).
+ * Duplicated locally rather than imported, matching this codebase's own
+ * existing convention (see DiskMap.jsx's own copy) of a small
+ * per-component copy over one shared util. */
+function safeStorage() {
+  try { return window.localStorage; } catch { return null; }
 }
 
 /** Shown inside the empty field as an example, not as a value. "C:\Users"
@@ -72,9 +81,23 @@ function Duplicates() {
   const [stopped, setStopped] = useState(false);
   const [picking, setPicking] = useState(false);
   const [pickError, setPickError] = useState(null);
+  const [recentFolders, setRecentFolders] = useState(() => readRecentFolders(safeStorage()));
   const toasts = useToasts();
   const offerUndo = useQuarantineUndo();
   const queryClient = useQueryClient();
+
+  /** The one place a search actually starts, from the field, Enter, Browse
+      or a click on a remembered folder -- so every path in gets added to
+      the recent list the same way. */
+  const startSearch = (target) => {
+    const trimmed = target.trim();
+    if (!trimmed) return;
+    setSelected(new Set());
+    setStopped(false);
+    setFolder(trimmed);
+    setArmed(trimmed);
+    setRecentFolders(addRecentFolder(safeStorage(), trimmed));
+  };
 
   const scan = useQuery({
     queryKey: ['duplicates', armed],
@@ -185,7 +208,7 @@ function Duplicates() {
           type="text"
           value={folder}
           onChange={(e) => setFolder(e.target.value)}
-          onKeyDown={(e) => { if (e.key === 'Enter' && folder.trim()) { setSelected(new Set()); setStopped(false); setArmed(folder.trim()); } }}
+          onKeyDown={(e) => { if (e.key === 'Enter') startSearch(folder); }}
           placeholder={t('duplicates.folderPlaceholder', EXAMPLE_FOLDER)}
           data-app-search="duplicates"
           aria-label={t('duplicates.folderInputAriaLabel')}
@@ -210,7 +233,7 @@ function Duplicates() {
           <button
             className="btn-primary px-4 py-2 rounded-lg text-[12.5px] font-medium shrink-0 disabled:opacity-50"
             disabled={!folder.trim()}
-            onClick={() => { setSelected(new Set()); setStopped(false); setArmed(folder.trim()); }}
+            onClick={() => startSearch(folder)}
           >
             {t('duplicates.findButton')}
           </button>
@@ -225,6 +248,30 @@ function Duplicates() {
       {scan.error && (
         <div className="glass-panel p-6 text-[13px] text-[color:var(--danger)] select-text">
           {scan.error.message}
+        </div>
+      )}
+
+      {/* Nothing searched yet: a blank field above a blank screen, with
+          no way back to a folder already typed once. Offers the recent
+          ones back for a click, the same way Browse offers the picker --
+          both exist so a second search costs a click, not a retype. */}
+      {!armed && !stopped && !scan.isFetching && recentFolders.length > 0 && (
+        <div className="glass-panel p-5">
+          <h2 className="text-[11px] font-mono uppercase tracking-[0.14em] text-[color:var(--text-muted)] mb-3">
+            {t('duplicates.recent.heading')}
+          </h2>
+          <div className="flex flex-col">
+            {recentFolders.map((recent) => (
+              <button
+                key={recent}
+                type="button"
+                onClick={() => startSearch(recent)}
+                className="text-left px-2 py-2 -mx-2 rounded-lg font-mono text-[12.5px] text-[color:var(--text-secondary)] hover:text-[color:var(--text-primary)] hover:bg-[color:var(--surface-subtle)] transition-colors truncate"
+              >
+                {recent}
+              </button>
+            ))}
+          </div>
         </div>
       )}
 
