@@ -8,4 +8,6 @@ import background from './background.js';
 import explorer from './explorer.js';
 import whatsNew from './whatsNew.js';
 
-export const EXTRAS = [diskMap, deepClean, uninstaller, runAsAdmin, dashboardQol, diskMapQol, background, explorer, whatsNew];
+import diskMapCounting from './diskMapCounting.js';
+
+export const EXTRAS = [diskMap, deepClean, uninstaller, runAsAdmin, dashboardQol, diskMapQol, background, explorer, whatsNew, diskMapCounting];

@@ -1,6 +1,6 @@
 // @vitest-environment jsdom
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
-import { renderHook, waitFor } from '@testing-library/react';
+import { renderHook, waitFor, act } from '@testing-library/react';
 import { useDiskMapAggregates } from './useDiskMapAggregates.js';
 import { createAggregator } from '../lib/aggregator.js';
 
@@ -124,7 +124,68 @@ describe('with a Worker available', () => {
     const { result } = renderHook(({ tree }) => useDiskMapAggregates(tree), {
       initialProps: { tree: null }
     });
-    expect(result.current).toEqual({ result: null, computing: false });
+    expect(result.current).toMatchObject({ result: null, computing: false, error: null });
+  });
+});
+
+/** A worker that cannot count. Either it answers with the error the real worker
+ * module now reports (`{ requestId, error }`), or it dies outright and fires an
+ * `error` event. Before, both left the screen waiting forever and the folder
+ * table said "Nothing to list inside this folder." */
+class BrokenWorker {
+  constructor() {
+    this.byType = { message: new Set(), error: new Set(), messageerror: new Set() };
+    this.terminated = false;
+    BrokenWorker.instances.push(this);
+  }
+
+  addEventListener(type, fn) { this.byType[type]?.add(fn); }
+
+  removeEventListener(type, fn) { this.byType[type]?.delete(fn); }
+
+  postMessage(data) {
+    queueMicrotask(() => {
+      if (this.terminated) return;
+      if (BrokenWorker.mode === 'reports') {
+        for (const fn of this.byType.message) fn({ data: { requestId: data.requestId, error: 'tree too large' } });
+      } else {
+        for (const fn of this.byType.error) fn({ message: 'worker crashed' });
+      }
+    });
+  }
+
+  terminate() { this.terminated = true; }
+}
+
+describe('when counting fails', () => {
+  beforeEach(() => {
+    BrokenWorker.instances = [];
+    globalThis.Worker = BrokenWorker;
+  });
+
+  it.each([['reports', 'tree too large'], ['dies', 'worker crashed']])(
+    'a worker that %s ends computing with the reason, not with an empty result', async (mode, reason) => {
+      BrokenWorker.mode = mode;
+      const { result } = renderHook(() => useDiskMapAggregates(smallTree));
+      expect(result.current.computing).toBe(true);
+      await waitFor(() => expect(result.current.computing).toBe(false));
+      expect(result.current.error).toBe(reason);
+      expect(result.current.result).toBeNull();
+      // a failed worker is not reused
+      expect(BrokenWorker.instances[0].terminated).toBe(true);
+    }
+  );
+
+  it('retry starts a fresh worker and, when that one counts, clears the error', async () => {
+    BrokenWorker.mode = 'dies';
+    const { result } = renderHook(() => useDiskMapAggregates(smallTree));
+    await waitFor(() => expect(result.current.error).toBe('worker crashed'));
+
+    globalThis.Worker = FakeWorker; // the next worker is a working one
+    act(() => result.current.retry());
+    await waitFor(() => expect(result.current.result).not.toBeNull());
+    expect(result.current.error).toBeNull();
+    expect(result.current.computing).toBe(false);
   });
 });
 

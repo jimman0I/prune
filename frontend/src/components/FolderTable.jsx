@@ -58,7 +58,10 @@ function Count({ value }) {
   return <>{value.toLocaleString()}</>;
 }
 
-export function FolderTable({ folderRows: allRows, onDrillDown, onContextMenu, onVisibleRows, selectedPath = null, onSelect, filter = null, searchText = '' }) {
+export function FolderTable({
+  folderRows: allRows, onDrillDown, onContextMenu, onVisibleRows, selectedPath = null, onSelect, filter = null, searchText = '',
+  counting = false, countError = null, onRetryCount
+}) {
   const { t } = useLanguage();
   const [sort, setSort] = useState({ column: 'size', direction: 'desc' });
   // The counts themselves are computed off the main thread (see
@@ -88,6 +91,29 @@ export function FolderTable({ folderRows: allRows, onDrillDown, onContextMenu, o
   const grid = columns.map((c) => c.width).join(' ');
 
   if (rows.length === 0) {
+    // "Empty" is only said once the folder has actually been counted. Before
+    // that it is counting, and if counting failed it says why and offers to try
+    // again -- either way never a claim that the folder holds nothing, which is
+    // what this used to show above a treemap full of folders.
+    if (!filter?.active && countError) {
+      return (
+        <div className="glass-panel p-6 flex flex-wrap items-center justify-between gap-3" role="alert">
+          <span className="text-[13px] text-[color:var(--text-secondary)] select-text">{t('diskMapCountingV1.failed', countError)}</span>
+          {onRetryCount && (
+            <button type="button" className="btn-ghost px-3 py-1.5 rounded-md text-[12.5px] shrink-0" onClick={onRetryCount}>
+              {t('diskMapCountingV1.retry')}
+            </button>
+          )}
+        </div>
+      );
+    }
+    if (!filter?.active && counting) {
+      return (
+        <div className="glass-panel p-6 text-[13px] text-[color:var(--text-muted)]" role="status">
+          {t('diskMapCountingV1.counting')}
+        </div>
+      );
+    }
     return (
       <div className="glass-panel p-6 text-[13px] text-[color:var(--text-muted)]">
         {filter?.active ? t('diskMapV3.search.noMatches', searchText.trim()) : t('diskMap.folderTable.empty')}
