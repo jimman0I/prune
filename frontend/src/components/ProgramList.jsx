@@ -351,16 +351,21 @@ function ProgramRow({ program, iconSrc, checked, running, isNew, monitored = fal
         </span>
       )}
       {/* Marked, because how you remove one is genuinely different --
-          a Store app has no uninstaller to run. */}
+          a Store app has no uninstaller to run. Neutral, not blue: which
+          kind of install this is doesn't bear on the task of freeing
+          space, so it gets the same outline every other identifying
+          badge on this row uses, not an ambient accent that means
+          nothing here. */}
       {program.source === 'store' && (
-        <span className="text-[11px] font-mono uppercase tracking-wider px-1 py-px rounded bg-[color:var(--accent-blue)]/15 text-[color:var(--accent-blue)] border border-[color:var(--accent-blue)]/25 shrink-0">
+        <span className="text-[11px] font-mono uppercase tracking-wider px-1 py-px rounded bg-[color:var(--surface-hover)] text-[color:var(--text-secondary)] border border-[color:var(--border-subtle)] shrink-0">
           {t('applications.badges.store')}
         </span>
       )}
       {/* Which browser it belongs to is the identifying fact here -- the
-          same extension is often installed in two of them. */}
+          same extension is often installed in two of them. Neutral for
+          the same reason the Store badge above is. */}
       {program.source === 'extension' && (
-        <span className="text-[11px] font-mono uppercase tracking-wider px-1 py-px rounded bg-[color:var(--accent-purple)]/15 text-[color:var(--accent-purple)] border border-[color:var(--accent-purple)]/25 shrink-0">
+        <span className="text-[11px] font-mono uppercase tracking-wider px-1 py-px rounded bg-[color:var(--surface-hover)] text-[color:var(--text-secondary)] border border-[color:var(--border-subtle)] shrink-0">
           {program.browser}
         </span>
       )}
