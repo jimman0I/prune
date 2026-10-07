@@ -380,9 +380,13 @@ function CategorySection({ category, items, allItems = items, iconSrc, selected,
                 </span>
               )}
               {/* The wipe loses nothing; what it costs is time and, on an
-                  SSD, wear. A different fact gets a different badge. */}
+                  SSD, wear. A different fact gets a different badge --
+                  neutral like `imported` above, not the amber that means
+                  "this loses data": sharing that colour with the risky
+                  badge put the same visual urgency on a slow operation as
+                  on one that signs someone out of every site. */}
               {item.confirmEveryTime && (
-                <span className="text-[11px] font-mono uppercase tracking-wider px-1 rounded bg-[color:var(--warning-soft)] text-[color:var(--warning)] border border-[color:var(--warning)]/25 shrink-0">
+                <span className="text-[11px] font-mono uppercase tracking-wider px-1 rounded bg-[color:var(--surface-hover)] text-[color:var(--text-secondary)] border border-[color:var(--border-subtle)] shrink-0">
                   {t('deepClean.tree.longRunning')}
                 </span>
               )}

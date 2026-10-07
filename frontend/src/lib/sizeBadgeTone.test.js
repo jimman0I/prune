@@ -10,20 +10,21 @@ import { sizeBadgeTone } from './sizeBadgeTone.js';
  * existing entirely. A band is a statement about size; what colour that
  * is belongs to the component that draws it. */
 describe('sizeBadgeTone', () => {
-  it('is low under 100MB', () => {
+  it('is low under 250MB', () => {
     expect(sizeBadgeTone(50 * 1024 * 1024)).toBe('low');
+    expect(sizeBadgeTone(200 * 1024 * 1024)).toBe('low');
   });
-  it('is moderate from 100MB up to (not including) 1GB', () => {
-    expect(sizeBadgeTone(100 * 1024 * 1024)).toBe('moderate');
-    expect(sizeBadgeTone(500 * 1024 * 1024)).toBe('moderate');
+  it('is moderate from 250MB up to (not including) 2GB', () => {
+    expect(sizeBadgeTone(250 * 1024 * 1024)).toBe('moderate');
+    expect(sizeBadgeTone(1024 * 1024 * 1024)).toBe('moderate');
   });
-  it('is high from 1GB up to (not including) 5GB', () => {
-    expect(sizeBadgeTone(1024 * 1024 * 1024)).toBe('high');
-    expect(sizeBadgeTone(3 * 1024 * 1024 * 1024)).toBe('high');
+  it('is high from 2GB up to (not including) 15GB', () => {
+    expect(sizeBadgeTone(2 * 1024 * 1024 * 1024)).toBe('high');
+    expect(sizeBadgeTone(10 * 1024 * 1024 * 1024)).toBe('high');
   });
-  it('is peak at 5GB and above', () => {
-    expect(sizeBadgeTone(5 * 1024 * 1024 * 1024)).toBe('peak');
-    expect(sizeBadgeTone(40 * 1024 * 1024 * 1024)).toBe('peak');
+  it('is peak at 15GB and above', () => {
+    expect(sizeBadgeTone(15 * 1024 * 1024 * 1024)).toBe('peak');
+    expect(sizeBadgeTone(80 * 1024 * 1024 * 1024)).toBe('peak');
   });
   it('is low for null/undefined/zero (unknown size)', () => {
     // Many system components report no size at all. Unknown reads as the
