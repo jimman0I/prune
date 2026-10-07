@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState, memo } from 'react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { fetchDuplicates, quarantineDiskPath } from '../lib/api.js';
+import { fetchDuplicates, quarantineDiskPath, pickPath } from '../lib/api.js';
 import { selectForRemoval, KEEP } from '../lib/duplicateSelection.js';
 import { splitPath } from '../lib/pathDisplay.js';
 import { useToasts } from '../hooks/useToasts.jsx';
@@ -70,6 +70,8 @@ function Duplicates() {
   // Set by Stop, cleared by the next search: without it a stopped search left
   // an empty screen, which reads as "found nothing".
   const [stopped, setStopped] = useState(false);
+  const [picking, setPicking] = useState(false);
+  const [pickError, setPickError] = useState(null);
   const toasts = useToasts();
   const offerUndo = useQuarantineUndo();
   const queryClient = useQueryClient();
@@ -87,6 +89,22 @@ function Duplicates() {
 
   const groups = scan.data?.groups ?? [];
   const elapsed = useElapsedSeconds(scan.isFetching);
+
+  /** The same native folder chooser Forced Uninstall already uses -- the
+   * field otherwise asks for a full Windows path typed by hand, with
+   * nothing to autocomplete it or catch a typo before the scan runs. */
+  const browse = async () => {
+    setPickError(null);
+    setPicking(true);
+    try {
+      const { path } = await pickPath('folder');
+      if (path) setFolder(path);
+    } catch (err) {
+      setPickError(t('uninstallerV3.forced.pickFailed', err.message));
+    } finally {
+      setPicking(false);
+    }
+  };
 
   const toggle = (path) => {
     setSelected((prev) => {
@@ -173,6 +191,14 @@ function Duplicates() {
           aria-label={t('duplicates.folderInputAriaLabel')}
           className="flex-1 min-w-0 font-mono text-[12.5px] px-3 py-2 rounded-lg bg-[color:var(--surface-hover)] border border-[color:var(--border-subtle)] text-[color:var(--text-primary)] placeholder:text-[color:var(--text-muted)] focus:outline-none focus:border-[color:var(--accent-primary)]/50"
         />
+        <button
+          type="button"
+          onClick={browse}
+          disabled={picking}
+          className="btn-ghost px-3.5 py-2 rounded-lg text-[12.5px] font-medium shrink-0 disabled:opacity-50"
+        >
+          {t('uninstallerV3.forced.browse')}
+        </button>
         {scan.isFetching ? (
           <button
             className="btn-ghost px-3.5 py-2 rounded-lg text-[12.5px] font-medium shrink-0"
@@ -193,6 +219,8 @@ function Duplicates() {
       <p className="text-[11.5px] text-[color:var(--text-muted)] mb-6">
         {t('duplicates.compareNote')}
       </p>
+
+      {pickError && <p className="text-[12.5px] text-[color:var(--danger)] mb-4 select-text">{pickError}</p>}
 
       {scan.error && (
         <div className="glass-panel p-6 text-[13px] text-[color:var(--danger)] select-text">
