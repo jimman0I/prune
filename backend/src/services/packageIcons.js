@@ -2,7 +2,8 @@ import { readFile, readdir } from 'node:fs/promises';
 import { dirname, basename, extname, join } from 'node:path';
 import { getStoreApps } from './storeApps.js';
 import { getBrowserExtensions } from './browserExtensions.js';
-import { memoizeAsync } from '../lib/memoizeAsync.js';
+import { staleWhileRevalidate } from '../lib/staleWhileRevalidate.js';
+import { defaultSnapshotStore } from '../lib/snapshotStore.js';
 
 /** Icons for the rows that do not come from the registry.
  *
@@ -174,7 +175,14 @@ export async function getPackageIcons() {
 }
 
 const PACKAGE_ICONS_REUSE_MS = 60_000;
-const sharedLookup = memoizeAsync(resolvePackageIcons, { ttlMs: PACKAGE_ICONS_REUSE_MS });
+// Kept on disk between launches and shown at once, refreshed behind it: the
+// Store scan and the extension scan this waits on take seconds (see
+// staleWhileRevalidate.js). An empty map is never saved over a good one.
+const sharedLookup = staleWhileRevalidate(resolvePackageIcons, {
+  store: defaultSnapshotStore('icons-packages.json'),
+  ttlMs: PACKAGE_ICONS_REUSE_MS,
+  accept: (map) => map && Object.keys(map).length > 0
+});
 
 /** Testing seam -- the shared answer is process-wide. */
 export function clearPackageIconCache() {

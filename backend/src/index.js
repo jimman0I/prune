@@ -13,6 +13,7 @@ import { reconcileScheduledClean } from './services/scheduledCleanTask.js';
 import { repairStartWithWindows } from './services/startWithWindows.js';
 import { repairExplorerMenu } from './services/explorerMenu.js';
 import { getProgramSizes, refreshStaleSizes } from './services/programSizes.js';
+import { warmDecorations } from './services/decorationWarmup.js';
 import {
   HOUSEKEEPING_DELAY_MS, SCHEDULE_CATCHUP_DELAY_MS, runLater, scheduleHousekeeping
 } from './lib/startupTasks.js';
@@ -66,6 +67,10 @@ const housekeeping = [
   // The sign-in entry, if the person turned it on, follows Prune into a new
   // install folder. Never creates one.
   { name: 'start with Windows', run: () => repairStartWithWindows() },
+
+  // The Store list and the icon maps are made and saved, so the next launch shows
+  // them at once. Here, past the window's first load, never at start-up.
+  { name: 'icons and Store apps', run: () => warmDecorations() },
 
   // The right-click menu entries, if the person turned them on, follow Prune into
   // a new install folder and into the app's language. Never creates one.

@@ -118,6 +118,19 @@ see v1.0.1 below) are documented here.
   Defender flag it as `Behavior:Win32/WebBrowserCredAccess.E2`, and a test
   now guards against it.)
 - Fixed: program names with an apostrophe broke the leftover scan.
+- **Icons are there when the window opens.** Program and Store icons and the Store
+  list used to be worked out again on every launch (about 10 seconds here: a
+  Store scan that measures every package folder, a search for each program’s main
+  executable, a scan of browser extensions) and only once Applications was opened.
+  The finished results are now kept beside settings.json (`icons-programs.json`,
+  `icons-packages.json`, `store-apps.json`) and the first ask of a launch is
+  answered from them at once, 61 ms here instead of 10.6 s, while the real answer is
+  made behind them and swapped in (the screen asks once more 15 seconds after
+  launch, so a program installed since gets its icon without a restart). The very
+  first launch has nothing saved, so about 20 seconds after launch, once the
+  window’s first load is over and one at a time, Prune makes and saves them. A
+  failed or empty scan never overwrites a good saved list, and an app removed
+  through Prune cannot be brought back by a scan that began before the removal.
 - Fixed: a Store app you had just removed stayed in the Applications list, and the
   Uninstall button waited several seconds before doing anything. The list of Store
   apps was kept for the whole session and never told about the removal, and the

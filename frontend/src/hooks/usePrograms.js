@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import {
   fetchPrograms, fetchProgramIcons, fetchProgramSizes, fetchProgramVersions,
@@ -36,6 +36,11 @@ import { keys } from '../lib/queryClient.js';
 /** The decorating queries share this: a failure is not worth a retry
  * storm, and their absence is a supported state rather than an error. */
 const DECORATION = { retry: 1 };
+
+/** How long after the decorations first load the icons and Store apps are asked
+ * for again: long enough for the backend's refresh (the Store scan is about
+ * seven seconds) to have landed. */
+export const REFRESH_AFTER_LAUNCH_MS = 15_000;
 
 /** `loadDecorations`: false defers every query below that only Applications
  * itself can show -- icons, versions, install dates, extensions, and the
@@ -81,6 +86,21 @@ export function useProgramData({ loadDecorations = true } = {}) {
     staleTime: 0,
     ...DEFERRED
   });
+
+  // The backend answers the first ask of a launch from what it saved last time,
+  // so icons and Store apps are on screen at once, and makes the real answer
+  // behind it. This asks once more when that has had time to finish, so a program
+  // installed since the last launch gets its icon without a restart. Once only:
+  // after this the backend is serving its own fresh answer.
+  useEffect(() => {
+    if (!loadDecorations) return undefined;
+    const timer = setTimeout(() => {
+      queryClient.invalidateQueries({ queryKey: keys.programIcons });
+      queryClient.invalidateQueries({ queryKey: keys.packageIcons });
+      queryClient.invalidateQueries({ queryKey: keys.storeApps });
+    }, REFRESH_AFTER_LAUNCH_MS);
+    return () => clearTimeout(timer);
+  }, [loadDecorations, queryClient]);
 
   const programs = useMemo(() => [
     ...mergeInstallDates(

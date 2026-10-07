@@ -6,7 +6,8 @@ import { getFileTypeIcons } from './fileTypeIcons.js';
 import { typeIconExtension } from './iconTypeFallback.js';
 import { productCodeFrom, getMsiProductIcons } from './msiProductIcon.js';
 import { genericIconIds } from './genericIcon.js';
-import { memoizeAsync } from '../lib/memoizeAsync.js';
+import { staleWhileRevalidate } from '../lib/staleWhileRevalidate.js';
+import { defaultSnapshotStore } from '../lib/snapshotStore.js';
 
 /** Extraction is pure function of the file it reads, and those files don't
  * change while the app is open -- so this survives for the process's life
@@ -37,7 +38,16 @@ export async function getProgramIcons(programs) {
  * life of the process anyway; this only spares the program scan and the
  * executable search in front of them when the window asks again. */
 const ICONS_REUSE_MS = 60_000;
-const sharedLookup = memoizeAsync(() => resolveProgramIcons(null), { ttlMs: ICONS_REUSE_MS });
+/** The last launch's finished map is kept on disk and shown at once; this
+ * launch's is computed behind it (stale-while-revalidate). The search for each
+ * program's main executable and the MSI lookups behind the map cost several
+ * seconds, which is why icons used to appear a while after the window did. An
+ * empty map is never saved over a good one. */
+const sharedLookup = staleWhileRevalidate(() => resolveProgramIcons(null), {
+  store: defaultSnapshotStore('icons-programs.json'),
+  ttlMs: ICONS_REUSE_MS,
+  accept: (map) => map && Object.keys(map).length > 0
+});
 
 async function resolveProgramIcons(programs) {
   const list = programs ?? await listInstalledPrograms();
