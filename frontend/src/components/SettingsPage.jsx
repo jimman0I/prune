@@ -312,21 +312,17 @@ function SettingsPage({ onReportBug = null, onShowWhatsNew = null, tabRequest = 
           )}
 
           {tab === 'general' && (
-            <div className="flex flex-col gap-4">
+            <div className="glass-panel p-6 divide-y divide-[color:var(--border-subtle)]">
 
               {/* What Prune's own screens are shown in -- the installer may
                   already have picked one, or Windows' own display language
                   did the first time Prune ever started; see
                   backend/src/services/settings.js. Changing it here is
                   instant: LanguageContext.jsx reads this same setting. */}
-              <div className="glass-panel p-6">
-                <div className="flex items-center justify-between gap-4">
-                  <div className="min-w-0">
-                    <div className="text-[14px] font-medium text-[color:var(--text-primary)]">{t('settings.language.title')}</div>
-                    <p className="text-[12.5px] text-[color:var(--text-secondary)] mt-1 leading-relaxed max-w-[110ch]">
-                      {t('settings.language.description')}
-                    </p>
-                  </div>
+              <SettingRow
+                title={t('settings.language.title')}
+                description={t('settings.language.description')}
+                control={
                   <select
                     value={settings.language ?? 'en'}
                     onChange={(e) => save({ language: e.target.value })}
@@ -337,24 +333,15 @@ function SettingsPage({ onReportBug = null, onShowWhatsNew = null, tabRequest = 
                       <option key={lang.code} value={lang.code}>{lang.native}</option>
                     ))}
                   </select>
-                </div>
-              </div>
+                }
+              />
 
-              <div className="glass-panel p-6">
-                <div className="flex items-center justify-between gap-4">
-                  <div className="min-w-0">
-                    <div className="text-[14px] font-medium text-[color:var(--text-primary)]">{t('settings.minimizeToTray.title')}</div>
-                    <p className="text-[12.5px] text-[color:var(--text-secondary)] mt-1 leading-relaxed max-w-[110ch]">
-                      {t('settings.minimizeToTray.description')}
-                    </p>
-                  </div>
-                  <Toggle
-                    checked={settings.minimizeToTray}
-                    onChange={() => save({ minimizeToTray: !settings.minimizeToTray })}
-                    label={t('settings.minimizeToTray.title')}
-                  />
-                </div>
-              </div>
+              <SettingRow
+                title={t('settings.minimizeToTray.title')}
+                description={t('settings.minimizeToTray.description')}
+                checked={settings.minimizeToTray}
+                onChange={() => save({ minimizeToTray: !settings.minimizeToTray })}
+              />
 
               {/* Opt-in sign-in start (the per-user Run entry), right under the
                   tray switch its "minimised" choice follows. Reads the real
@@ -369,14 +356,10 @@ function SettingsPage({ onReportBug = null, onShowWhatsNew = null, tabRequest = 
               {/* How little room a drive may have left before Prune says so: on
                   the Dashboard, and with a notification while it sits in the
                   tray. Off, 5, 10 or 15 percent; 10 until changed. */}
-              <div className="glass-panel p-6">
-                <div className="flex items-center justify-between gap-4">
-                  <div className="min-w-0">
-                    <div className="text-[14px] font-medium text-[color:var(--text-primary)]">{t('dashboardQolV3.lowDisk.setting.title')}</div>
-                    <p className="text-[12.5px] text-[color:var(--text-secondary)] mt-1 leading-relaxed max-w-[110ch]">
-                      {t('dashboardQolV3.lowDisk.setting.description')}
-                    </p>
-                  </div>
+              <SettingRow
+                title={t('dashboardQolV3.lowDisk.setting.title')}
+                description={t('dashboardQolV3.lowDisk.setting.description')}
+                control={
                   <select
                     value={[0, 5, 10, 15].includes(settings.lowDiskWarning) ? settings.lowDiskWarning : 10}
                     onChange={(e) => save({ lowDiskWarning: Number(e.target.value) })}
@@ -388,24 +371,15 @@ function SettingsPage({ onReportBug = null, onShowWhatsNew = null, tabRequest = 
                       <option key={percent} value={percent}>{`${percent}%`}</option>
                     ))}
                   </select>
-                </div>
-              </div>
+                }
+              />
 
-              <div className="glass-panel p-6">
-                <div className="flex items-center justify-between gap-4">
-                  <div className="min-w-0">
-                    <div className="text-[14px] font-medium text-[color:var(--text-primary)]">{t('settings.lowPowerMode.title')}</div>
-                    <p className="text-[12.5px] text-[color:var(--text-secondary)] mt-1 leading-relaxed max-w-[110ch]">
-                      {t('settings.lowPowerMode.description')}
-                    </p>
-                  </div>
-                  <Toggle
-                    checked={settings.lowPowerMode === true}
-                    onChange={() => save({ lowPowerMode: !settings.lowPowerMode })}
-                    label={t('settings.lowPowerMode.title')}
-                  />
-                </div>
-              </div>
+              <SettingRow
+                title={t('settings.lowPowerMode.title')}
+                description={t('settings.lowPowerMode.description')}
+                checked={settings.lowPowerMode === true}
+                onChange={() => save({ lowPowerMode: !settings.lowPowerMode })}
+              />
 
               {/* Opt-in and honest about its costs; reads the flag Windows honours,
                   not a copy in settings.json. See RunAsAdminSetting.jsx. */}
@@ -414,10 +388,10 @@ function SettingsPage({ onReportBug = null, onShowWhatsNew = null, tabRequest = 
               {/* The one setting that lets anything leave the machine, so
                   it says exactly what, to whom and how often before it is
                   switched on -- and it is off until someone does. */}
-              <div className="glass-panel p-6">
+              <div className="py-3 first:pt-0 last:pb-0">
                 <div className="flex items-center justify-between gap-4">
                   <div className="min-w-0">
-                    <div className="text-[14px] font-medium text-[color:var(--text-primary)]">{t('settings.updateCheck.title')}</div>
+                    <div className="text-[13.5px] font-medium text-[color:var(--text-primary)]">{t('settings.updateCheck.title')}</div>
                     <p className="text-[12.5px] text-[color:var(--text-secondary)] mt-1 leading-relaxed max-w-[110ch]">
                       {t('settings.updateCheck.description')}
                     </p>
@@ -476,14 +450,12 @@ function SettingsPage({ onReportBug = null, onShowWhatsNew = null, tabRequest = 
                 )}
               </div>
 
-              <div className="glass-panel p-6">
-                <SettingRow
-                  title={t('settings.showFreeSpace.title')}
-                  description={t('settings.showFreeSpace.description')}
-                  checked={isOnlyIfTrue('showFreeSpaceOnMap')}
-                  onChange={() => save({ showFreeSpaceOnMap: !isOnlyIfTrue('showFreeSpaceOnMap') })}
-                />
-              </div>
+              <SettingRow
+                title={t('settings.showFreeSpace.title')}
+                description={t('settings.showFreeSpace.description')}
+                checked={isOnlyIfTrue('showFreeSpaceOnMap')}
+                onChange={() => save({ showFreeSpaceOnMap: !isOnlyIfTrue('showFreeSpaceOnMap') })}
+              />
 
               {/* Keeps the Disk Map's last two scans of each drive, so it opens
                   on one at once and can say what grew. On by default. */}

@@ -52,10 +52,10 @@ export default function RunAsAdminSetting() {
   if (supported && enabled !== elevatedNow) notes.push(<p key="next" className="text-[color:var(--text-secondary)]">{t('runAsAdminV3.nextStart')}</p>);
   if (enabled && data?.startsWithWindows) notes.push(<p key="startup" className="text-[color:var(--warning)] max-w-[110ch]">{t('runAsAdminV3.startupConflict')}</p>);
   return (
-    <div className="glass-panel p-6">
+    <div className="py-3 first:pt-0 last:pb-0">
       <div className="flex items-center justify-between gap-4">
         <div className="min-w-0">
-          <div className="text-[14px] font-medium text-[color:var(--text-primary)]">{title}</div>
+          <div className="text-[13.5px] font-medium text-[color:var(--text-primary)]">{title}</div>
           <p className="text-[12.5px] text-[color:var(--text-secondary)] mt-1 leading-relaxed max-w-[110ch]">
             {t('runAsAdminV3.description')}
           </p>
