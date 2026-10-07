@@ -229,15 +229,36 @@ function Duplicates() {
       )}
 
       {scan.isFetching && (
-        <div className="glass-panel p-8 text-center">
-          <div className="w-6 h-6 border-2 border-[color:var(--accent-primary)] border-t-transparent rounded-full animate-spin mx-auto mb-4" />
-          <p className="text-[13px] text-[color:var(--text-primary)]">{t('duplicates.reading', armed)}</p>
-          <p className="text-[12.5px] text-[color:var(--text-secondary)] mt-1.5 max-w-[52ch] mx-auto">
-            {t('duplicates.readingNote')}
-          </p>
-          <p className="text-[12.5px] text-[color:var(--text-primary)] mt-3 tabular-nums" data-testid="duplicates-elapsed">
-            {t('diskMap.scanProgress.elapsed', formatElapsed(elapsed))}
-          </p>
+        <div aria-busy="true" aria-live="polite">
+          <div className="text-center mb-5">
+            <p className="text-[13px] text-[color:var(--text-primary)]">{t('duplicates.reading', armed)}</p>
+            <p className="text-[12.5px] text-[color:var(--text-secondary)] mt-1.5 max-w-[52ch] mx-auto">
+              {t('duplicates.readingNote')}
+            </p>
+            <p className="text-[12.5px] text-[color:var(--text-primary)] mt-3 tabular-nums" data-testid="duplicates-elapsed">
+              {t('diskMap.scanProgress.elapsed', formatElapsed(elapsed))}
+            </p>
+          </div>
+          {/* The shape of the groups that are about to arrive -- a hash
+              scan has no way to know its total up front, so a real
+              progress bar would have to lie about one. This says "results
+              shaped like this are coming" instead of claiming a percent
+              that doesn't exist yet. */}
+          <div className="flex flex-col gap-3">
+            {[0, 1, 2].map((group) => (
+              <div key={group} className="glass-panel p-4 skeleton-row" style={{ animationDelay: `${group * 90}ms` }}>
+                <div className="flex items-baseline justify-between mb-2.5">
+                  <div className="h-[11px] rounded-full skeleton-shimmer" style={{ width: '38%' }} />
+                  <div className="h-[11px] rounded-full skeleton-shimmer" style={{ width: '18%' }} />
+                </div>
+                <div className="flex flex-col gap-2 mt-2">
+                  {[0, 1].map((file) => (
+                    <div key={file} className="h-[10px] rounded-full skeleton-shimmer" style={{ width: `${60 - file * 12}%` }} />
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
       )}
 
