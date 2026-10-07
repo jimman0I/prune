@@ -502,7 +502,10 @@ export const CATALOG = {
       emptying: 'Emptying…',
       empty: {
         heading: 'Nothing in quarantine.',
-        body: 'Anything an uninstall or a Deep Clean removes lands here first. It stays until you empty it, so a file taken by mistake is always recoverable.'
+        bodyBoth: 'Anything an uninstall or a Deep Clean removes lands here first. It stays until you empty it, so a file taken by mistake is always recoverable.',
+        bodyDeepCleanOnly: "Anything a Deep Clean removes lands here first -- it stays until you empty it. An uninstall's leftovers go straight to the Recycle Bin or are deleted for good; change that in Settings → Uninstall.",
+        bodyUninstallOnly: "Anything an uninstall's leftovers remove lands here first -- it stays until you empty it. Deep Clean deletes files immediately or sends them to the Recycle Bin; change that in Settings → Cleanup.",
+        bodyNeither: "Nothing lands here right now. Deep Clean deletes immediately and an uninstall's leftovers go straight to the Recycle Bin or are deleted for good -- set either of those back to Quarantine in Settings if you want a removal you can undo."
       },
       deleteConfirmPrompt: 'Delete forever?',
       restore: 'Restore',
@@ -1395,7 +1398,10 @@ export const CATALOG = {
       emptying: 'Maak leeg…',
       empty: {
         heading: 'Niks in karantyn nie.',
-        body: "Enigiets wat 'n deïnstallering of 'n Diep Skoonmaak verwyder, land eers hier. Dit bly totdat jy dit leegmaak, sodat 'n lêer wat per ongeluk gevat is altyd herstelbaar is."
+        bodyBoth: "Enigiets wat 'n deïnstallering of 'n Diep Skoonmaak verwyder, land eers hier. Dit bly totdat jy dit leegmaak, sodat 'n lêer wat per ongeluk gevat is altyd herstelbaar is.",
+        bodyDeepCleanOnly: "Enigiets wat 'n Diep Skoonmaak verwyder, beland hier eers -- dit bly totdat jy dit leegmaak. 'n Deïnstalleerder se oorblyfsels gaan reguit na die Asblik of word permanent verwyder; verander dit by Instellings → Deïnstalleerder.",
+        bodyUninstallOnly: "Enigiets wat 'n deïnstalleerder se oorblyfsels verwyder, beland hier eers -- dit bly totdat jy dit leegmaak. Diep Skoonmaak verwyder lêers onmiddellik of stuur dit na die Asblik; verander dit by Instellings → Skoonmaak.",
+        bodyNeither: "Niks beland tans hier nie. Diep Skoonmaak verwyder onmiddellik en 'n deïnstalleerder se oorblyfsels gaan reguit na die Asblik of word permanent verwyder -- stel enige een terug na Karantyn in Instellings as jy 'n verwydering wil kan ontdoen."
       },
       deleteConfirmPrompt: 'Vir altyd verwyder?',
       restore: 'Herstel',
@@ -2288,7 +2294,10 @@ export const CATALOG = {
       emptying: 'جارٍ الإفراغ…',
       empty: {
         heading: 'لا شيء في الحجر الصحي.',
-        body: 'كل ما يزيله إلغاء تثبيت أو تنظيف عميق يصل إلى هنا أولاً. يبقى حتى تفرغه، لذا فإن أي ملف أُخذ بالخطأ يمكن استعادته دائمًا.'
+        bodyBoth: 'كل ما يزيله إلغاء تثبيت أو تنظيف عميق يصل إلى هنا أولاً. يبقى حتى تفرغه، لذا فإن أي ملف أُخذ بالخطأ يمكن استعادته دائمًا.',
+        bodyDeepCleanOnly: "كل ما يزيله التنظيف العميق يصل إلى هنا أولًا — ويبقى حتى تفرّغه. أما مخلفات إلغاء التثبيت فتذهب مباشرة إلى سلة المحذوفات أو تُحذف نهائيًا؛ غيّر ذلك من الإعدادات ← إلغاء التثبيت.",
+        bodyUninstallOnly: "كل ما تزيله مخلفات إلغاء التثبيت يصل إلى هنا أولًا — ويبقى حتى تفرّغه. أما التنظيف العميق فيحذف الملفات فورًا أو يرسلها إلى سلة المحذوفات؛ غيّر ذلك من الإعدادات ← التنظيف.",
+        bodyNeither: "لا شيء يصل إلى هنا حاليًا. التنظيف العميق يحذف فورًا، ومخلفات إلغاء التثبيت تذهب مباشرة إلى سلة المحذوفات أو تُحذف نهائيًا — أعد أيًّا منهما إلى الحجر الصحي في الإعدادات إن أردت إزالة يمكن التراجع عنها."
       },
       deleteConfirmPrompt: 'حذف نهائيًا؟',
       restore: 'استعادة',
@@ -3181,7 +3190,10 @@ export const CATALOG = {
       emptying: 'Buidant…',
       empty: {
         heading: 'No hi ha res a la quarantena.',
-        body: "Tot el que una desinstal·lació o una Neteja profunda elimina, arriba aquí primer. Es queda fins que el buidis, així que un fitxer eliminat per error sempre es pot restaurar."
+        bodyBoth: "Tot el que una desinstal·lació o una Neteja profunda elimina, arriba aquí primer. Es queda fins que el buidis, així que un fitxer eliminat per error sempre es pot restaurar.",
+        bodyDeepCleanOnly: "Tot el que suprimeix una Neteja profunda arriba aquí primer -- es queda fins que ho buides. Les restes d'una desinstal·lació van directes a la Paperera o se suprimeixen definitivament; canvia-ho a Configuració → Desinstal·lació.",
+        bodyUninstallOnly: "Tot el que suprimeixen les restes d'una desinstal·lació arriba aquí primer -- es queda fins que ho buides. La Neteja profunda suprimeix fitxers a l'instant o els envia a la Paperera; canvia-ho a Configuració → Neteja.",
+        bodyNeither: "Ara mateix no hi arriba res. La Neteja profunda suprimeix a l'instant i les restes d'una desinstal·lació van directes a la Paperera o se suprimeixen definitivament -- torna qualsevol dels dos a Quarantena a Configuració si vols una supressió que es pugui desfer."
       },
       deleteConfirmPrompt: 'Eliminar per sempre?',
       restore: 'Restaura',
@@ -4074,7 +4086,10 @@ export const CATALOG = {
       emptying: 'Vyprazdňování…',
       empty: {
         heading: 'V karanténě nic není.',
-        body: "Vše, co odinstalace nebo Důkladné čištění odstraní, skončí nejdřív tady. Zůstává to tu, dokud karanténu nevyprázdníte, takže omylem odebraný soubor lze vždy obnovit."
+        bodyBoth: "Vše, co odinstalace nebo Důkladné čištění odstraní, skončí nejdřív tady. Zůstává to tu, dokud karanténu nevyprázdníte, takže omylem odebraný soubor lze vždy obnovit.",
+        bodyDeepCleanOnly: "Vše, co odstraní Důkladné čištění, sem nejprve doputuje -- zůstává to tu, dokud to nevyprázdníte. Zbytky po odinstalaci jdou rovnou do Koše nebo se trvale smažou; změňte to v Nastavení → Odinstalace.",
+        bodyUninstallOnly: "Vše, co odstraní zbytky po odinstalaci, sem nejprve doputuje -- zůstává to tu, dokud to nevyprázdníte. Důkladné čištění maže soubory ihned nebo je posílá do Koše; změňte to v Nastavení → Čištění.",
+        bodyNeither: "Právě teď sem nic nedoputuje. Důkladné čištění maže ihned a zbytky po odinstalaci jdou rovnou do Koše nebo se trvale smažou -- pokud chcete odstranění, které lze vrátit zpět, nastavte některé z toho zpět na karanténu v Nastavení."
       },
       deleteConfirmPrompt: 'Odstranit navždy?',
       restore: 'Obnovit',
@@ -4965,7 +4980,10 @@ export const CATALOG = {
       emptying: 'Gwacáu…',
       empty: {
         heading: "Dim byd yn y Cwarantin.",
-        body: "Mae unrhyw beth mae dadosod neu Lanhau Dwfn yn ei ddileu yn glanio yma gyntaf. Mae'n aros nes i chi ei wacáu, felly gellir adfer ffeil a gymerwyd trwy gamgymeriad bob amser."
+        bodyBoth: "Mae unrhyw beth mae dadosod neu Lanhau Dwfn yn ei ddileu yn glanio yma gyntaf. Mae'n aros nes i chi ei wacáu, felly gellir adfer ffeil a gymerwyd trwy gamgymeriad bob amser.",
+        bodyDeepCleanOnly: "Mae beth bynnag mae Glanhau Dwfn yn ei dynnu yn glanio yma gyntaf -- mae'n aros nes i chi ei wagio. Mae gweddillion dadosod yn mynd yn syth i'r Bin Ailgylchu neu'n cael eu dileu'n barhaol; newidiwch hynny yn Gosodiadau → Dadosod.",
+        bodyUninstallOnly: "Mae beth bynnag mae gweddillion dadosod yn ei dynnu yn glanio yma gyntaf -- mae'n aros nes i chi ei wagio. Mae Glanhau Dwfn yn dileu ffeiliau ar unwaith neu'n eu hanfon i'r Bin Ailgylchu; newidiwch hynny yn Gosodiadau → Glanhau.",
+        bodyNeither: "Does dim byd yn glanio yma ar hyn o bryd. Mae Glanhau Dwfn yn dileu ar unwaith ac mae gweddillion dadosod yn mynd yn syth i'r Bin Ailgylchu neu'n cael eu dileu'n barhaol -- newidiwch naill ai'n ôl i Grwantin yn y Gosodiadau os ydych am ddileu y gellir ei ddadwneud."
       },
       deleteConfirmPrompt: 'Dileu am byth?',
       restore: 'Adfer',
@@ -5858,7 +5876,10 @@ export const CATALOG = {
       emptying: 'Tømmer…',
       empty: {
         heading: 'Intet i karantæne.',
-        body: "Alt, hvad en afinstallation eller en Dybderensning fjerner, havner her først. Det bliver, indtil du tømmer det, så en fil taget ved en fejl altid kan gendannes."
+        bodyBoth: "Alt, hvad en afinstallation eller en Dybderensning fjerner, havner her først. Det bliver, indtil du tømmer det, så en fil taget ved en fejl altid kan gendannes.",
+        bodyDeepCleanOnly: "Alt, hvad en Dybderensning fjerner, havner her først -- det bliver, indtil du tømmer det. Rester fra en afinstallation går direkte til Papirkurven eller slettes permanent; skift det i Indstillinger → Afinstallation.",
+        bodyUninstallOnly: "Alt, hvad en afinstallations rester fjerner, havner her først -- det bliver, indtil du tømmer det. Dybderensning sletter filer med det samme eller sender dem til Papirkurven; skift det i Indstillinger → Oprydning.",
+        bodyNeither: "Lige nu havner intet her. Dybderensning sletter med det samme, og en afinstallations rester går direkte til Papirkurven eller slettes permanent -- sæt en af dem tilbage til Karantæne i Indstillinger, hvis du vil have en fjernelse, du kan fortryde."
       },
       deleteConfirmPrompt: 'Slet for altid?',
       restore: 'Gendan',
@@ -6751,7 +6772,10 @@ export const CATALOG = {
       emptying: 'Wird geleert…',
       empty: {
         heading: 'Nichts in der Quarantäne.',
-        body: "Alles, was eine Deinstallation oder eine Gründliche Bereinigung entfernt, landet zuerst hier. Es bleibt, bis du es leerst, sodass eine versehentlich entfernte Datei immer wiederherstellbar ist."
+        bodyBoth: "Alles, was eine Deinstallation oder eine Gründliche Bereinigung entfernt, landet zuerst hier. Es bleibt, bis du es leerst, sodass eine versehentlich entfernte Datei immer wiederherstellbar ist.",
+        bodyDeepCleanOnly: "Alles, was eine Gründliche Bereinigung entfernt, landet zuerst hier -- es bleibt, bis du es leerst. Überreste einer Deinstallation wandern direkt in den Papierkorb oder werden endgültig gelöscht; ändere das unter Einstellungen → Deinstallation.",
+        bodyUninstallOnly: "Alles, was Überreste einer Deinstallation entfernen, landet zuerst hier -- es bleibt, bis du es leerst. Die Gründliche Bereinigung löscht Dateien sofort oder schickt sie in den Papierkorb; ändere das unter Einstellungen → Bereinigung.",
+        bodyNeither: "Gerade landet hier nichts. Die Gründliche Bereinigung löscht sofort, und Überreste einer Deinstallation wandern direkt in den Papierkorb oder werden endgültig gelöscht -- stelle eins von beidem in den Einstellungen wieder auf Quarantäne, wenn du eine rückgängig machbare Entfernung willst."
       },
       deleteConfirmPrompt: 'Für immer löschen?',
       restore: 'Wiederherstellen',
@@ -7644,7 +7668,10 @@ export const CATALOG = {
       emptying: 'Άδειασμα…',
       empty: {
         heading: 'Τίποτα στην καραντίνα.',
-        body: "Οτιδήποτε αφαιρεί μια απεγκατάσταση ή ένας Βαθύς καθαρισμός καταλήγει πρώτα εδώ. Παραμένει μέχρι να το αδειάσετε, οπότε ένα αρχείο που πάρθηκε κατά λάθος είναι πάντα ανακτήσιμο."
+        bodyBoth: "Οτιδήποτε αφαιρεί μια απεγκατάσταση ή ένας Βαθύς καθαρισμός καταλήγει πρώτα εδώ. Παραμένει μέχρι να το αδειάσετε, οπότε ένα αρχείο που πάρθηκε κατά λάθος είναι πάντα ανακτήσιμο.",
+        bodyDeepCleanOnly: "Ό,τι αφαιρεί ένας Βαθύς καθαρισμός καταλήγει πρώτα εδώ -- παραμένει μέχρι να το αδειάσετε. Τα υπολείμματα μιας απεγκατάστασης πηγαίνουν κατευθείαν στον Κάδο ανακύκλωσης ή διαγράφονται μόνιμα· αλλάξτε το στις Ρυθμίσεις → Απεγκατάσταση.",
+        bodyUninstallOnly: "Ό,τι αφαιρούν τα υπολείμματα μιας απεγκατάστασης καταλήγει πρώτα εδώ -- παραμένει μέχρι να το αδειάσετε. Ο Βαθύς καθαρισμός διαγράφει αρχεία αμέσως ή τα στέλνει στον Κάδο ανακύκλωσης· αλλάξτε το στις Ρυθμίσεις → Καθαρισμός.",
+        bodyNeither: "Αυτήν τη στιγμή δεν καταλήγει τίποτα εδώ. Ο Βαθύς καθαρισμός διαγράφει αμέσως και τα υπολείμματα μιας απεγκατάστασης πηγαίνουν κατευθείαν στον Κάδο ανακύκλωσης ή διαγράφονται μόνιμα -- επαναφέρετε όποιο από τα δύο θέλετε σε Καραντίνα στις Ρυθμίσεις αν θέλετε μια αφαίρεση που μπορεί να αναιρεθεί."
       },
       deleteConfirmPrompt: 'Οριστική διαγραφή;',
       restore: 'Επαναφορά',
@@ -8537,7 +8564,10 @@ export const CATALOG = {
       emptying: 'Vaciando…',
       empty: {
         heading: 'Nada en la cuarentena.',
-        body: "Todo lo que elimina una desinstalación o una Limpieza profunda llega aquí primero. Permanece hasta que la vacíes, así que un archivo eliminado por error siempre se puede recuperar."
+        bodyBoth: "Todo lo que elimina una desinstalación o una Limpieza profunda llega aquí primero. Permanece hasta que la vacíes, así que un archivo eliminado por error siempre se puede recuperar.",
+        bodyDeepCleanOnly: "Todo lo que elimina una Limpieza profunda llega aquí primero -- se queda hasta que lo vacíes. Los restos de una desinstalación van directos a la Papelera de reciclaje o se eliminan de forma permanente; cámbialo en Configuración → Desinstalación.",
+        bodyUninstallOnly: "Todo lo que eliminan los restos de una desinstalación llega aquí primero -- se queda hasta que lo vacíes. La Limpieza profunda elimina archivos al instante o los envía a la Papelera de reciclaje; cámbialo en Configuración → Limpieza.",
+        bodyNeither: "Ahora mismo no llega nada aquí. La Limpieza profunda elimina al instante y los restos de una desinstalación van directos a la Papelera de reciclaje o se eliminan de forma permanente -- vuelve a poner cualquiera de los dos en Cuarentena en Configuración si quieres una eliminación que se pueda deshacer."
       },
       deleteConfirmPrompt: '¿Eliminar para siempre?',
       restore: 'Restaurar',
@@ -9430,7 +9460,10 @@ export const CATALOG = {
       emptying: 'Tühjendamine…',
       empty: {
         heading: 'Karantiinis pole midagi.',
-        body: "Kõik, mida desinstallimine või Süvapuhastus eemaldab, jõuab kõigepealt siia. See jääb, kuni tühjendad selle, nii et kogemata võetud fail on alati taastatav."
+        bodyBoth: "Kõik, mida desinstallimine või Süvapuhastus eemaldab, jõuab kõigepealt siia. See jääb, kuni tühjendad selle, nii et kogemata võetud fail on alati taastatav.",
+        bodyDeepCleanOnly: "Kõik, mida Süvapuhastus eemaldab, jõuab kõigepealt siia -- see jääb siia, kuni tühjendad. Desinstallimise jäägid lähevad otse prügikasti või kustutatakse jäädavalt; muuda seda jaotises Seaded → Desinstallimine.",
+        bodyUninstallOnly: "Kõik, mida desinstallimise jäägid eemaldavad, jõuab kõigepealt siia -- see jääb siia, kuni tühjendad. Süvapuhastus kustutab failid kohe või saadab need prügikasti; muuda seda jaotises Seaded → Puhastus.",
+        bodyNeither: "Praegu ei jõua siia midagi. Süvapuhastus kustutab kohe ja desinstallimise jäägid lähevad otse prügikasti või kustutatakse jäädavalt -- kui soovid tagasivõetavat eemaldamist, lülita üks neist Seadetes tagasi karantiinile."
       },
       deleteConfirmPrompt: 'Kustutada jäädavalt?',
       restore: 'Taasta',
@@ -10323,7 +10356,10 @@ export const CATALOG = {
       emptying: 'Tyhjennetään…',
       empty: {
         heading: 'Karanteeni on tyhjä.',
-        body: "Kaikki, minkä asennuksen poisto tai Syväpuhdistus poistaa, siirtyy ensin tänne. Se pysyy täällä, kunnes tyhjennät sen, joten vahingossa otettu tiedosto on aina palautettavissa."
+        bodyBoth: "Kaikki, minkä asennuksen poisto tai Syväpuhdistus poistaa, siirtyy ensin tänne. Se pysyy täällä, kunnes tyhjennät sen, joten vahingossa otettu tiedosto on aina palautettavissa.",
+        bodyDeepCleanOnly: "Kaikki, mitä Perusteellinen siivous poistaa, päätyy ensin tänne -- se säilyy, kunnes tyhjennät sen. Asennuksen poiston jäänteet menevät suoraan roskakoriin tai poistetaan pysyvästi; muuta se kohdassa Asetukset → Asennuksen poisto.",
+        bodyUninstallOnly: "Kaikki, mitä asennuksen poiston jäänteet poistavat, päätyy ensin tänne -- se säilyy, kunnes tyhjennät sen. Perusteellinen siivous poistaa tiedostot heti tai lähettää ne roskakoriin; muuta se kohdassa Asetukset → Siivous.",
+        bodyNeither: "Juuri nyt tänne ei päädy mitään. Perusteellinen siivous poistaa heti, ja asennuksen poiston jäänteet menevät suoraan roskakoriin tai poistetaan pysyvästi -- aseta jompikumpi takaisin karanteeniin Asetuksissa, jos haluat peruutettavissa olevan poiston."
       },
       deleteConfirmPrompt: 'Poistetaanko pysyvästi?',
       restore: 'Palauta',
@@ -11216,7 +11252,10 @@ export const CATALOG = {
       emptying: 'Vidage…',
       empty: {
         heading: 'Rien en quarantaine.',
-        body: "Tout ce qu'une désinstallation ou un Nettoyage approfondi supprime arrive ici en premier. Tout y reste jusqu'à ce que vous vidiez la quarantaine, donc un fichier supprimé par erreur est toujours récupérable."
+        bodyBoth: "Tout ce qu'une désinstallation ou un Nettoyage approfondi supprime arrive ici en premier. Tout y reste jusqu'à ce que vous vidiez la quarantaine, donc un fichier supprimé par erreur est toujours récupérable.",
+        bodyDeepCleanOnly: "Tout ce qu'un Nettoyage approfondi supprime arrive d'abord ici -- ça reste jusqu'à ce que vous videz. Les résidus d'une désinstallation vont directement à la Corbeille ou sont supprimés définitivement ; changez cela dans Paramètres → Désinstallation.",
+        bodyUninstallOnly: "Tout ce que les résidus d'une désinstallation suppriment arrive d'abord ici -- ça reste jusqu'à ce que vous videz. Le Nettoyage approfondi supprime les fichiers immédiatement ou les envoie à la Corbeille ; changez cela dans Paramètres → Nettoyage.",
+        bodyNeither: "Rien n'arrive ici pour l'instant. Le Nettoyage approfondi supprime immédiatement et les résidus d'une désinstallation vont directement à la Corbeille ou sont supprimés définitivement -- remettez l'un des deux en Quarantaine dans les Paramètres si vous voulez une suppression réversible."
       },
       deleteConfirmPrompt: 'Supprimer pour toujours ?',
       restore: 'Restaurer',
@@ -12109,7 +12148,10 @@ export const CATALOG = {
       emptying: 'מרוקן…',
       empty: {
         heading: 'אין כלום בהסגר.',
-        body: "כל מה שנמחק על ידי הסרה או ניקוי מעמיק מגיע לכאן קודם. זה נשאר עד שתרוקן אותו, כך שקובץ שנלקח בטעות תמיד ניתן לשחזור."
+        bodyBoth: "כל מה שנמחק על ידי הסרה או ניקוי מעמיק מגיע לכאן קודם. זה נשאר עד שתרוקן אותו, כך שקובץ שנלקח בטעות תמיד ניתן לשחזור.",
+        bodyDeepCleanOnly: "כל מה שניקוי מעמיק מסיר מגיע לכאן תחילה -- זה נשאר עד שתרוקן את ההסגר. שאריות של הסרת התקנה הולכות ישר לסל המיחזור או נמחקות לצמיתות; שנה זאת בהגדרות ← הסרת התקנה.",
+        bodyUninstallOnly: "כל מה ששאריות של הסרת התקנה מסירות מגיע לכאן תחילה -- זה נשאר עד שתרוקן את ההסגר. ניקוי מעמיק מוחק קבצים מיד או שולח אותם לסל המיחזור; שנה זאת בהגדרות ← ניקוי.",
+        bodyNeither: "שום דבר לא מגיע לכאן כרגע. ניקוי מעמיק מוחק מיד, ושאריות של הסרת התקנה הולכות ישר לסל המיחזור או נמחקות לצמיתות -- החזר את אחת מהן להסגר בהגדרות אם אתה רוצה הסרה שאפשר לבטל."
       },
       deleteConfirmPrompt: 'למחוק לצמיתות?',
       restore: 'שחזר',
@@ -13002,7 +13044,10 @@ export const CATALOG = {
       emptying: 'Ürítés…',
       empty: {
         heading: 'A karantén üres.',
-        body: "Minden, amit egy eltávolítás vagy egy Mélytisztítás eltávolít, először ide kerül. Ez itt marad, amíg ki nem üríted, így a tévedésből eltávolított fájl mindig visszaállítható."
+        bodyBoth: "Minden, amit egy eltávolítás vagy egy Mélytisztítás eltávolít, először ide kerül. Ez itt marad, amíg ki nem üríted, így a tévedésből eltávolított fájl mindig visszaállítható.",
+        bodyDeepCleanOnly: "Minden, amit az Alapos tisztítás eltávolít, előbb ide kerül -- itt marad, amíg ki nem ürítöd. Az eltávolítás maradványai egyenesen a Lomtárba kerülnek vagy véglegesen törlődnek; változtasd meg a Beállítások → Eltávolítás menüben.",
+        bodyUninstallOnly: "Minden, amit az eltávolítás maradványai eltávolítanak, előbb ide kerül -- itt marad, amíg ki nem ürítöd. Az Alapos tisztítás azonnal törli a fájlokat, vagy a Lomtárba küldi őket; változtasd meg a Beállítások → Tisztítás menüben.",
+        bodyNeither: "Jelenleg semmi sem kerül ide. Az Alapos tisztítás azonnal töröl, az eltávolítás maradványai pedig egyenesen a Lomtárba kerülnek vagy véglegesen törlődnek -- állítsd vissza valamelyiket Karanténra a Beállításokban, ha visszavonható eltávolítást szeretnél."
       },
       deleteConfirmPrompt: "Véglegesen törlöd?",
       restore: 'Visszaállítás',
@@ -13895,7 +13940,10 @@ export const CATALOG = {
       emptying: 'Mengosongkan…',
       empty: {
         heading: "Tidak ada apa pun di Karantina.",
-        body: "Semua yang dihapus oleh uninstal atau Pembersihan Mendalam masuk ke sini terlebih dahulu. Isinya tetap ada sampai kamu mengosongkannya, jadi file yang terhapus secara tidak sengaja selalu dapat dipulihkan."
+        bodyBoth: "Semua yang dihapus oleh uninstal atau Pembersihan Mendalam masuk ke sini terlebih dahulu. Isinya tetap ada sampai kamu mengosongkannya, jadi file yang terhapus secara tidak sengaja selalu dapat dipulihkan.",
+        bodyDeepCleanOnly: "Semua yang dihapus oleh Pembersihan Mendalam mendarat di sini dulu -- tetap ada sampai Anda mengosongkannya. Sisa dari pencopotan pemasangan langsung masuk ke Tempat Sampah atau dihapus permanen; ubah itu di Pengaturan → Pencopotan Pemasangan.",
+        bodyUninstallOnly: "Semua yang dihapus oleh sisa pencopotan pemasangan mendarat di sini dulu -- tetap ada sampai Anda mengosongkannya. Pembersihan Mendalam menghapus file langsung atau mengirimnya ke Tempat Sampah; ubah itu di Pengaturan → Pembersihan.",
+        bodyNeither: "Saat ini tidak ada yang mendarat di sini. Pembersihan Mendalam menghapus langsung dan sisa pencopotan pemasangan langsung masuk ke Tempat Sampah atau dihapus permanen -- kembalikan salah satunya ke Karantina di Pengaturan jika Anda ingin penghapusan yang bisa dibatalkan."
       },
       deleteConfirmPrompt: 'Hapus selamanya?',
       restore: 'Pulihkan',
@@ -14788,7 +14836,10 @@ export const CATALOG = {
       emptying: 'Tæmi…',
       empty: {
         heading: 'Ekkert í sóttkví.',
-        body: "Allt sem fjarlæging forrits eða Djúphreinsun fjarlægir lendir hér fyrst. Það helst þar til þú tæmir það, svo hægt er alltaf að endurheimta skrá sem var tekin fyrir mistök."
+        bodyBoth: "Allt sem fjarlæging forrits eða Djúphreinsun fjarlægir lendir hér fyrst. Það helst þar til þú tæmir það, svo hægt er alltaf að endurheimta skrá sem var tekin fyrir mistök.",
+        bodyDeepCleanOnly: "Allt sem Djúphreinsun fjarlægir lendir hér fyrst -- það er hér þar til þú tæmir það. Leifar af aföruninnsetningu fara beint í Ruslafötuna eða eyðast varanlega; breyttu því í Stillingar → Aföruninnsetning.",
+        bodyUninstallOnly: "Allt sem leifar aföruninnsetningar fjarlægja lendir hér fyrst -- það er hér þar til þú tæmir það. Djúphreinsun eyðir skrám samstundis eða sendir þær í Ruslafötuna; breyttu því í Stillingar → Hreinsun.",
+        bodyNeither: "Ekkert lendir hér núna. Djúphreinsun eyðir samstundis og leifar aföruninnsetningar fara beint í Ruslafötuna eða eyðast varanlega -- settu annað hvort aftur á Sóttkví í Stillingum ef þú vilt fjarlægingu sem hægt er að afturkalla."
       },
       deleteConfirmPrompt: 'Eyða að eilífu?',
       restore: 'Endurheimta',
@@ -15681,7 +15732,10 @@ export const CATALOG = {
       emptying: 'Svuotamento…',
       empty: {
         heading: 'Niente in quarantena.',
-        body: "Tutto ciò che una disinstallazione o una Pulizia approfondita rimuove finisce prima qui. Resta finché non lo svuoti, quindi un file rimosso per errore è sempre recuperabile."
+        bodyBoth: "Tutto ciò che una disinstallazione o una Pulizia approfondita rimuove finisce prima qui. Resta finché non lo svuoti, quindi un file rimosso per errore è sempre recuperabile.",
+        bodyDeepCleanOnly: "Tutto ciò che una Pulizia approfondita rimuove arriva prima qui -- resta finché non lo svuoti. I residui di una disinstallazione vanno direttamente nel Cestino o vengono eliminati definitivamente; cambialo in Impostazioni → Disinstallazione.",
+        bodyUninstallOnly: "Tutto ciò che i residui di una disinstallazione rimuovono arriva prima qui -- resta finché non lo svuoti. La Pulizia approfondita elimina i file immediatamente o li invia al Cestino; cambialo in Impostazioni → Pulizia.",
+        bodyNeither: "In questo momento non arriva nulla qui. La Pulizia approfondita elimina immediatamente e i residui di una disinstallazione vanno direttamente nel Cestino o vengono eliminati definitivamente -- riporta uno dei due in Quarantena nelle Impostazioni se vuoi una rimozione annullabile."
       },
       deleteConfirmPrompt: 'Eliminare per sempre?',
       restore: 'Ripristina',
@@ -16574,7 +16628,10 @@ export const CATALOG = {
       emptying: '空にしています…',
       empty: {
         heading: '隔離には何もありません。',
-        body: 'アンインストールやディープクリーンで削除されたものは、まずここに届きます。空にするまで残るため、誤って削除したファイルはいつでも復元できます。'
+        bodyBoth: 'アンインストールやディープクリーンで削除されたものは、まずここに届きます。空にするまで残るため、誤って削除したファイルはいつでも復元できます。',
+        bodyDeepCleanOnly: "ディープクリーンが削除するものは、まずここに入ります -- 空にするまで残ります。アンインストールの残骸は直接ごみ箱に移動するか完全に削除されます。設定 → アンインストール で変更できます。",
+        bodyUninstallOnly: "アンインストールの残骸が削除するものは、まずここに入ります -- 空にするまで残ります。ディープクリーンはファイルを即座に削除するか、ごみ箱に送ります。設定 → クリーンアップ で変更できます。",
+        bodyNeither: "現在、ここには何も入りません。ディープクリーンは即座に削除し、アンインストールの残骸は直接ごみ箱に移動するか完全に削除されます。元に戻せる削除にしたい場合は、設定でどちらかを隔離に戻してください。"
       },
       deleteConfirmPrompt: '完全に削除しますか?',
       restore: '復元',
@@ -17467,7 +17524,10 @@ export const CATALOG = {
       emptying: '비우는 중…',
       empty: {
         heading: '격리 항목이 없습니다.',
-        body: "제거 또는 딥 클린이 삭제하는 모든 항목은 먼저 여기에 도착합니다. 비울 때까지 유지되므로 실수로 제거된 파일은 언제든지 복원할 수 있습니다."
+        bodyBoth: "제거 또는 딥 클린이 삭제하는 모든 항목은 먼저 여기에 도착합니다. 비울 때까지 유지되므로 실수로 제거된 파일은 언제든지 복원할 수 있습니다.",
+        bodyDeepCleanOnly: "딥 클린이 제거하는 모든 항목이 먼저 여기로 들어옵니다 -- 비우기 전까지 보관됩니다. 제거 프로그램의 잔여물은 바로 휴지통으로 이동하거나 영구 삭제됩니다. 설정 → 제거 프로그램에서 변경할 수 있습니다.",
+        bodyUninstallOnly: "제거 프로그램의 잔여물이 제거하는 모든 항목이 먼저 여기로 들어옵니다 -- 비우기 전까지 보관됩니다. 딥 클린은 파일을 즉시 삭제하거나 휴지통으로 보냅니다. 설정 → 정리에서 변경할 수 있습니다.",
+        bodyNeither: "지금은 여기로 들어오는 항목이 없습니다. 딥 클린은 즉시 삭제하고, 제거 프로그램의 잔여물은 바로 휴지통으로 이동하거나 영구 삭제됩니다 -- 되돌릴 수 있는 제거를 원하면 설정에서 둘 중 하나를 격리로 다시 설정하세요."
       },
       deleteConfirmPrompt: '영구적으로 삭제하시겠습니까?',
       restore: '복원',
@@ -18360,7 +18420,10 @@ export const CATALOG = {
       emptying: 'Tuštinama…',
       empty: {
         heading: 'Karantine nieko nėra.',
-        body: "Viskas, ką pašalina programos šalinimas ar Gilus valymas, pirmiausia atsiduria čia. Tai lieka, kol jo neištuštinsite, todėl atsitiktinai paimtą failą visada galima atkurti."
+        bodyBoth: "Viskas, ką pašalina programos šalinimas ar Gilus valymas, pirmiausia atsiduria čia. Tai lieka, kol jo neištuštinsite, todėl atsitiktinai paimtą failą visada galima atkurti.",
+        bodyDeepCleanOnly: "Viskas, ką pašalina Nuodugnus valymas, pirmiausia atsiduria čia -- lieka čia, kol išvalysite. Pašalinimo liekanos iškart keliauja į šiukšlinę arba ištrinamos visam laikui; pakeiskite tai Nustatymuose → Pašalinimas.",
+        bodyUninstallOnly: "Viskas, ką pašalina pašalinimo liekanos, pirmiausia atsiduria čia -- lieka čia, kol išvalysite. Nuodugnus valymas ištrina failus iš karto arba siunčia juos į šiukšlinę; pakeiskite tai Nustatymuose → Valymas.",
+        bodyNeither: "Šiuo metu čia niekas nepatenka. Nuodugnus valymas ištrina iš karto, o pašalinimo liekanos iškart keliauja į šiukšlinę arba ištrinamos visam laikui -- jei norite pašalinimo, kurį galima atšaukti, Nustatymuose grąžinkite vieną iš jų į karantiną."
       },
       deleteConfirmPrompt: 'Ištrinti visam laikui?',
       restore: 'Atkurti',
@@ -19251,7 +19314,10 @@ export const CATALOG = {
       emptying: 'Mengosongkan…',
       empty: {
         heading: "Tiada apa-apa dalam Kuarantin.",
-        body: 'Segala yang dialih keluar oleh nyahpasang atau Pembersihan Mendalam mendarat di sini dahulu. Ia kekal sehingga anda mengosongkannya, jadi fail yang diambil secara tidak sengaja sentiasa boleh dipulihkan.'
+        bodyBoth: 'Segala yang dialih keluar oleh nyahpasang atau Pembersihan Mendalam mendarat di sini dahulu. Ia kekal sehingga anda mengosongkannya, jadi fail yang diambil secara tidak sengaja sentiasa boleh dipulihkan.',
+        bodyDeepCleanOnly: "Semua yang dialih keluar oleh Pembersihan Mendalam akan sampai ke sini dahulu -- ia kekal di sini sehingga anda mengosongkannya. Baki daripada nyahpasang terus ke Tong Kitar Semula atau dipadam secara kekal; ubah ini di Tetapan → Nyahpasang.",
+        bodyUninstallOnly: "Semua yang dialih keluar oleh baki nyahpasang akan sampai ke sini dahulu -- ia kekal di sini sehingga anda mengosongkannya. Pembersihan Mendalam memadam fail serta-merta atau menghantarnya ke Tong Kitar Semula; ubah ini di Tetapan → Pembersihan.",
+        bodyNeither: "Tiada apa-apa yang sampai ke sini sekarang. Pembersihan Mendalam memadam serta-merta dan baki nyahpasang terus ke Tong Kitar Semula atau dipadam secara kekal -- tetapkan semula salah satu kepada Kuarantin di Tetapan jika anda mahukan pembuangan yang boleh dibuat asal."
       },
       deleteConfirmPrompt: 'Padam selama-lamanya?',
       restore: 'Pulihkan',
@@ -20144,7 +20210,10 @@ export const CATALOG = {
       emptying: 'Tømmer…',
       empty: {
         heading: 'Ingenting i karantene.',
-        body: "Alt en avinstallering eller en Grundig opprydding fjerner, havner her først. Det blir liggende til du tømmer det, så en fil tatt ved en feil kan alltid gjenopprettes."
+        bodyBoth: "Alt en avinstallering eller en Grundig opprydding fjerner, havner her først. Det blir liggende til du tømmer det, så en fil tatt ved en feil kan alltid gjenopprettes.",
+        bodyDeepCleanOnly: "Alt Grundig opprydding fjerner havner her først -- det blir her til du tømmer det. Rester fra en avinstallering går rett til Papirkurven eller slettes permanent; endre det i Innstillinger → Avinstallering.",
+        bodyUninstallOnly: "Alt rester fra en avinstallering fjerner havner her først -- det blir her til du tømmer det. Grundig opprydding sletter filer med én gang eller sender dem til Papirkurven; endre det i Innstillinger → Opprydding.",
+        bodyNeither: "Akkurat nå havner ingenting her. Grundig opprydding sletter med én gang, og rester fra en avinstallering går rett til Papirkurven eller slettes permanent -- sett en av dem tilbake til Karantene i Innstillinger hvis du vil ha en fjerning du kan angre."
       },
       deleteConfirmPrompt: 'Slette for godt?',
       restore: 'Gjenopprett',
@@ -21035,7 +21104,10 @@ export const CATALOG = {
       emptying: 'Leegmaken…',
       empty: {
         heading: 'Niets in quarantaine.',
-        body: "Alles wat een verwijdering of een Grondige opschoning verwijdert, komt eerst hier terecht. Het blijft totdat je het leegmaakt, zodat een per ongeluk verwijderd bestand altijd herstelbaar is."
+        bodyBoth: "Alles wat een verwijdering of een Grondige opschoning verwijdert, komt eerst hier terecht. Het blijft totdat je het leegmaakt, zodat een per ongeluk verwijderd bestand altijd herstelbaar is.",
+        bodyDeepCleanOnly: "Alles wat een Grondige opschoning verwijdert, komt eerst hier terecht -- het blijft hier totdat je het leegt. Restanten van een verwijdering gaan rechtstreeks naar de Prullenbak of worden definitief verwijderd; wijzig dit bij Instellingen → Verwijderen.",
+        bodyUninstallOnly: "Alles wat restanten van een verwijdering verwijderen, komt eerst hier terecht -- het blijft hier totdat je het leegt. Grondige opschoning verwijdert bestanden direct of stuurt ze naar de Prullenbak; wijzig dit bij Instellingen → Opschonen.",
+        bodyNeither: "Op dit moment komt hier niets terecht. Grondige opschoning verwijdert direct en restanten van een verwijdering gaan rechtstreeks naar de Prullenbak of worden definitief verwijderd -- zet een van beide terug op Quarantaine bij Instellingen als je een ongedaan te maken verwijdering wilt."
       },
       deleteConfirmPrompt: 'Voor altijd verwijderen?',
       restore: 'Herstellen',
@@ -21926,7 +21998,10 @@ export const CATALOG = {
       emptying: 'Opróżnianie…',
       empty: {
         heading: 'W kwarantannie nic nie ma.',
-        body: "Wszystko, co zostaje usunięte podczas odinstalowania lub Głębokiego czyszczenia, trafia najpierw tutaj. Pozostaje tu, dopóki nie opróżnisz kwarantanny, więc plik zabrany przez pomyłkę zawsze można odzyskać."
+        bodyBoth: "Wszystko, co zostaje usunięte podczas odinstalowania lub Głębokiego czyszczenia, trafia najpierw tutaj. Pozostaje tu, dopóki nie opróżnisz kwarantanny, więc plik zabrany przez pomyłkę zawsze można odzyskać.",
+        bodyDeepCleanOnly: "Wszystko, co usuwa Głębokie czyszczenie, trafia najpierw tutaj -- zostaje, dopóki nie opróżnisz. Pozostałości po odinstalowaniu trafiają prosto do Kosza lub są usuwane na stałe; zmień to w Ustawieniach → Odinstalowywanie.",
+        bodyUninstallOnly: "Wszystko, co usuwają pozostałości po odinstalowaniu, trafia najpierw tutaj -- zostaje, dopóki nie opróżnisz. Głębokie czyszczenie usuwa pliki od razu lub wysyła je do Kosza; zmień to w Ustawieniach → Czyszczenie.",
+        bodyNeither: "W tej chwili nic tu nie trafia. Głębokie czyszczenie usuwa od razu, a pozostałości po odinstalowaniu trafiają prosto do Kosza lub są usuwane na stałe -- jeśli chcesz usuwania, które można cofnąć, przywróć jedno z nich do kwarantanny w Ustawieniach."
       },
       deleteConfirmPrompt: 'Usunąć na zawsze?',
       restore: 'Przywróć',
@@ -22817,7 +22892,10 @@ export const CATALOG = {
       emptying: 'تشول کیږي…',
       empty: {
         heading: 'په قرنطین کې هیڅ شی نشته.',
-        body: 'هر هغه څه چې لرې کول یا ژور پاکول یې لرې کوي، لومړی دلته راځي. دا پاتې کیږي تر څو یې تش نه کړئ، نو د تېروتنې له امله اخیستل شوی فایل تل بیرته ترلاسه کیدی شي.'
+        bodyBoth: 'هر هغه څه چې لرې کول یا ژور پاکول یې لرې کوي، لومړی دلته راځي. دا پاتې کیږي تر څو یې تش نه کړئ، نو د تېروتنې له امله اخیستل شوی فایل تل بیرته ترلاسه کیدی شي.',
+        bodyDeepCleanOnly: "هر هغه څه چې ژور پاکول یې لرې کوي، لومړی دلته راځي -- دلته پاتې کیږي تر هغه چې یې خالي کړئ. د لرې کولو پاتې شونې مستقیم د کثافاتو سطل ته ځي یا د تل لپاره ړنګیږي؛ دا په تنظیماتو کې بدل کړئ → لرې کول.",
+        bodyUninstallOnly: "هر هغه څه چې د لرې کولو پاتې شونې یې لرې کوي، لومړی دلته راځي -- دلته پاتې کیږي تر هغه چې یې خالي کړئ. ژور پاکول دوتنې سمدستي ړنګوي یا یې کثافاتو سطل ته لیږي؛ دا په تنظیماتو کې بدل کړئ → پاکول.",
+        bodyNeither: "اوس مهال دلته هیڅ شی نه راځي. ژور پاکول سمدستي ړنګوي او د لرې کولو پاتې شونې مستقیم د کثافاتو سطل ته ځي یا د تل لپاره ړنګیږي -- که تاسو داسې لرې کول غواړئ چې بیرته راوستل کیدی شي، نو په تنظیماتو کې یو یې بیا قرنطین ته وګرځوئ."
       },
       deleteConfirmPrompt: 'د تل لپاره ړنګ شي؟',
       restore: "بیرته راوستل",
@@ -23710,7 +23788,10 @@ export const CATALOG = {
       emptying: 'Esvaziando…',
       empty: {
         heading: 'Nada na quarentena.',
-        body: "Tudo o que uma desinstalação ou uma Limpeza profunda remove chega aqui primeiro. Permanece até que você o esvazie, então um arquivo pego por engano sempre pode ser recuperado."
+        bodyBoth: "Tudo o que uma desinstalação ou uma Limpeza profunda remove chega aqui primeiro. Permanece até que você o esvazie, então um arquivo pego por engano sempre pode ser recuperado.",
+        bodyDeepCleanOnly: "Tudo o que uma Limpeza profunda remove chega aqui primeiro -- fica até você esvaziar. Os resíduos de uma desinstalação vão direto para a Lixeira ou são excluídos permanentemente; mude isso em Configurações → Desinstalação.",
+        bodyUninstallOnly: "Tudo o que os resíduos de uma desinstalação removem chega aqui primeiro -- fica até você esvaziar. A Limpeza profunda exclui arquivos na hora ou os envia para a Lixeira; mude isso em Configurações → Limpeza.",
+        bodyNeither: "No momento, nada chega aqui. A Limpeza profunda exclui na hora e os resíduos de uma desinstalação vão direto para a Lixeira ou são excluídos permanentemente -- volte um dos dois para Quarentena em Configurações se quiser uma remoção que possa ser desfeita."
       },
       deleteConfirmPrompt: 'Excluir para sempre?',
       restore: 'Restaurar',
@@ -24601,7 +24682,10 @@ export const CATALOG = {
       emptying: 'A esvaziar…',
       empty: {
         heading: 'Nada na quarentena.',
-        body: "Tudo o que uma desinstalação ou uma Limpeza profunda remove chega aqui primeiro. Permanece até a esvaziar, pelo que um ficheiro apanhado por engano é sempre recuperável."
+        bodyBoth: "Tudo o que uma desinstalação ou uma Limpeza profunda remove chega aqui primeiro. Permanece até a esvaziar, pelo que um ficheiro apanhado por engano é sempre recuperável.",
+        bodyDeepCleanOnly: "Tudo o que uma Limpeza profunda remove chega aqui primeiro -- fica até esvaziar. Os resíduos de uma desinstalação vão diretamente para a Reciclagem ou são eliminados permanentemente; altere isso em Definições → Desinstalação.",
+        bodyUninstallOnly: "Tudo o que os resíduos de uma desinstalação removem chega aqui primeiro -- fica até esvaziar. A Limpeza profunda elimina ficheiros de imediato ou envia-os para a Reciclagem; altere isso em Definições → Limpeza.",
+        bodyNeither: "Neste momento nada chega aqui. A Limpeza profunda elimina de imediato e os resíduos de uma desinstalação vão diretamente para a Reciclagem ou são eliminados permanentemente -- reponha um dos dois em Quarentena nas Definições se quiser uma remoção reversível."
       },
       deleteConfirmPrompt: 'Eliminar para sempre?',
       restore: 'Restaurar',
@@ -25494,7 +25578,10 @@ export const CATALOG = {
       emptying: 'Se golește…',
       empty: {
         heading: 'Nimic în carantină.',
-        body: "Tot ce elimină o dezinstalare sau o Curățare profundă ajunge mai întâi aici. Rămâne aici până golești Carantina, deci un fișier luat din greșeală poate fi întotdeauna restaurat."
+        bodyBoth: "Tot ce elimină o dezinstalare sau o Curățare profundă ajunge mai întâi aici. Rămâne aici până golești Carantina, deci un fișier luat din greșeală poate fi întotdeauna restaurat.",
+        bodyDeepCleanOnly: "Tot ce elimină o Curățare profundă ajunge mai întâi aici -- rămâne aici până îl golești. Resturile unei dezinstalări merg direct în Coșul de reciclare sau sunt șterse definitiv; schimbă asta din Setări → Dezinstalare.",
+        bodyUninstallOnly: "Tot ce elimină resturile unei dezinstalări ajunge mai întâi aici -- rămâne aici până îl golești. Curățarea profundă șterge fișierele imediat sau le trimite în Coșul de reciclare; schimbă asta din Setări → Curățare.",
+        bodyNeither: "Chiar acum nimic nu ajunge aici. Curățarea profundă șterge imediat, iar resturile unei dezinstalări merg direct în Coșul de reciclare sau sunt șterse definitiv -- readu oricare dintre ele la Carantină din Setări dacă vrei o eliminare reversibilă."
       },
       deleteConfirmPrompt: 'Ștergi definitiv?',
       restore: 'Restaurează',
@@ -26387,7 +26474,10 @@ export const CATALOG = {
       emptying: 'Очистка…',
       empty: {
         heading: 'В карантине пусто.',
-        body: "Всё, что удаляется при удалении программы или Глубокой очистке, сначала попадает сюда. Это остаётся здесь, пока вы не очистите карантин, поэтому файл, взятый по ошибке, всегда можно восстановить."
+        bodyBoth: "Всё, что удаляется при удалении программы или Глубокой очистке, сначала попадает сюда. Это остаётся здесь, пока вы не очистите карантин, поэтому файл, взятый по ошибке, всегда можно восстановить.",
+        bodyDeepCleanOnly: "Всё, что удаляет Глубокая очистка, сначала попадает сюда -- остаётся здесь, пока вы не очистите. Остатки удаления программы отправляются прямо в корзину или удаляются навсегда; измените это в Настройках → Удаление программ.",
+        bodyUninstallOnly: "Всё, что удаляют остатки удаления программы, сначала попадает сюда -- остаётся здесь, пока вы не очистите. Глубокая очистка удаляет файлы сразу или отправляет их в корзину; измените это в Настройках → Очистка.",
+        bodyNeither: "Сейчас сюда ничего не попадает. Глубокая очистка удаляет сразу, а остатки удаления программы отправляются прямо в корзину или удаляются навсегда -- верните любой из этих вариантов на карантин в Настройках, если хотите удаление с возможностью отмены."
       },
       deleteConfirmPrompt: 'Удалить навсегда?',
       restore: 'Восстановить',
@@ -27278,7 +27368,10 @@ export const CATALOG = {
       emptying: 'Vyprázdňovanie…',
       empty: {
         heading: 'V karanténe nič nie je.',
-        body: "Všetko, čo odinštalovanie alebo Hĺbkové čistenie odstráni, skončí najprv tu. Zostáva tu, kým karanténu nevyprázdnite, takže omylom odstránený súbor je vždy možné obnoviť."
+        bodyBoth: "Všetko, čo odinštalovanie alebo Hĺbkové čistenie odstráni, skončí najprv tu. Zostáva tu, kým karanténu nevyprázdnite, takže omylom odstránený súbor je vždy možné obnoviť.",
+        bodyDeepCleanOnly: "Všetko, čo odstráni Dôkladné čistenie, sem najprv príde -- zostáva tu, kým to nevyprázdnite. Zvyšky po odinštalovaní idú rovno do Koša alebo sa natrvalo odstránia; zmeňte to v Nastaveniach → Odinštalovanie.",
+        bodyUninstallOnly: "Všetko, čo odstránia zvyšky po odinštalovaní, sem najprv príde -- zostáva tu, kým to nevyprázdnite. Dôkladné čistenie maže súbory okamžite alebo ich posiela do Koša; zmeňte to v Nastaveniach → Čistenie.",
+        bodyNeither: "Práve teraz sem nič nepríde. Dôkladné čistenie maže okamžite a zvyšky po odinštalovaní idú rovno do Koša alebo sa natrvalo odstránia -- ak chcete odstránenie, ktoré sa dá vrátiť späť, nastavte niektoré z nich späť na karanténu v Nastaveniach."
       },
       deleteConfirmPrompt: 'Odstrániť navždy?',
       restore: 'Obnoviť',
@@ -28169,7 +28262,10 @@ export const CATALOG = {
       emptying: 'Duke zbrazur…',
       empty: {
         heading: "Asgjë në Karantinë.",
-        body: 'Çdo gjë që heq një çinstalim ose një Pastrim i thellë, zbret këtu së pari. Mbetet derisa ta zbrazësh, kështu që një skedar i marrë gabimisht mund të rikthehet gjithmonë.'
+        bodyBoth: 'Çdo gjë që heq një çinstalim ose një Pastrim i thellë, zbret këtu së pari. Mbetet derisa ta zbrazësh, kështu që një skedar i marrë gabimisht mund të rikthehet gjithmonë.',
+        bodyDeepCleanOnly: "Çdo gjë që Pastrimi i thellë heq vjen këtu së pari -- qëndron këtu derisa ta zbrazësh. Mbetjet e çinstalimit shkojnë drejt e në Koshin e riciklimit ose fshihen përgjithmonë; ndryshoje te Cilësimet → Çinstalim.",
+        bodyUninstallOnly: "Çdo gjë që heqin mbetjet e çinstalimit vjen këtu së pari -- qëndron këtu derisa ta zbrazësh. Pastrimi i thellë fshin skedarët menjëherë ose i dërgon te Koshi i riciklimit; ndryshoje te Cilësimet → Pastrim.",
+        bodyNeither: "Tani për tani asgjë nuk vjen këtu. Pastrimi i thellë fshin menjëherë dhe mbetjet e çinstalimit shkojnë drejt e në Koshin e riciklimit ose fshihen përgjithmonë -- vendos njërën prej tyre përsëri në Karantinë te Cilësimet nëse do një heqje të kthyeshme."
       },
       deleteConfirmPrompt: 'Të fshihet përgjithmonë?',
       restore: 'Rikthe',
@@ -29062,7 +29158,10 @@ export const CATALOG = {
       emptying: 'Празни се…',
       empty: {
         heading: 'Нема ничега у карантину.',
-        body: "Све што деинсталација или Дубоко чишћење уклони, прво стиже овде. Остаје док га не испразните, тако да датотека узета грешком увек може да се врати."
+        bodyBoth: "Све што деинсталација или Дубоко чишћење уклони, прво стиже овде. Остаје док га не испразните, тако да датотека узета грешком увек може да се врати.",
+        bodyDeepCleanOnly: "Све што Дубоко чишћење уклони прво доспе овде -- остаје овде док га не испразните. Остаци деинсталације иду директно у Корпу за отпатке или се трајно бришу; то промените у Подешавањима → Деинсталација.",
+        bodyUninstallOnly: "Све што остаци деинсталације уклоне прво доспе овде -- остаје овде док га не испразните. Дубоко чишћење брише датотеке одмах или их шаље у Корпу за отпатке; то промените у Подешавањима → Чишћење.",
+        bodyNeither: "Тренутно овде ништа не доспева. Дубоко чишћење брише одмах, а остаци деинсталације иду директно у Корпу за отпатке или се трајно бришу -- вратите било које од ова два на Карантин у Подешавањима ако желите уклањање које се може поништити."
       },
       deleteConfirmPrompt: 'Обрисати заувек?',
       restore: 'Врати',
@@ -29953,7 +30052,10 @@ export const CATALOG = {
       emptying: 'Tömmer…',
       empty: {
         heading: 'Inget i karantän.',
-        body: "Allt som en avinstallation eller Grundlig rensning tar bort hamnar här först. Det ligger kvar tills du tömmer det, så en fil som tagits av misstag kan alltid återställas."
+        bodyBoth: "Allt som en avinstallation eller Grundlig rensning tar bort hamnar här först. Det ligger kvar tills du tömmer det, så en fil som tagits av misstag kan alltid återställas.",
+        bodyDeepCleanOnly: "Allt som en Grundlig städning tar bort hamnar här först -- det stannar här tills du tömmer det. Rester från en avinstallation går direkt till Papperskorgen eller tas bort permanent; ändra det i Inställningar → Avinstallation.",
+        bodyUninstallOnly: "Allt som rester från en avinstallation tar bort hamnar här först -- det stannar här tills du tömmer det. Grundlig städning tar bort filer direkt eller skickar dem till Papperskorgen; ändra det i Inställningar → Städning.",
+        bodyNeither: "Just nu hamnar inget här. Grundlig städning tar bort direkt och rester från en avinstallation går direkt till Papperskorgen eller tas bort permanent -- sätt tillbaka någon av dem till Karantän i Inställningar om du vill ha en borttagning du kan ångra."
       },
       deleteConfirmPrompt: 'Ta bort för alltid?',
       restore: 'Återställ',
@@ -30844,7 +30946,10 @@ export const CATALOG = {
       emptying: 'กำลังล้าง…',
       empty: {
         heading: 'ไม่มีอะไรในการกักกัน',
-        body: "สิ่งที่การถอนการติดตั้งหรือการทำความสะอาดเชิงลึกลบทิ้งจะมาที่นี่ก่อน มันจะอยู่ที่นี่จนกว่าคุณจะล้างมัน ดังนั้นไฟล์ที่ถูกนำออกโดยไม่ตั้งใจจึงสามารถกู้คืนได้เสมอ"
+        bodyBoth: "สิ่งที่การถอนการติดตั้งหรือการทำความสะอาดเชิงลึกลบทิ้งจะมาที่นี่ก่อน มันจะอยู่ที่นี่จนกว่าคุณจะล้างมัน ดังนั้นไฟล์ที่ถูกนำออกโดยไม่ตั้งใจจึงสามารถกู้คืนได้เสมอ",
+        bodyDeepCleanOnly: "ทุกอย่างที่การล้างเชิงลึกลบออกจะมาที่นี่ก่อน -- จะอยู่ที่นี่จนกว่าคุณจะล้าง ส่วนที่เหลือจากการถอนการติดตั้งจะไปที่ถังรีไซเคิลโดยตรงหรือถูกลบถาวร เปลี่ยนได้ที่ การตั้งค่า → การถอนการติดตั้ง",
+        bodyUninstallOnly: "ทุกอย่างที่ส่วนที่เหลือจากการถอนการติดตั้งลบออกจะมาที่นี่ก่อน -- จะอยู่ที่นี่จนกว่าคุณจะล้าง การล้างเชิงลึกจะลบไฟล์ทันทีหรือส่งไปที่ถังรีไซเคิล เปลี่ยนได้ที่ การตั้งค่า → การล้างข้อมูล",
+        bodyNeither: "ขณะนี้ไม่มีอะไรมาที่นี่ การล้างเชิงลึกลบทันที และส่วนที่เหลือจากการถอนการติดตั้งจะไปที่ถังรีไซเคิลโดยตรงหรือถูกลบถาวร -- ตั้งค่าอย่างใดอย่างหนึ่งกลับไปเป็นกักกันในการตั้งค่า หากคุณต้องการการลบที่สามารถยกเลิกได้"
       },
       deleteConfirmPrompt: 'ลบทิ้งถาวรใช่หรือไม่',
       restore: 'กู้คืน',
@@ -31737,7 +31842,10 @@ export const CATALOG = {
       emptying: 'Boşaltılıyor…',
       empty: {
         heading: 'Karantinada hiçbir şey yok.',
-        body: "Bir kaldırma veya bir Derin Temizlik ile silinen her şey önce buraya iner. Boşaltana kadar burada kalır, bu yüzden yanlışlıkla alınan bir dosya her zaman geri yüklenebilir."
+        bodyBoth: "Bir kaldırma veya bir Derin Temizlik ile silinen her şey önce buraya iner. Boşaltana kadar burada kalır, bu yüzden yanlışlıkla alınan bir dosya her zaman geri yüklenebilir.",
+        bodyDeepCleanOnly: "Derin Temizleme'nin kaldırdığı her şey önce buraya gelir -- siz boşaltana kadar burada kalır. Kaldırmanın artıkları doğrudan Geri Dönüşüm Kutusu'na gider ya da kalıcı olarak silinir; bunu Ayarlar → Kaldırma bölümünden değiştirin.",
+        bodyUninstallOnly: "Kaldırma artıklarının kaldırdığı her şey önce buraya gelir -- siz boşaltana kadar burada kalır. Derin Temizleme dosyaları hemen siler ya da Geri Dönüşüm Kutusu'na gönderir; bunu Ayarlar → Temizleme bölümünden değiştirin.",
+        bodyNeither: "Şu anda buraya hiçbir şey gelmiyor. Derin Temizleme hemen siler ve kaldırmanın artıkları doğrudan Geri Dönüşüm Kutusu'na gider ya da kalıcı olarak silinir -- geri alınabilir bir kaldırma istiyorsanız Ayarlar'dan ikisinden birini tekrar Karantina'ya ayarlayın."
       },
       deleteConfirmPrompt: 'Kalıcı olarak silinsin mi?',
       restore: 'Geri yükle',
@@ -32630,7 +32738,10 @@ export const CATALOG = {
       emptying: 'Очищення…',
       empty: {
         heading: 'У карантині порожньо.',
-        body: "Усе, що видаляється під час видалення програми чи Глибокого очищення, спершу потрапляє сюди. Воно залишається тут, доки ви не очистите карантин, тож файл, узятий помилково, завжди можна відновити."
+        bodyBoth: "Усе, що видаляється під час видалення програми чи Глибокого очищення, спершу потрапляє сюди. Воно залишається тут, доки ви не очистите карантин, тож файл, узятий помилково, завжди можна відновити.",
+        bodyDeepCleanOnly: "Усе, що видаляє Глибоке очищення, спочатку потрапляє сюди -- залишається тут, поки ви не очистите. Залишки видалення програми йдуть прямо в кошик або видаляються назавжди; змініть це в Налаштуваннях → Видалення програм.",
+        bodyUninstallOnly: "Усе, що видаляють залишки видалення програми, спочатку потрапляє сюди -- залишається тут, поки ви не очистите. Глибоке очищення видаляє файли одразу або надсилає їх у кошик; змініть це в Налаштуваннях → Очищення.",
+        bodyNeither: "Зараз сюди нічого не потрапляє. Глибоке очищення видаляє одразу, а залишки видалення програми йдуть прямо в кошик або видаляються назавжди -- поверніть будь-яке з цього до карантину в Налаштуваннях, якщо хочете видалення, яке можна скасувати."
       },
       deleteConfirmPrompt: 'Видалити назавжди?',
       restore: 'Відновити',
@@ -33521,7 +33632,10 @@ export const CATALOG = {
       emptying: 'Đang dọn sạch…',
       empty: {
         heading: 'Không có gì trong khu cách ly.',
-        body: "Bất cứ thứ gì mà việc gỡ cài đặt hoặc Dọn dẹp sâu xóa sẽ đến đây trước. Nó sẽ ở lại đây cho đến khi bạn dọn sạch, vì vậy một tệp bị xóa nhầm luôn có thể khôi phục được."
+        bodyBoth: "Bất cứ thứ gì mà việc gỡ cài đặt hoặc Dọn dẹp sâu xóa sẽ đến đây trước. Nó sẽ ở lại đây cho đến khi bạn dọn sạch, vì vậy một tệp bị xóa nhầm luôn có thể khôi phục được.",
+        bodyDeepCleanOnly: "Mọi thứ mà Dọn dẹp sâu loại bỏ đều đến đây trước -- nó ở lại đây cho đến khi bạn dọn trống. Phần còn sót lại của việc gỡ cài đặt đi thẳng vào Thùng rác hoặc bị xóa vĩnh viễn; thay đổi điều đó tại Cài đặt → Gỡ cài đặt.",
+        bodyUninstallOnly: "Mọi thứ mà phần còn sót lại của việc gỡ cài đặt loại bỏ đều đến đây trước -- nó ở lại đây cho đến khi bạn dọn trống. Dọn dẹp sâu xóa tệp ngay lập tức hoặc gửi chúng vào Thùng rác; thay đổi điều đó tại Cài đặt → Dọn dẹp.",
+        bodyNeither: "Hiện tại không có gì đến đây cả. Dọn dẹp sâu xóa ngay lập tức và phần còn sót lại của việc gỡ cài đặt đi thẳng vào Thùng rác hoặc bị xóa vĩnh viễn -- đặt lại một trong hai về Khu cách ly trong Cài đặt nếu bạn muốn việc xóa có thể hoàn tác."
       },
       deleteConfirmPrompt: 'Xóa vĩnh viễn?',
       restore: 'Khôi phục',
@@ -34414,7 +34528,10 @@ export const CATALOG = {
       emptying: '正在清空…',
       empty: {
         heading: '隔离区中没有内容。',
-        body: '卸载或深度清理移除的任何内容都会先到这里。它会一直保留，直到你清空隔离区，因此误删的文件始终可以恢复。'
+        bodyBoth: '卸载或深度清理移除的任何内容都会先到这里。它会一直保留，直到你清空隔离区，因此误删的文件始终可以恢复。',
+        bodyDeepCleanOnly: "深度清理删除的内容会先存放在这里——在你清空之前一直保留。卸载产生的残留会直接进入回收站或被永久删除；可在\"设置→卸载\"中更改。",
+        bodyUninstallOnly: "卸载残留删除的内容会先存放在这里——在你清空之前一直保留。深度清理会立即删除文件或将其发送到回收站；可在\"设置→清理\"中更改。",
+        bodyNeither: "目前没有任何内容会存放在这里。深度清理会立即删除，卸载残留也会直接进入回收站或被永久删除——如果你希望删除操作可以撤销，请在设置中把其中一项改回隔离区。"
       },
       deleteConfirmPrompt: '要永久删除吗？',
       restore: '恢复',
@@ -35307,7 +35424,10 @@ export const CATALOG = {
       emptying: '正在清空…',
       empty: {
         heading: '隔離區中沒有內容。',
-        body: '解除安裝或深度清理移除的任何內容都會先到這裡。它會一直保留，直到你清空隔離區，因此誤刪的檔案永遠可以還原。'
+        bodyBoth: '解除安裝或深度清理移除的任何內容都會先到這裡。它會一直保留，直到你清空隔離區，因此誤刪的檔案永遠可以還原。',
+        bodyDeepCleanOnly: "深度清理刪除的內容會先存放在這裡──在你清空之前一直保留。解除安裝產生的殘留會直接進入資源回收筒或被永久刪除；可在「設定→解除安裝」中變更。",
+        bodyUninstallOnly: "解除安裝殘留刪除的內容會先存放在這裡──在你清空之前一直保留。深度清理會立即刪除檔案或將其傳送到資源回收筒；可在「設定→清理」中變更。",
+        bodyNeither: "目前沒有任何內容會存放在這裡。深度清理會立即刪除，解除安裝殘留也會直接進入資源回收筒或被永久刪除──如果你希望刪除操作可以復原，請在設定中把其中一項改回隔離區。"
       },
       deleteConfirmPrompt: '要永久刪除嗎？',
       restore: '還原',

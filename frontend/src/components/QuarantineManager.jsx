@@ -1,6 +1,7 @@
 import { useEffect, useState, memo } from 'react';
 import Page from './Page.jsx';
-import { useQuarantine } from '../hooks/useSystemQueries.js';
+import { useQuarantine, useSettings } from '../hooks/useSystemQueries.js';
+import { quarantineEmptyBodyKey } from '../lib/quarantineEmptyState.js';
 import BackupManager from './BackupManager.jsx';
 import HistoryView from './HistoryView.jsx';
 import { useLanguage } from '../i18n/LanguageContext.jsx';
@@ -94,6 +95,7 @@ function QuarantineManager({ initialTab = 'quarantine', tabNonce = 0 }) {
   const [emptyArmed, restartEmptyArm] = useArmed(confirmEmpty ? 'empty' : null);
 
   const { batches, totals, loading, error, restore, remove, empty } = useQuarantine();
+  const { settings } = useSettings();
 
   // Which row is mid-action. Read off the mutations rather than tracked
   // separately, so it cannot disagree with what is actually running.
@@ -267,8 +269,13 @@ function QuarantineManager({ initialTab = 'quarantine', tabNonce = 0 }) {
           {batches.length === 0 ? (
             <div className="glass-panel p-10 text-center">
               <p className="text-[13.5px] text-[color:var(--text-secondary)]">{t('quarantine.empty.heading')}</p>
+              {/* Which sentence depends on whether a Deep Clean and an uninstall's
+                  leftovers actually land here right now -- see lib/quarantineEmptyState.js.
+                  The old text was a single unconditional "always recoverable", which
+                  was false the moment Delete now, Recycle Bin or a permanent leftover
+                  destination was chosen in Settings. */}
               <p className="text-[12.5px] text-[color:var(--text-muted)] mt-1.5">
-                {t('quarantine.empty.body')}
+                {t(quarantineEmptyBodyKey(settings))}
               </p>
             </div>
           ) : (
