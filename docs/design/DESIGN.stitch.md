@@ -32,7 +32,7 @@ Light
 
 ## 3. Typography Rules
 
-- **Display:** IBM Plex Serif, used only for page titles and the one question per screen. This is a deliberate departure: the stock rule bans serifs in software UIs and lists other faces as acceptable. The serif is the only editorial voice in an otherwise instrument-like interface and the product brief names it. **Decision needed** (see the review): keep, or move titles to Geist with weight-driven hierarchy.
+- **Display:** Geist at 600 weight, used for page titles and the one question per screen. Was IBM Plex Serif; compared live against this alternative and resolved in favour of Geist -- one typeface read as more of a piece with itself on a cockpit-dense instrument panel than a second, editorial voice did. See index.css's own notes on both the original departure and the reversal.
 - **UI body:** Geist, regular and medium, 12.5 to 13px for controls and rows, 11 to 11.5px for column headers and metadata. Nothing is below 11px.
 - **Data:** JetBrains Mono for every number, path, registry key and size; tabular figures.
 - **Banned here:** Inter, generic system fonts for UI, light weights at small sizes.

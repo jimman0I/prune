@@ -60,8 +60,9 @@ not a confetti animation.
 
 ## Visual System — Aurora Deck
 
-Obsidian ground (`#09090b`), a single functional accent in cyan (`#06b6d4`),
-Geist for UI, IBM Plex Serif for display headings, JetBrains Mono for anything
+Obsidian ground (`#09090b`), a single functional accent in cyan (`#18a9c2`),
+Geist for everything — UI and display headings alike, headings at 600 weight
+for the hierarchy a serif used to carry — and JetBrains Mono for anything
 the machine produced — sizes, paths, counts, registry keys.
 
 Chosen over the navy-and-coral build it replaced after rendering both. The
@@ -75,11 +76,17 @@ Two rules hold this together, and both were nearly broken by the change itself:
 - **The primary accent is never a status colour.** Cyan means "the thing you
   click". It previously also meant "running", "newest", and "largest", which
   put the action colour on four unrelated readouts at once. Running is green,
-  a browser badge is purple, and size is a severity ramp — neutral, blue,
-  amber, red.
-- **Ambient accents are never an interactive element's colour.** Purple and
-  blue exist for the backdrop and for categorical data — the disk map's file
-  types, the icon tiles. They never mark a control.
+  and size is a severity ramp — neutral climbing to amber, never a colour
+  this one's hue is shared with. Which kind of install a row is (Store, a
+  browser extension) doesn't bear on the task either, so those badges are
+  neutral now too.
+- **Ambient accents are never an interactive element's colour, and the
+  backdrop is never a second or third accent.** The aurora is the single
+  accent now, varying only in opacity — it used to mix violet and blue in
+  with it, which was a second and third accent that happened to live in the
+  background. Purple and blue still exist for genuinely categorical data —
+  the disk map's file types, the icon tiles — where a hue tells two
+  categories apart rather than decorating one.
 
 The NEW badge and the "n new in 7 days" count were the one exception to the
 first rule; both are neutral text/surface colour now, not the accent.
