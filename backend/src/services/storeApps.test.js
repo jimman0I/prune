@@ -177,7 +177,11 @@ describe('forgetStoreApp', () => {
       expect(query).toHaveBeenCalledTimes(1);
 
       vi.setSystemTime(Date.now() + 2000);
-      expect((await getStoreApps()).map((a) => a.name)).toEqual(['Beta']); // Alpha was removed elsewhere
+      // expired: the old list is shown at once while a new one is made behind it
+      expect((await getStoreApps()).map((a) => a.name)).toEqual(['Alpha', 'Beta']);
+      await vi.waitFor(async () => {
+        expect((await getStoreApps()).map((a) => a.name)).toEqual(['Beta']); // Alpha was removed elsewhere
+      });
       expect(query).toHaveBeenCalledTimes(2);
     } finally {
       vi.useRealTimers();

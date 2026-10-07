@@ -1,5 +1,6 @@
 import { runPowerShellJson } from './powershell.js';
 import { isValidPackageFullName } from './removeStoreApp.js';
+import { defaultSnapshotStore } from '../lib/snapshotStore.js';
 
 /** Store apps live in a different world from the uninstall registry, and
  * programs.js deliberately does not read them -- Get-AppxPackage is a
@@ -176,18 +177,71 @@ export async function getStoreApps({ fresh = false } = {}) {
   // but not forever. An app removed outside Prune (Windows Settings, the
   // Store itself) never reached forgetStoreApp, and a list that was only ever
   // read once kept showing it until the next launch.
+  //
+  // The finished list is also kept on disk, and the first ask of a launch is
+  // answered from it at once while a real scan runs behind it: the scan walks
+  // every package folder for its size, about seven seconds here, and the icons
+  // and the Applications screen both waited on it.
   if (!fresh) {
-    if (cached && Date.now() - cachedAt > STORE_LIST_TTL_MS) cached = null;
-    if (!cached) {
+    if (cached && Date.now() - cachedAt > STORE_LIST_TTL_MS) {
+      // Expired: keep showing the old list while a new one is made.
       cachedAt = Date.now();
-      cached = resolveStoreApps().catch((error) => {
-        cached = null;
-        throw error;
-      });
+      refreshStoreList();
+    }
+    if (!cached) {
+      const saved = snapshotChecked ? null : await readSnapshot();
+      snapshotChecked = true;
+      if (saved && !cached) {
+        cachedAt = Date.now();
+        cached = Promise.resolve(saved);
+        refreshStoreList();
+        return cached;
+      }
+      if (!cached) {
+        cachedAt = Date.now();
+        cached = resolveStoreApps().then((list) => {
+          if (list.length > 0) snapshot.write(list).catch(() => {});
+          return list;
+        }).catch((error) => {
+          cached = null;
+          throw error;
+        });
+      }
     }
     return cached;
   }
   return resolveStoreApps();
+}
+
+const snapshot = defaultSnapshotStore('store-apps.json');
+let snapshotChecked = false;
+
+async function readSnapshot() {
+  const saved = await snapshot.read().catch(() => null);
+  return Array.isArray(saved) && saved.length > 0 ? saved : null;
+}
+
+/** Packages removed through Prune, and when. A background scan that began before
+ * a removal can still report the package; this keeps it from coming back. */
+const removedAt = new Map();
+let refreshing = false;
+
+/** Re-scans in the background and swaps the answer in when it arrives. A scan
+ * that failed (it reports that as an empty list) never replaces a good list. */
+function refreshStoreList() {
+  if (refreshing) return;
+  refreshing = true;
+  const startedAt = Date.now();
+  resolveStoreApps()
+    .then((list) => {
+      const live = list.filter((entry) => !(removedAt.get(entry.packageFullName) > startedAt - 1));
+      if (live.length === 0) return;
+      cached = Promise.resolve(live);
+      cachedAt = Date.now();
+      snapshot.write(live).catch(() => {});
+    })
+    .catch(() => { /* the list on screen stays */ })
+    .finally(() => { refreshing = false; });
 }
 
 /** How long the measured list is trusted. The folders it measured do not
@@ -201,6 +255,8 @@ let cachedAt = 0;
 /** Testing seam -- the cache is process-wide. */
 export function clearStoreAppCache() {
   cached = null;
+  snapshotChecked = true; // a test clearing the cache wants a real scan, not the disk
+  removedAt.clear();
 }
 
 /** Takes one package out of the cached list after it was removed.
@@ -212,8 +268,13 @@ export function clearStoreAppCache() {
  * copy. Filtering the cache keeps every other row's measured size and costs
  * nothing, where clearing it would re-measure all of them. */
 export function forgetStoreApp(packageFullName) {
+  removedAt.set(packageFullName, Date.now());
   if (!cached) return;
-  cached = cached.then((list) => list.filter((entry) => entry.packageFullName !== packageFullName));
+  cached = cached.then((list) => {
+    const kept = list.filter((entry) => entry.packageFullName !== packageFullName);
+    if (kept.length > 0) snapshot.write(kept).catch(() => {});
+    return kept;
+  });
 }
 
 /** One installed package, or null: the identity and the NonRemovable flag
