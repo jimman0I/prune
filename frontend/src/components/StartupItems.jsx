@@ -1,6 +1,7 @@
 import { useCallback, useMemo, useState, memo } from 'react';
 import { groupStartupItems, startupCounts } from '../lib/groupStartupItems.js';
-import { useStartupItems, useStartupToggle } from '../hooks/useSystemQueries.js';
+import { useStartupItems, useStartupToggle, useStartupRemove } from '../hooks/useSystemQueries.js';
+import { startupRemovalTarget } from '../lib/startupRemovalTarget.js';
 import TableSkeleton from './TableSkeleton.jsx';
 import { tileLetter } from '../lib/iconTileLetter.js';
 import { tileColor, TILE_INK } from '../lib/programTileColor.js';
@@ -249,10 +250,11 @@ function LaunchPath({ item, open, onToggle }) {
   );
 }
 
-function StartupRow({ item, iconSrc, pending, error, onToggle, hideNote = false }) {
+function StartupRow({ item, iconSrc, pending, error, onToggle, onRemove, removing = false, hideNote = false }) {
   const { t } = useLanguage();
   const toasts = useToasts();
   const [pathOpen, setPathOpen] = useState(false);
+  const removable = startupRemovalTarget(item) !== null;
   const copyPath = () => Promise.resolve()
     .then(() => navigator.clipboard.writeText(item.command))
     .then(() => toasts.info(t('startup.pathCopied')))
@@ -280,6 +282,21 @@ function StartupRow({ item, iconSrc, pending, error, onToggle, hideNote = false 
         )}
         {error && (
           <div className="text-[11px] text-[color:var(--danger)] leading-snug mt-0.5 select-text">{error}</div>
+        )}
+        {/* The switch disables; it cannot clean up an entry whose target
+            is already gone -- there is nothing left to re-enable. This is
+            the one place on the row that actually removes the Run value
+            or the shortcut, through Quarantine like everywhere else, so
+            it carries Undo on the toast it raises. */}
+        {removable && (
+          <button
+            type="button"
+            onClick={() => onRemove(item)}
+            disabled={removing}
+            className="mt-0.5 text-[11px] font-medium text-[color:var(--danger)] hover:underline disabled:opacity-50 disabled:no-underline"
+          >
+            {removing ? t('startup.remove.removing') : t('startup.remove.button')}
+          </button>
         )}
       </div>
 
@@ -351,6 +368,11 @@ function StartupItems() {
     });
     toggle.mutate({ id: item.id, enabled: !item.enabled });
   }, [toggle]);
+
+  const { mutation: remove, pendingIds: removingIds } = useStartupRemove();
+  const onRemove = useCallback((item) => {
+    remove.mutate({ id: item.id, item });
+  }, [remove]);
 
   // Which rows are mid-flight, from the hook's own set.
   //
@@ -476,6 +498,8 @@ function StartupItems() {
                       error={rowErrors[item.id]}
                       hideNote={Boolean(sharedNote(group))}
                       onToggle={onToggle}
+                      onRemove={onRemove}
+                      removing={removingIds.has(item.id)}
                     />
                   ))}
                 </div>

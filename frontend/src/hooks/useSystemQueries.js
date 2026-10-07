@@ -1,7 +1,7 @@
 import { useCallback, useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import {
-  fetchStartupItems, fetchStartupIcons, setStartupItemEnabled,
+  fetchStartupItems, fetchStartupIcons, setStartupItemEnabled, removeQuarantined,
   fetchQuarantineBatches, restoreQuarantineBatch, deleteQuarantineBatch, emptyQuarantine,
   fetchSettings, updateSettings, fetchUpdateCheck,
   fetchDiskSpace, fetchDiskHealth, fetchInstallTraces, fetchBackups, restoreBackup, deleteBackup,
@@ -9,6 +9,9 @@ import {
 } from '../lib/api.js';
 import { keys } from '../lib/queryClient.js';
 import { applyEnabled, toggleOutcome, enabledStateOf } from '../lib/startupToggleState.js';
+import { startupRemovalTarget } from '../lib/startupRemovalTarget.js';
+import { useQuarantineUndo } from './useQuarantineUndo.js';
+import { useLanguage } from '../i18n/LanguageContext.jsx';
 
 /** The screens whose data is one request and a couple of actions.
  *
@@ -124,6 +127,47 @@ export function useStartupToggle({ onProblem } = {}) {
        * now. */
       queryClient.invalidateQueries({ queryKey: keys.startupItems });
       markPending(variables.id, false);
+    }
+  });
+
+  return { mutation, pendingIds };
+}
+
+/** Removing one dead startup entry -- a Run value or Startup-folder
+ * shortcut whose target is confirmed gone (see startupRemovalTarget.js).
+ * Routed through the same quarantine the rest of the app uses for
+ * removal, not a raw delete: the row disappears, but the toast carries
+ * Undo exactly like every other quarantine move, and the batch sits in
+ * Quarantine until it ages out like any other.
+ *
+ * Not optimistic, unlike the toggle above: a toggle is a guess about a
+ * state Windows already has a record for, worth showing immediately. A
+ * removal has no "probably still right" interpretation to show early --
+ * the row either goes or it doesn't -- so this waits for the real
+ * answer. */
+export function useStartupRemove() {
+  const { t } = useLanguage();
+  const queryClient = useQueryClient();
+  const offerUndo = useQuarantineUndo();
+  const [pendingIds, setPendingIds] = useState(() => new Set());
+  const markPending = (id, busy) => setPendingIds((current) => {
+    const next = new Set(current);
+    if (busy) next.add(id); else next.delete(id);
+    return next;
+  });
+
+  const mutation = useMutation({
+    mutationFn: async ({ id, item }) => {
+      const target = startupRemovalTarget(item);
+      if (!target) throw new Error('This entry cannot be removed from here.');
+      markPending(id, true);
+      return removeQuarantined({ programName: item.name, ...target, destination: 'quarantine' });
+    },
+    onSettled: (result, error, variables) => {
+      markPending(variables.id, false);
+      queryClient.invalidateQueries({ queryKey: keys.startupItems });
+      if (error) return;
+      offerUndo(t('startup.remove.toast', variables.item.name), [result.batchDir]);
     }
   });
 

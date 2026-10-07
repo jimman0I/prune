@@ -565,7 +565,12 @@ export const CATALOG = {
       },
       groupEnabledOf: (enabledCount, total) => `${enabledCount} of ${total} enabled`,
       groupAdminNote: 'Changing these asks for administrator',
-      footerNote: "Switching an entry off records the decision in StartupApproved, the same place Windows' own Startup Apps settings and Task Manager read and write. Nothing is deleted: the Run value or the shortcut stays where it is, so the change is reversible from here or from either of those."
+      footerNote: "Switching an entry off records the decision in StartupApproved, the same place Windows' own Startup Apps settings and Task Manager read and write. Nothing is deleted: the Run value or the shortcut stays where it is, so the change is reversible from here or from either of those.",
+      remove: {
+        button: "Remove",
+        removing: "Removing…",
+        toast: (name) => `Removed ${name}.`
+      }
     },
     duplicates: {
       title: 'Duplicate files',
@@ -1464,7 +1469,12 @@ export const CATALOG = {
       },
       groupEnabledOf: (enabledCount, total) => `${enabledCount} van ${total} geaktiveer`,
       groupAdminNote: 'Om dit te verander vra administrateurregte',
-      footerNote: "Om \'n inskrywing af te skakel, teken die besluit in StartupApproved aan, dieselfde plek waar Windows se eie Opstartprogramme-instellings en Taakbestuurder lees en skryf. Niks word verwyder nie: die Run-waarde of kortpad bly presies waar dit is, sodat die verandering van hier of enige van daardie plekke omkeerbaar is."
+      footerNote: "Om \'n inskrywing af te skakel, teken die besluit in StartupApproved aan, dieselfde plek waar Windows se eie Opstartprogramme-instellings en Taakbestuurder lees en skryf. Niks word verwyder nie: die Run-waarde of kortpad bly presies waar dit is, sodat die verandering van hier of enige van daardie plekke omkeerbaar is.",
+      remove: {
+        button: "Verwyder",
+        removing: "Verwyder tans…",
+        toast: (name) => `${name} is verwyder.`
+      }
     },
     duplicates: {
       title: 'Duplikaatlêers',
@@ -2363,7 +2373,12 @@ export const CATALOG = {
       },
       groupEnabledOf: (enabledCount, total) => `${enabledCount} من ${total} مفعّل`,
       groupAdminNote: 'تغيير هذه يطلب صلاحيات المسؤول',
-      footerNote: 'إيقاف تشغيل إدخال ما يسجل القرار في StartupApproved، وهو نفس المكان الذي تقرأه وتكتب فيه إعدادات تطبيقات بدء التشغيل الخاصة بـ Windows ومدير المهام. لا يُحذف شيء: تبقى قيمة Run أو الاختصار كما هي، لذا فإن التغيير قابل للتراجع من هنا أو من أي منهما.'
+      footerNote: 'إيقاف تشغيل إدخال ما يسجل القرار في StartupApproved، وهو نفس المكان الذي تقرأه وتكتب فيه إعدادات تطبيقات بدء التشغيل الخاصة بـ Windows ومدير المهام. لا يُحذف شيء: تبقى قيمة Run أو الاختصار كما هي، لذا فإن التغيير قابل للتراجع من هنا أو من أي منهما.',
+      remove: {
+        button: "إزالة",
+        removing: "جارٍ الإزالة…",
+        toast: (name) => `تمت إزالة ${name}.`
+      }
     },
     duplicates: {
       title: 'الملفات المكررة',
@@ -3262,7 +3277,12 @@ export const CATALOG = {
       },
       groupEnabledOf: (enabledCount, total) => `${enabledCount} de ${total} activades`,
       groupAdminNote: 'Canviar-les demana permisos d\'administrador',
-      footerNote: "Desactivar una entrada enregistra la decisió a StartupApproved, el mateix lloc on la configuració d'Aplicacions d'inici i el Gestor de tasques del Windows llegeixen i escriuen. No s'elimina res: el valor Run o la drecera es queda exactament on és, així que el canvi és reversible des d'aquí o des de qualsevol d'aquests."
+      footerNote: "Desactivar una entrada enregistra la decisió a StartupApproved, el mateix lloc on la configuració d'Aplicacions d'inici i el Gestor de tasques del Windows llegeixen i escriuen. No s'elimina res: el valor Run o la drecera es queda exactament on és, així que el canvi és reversible des d'aquí o des de qualsevol d'aquests.",
+      remove: {
+        button: "Elimina",
+        removing: "Eliminant…",
+        toast: (name) => `S'ha eliminat ${name}.`
+      }
     },
     duplicates: {
       title: 'Fitxers duplicats',
@@ -4161,7 +4181,12 @@ export const CATALOG = {
       },
       groupEnabledOf: (enabledCount, total) => `${enabledCount} z ${total} povoleno`,
       groupAdminNote: 'Změna vyžaduje oprávnění správce',
-      footerNote: 'Vypnutí položky zaznamená rozhodnutí do StartupApproved, stejného místa, které čte a zapisuje vlastní nastavení Po spuštění systému Windows a Správce úloh. Nic se neodstraní: hodnota Run nebo zástupce zůstává přesně tam, kde je, takže změnu lze vrátit odsud nebo z kteréhokoli z nich.'
+      footerNote: 'Vypnutí položky zaznamená rozhodnutí do StartupApproved, stejného místa, které čte a zapisuje vlastní nastavení Po spuštění systému Windows a Správce úloh. Nic se neodstraní: hodnota Run nebo zástupce zůstává přesně tam, kde je, takže změnu lze vrátit odsud nebo z kteréhokoli z nich.',
+      remove: {
+        button: "Odstranit",
+        removing: "Odstraňuje se…",
+        toast: (name) => `Odstraněno: ${name}.`
+      }
     },
     duplicates: {
       title: 'Duplicitní soubory',
@@ -5058,7 +5083,12 @@ export const CATALOG = {
       },
       groupEnabledOf: (enabledCount, total) => `${enabledCount} o ${total} wedi'u galluogi`,
       groupAdminNote: 'Mae newid y rhain yn gofyn am hawliau gweinyddwr',
-      footerNote: "Mae diffodd cofnod yn cofnodi'r penderfyniad yn StartupApproved, yr un man y mae gosodiadau Apiau Cychwyn Windows a Rheolwr Tasgau eu hunain yn ei ddarllen ac yn ysgrifennu ato. Ni chaiff dim ei ddileu: mae'r gwerth Run neu'r llwybr byr yn aros yn union lle mae, felly gellir dadwneud y newid o'r fan hon neu o'r un o'r rheiny."
+      footerNote: "Mae diffodd cofnod yn cofnodi'r penderfyniad yn StartupApproved, yr un man y mae gosodiadau Apiau Cychwyn Windows a Rheolwr Tasgau eu hunain yn ei ddarllen ac yn ysgrifennu ato. Ni chaiff dim ei ddileu: mae'r gwerth Run neu'r llwybr byr yn aros yn union lle mae, felly gellir dadwneud y newid o'r fan hon neu o'r un o'r rheiny.",
+      remove: {
+        button: "Dileu",
+        removing: "Yn dileu…",
+        toast: (name) => `Wedi dileu ${name}.`
+      }
     },
     duplicates: {
       title: 'Ffeiliau dyblyg',
@@ -5957,7 +5987,12 @@ export const CATALOG = {
       },
       groupEnabledOf: (enabledCount, total) => `${enabledCount} af ${total} aktiveret`,
       groupAdminNote: 'Ændring af disse kræver administratorrettigheder',
-      footerNote: "At slå en post fra registrerer beslutningen i StartupApproved, det samme sted Windows egne Startprogrammer-indstillinger og Jobliste læser og skriver til. Intet slettes: Run-værdien eller genvejen forbliver, hvor den er, så ændringen kan fortrydes herfra eller fra et af de to andre steder."
+      footerNote: "At slå en post fra registrerer beslutningen i StartupApproved, det samme sted Windows egne Startprogrammer-indstillinger og Jobliste læser og skriver til. Intet slettes: Run-værdien eller genvejen forbliver, hvor den er, så ændringen kan fortrydes herfra eller fra et af de to andre steder.",
+      remove: {
+        button: "Fjern",
+        removing: "Fjerner…",
+        toast: (name) => `Fjernede ${name}.`
+      }
     },
     duplicates: {
       title: "Dubletfiler",
@@ -6856,7 +6891,12 @@ export const CATALOG = {
       },
       groupEnabledOf: (enabledCount, total) => `${enabledCount} von ${total} aktiviert`,
       groupAdminNote: 'Das Ändern erfordert Administratorrechte',
-      footerNote: "Das Deaktivieren eines Eintrags speichert die Entscheidung in StartupApproved, demselben Ort, den Windows' eigene Autostart-Einstellungen und der Task-Manager lesen und schreiben. Nichts wird gelöscht: Der Run-Wert oder die Verknüpfung bleibt genau dort, wo er ist, sodass die Änderung von hier oder von einer der beiden anderen Stellen rückgängig gemacht werden kann."
+      footerNote: "Das Deaktivieren eines Eintrags speichert die Entscheidung in StartupApproved, demselben Ort, den Windows' eigene Autostart-Einstellungen und der Task-Manager lesen und schreiben. Nichts wird gelöscht: Der Run-Wert oder die Verknüpfung bleibt genau dort, wo er ist, sodass die Änderung von hier oder von einer der beiden anderen Stellen rückgängig gemacht werden kann.",
+      remove: {
+        button: "Entfernen",
+        removing: "Wird entfernt…",
+        toast: (name) => `${name} entfernt.`
+      }
     },
     duplicates: {
       title: 'Doppelte Dateien',
@@ -7755,7 +7795,12 @@ export const CATALOG = {
       },
       groupEnabledOf: (enabledCount, total) => `${enabledCount} από ${total} ενεργοποιημένες`,
       groupAdminNote: 'Η αλλαγή τους ζητά δικαιώματα διαχειριστή',
-      footerNote: 'Η απενεργοποίηση μιας καταχώρισης καταγράφει την απόφαση στο StartupApproved, το ίδιο σημείο που διαβάζουν και γράφουν οι δικές τους ρυθμίσεις Εφαρμογών Εκκίνησης των Windows και η Διαχείριση εργασιών. Τίποτα δεν διαγράφεται: η τιμή Run ή η συντόμευση παραμένει ακριβώς εκεί που είναι, οπότε η αλλαγή είναι αναστρέψιμη από εδώ ή από οποιοδήποτε από τα δύο.'
+      footerNote: 'Η απενεργοποίηση μιας καταχώρισης καταγράφει την απόφαση στο StartupApproved, το ίδιο σημείο που διαβάζουν και γράφουν οι δικές τους ρυθμίσεις Εφαρμογών Εκκίνησης των Windows και η Διαχείριση εργασιών. Τίποτα δεν διαγράφεται: η τιμή Run ή η συντόμευση παραμένει ακριβώς εκεί που είναι, οπότε η αλλαγή είναι αναστρέψιμη από εδώ ή από οποιοδήποτε από τα δύο.',
+      remove: {
+        button: "Κατάργηση",
+        removing: "Γίνεται κατάργηση…",
+        toast: (name) => `Το ${name} καταργήθηκε.`
+      }
     },
     duplicates: {
       title: 'Διπλότυπα αρχεία',
@@ -8654,7 +8699,12 @@ export const CATALOG = {
       },
       groupEnabledOf: (enabledCount, total) => `${enabledCount} de ${total} habilitadas`,
       groupAdminNote: 'Cambiarlas solicita permisos de administrador',
-      footerNote: "Deshabilitar una entrada registra la decisión en StartupApproved, el mismo lugar que leen y escriben la configuración de Aplicaciones de inicio de Windows y el Administrador de tareas. No se elimina nada: el valor Run o el acceso directo permanece exactamente donde está, así que el cambio se puede revertir desde aquí o desde cualquiera de los dos."
+      footerNote: "Deshabilitar una entrada registra la decisión en StartupApproved, el mismo lugar que leen y escriben la configuración de Aplicaciones de inicio de Windows y el Administrador de tareas. No se elimina nada: el valor Run o el acceso directo permanece exactamente donde está, así que el cambio se puede revertir desde aquí o desde cualquiera de los dos.",
+      remove: {
+        button: "Quitar",
+        removing: "Quitando…",
+        toast: (name) => `Se quitó ${name}.`
+      }
     },
     duplicates: {
       title: 'Archivos duplicados',
@@ -9553,7 +9603,12 @@ export const CATALOG = {
       },
       groupEnabledOf: (enabledCount, total) => `${enabledCount}/${total} lubatud`,
       groupAdminNote: 'Muutmine küsib administraatoriõigusi',
-      footerNote: "Kirje väljalülitamine salvestab otsuse StartupApproved kirjesse, samasse kohta, kust Windowsi enda Käivitusrakenduste seaded ja Task Manager loevad ja kirjutavad. Midagi ei kustutata: Run-väärtus või otsetee jääb täpselt sinna, kus see on, seega saab muudatuse siit või kummastki neist tagasi pöörata."
+      footerNote: "Kirje väljalülitamine salvestab otsuse StartupApproved kirjesse, samasse kohta, kust Windowsi enda Käivitusrakenduste seaded ja Task Manager loevad ja kirjutavad. Midagi ei kustutata: Run-väärtus või otsetee jääb täpselt sinna, kus see on, seega saab muudatuse siit või kummastki neist tagasi pöörata.",
+      remove: {
+        button: "Eemalda",
+        removing: "Eemaldamine…",
+        toast: (name) => `${name} eemaldatud.`
+      }
     },
     duplicates: {
       title: "Duplikaatfailid",
@@ -10452,7 +10507,12 @@ export const CATALOG = {
       },
       groupEnabledOf: (enabledCount, total) => `${enabledCount}/${total} käytössä`,
       groupAdminNote: "Näiden muuttaminen pyytää järjestelmänvalvojan oikeuksia",
-      footerNote: 'Merkinnän poistaminen käytöstä tallentaa päätöksen StartupApproved-tietoon, samaan paikkaan, jota Windowsin omat Käynnistyssovellukset-asetukset ja Tehtävienhallinta lukevat ja kirjoittavat. Mitään ei poisteta: Run-arvo tai pikakuvake pysyy juuri siellä, missä se on, joten muutoksen voi perua täältä tai kummasta tahansa niistä.'
+      footerNote: 'Merkinnän poistaminen käytöstä tallentaa päätöksen StartupApproved-tietoon, samaan paikkaan, jota Windowsin omat Käynnistyssovellukset-asetukset ja Tehtävienhallinta lukevat ja kirjoittavat. Mitään ei poisteta: Run-arvo tai pikakuvake pysyy juuri siellä, missä se on, joten muutoksen voi perua täältä tai kummasta tahansa niistä.',
+      remove: {
+        button: "Poista",
+        removing: "Poistetaan…",
+        toast: (name) => `${name} poistettu.`
+      }
     },
     duplicates: {
       title: 'Kaksoiskappaleet',
@@ -11351,7 +11411,12 @@ export const CATALOG = {
       },
       groupEnabledOf: (enabledCount, total) => `${enabledCount} sur ${total} activées`,
       groupAdminNote: 'Les modifier demande des droits administrateur',
-      footerNote: "Désactiver une entrée enregistre la décision dans StartupApproved, le même endroit que lisent et écrivent les paramètres Applications au démarrage de Windows et le Gestionnaire des tâches. Rien n'est supprimé : la valeur Run ou le raccourci reste exactement là où il est, donc la modification est réversible depuis ici ou depuis l'un des deux autres."
+      footerNote: "Désactiver une entrée enregistre la décision dans StartupApproved, le même endroit que lisent et écrivent les paramètres Applications au démarrage de Windows et le Gestionnaire des tâches. Rien n'est supprimé : la valeur Run ou le raccourci reste exactement là où il est, donc la modification est réversible depuis ici ou depuis l'un des deux autres.",
+      remove: {
+        button: "Supprimer",
+        removing: "Suppression…",
+        toast: (name) => `${name} supprimé.`
+      }
     },
     duplicates: {
       title: 'Fichiers en double',
@@ -12250,7 +12315,12 @@ export const CATALOG = {
       },
       groupEnabledOf: (enabledCount, total) => `${enabledCount} מתוך ${total} מופעלות`,
       groupAdminNote: 'שינוי אלה דורש הרשאות מנהל',
-      footerNote: 'השבתת רשומה רושמת את ההחלטה ב-StartupApproved, אותו מקום שבו קוראות וכותבות הגדרות אפליקציות ההפעלה ומנהל המשימות של Windows עצמו. שום דבר לא נמחק: ערך ה-Run או הקיצור נשארים בדיוק במקומם, כך שהשינוי ניתן לביטול מכאן או מכל אחד מהם.'
+      footerNote: 'השבתת רשומה רושמת את ההחלטה ב-StartupApproved, אותו מקום שבו קוראות וכותבות הגדרות אפליקציות ההפעלה ומנהל המשימות של Windows עצמו. שום דבר לא נמחק: ערך ה-Run או הקיצור נשארים בדיוק במקומם, כך שהשינוי ניתן לביטול מכאן או מכל אחד מהם.',
+      remove: {
+        button: "הסר",
+        removing: "מסיר…",
+        toast: (name) => `${name} הוסר.`
+      }
     },
     duplicates: {
       title: 'קבצים כפולים',
@@ -13149,7 +13219,12 @@ export const CATALOG = {
       },
       groupEnabledOf: (enabledCount, total) => `${enabledCount}/${total} engedélyezve`,
       groupAdminNote: 'Ezek módosítása rendszergazdai jogosultságot kér',
-      footerNote: 'Egy bejegyzés kikapcsolása rögzíti a döntést a StartupApproved-ban, ugyanott, ahol a Windows saját Indítási alkalmazások beállításai és a Feladatkezelő olvas és ír. Semmi nem törlődik: a Run érték vagy a parancsikon pontosan ott marad, ahol van, így a módosítás innen vagy bármelyik másik helyről visszavonható.'
+      footerNote: 'Egy bejegyzés kikapcsolása rögzíti a döntést a StartupApproved-ban, ugyanott, ahol a Windows saját Indítási alkalmazások beállításai és a Feladatkezelő olvas és ír. Semmi nem törlődik: a Run érték vagy a parancsikon pontosan ott marad, ahol van, így a módosítás innen vagy bármelyik másik helyről visszavonható.',
+      remove: {
+        button: "Eltávolítás",
+        removing: "Eltávolítás…",
+        toast: (name) => `${name} eltávolítva.`
+      }
     },
     duplicates: {
       title: 'Duplikált fájlok',
@@ -14048,7 +14123,12 @@ export const CATALOG = {
       },
       groupEnabledOf: (enabledCount, total) => `${enabledCount} dari ${total} diaktifkan`,
       groupAdminNote: 'Mengubah ini meminta hak administrator',
-      footerNote: 'Menonaktifkan sebuah entri mencatat keputusan itu di StartupApproved, tempat yang sama yang dibaca dan ditulis oleh pengaturan Aplikasi Startup Windows dan Task Manager sendiri. Tidak ada yang dihapus: nilai Run atau pintasan tetap persis di tempatnya, sehingga perubahan dapat dibatalkan dari sini atau dari salah satu dari keduanya.'
+      footerNote: 'Menonaktifkan sebuah entri mencatat keputusan itu di StartupApproved, tempat yang sama yang dibaca dan ditulis oleh pengaturan Aplikasi Startup Windows dan Task Manager sendiri. Tidak ada yang dihapus: nilai Run atau pintasan tetap persis di tempatnya, sehingga perubahan dapat dibatalkan dari sini atau dari salah satu dari keduanya.',
+      remove: {
+        button: "Hapus",
+        removing: "Menghapus…",
+        toast: (name) => `${name} dihapus.`
+      }
     },
     duplicates: {
       title: 'Berkas duplikat',
@@ -14947,7 +15027,12 @@ export const CATALOG = {
       },
       groupEnabledOf: (enabledCount, total) => `${enabledCount} af ${total} virkjaðar`,
       groupAdminNote: 'Að breyta þessu biður um kerfisstjórnarréttindi',
-      footerNote: 'Að slökkva á færslu skráir ákvörðunina í StartupApproved, sama stað og Windows eigin Ræsiforritastillingar og Verkefnastjóri lesa og skrifa. Engu er eytt: Run-gildið eða flýtileiðin er nákvæmlega þar sem hún er, svo hægt er að afturkalla breytinguna héðan eða frá hvorum staðnum sem er.'
+      footerNote: 'Að slökkva á færslu skráir ákvörðunina í StartupApproved, sama stað og Windows eigin Ræsiforritastillingar og Verkefnastjóri lesa og skrifa. Engu er eytt: Run-gildið eða flýtileiðin er nákvæmlega þar sem hún er, svo hægt er að afturkalla breytinguna héðan eða frá hvorum staðnum sem er.',
+      remove: {
+        button: "Fjarlægja",
+        removing: "Fjarlægi…",
+        toast: (name) => `${name} fjarlægt.`
+      }
     },
     duplicates: {
       title: "Tvítök",
@@ -15846,7 +15931,12 @@ export const CATALOG = {
       },
       groupEnabledOf: (enabledCount, total) => `${enabledCount} di ${total} abilitate`,
       groupAdminNote: 'Modificarle richiede i permessi di amministratore',
-      footerNote: "Disabilitare una voce registra la decisione in StartupApproved, lo stesso posto che leggono e scrivono le impostazioni di Windows per le App di avvio e il Task Manager. Niente viene eliminato: il valore Run o il collegamento resta esattamente dov'è, quindi la modifica è reversibile da qui o da uno dei due."
+      footerNote: "Disabilitare una voce registra la decisione in StartupApproved, lo stesso posto che leggono e scrivono le impostazioni di Windows per le App di avvio e il Task Manager. Niente viene eliminato: il valore Run o il collegamento resta esattamente dov'è, quindi la modifica è reversibile da qui o da uno dei due.",
+      remove: {
+        button: "Rimuovi",
+        removing: "Rimozione…",
+        toast: (name) => `${name} rimosso.`
+      }
     },
     duplicates: {
       title: 'File duplicati',
@@ -16745,7 +16835,12 @@ export const CATALOG = {
       },
       groupEnabledOf: (enabledCount, total) => `${total} 件中 ${enabledCount} 件有効`,
       groupAdminNote: '変更には管理者権限が必要です',
-      footerNote: 'ここで項目を無効にすると、その決定は StartupApproved に記録されます。これは Windows 自身のスタートアップ アプリの設定とタスク マネージャーが読み書きするのと同じ場所です。何も削除されません。Run の値やショートカットはそのまま残るため、変更はここからでもどちらの画面からでも元に戻せます。'
+      footerNote: 'ここで項目を無効にすると、その決定は StartupApproved に記録されます。これは Windows 自身のスタートアップ アプリの設定とタスク マネージャーが読み書きするのと同じ場所です。何も削除されません。Run の値やショートカットはそのまま残るため、変更はここからでもどちらの画面からでも元に戻せます。',
+      remove: {
+        button: "削除",
+        removing: "削除中…",
+        toast: (name) => `${name} を削除しました。`
+      }
     },
     duplicates: {
       title: '重複ファイル',
@@ -17644,7 +17739,12 @@ export const CATALOG = {
       },
       groupEnabledOf: (enabledCount, total) => `${total}개 중 ${enabledCount}개 사용`,
       groupAdminNote: '이 항목을 변경하려면 관리자 권한이 필요합니다',
-      footerNote: '항목을 사용 안 함으로 전환하면 해당 결정이 StartupApproved에 기록되며, 이는 Windows 자체의 시작 앱 설정과 작업 관리자가 읽고 쓰는 곳과 동일합니다. 아무것도 삭제되지 않습니다. Run 값이나 바로가기는 그대로 남아 있으므로, 변경 사항은 여기서든 두 곳 중 어디에서든 되돌릴 수 있습니다.'
+      footerNote: '항목을 사용 안 함으로 전환하면 해당 결정이 StartupApproved에 기록되며, 이는 Windows 자체의 시작 앱 설정과 작업 관리자가 읽고 쓰는 곳과 동일합니다. 아무것도 삭제되지 않습니다. Run 값이나 바로가기는 그대로 남아 있으므로, 변경 사항은 여기서든 두 곳 중 어디에서든 되돌릴 수 있습니다.',
+      remove: {
+        button: "제거",
+        removing: "제거 중…",
+        toast: (name) => `${name} 제거됨.`
+      }
     },
     duplicates: {
       title: '중복 파일',
@@ -18543,7 +18643,12 @@ export const CATALOG = {
       },
       groupEnabledOf: (enabledCount, total) => `${enabledCount} iš ${total} įjungta`,
       groupAdminNote: 'Keičiant reikės administratoriaus teisių',
-      footerNote: 'Įrašo išjungimas įrašo sprendimą į StartupApproved, tą pačią vietą, kurią skaito ir į kurią rašo pačios „Windows“ Paleisties programų nuostatos ir Užduočių tvarkytuvė. Niekas nepašalinama: Run reikšmė ar nuoroda lieka lygiai ten, kur buvo, todėl pakeitimą galima grąžinti iš čia arba iš bet kurios iš tų dviejų vietų.'
+      footerNote: 'Įrašo išjungimas įrašo sprendimą į StartupApproved, tą pačią vietą, kurią skaito ir į kurią rašo pačios „Windows“ Paleisties programų nuostatos ir Užduočių tvarkytuvė. Niekas nepašalinama: Run reikšmė ar nuoroda lieka lygiai ten, kur buvo, todėl pakeitimą galima grąžinti iš čia arba iš bet kurios iš tų dviejų vietų.',
+      remove: {
+        button: "Pašalinti",
+        removing: "Šalinama…",
+        toast: (name) => `${name} pašalinta.`
+      }
     },
     duplicates: {
       title: 'Pasikartojantys failai',
@@ -19440,7 +19545,12 @@ export const CATALOG = {
       },
       groupEnabledOf: (enabledCount, total) => `${enabledCount} daripada ${total} didayakan`,
       groupAdminNote: 'Mengubah ini meminta hak pentadbir',
-      footerNote: 'Melumpuhkan entri merekodkan keputusan itu dalam StartupApproved, tempat yang sama yang dibaca dan ditulis oleh tetapan Aplikasi Permulaan Windows sendiri dan Pengurus Tugas. Tiada apa yang dipadamkan: nilai Run atau pintasan kekal betul-betul di tempatnya, jadi perubahan itu boleh dibalikkan dari sini atau dari mana-mana antara kedua-duanya.'
+      footerNote: 'Melumpuhkan entri merekodkan keputusan itu dalam StartupApproved, tempat yang sama yang dibaca dan ditulis oleh tetapan Aplikasi Permulaan Windows sendiri dan Pengurus Tugas. Tiada apa yang dipadamkan: nilai Run atau pintasan kekal betul-betul di tempatnya, jadi perubahan itu boleh dibalikkan dari sini atau dari mana-mana antara kedua-duanya.',
+      remove: {
+        button: "Alih keluar",
+        removing: "Mengalih keluar…",
+        toast: (name) => `${name} dialih keluar.`
+      }
     },
     duplicates: {
       title: 'Fail pendua',
@@ -20339,7 +20449,12 @@ export const CATALOG = {
       },
       groupEnabledOf: (enabledCount, total) => `${enabledCount} av ${total} aktivert`,
       groupAdminNote: 'Å endre disse krever administratorrettigheter',
-      footerNote: 'Å slå av en oppføring registrerer beslutningen i StartupApproved, samme sted Windows' + " egne Oppstartsprogrammer-innstillinger og Oppgavebehandling leser og skriver til. Ingenting slettes: Run-verdien eller snarveien blir liggende akkurat der den er, så endringen kan reverseres herfra eller fra hvilken som helst av de to andre."
+      footerNote: 'Å slå av en oppføring registrerer beslutningen i StartupApproved, samme sted Windows' + " egne Oppstartsprogrammer-innstillinger og Oppgavebehandling leser og skriver til. Ingenting slettes: Run-verdien eller snarveien blir liggende akkurat der den er, så endringen kan reverseres herfra eller fra hvilken som helst av de to andre.",
+      remove: {
+        button: "Fjern",
+        removing: "Fjerner…",
+        toast: (name) => `${name} fjernet.`
+      }
     },
     duplicates: {
       title: 'Duplikatfiler',
@@ -21236,7 +21351,12 @@ export const CATALOG = {
       },
       groupEnabledOf: (enabledCount, total) => `${enabledCount} van ${total} ingeschakeld`,
       groupAdminNote: 'Wijzigen hiervan vraagt om beheerdersrechten',
-      footerNote: "Een item uitschakelen legt de beslissing vast in StartupApproved, dezelfde plek die Windows' eigen instellingen voor opstartapps en Taakbeheer lezen en beschrijven. Er wordt niets verwijderd: de Run-waarde of snelkoppeling blijft precies waar hij is, zodat de wijziging vanaf hier of vanaf een van beide ongedaan te maken is."
+      footerNote: "Een item uitschakelen legt de beslissing vast in StartupApproved, dezelfde plek die Windows' eigen instellingen voor opstartapps en Taakbeheer lezen en beschrijven. Er wordt niets verwijderd: de Run-waarde of snelkoppeling blijft precies waar hij is, zodat de wijziging vanaf hier of vanaf een van beide ongedaan te maken is.",
+      remove: {
+        button: "Verwijderen",
+        removing: "Verwijderen…",
+        toast: (name) => `${name} verwijderd.`
+      }
     },
     duplicates: {
       title: 'Dubbele bestanden',
@@ -22133,7 +22253,12 @@ export const CATALOG = {
       },
       groupEnabledOf: (enabledCount, total) => `${enabledCount} z ${total} włączonych`,
       groupAdminNote: 'Zmiana tych wpisów wymaga uprawnień administratora',
-      footerNote: 'Wyłączenie wpisu zapisuje decyzję w StartupApproved, tym samym miejscu, które odczytują i zapisują własne ustawienia aplikacji autostartu Windows oraz Menedżer zadań. Nic nie zostaje usunięte: wartość Run lub skrót pozostaje dokładnie tam, gdzie jest, więc zmianę można cofnąć stąd lub z dowolnego z tych dwóch miejsc.'
+      footerNote: 'Wyłączenie wpisu zapisuje decyzję w StartupApproved, tym samym miejscu, które odczytują i zapisują własne ustawienia aplikacji autostartu Windows oraz Menedżer zadań. Nic nie zostaje usunięte: wartość Run lub skrót pozostaje dokładnie tam, gdzie jest, więc zmianę można cofnąć stąd lub z dowolnego z tych dwóch miejsc.',
+      remove: {
+        button: "Usuń",
+        removing: "Usuwanie…",
+        toast: (name) => `Usunięto ${name}.`
+      }
     },
     duplicates: {
       title: "Duplikaty plików",
@@ -23030,7 +23155,12 @@ export const CATALOG = {
       },
       groupEnabledOf: (enabledCount, total) => `${enabledCount} د ${total} څخه فعالې`,
       groupAdminNote: 'د دې بدلول د اډمین اجازې غواړي',
-      footerNote: "د یوې ننوتنې غیرفعالول دا پرېکړه په StartupApproved کې ثبتوي، همدا هغه ځای دی چې د Windows خپل د پیل غوښتنلیکونو ترتیبات او د دندو مدیر یې لولي او لیکي. هیڅ شی نه ړنګیږي: د Run ارزښت یا شارټ کټ سمدلاسه هلته پاتې کیږي چې دی، نو بدلون د دې دواړو ځایونو څخه بېرته اړول کیدی شي."
+      footerNote: "د یوې ننوتنې غیرفعالول دا پرېکړه په StartupApproved کې ثبتوي، همدا هغه ځای دی چې د Windows خپل د پیل غوښتنلیکونو ترتیبات او د دندو مدیر یې لولي او لیکي. هیڅ شی نه ړنګیږي: د Run ارزښت یا شارټ کټ سمدلاسه هلته پاتې کیږي چې دی، نو بدلون د دې دواړو ځایونو څخه بېرته اړول کیدی شي.",
+      remove: {
+        button: "لرې کول",
+        removing: "لرې کول…",
+        toast: (name) => `${name} لرې شو.`
+      }
     },
     duplicates: {
       title: "تکراري فایلونه",
@@ -23929,7 +24059,12 @@ export const CATALOG = {
       },
       groupEnabledOf: (enabledCount, total) => `${enabledCount} de ${total} habilitadas`,
       groupAdminNote: 'Alterá-las pede permissões de administrador',
-      footerNote: 'Desabilitar uma entrada registra a decisão no StartupApproved, o mesmo lugar que as configurações de Aplicativos de Inicialização do próprio Windows e o Gerenciador de Tarefas leem e escrevem. Nada é excluído: o valor Run ou o atalho permanece exatamente onde está, então a mudança pode ser desfeita a partir daqui ou de qualquer um dos dois.'
+      footerNote: 'Desabilitar uma entrada registra a decisão no StartupApproved, o mesmo lugar que as configurações de Aplicativos de Inicialização do próprio Windows e o Gerenciador de Tarefas leem e escrevem. Nada é excluído: o valor Run ou o atalho permanece exatamente onde está, então a mudança pode ser desfeita a partir daqui ou de qualquer um dos dois.',
+      remove: {
+        button: "Remover",
+        removing: "Removendo…",
+        toast: (name) => `${name} removido.`
+      }
     },
     duplicates: {
       title: 'Arquivos duplicados',
@@ -24826,7 +24961,12 @@ export const CATALOG = {
       },
       groupEnabledOf: (enabledCount, total) => `${enabledCount} de ${total} ativadas`,
       groupAdminNote: 'Alterá-las pede permissões de administrador',
-      footerNote: 'Desativar uma entrada regista a decisão no StartupApproved, o mesmo local que as definições de Aplicações de Arranque do próprio Windows e o Gestor de Tarefas leem e escrevem. Nada é eliminado: o valor Run ou o atalho permanece exatamente onde está, pelo que a alteração pode ser revertida a partir daqui ou de qualquer um dos dois.'
+      footerNote: 'Desativar uma entrada regista a decisão no StartupApproved, o mesmo local que as definições de Aplicações de Arranque do próprio Windows e o Gestor de Tarefas leem e escrevem. Nada é eliminado: o valor Run ou o atalho permanece exatamente onde está, pelo que a alteração pode ser revertida a partir daqui ou de qualquer um dos dois.',
+      remove: {
+        button: "Remover",
+        removing: "A remover…",
+        toast: (name) => `${name} removido.`
+      }
     },
     duplicates: {
       title: 'Ficheiros duplicados',
@@ -25725,7 +25865,12 @@ export const CATALOG = {
       },
       groupEnabledOf: (enabledCount, total) => `${enabledCount} din ${total} activate`,
       groupAdminNote: 'Modificarea acestora solicită drepturi de administrator',
-      footerNote: 'Dezactivarea unei intrări înregistrează decizia în StartupApproved, același loc pe care setările proprii de Aplicații la pornire ale Windows și Managerul de activități le citesc și le scriu. Nimic nu este șters: valoarea Run sau comanda rapidă rămâne exact acolo unde este, deci modificarea poate fi anulată de aici sau din oricare dintre cele două.'
+      footerNote: 'Dezactivarea unei intrări înregistrează decizia în StartupApproved, același loc pe care setările proprii de Aplicații la pornire ale Windows și Managerul de activități le citesc și le scriu. Nimic nu este șters: valoarea Run sau comanda rapidă rămâne exact acolo unde este, deci modificarea poate fi anulată de aici sau din oricare dintre cele două.',
+      remove: {
+        button: "Elimină",
+        removing: "Se elimină…",
+        toast: (name) => `${name} a fost eliminat.`
+      }
     },
     duplicates: {
       title: 'Fișiere duplicate',
@@ -26624,7 +26769,12 @@ export const CATALOG = {
       },
       groupEnabledOf: (enabledCount, total) => `Включено ${enabledCount} из ${total}`,
       groupAdminNote: 'Изменение требует прав администратора',
-      footerNote: 'Отключение записи фиксирует решение в StartupApproved — там же, где читают и пишут собственные параметры Windows «Приложения при автозапуске» и Диспетчер задач. Ничего не удаляется: значение Run или ярлык остаётся точно на своём месте, поэтому изменение можно отменить отсюда или из любого из этих двух мест.'
+      footerNote: 'Отключение записи фиксирует решение в StartupApproved — там же, где читают и пишут собственные параметры Windows «Приложения при автозапуске» и Диспетчер задач. Ничего не удаляется: значение Run или ярлык остаётся точно на своём месте, поэтому изменение можно отменить отсюда или из любого из этих двух мест.',
+      remove: {
+        button: "Удалить",
+        removing: "Удаление…",
+        toast: (name) => `${name} удалено.`
+      }
     },
     duplicates: {
       title: "Дубликаты файлов",
@@ -27521,7 +27671,12 @@ export const CATALOG = {
       },
       groupEnabledOf: (enabledCount, total) => `${enabledCount} z ${total} povolených`,
       groupAdminNote: 'Zmena vyžaduje oprávnenia správcu',
-      footerNote: 'Vypnutie položky zaznamená rozhodnutie do StartupApproved, na to isté miesto, ktoré čítajú a zapisujú vlastné nastavenia Po spustení systému Windows a Správca úloh. Nič sa neodstráni: hodnota Run alebo skratka zostáva presne tam, kde je, takže zmenu možno vrátiť odtiaľto alebo z ktoréhokoľvek z nich.'
+      footerNote: 'Vypnutie položky zaznamená rozhodnutie do StartupApproved, na to isté miesto, ktoré čítajú a zapisujú vlastné nastavenia Po spustení systému Windows a Správca úloh. Nič sa neodstráni: hodnota Run alebo skratka zostáva presne tam, kde je, takže zmenu možno vrátiť odtiaľto alebo z ktoréhokoľvek z nich.',
+      remove: {
+        button: "Odstrániť",
+        removing: "Odstraňuje sa…",
+        toast: (name) => `${name} odstránené.`
+      }
     },
     duplicates: {
       title: 'Duplicitné súbory',
@@ -28418,7 +28573,12 @@ export const CATALOG = {
       },
       groupEnabledOf: (enabledCount, total) => `${enabledCount} nga ${total} të aktivizuara`,
       groupAdminNote: 'Ndryshimi i tyre kërkon të drejta administratori',
-      footerNote: 'Çaktivizimi i një hyrjeje regjistron vendimin në StartupApproved, po atë vend ku lexojnë dhe shkruajnë vetë cilësimet e Aplikacioneve të Nisjes të Windows dhe Menaxheri i Detyrave. Asgjë nuk fshihet: vlera Run ose shkurtorja mbetet saktësisht aty ku është, kështu që ndryshimi mund të kthehet mbrapsht që këtu ose nga cilido prej dy vendeve.'
+      footerNote: 'Çaktivizimi i një hyrjeje regjistron vendimin në StartupApproved, po atë vend ku lexojnë dhe shkruajnë vetë cilësimet e Aplikacioneve të Nisjes të Windows dhe Menaxheri i Detyrave. Asgjë nuk fshihet: vlera Run ose shkurtorja mbetet saktësisht aty ku është, kështu që ndryshimi mund të kthehet mbrapsht që këtu ose nga cilido prej dy vendeve.',
+      remove: {
+        button: "Hiq",
+        removing: "Duke hequr…",
+        toast: (name) => `${name} u hoq.`
+      }
     },
     duplicates: {
       title: "Skedarë dublikatë",
@@ -29317,7 +29477,12 @@ export const CATALOG = {
       },
       groupEnabledOf: (enabledCount, total) => `${enabledCount} од ${total} омогућено`,
       groupAdminNote: 'Промена ових захтева администраторска права',
-      footerNote: 'Онемогућавање ставке бележи одлуку у StartupApproved, на истом месту које читају и пишу сопствена подешавања Windows апликација при покретању и Управљач задацима. Ништа се не брише: вредност Run или пречица остаје тачно тамо где јесте, тако да се промена може поништити одавде или из било ког од та два места.'
+      footerNote: 'Онемогућавање ставке бележи одлуку у StartupApproved, на истом месту које читају и пишу сопствена подешавања Windows апликација при покретању и Управљач задацима. Ништа се не брише: вредност Run или пречица остаје тачно тамо где јесте, тако да се промена може поништити одавде или из било ког од та два места.',
+      remove: {
+        button: "Уклони",
+        removing: "Уклањање…",
+        toast: (name) => `${name} је уклоњено.`
+      }
     },
     duplicates: {
       title: "Дуплиране датотеке",
@@ -30214,7 +30379,12 @@ export const CATALOG = {
       },
       groupEnabledOf: (enabledCount, total) => `${enabledCount} av ${total} aktiverade`,
       groupAdminNote: 'Att ändra dessa kräver administratörsrättigheter',
-      footerNote: 'Att inaktivera en post registrerar beslutet i StartupApproved, samma plats som Windows egna inställningar för Startappar och Aktivitetshanteraren läser och skriver till. Inget tas bort: Run-värdet eller genvägen ligger kvar exakt där det är, så ändringen kan ångras härifrån eller från någon av de två.'
+      footerNote: 'Att inaktivera en post registrerar beslutet i StartupApproved, samma plats som Windows egna inställningar för Startappar och Aktivitetshanteraren läser och skriver till. Inget tas bort: Run-värdet eller genvägen ligger kvar exakt där det är, så ändringen kan ångras härifrån eller från någon av de två.',
+      remove: {
+        button: "Ta bort",
+        removing: "Tar bort…",
+        toast: (name) => `${name} togs bort.`
+      }
     },
     duplicates: {
       title: 'Dubbletter',
@@ -31111,7 +31281,12 @@ export const CATALOG = {
       },
       groupEnabledOf: (enabledCount, total) => `เปิดใช้งาน ${enabledCount} จาก ${total}`,
       groupAdminNote: 'การเปลี่ยนแปลงรายการเหล่านี้ต้องมีสิทธิ์ผู้ดูแลระบบ',
-      footerNote: 'การปิดใช้งานรายการจะบันทึกการตัดสินใจไว้ใน StartupApproved ซึ่งเป็นตำแหน่งเดียวกับที่การตั้งค่าแอปเริ่มต้นระบบของ Windows เองและตัวจัดการงานอ่านและเขียน ไม่มีอะไรถูกลบ ค่า Run หรือทางลัดยังคงอยู่ตรงตำแหน่งเดิม ดังนั้นการเปลี่ยนแปลงจึงย้อนกลับได้จากที่นี่หรือจากที่ใดที่หนึ่งในสองแห่งนั้น'
+      footerNote: 'การปิดใช้งานรายการจะบันทึกการตัดสินใจไว้ใน StartupApproved ซึ่งเป็นตำแหน่งเดียวกับที่การตั้งค่าแอปเริ่มต้นระบบของ Windows เองและตัวจัดการงานอ่านและเขียน ไม่มีอะไรถูกลบ ค่า Run หรือทางลัดยังคงอยู่ตรงตำแหน่งเดิม ดังนั้นการเปลี่ยนแปลงจึงย้อนกลับได้จากที่นี่หรือจากที่ใดที่หนึ่งในสองแห่งนั้น',
+      remove: {
+        button: "นำออก",
+        removing: "กำลังนำออก…",
+        toast: (name) => `นำ ${name} ออกแล้ว`
+      }
     },
     duplicates: {
       title: "ไฟล์ซ้ำ",
@@ -32010,7 +32185,12 @@ export const CATALOG = {
       },
       groupEnabledOf: (enabledCount, total) => `${total} öğeden ${enabledCount} tanesi etkin`,
       groupAdminNote: 'Bunları değiştirmek yönetici izni ister',
-      footerNote: "Bir girdiyi devre dışı bırakmak, kararı StartupApproved'a kaydeder; bu, Windows'un kendi Başlangıç Uygulamaları ayarlarının ve Görev Yöneticisi'nin okuyup yazdığı aynı yerdir. Hiçbir şey silinmez: Run değeri veya kısayol tam olarak bulunduğu yerde kalır, bu yüzden değişiklik buradan veya ikisinden herhangi birinden geri alınabilir."
+      footerNote: "Bir girdiyi devre dışı bırakmak, kararı StartupApproved'a kaydeder; bu, Windows'un kendi Başlangıç Uygulamaları ayarlarının ve Görev Yöneticisi'nin okuyup yazdığı aynı yerdir. Hiçbir şey silinmez: Run değeri veya kısayol tam olarak bulunduğu yerde kalır, bu yüzden değişiklik buradan veya ikisinden herhangi birinden geri alınabilir.",
+      remove: {
+        button: "Kaldır",
+        removing: "Kaldırılıyor…",
+        toast: (name) => `${name} kaldırıldı.`
+      }
     },
     duplicates: {
       title: 'Yinelenen dosyalar',
@@ -32909,7 +33089,12 @@ export const CATALOG = {
       },
       groupEnabledOf: (enabledCount, total) => `Увімкнено ${enabledCount} з ${total}`,
       groupAdminNote: 'Зміна цього вимагає прав адміністратора',
-      footerNote: 'Вимкнення запису фіксує рішення в StartupApproved — тому самому місці, яке читають і записують власні параметри Windows «Застосунки автозавантаження» і Диспетчер завдань. Нічого не видаляється: значення Run або ярлик залишається точно там, де воно є, тож зміну можна скасувати звідси або з будь-якого з цих двох місць.'
+      footerNote: 'Вимкнення запису фіксує рішення в StartupApproved — тому самому місці, яке читають і записують власні параметри Windows «Застосунки автозавантаження» і Диспетчер завдань. Нічого не видаляється: значення Run або ярлик залишається точно там, де воно є, тож зміну можна скасувати звідси або з будь-якого з цих двох місць.',
+      remove: {
+        button: "Видалити",
+        removing: "Видалення…",
+        toast: (name) => `${name} видалено.`
+      }
     },
     duplicates: {
       title: 'Файли-дублікати',
@@ -33806,7 +33991,12 @@ export const CATALOG = {
       },
       groupEnabledOf: (enabledCount, total) => `${enabledCount}/${total} được bật`,
       groupAdminNote: 'Thay đổi các mục này cần quyền quản trị',
-      footerNote: 'Tắt một mục sẽ ghi lại quyết định đó trong StartupApproved, cùng nơi mà cài đặt Ứng dụng khởi động và Trình quản lý tác vụ của chính Windows đọc và ghi. Không có gì bị xóa: giá trị Run hoặc lối tắt vẫn còn nguyên ở đó, vì vậy thay đổi có thể được hoàn tác từ đây hoặc từ một trong hai nơi đó.'
+      footerNote: 'Tắt một mục sẽ ghi lại quyết định đó trong StartupApproved, cùng nơi mà cài đặt Ứng dụng khởi động và Trình quản lý tác vụ của chính Windows đọc và ghi. Không có gì bị xóa: giá trị Run hoặc lối tắt vẫn còn nguyên ở đó, vì vậy thay đổi có thể được hoàn tác từ đây hoặc từ một trong hai nơi đó.',
+      remove: {
+        button: "Xóa",
+        removing: "Đang xóa…",
+        toast: (name) => `Đã xóa ${name}.`
+      }
     },
     duplicates: {
       title: 'Tệp trùng lặp',
@@ -34705,7 +34895,12 @@ export const CATALOG = {
       },
       groupEnabledOf: (enabledCount, total) => `${total} 个中已启用 ${enabledCount} 个`,
       groupAdminNote: '更改这些需要管理员权限',
-      footerNote: '关闭某个项目会将该决定记录到 StartupApproved 中，这与 Windows 自身的"启动应用"设置和任务管理器读写的位置相同。不会删除任何内容：Run 值或快捷方式会原样保留，因此可以从这里或这两处中的任意一处撤销更改。'
+      footerNote: '关闭某个项目会将该决定记录到 StartupApproved 中，这与 Windows 自身的"启动应用"设置和任务管理器读写的位置相同。不会删除任何内容：Run 值或快捷方式会原样保留，因此可以从这里或这两处中的任意一处撤销更改。',
+      remove: {
+        button: "移除",
+        removing: "正在移除…",
+        toast: (name) => `已移除 ${name}。`
+      }
     },
     duplicates: {
       title: '重复文件',
@@ -35604,7 +35799,12 @@ export const CATALOG = {
       },
       groupEnabledOf: (enabledCount, total) => `${total} 個中已啟用 ${enabledCount} 個`,
       groupAdminNote: '變更這些需要系統管理員權限',
-      footerNote: '關閉某個項目會將該決定記錄到 StartupApproved 中，這與 Windows 自身的「啟動應用程式」設定和工作管理員讀寫的位置相同。不會刪除任何內容：Run 值或捷徑會原樣保留，因此可以從這裡或這兩處中的任一處復原變更。'
+      footerNote: '關閉某個項目會將該決定記錄到 StartupApproved 中，這與 Windows 自身的「啟動應用程式」設定和工作管理員讀寫的位置相同。不會刪除任何內容：Run 值或捷徑會原樣保留，因此可以從這裡或這兩處中的任一處復原變更。',
+      remove: {
+        button: "移除",
+        removing: "正在移除…",
+        toast: (name) => `已移除 ${name}。`
+      }
     },
     duplicates: {
       title: '重複檔案',
