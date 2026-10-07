@@ -757,7 +757,10 @@ export const CATALOG = {
       registryExcludedNote: (count) => `Registry keys left out because they're in your exclusions: ${count}.`,
       itemsSelected: 'items selected',
       reclaimable: 'reclaimable',
-      skip: 'Skip'
+      skip: 'Skip',
+      selectAll: "Select all",
+      clearAll: "Clear",
+      noneSelectedHint: "Tick at least one item above, or Skip."
     },
     uninstallModal: {
       titleForce: (name) => `Force remove ${name}`,
@@ -1653,7 +1656,10 @@ export const CATALOG = {
       registryExcludedNote: (count) => `Registersleutels uitgelaat omdat hulle in jou uitsluitings is: ${count}.`,
       itemsSelected: 'items geselekteer',
       reclaimable: 'herwinbaar',
-      skip: 'Slaan oor'
+      skip: 'Slaan oor',
+      selectAll: "Kies almal",
+      clearAll: "Maak skoon",
+      noneSelectedHint: "Merk minstens een item hierbo, of klik Slaan oor."
     },
     uninstallModal: {
       titleForce: (name) => `Forseer verwydering van ${name}`,
@@ -2549,7 +2555,10 @@ export const CATALOG = {
       registryExcludedNote: (count) => `مفاتيح التسجيل التي استُبعدت لأنها ضمن استثناءاتك: ${count}.`,
       itemsSelected: 'عناصر محددة',
       reclaimable: 'قابل للاسترداد',
-      skip: 'تخطّي'
+      skip: 'تخطّي',
+      selectAll: "تحديد الكل",
+      clearAll: "مسح التحديد",
+      noneSelectedHint: "ضع علامة على عنصر واحد على الأقل أعلاه، أو اضغط تخطّ."
     },
     uninstallModal: {
       titleForce: (name) => `إزالة قسرية لـ ${name}`,
@@ -3445,7 +3454,10 @@ export const CATALOG = {
       registryExcludedNote: (count) => `Claus del registre omeses perquè són a les teves exclusions: ${count}.`,
       itemsSelected: 'elements seleccionats',
       reclaimable: 'recuperable',
-      skip: 'Omet'
+      skip: 'Omet',
+      selectAll: "Selecciona-ho tot",
+      clearAll: "Neteja",
+      noneSelectedHint: "Marca com a mínim un element a dalt, o prem Omet."
     },
     uninstallModal: {
       titleForce: (name) => `Elimina forçadament ${name}`,
@@ -4341,7 +4353,10 @@ export const CATALOG = {
       registryExcludedNote: (count) => `Klíče registru vynechané, protože jsou ve vašich vyloučeních: ${count}.`,
       itemsSelected: 'vybraných položek',
       reclaimable: 'lze uvolnit',
-      skip: 'Přeskočit'
+      skip: 'Přeskočit',
+      selectAll: "Vybrat vše",
+      clearAll: "Zrušit výběr",
+      noneSelectedHint: "Zaškrtněte alespoň jednu položku výše, nebo klikněte na Přeskočit."
     },
     uninstallModal: {
       titleForce: (name) => `Vynutit odstranění ${name}`,
@@ -5235,7 +5250,10 @@ export const CATALOG = {
       registryExcludedNote: (count) => `Allweddi cofrestrfa a adawyd allan am eu bod yn eich eithriadau: ${count}.`,
       itemsSelected: 'eitem wedi\'u dewis',
       reclaimable: 'adenilladwy',
-      skip: 'Hepgor'
+      skip: 'Hepgor',
+      selectAll: "Dewis popeth",
+      clearAll: "Clirio",
+      noneSelectedHint: "Ticiwch o leiaf un eitem uchod, neu cliciwch Hepgor."
     },
     uninstallModal: {
       titleForce: (name) => `Gorfodi tynnu ${name}`,
@@ -6131,7 +6149,10 @@ export const CATALOG = {
       registryExcludedNote: (count) => `Registreringsdatabasenøgler udeladt, fordi de er i dine undtagelser: ${count}.`,
       itemsSelected: 'elementer valgt',
       reclaimable: 'kan frigøres',
-      skip: 'Spring over'
+      skip: 'Spring over',
+      selectAll: "Vælg alle",
+      clearAll: "Ryd",
+      noneSelectedHint: "Markér mindst ét element ovenfor, eller klik Spring over."
     },
     uninstallModal: {
       titleForce: (name) => `Gennemtving fjernelse af ${name}`,
@@ -7027,7 +7048,10 @@ export const CATALOG = {
       registryExcludedNote: (count) => `Registrierungsschlüssel ausgelassen, weil sie in deinen Ausschlüssen stehen: ${count}.`,
       itemsSelected: 'Elemente ausgewählt',
       reclaimable: "einsparbar",
-      skip: 'Überspringen'
+      skip: 'Überspringen',
+      selectAll: "Alle auswählen",
+      clearAll: "Leeren",
+      noneSelectedHint: "Hake mindestens ein Element oben an, oder klicke auf Überspringen."
     },
     uninstallModal: {
       titleForce: (name) => `Entfernung von ${name} erzwingen`,
@@ -7923,7 +7947,10 @@ export const CATALOG = {
       registryExcludedNote: (count) => `Κλειδιά μητρώου που παραλείφθηκαν επειδή βρίσκονται στις εξαιρέσεις σας: ${count}.`,
       itemsSelected: 'επιλεγμένα στοιχεία',
       reclaimable: 'ανακτήσιμο',
-      skip: 'Παράλειψη'
+      skip: 'Παράλειψη',
+      selectAll: "Επιλογή όλων",
+      clearAll: "Εκκαθάριση",
+      noneSelectedHint: "Επιλέξτε τουλάχιστον ένα στοιχείο παραπάνω, ή πατήστε Παράλειψη."
     },
     uninstallModal: {
       titleForce: (name) => `Εξαναγκασμένη αφαίρεση ${name}`,
@@ -8819,7 +8846,10 @@ export const CATALOG = {
       registryExcludedNote: (count) => `Claves del Registro omitidas porque están en tus exclusiones: ${count}.`,
       itemsSelected: 'elementos seleccionados',
       reclaimable: 'recuperable',
-      skip: 'Omitir'
+      skip: 'Omitir',
+      selectAll: "Seleccionar todo",
+      clearAll: "Borrar",
+      noneSelectedHint: "Marca al menos un elemento arriba, o pulsa Omitir."
     },
     uninstallModal: {
       titleForce: (name) => `Forzar eliminación de ${name}`,
@@ -9715,7 +9745,10 @@ export const CATALOG = {
       registryExcludedNote: (count) => `Registrivõtmed, mis jäeti välja, sest need on sinu erandites: ${count}.`,
       itemsSelected: 'üksust valitud',
       reclaimable: 'vabastatav',
-      skip: 'Jäta vahele'
+      skip: 'Jäta vahele',
+      selectAll: "Vali kõik",
+      clearAll: "Tühjenda",
+      noneSelectedHint: "Märgi vähemalt üks ülalolev üksus või klõpsa Jäta vahele."
     },
     uninstallModal: {
       titleForce: (name) => `Sundeemalda ${name}`,
@@ -10611,7 +10644,10 @@ export const CATALOG = {
       registryExcludedNote: (count) => `Rekisteriavaimet, jotka jätettiin pois, koska ne ovat poikkeuksissasi: ${count}.`,
       itemsSelected: 'kohdetta valittu',
       reclaimable: 'vapautettavissa',
-      skip: 'Ohita'
+      skip: 'Ohita',
+      selectAll: "Valitse kaikki",
+      clearAll: "Tyhjennä",
+      noneSelectedHint: "Valitse vähintään yksi yllä oleva kohde, tai napsauta Ohita."
     },
     uninstallModal: {
       titleForce: (name) => `Pakota kohteen ${name} poisto`,
@@ -11507,7 +11543,10 @@ export const CATALOG = {
       registryExcludedNote: (count) => `Clés de registre ignorées car elles figurent dans vos exclusions : ${count}.`,
       itemsSelected: 'éléments sélectionnés',
       reclaimable: 'récupérable',
-      skip: 'Ignorer'
+      skip: 'Ignorer',
+      selectAll: "Tout sélectionner",
+      clearAll: "Effacer",
+      noneSelectedHint: "Cochez au moins un élément ci-dessus, ou cliquez sur Ignorer."
     },
     uninstallModal: {
       titleForce: (name) => `Forcer la suppression de ${name}`,
@@ -12403,7 +12442,10 @@ export const CATALOG = {
       registryExcludedNote: (count) => `מפתחות רישום שהושמטו כי הם נמצאים בהחרגות שלך: ${count}.`,
       itemsSelected: 'פריטים נבחרו',
       reclaimable: 'ניתן לשחרור',
-      skip: 'דלג'
+      skip: 'דלג',
+      selectAll: "בחר הכול",
+      clearAll: "נקה",
+      noneSelectedHint: "סמן לפחות פריט אחד למעלה, או לחץ על דלג."
     },
     uninstallModal: {
       titleForce: (name) => `הסרה כפויה של ${name}`,
@@ -13299,7 +13341,10 @@ export const CATALOG = {
       registryExcludedNote: (count) => `Kihagyott beállításjegyzék-kulcsok, mert szerepelnek a kizárásaid között: ${count}.`,
       itemsSelected: 'elem kijelölve',
       reclaimable: 'felszabadítható',
-      skip: 'Kihagyás'
+      skip: 'Kihagyás',
+      selectAll: "Összes kijelölése",
+      clearAll: "Törlés",
+      noneSelectedHint: "Jelölj ki legalább egy elemet fent, vagy kattints a Kihagyás gombra."
     },
     uninstallModal: {
       titleForce: (name) => `${name} kényszerített eltávolítása`,
@@ -14195,7 +14240,10 @@ export const CATALOG = {
       registryExcludedNote: (count) => `Kunci registri yang dilewati karena ada di pengecualian Anda: ${count}.`,
       itemsSelected: 'item dipilih',
       reclaimable: 'dapat dibebaskan',
-      skip: 'Lewati'
+      skip: 'Lewati',
+      selectAll: "Pilih semua",
+      clearAll: "Bersihkan",
+      noneSelectedHint: "Centang setidaknya satu item di atas, atau klik Lewati."
     },
     uninstallModal: {
       titleForce: (name) => `Paksa hapus ${name}`,
@@ -15091,7 +15139,10 @@ export const CATALOG = {
       registryExcludedNote: (count) => `Skrásetningarlyklar sem var sleppt því þeir eru í undantekningunum þínum: ${count}.`,
       itemsSelected: 'hlutir valdir',
       reclaimable: "hægt að losa",
-      skip: 'Sleppa'
+      skip: 'Sleppa',
+      selectAll: "Velja allt",
+      clearAll: "Hreinsa",
+      noneSelectedHint: "Hakaðu við að minnsta kosti einn hlut hér að ofan, eða smelltu á Sleppa."
     },
     uninstallModal: {
       titleForce: (name) => `Þvinga fjarlægingu á ${name}`,
@@ -15987,7 +16038,10 @@ export const CATALOG = {
       registryExcludedNote: (count) => `Chiavi del registro escluse perché presenti nelle tue esclusioni: ${count}.`,
       itemsSelected: 'elementi selezionati',
       reclaimable: 'recuperabile',
-      skip: 'Salta'
+      skip: 'Salta',
+      selectAll: "Seleziona tutto",
+      clearAll: "Svuota",
+      noneSelectedHint: "Seleziona almeno un elemento sopra, oppure fai clic su Salta."
     },
     uninstallModal: {
       titleForce: (name) => `Rimuovi forzatamente ${name}`,
@@ -16883,7 +16937,10 @@ export const CATALOG = {
       registryExcludedNote: (count) => `除外設定に含まれているため除外されたレジストリ キー: ${count}`,
       itemsSelected: '項目を選択中',
       reclaimable: '回収可能',
-      skip: 'スキップ'
+      skip: 'スキップ',
+      selectAll: "すべて選択",
+      clearAll: "クリア",
+      noneSelectedHint: "上の項目を少なくとも1つチェックするか、「スキップ」をクリックしてください。"
     },
     uninstallModal: {
       titleForce: (name) => `${name} を強制削除`,
@@ -17779,7 +17836,10 @@ export const CATALOG = {
       registryExcludedNote: (count) => `제외 항목에 있어 제외된 레지스트리 키: ${count}개`,
       itemsSelected: '개 항목 선택됨',
       reclaimable: '확보 가능',
-      skip: '건너뛰기'
+      skip: '건너뛰기',
+      selectAll: "모두 선택",
+      clearAll: "지우기",
+      noneSelectedHint: "위 항목을 하나 이상 선택하거나 건너뛰기를 클릭하세요."
     },
     uninstallModal: {
       titleForce: (name) => `${name} 강제 제거`,
@@ -18675,7 +18735,10 @@ export const CATALOG = {
       registryExcludedNote: (count) => `Registro raktai, praleisti, nes yra jūsų išimtyse: ${count}.`,
       itemsSelected: 'pasirinkti elementai',
       reclaimable: 'atlaisvinama',
-      skip: 'Praleisti'
+      skip: 'Praleisti',
+      selectAll: "Pasirinkti viską",
+      clearAll: "Išvalyti",
+      noneSelectedHint: "Pažymėkite bent vieną aukščiau esantį elementą arba spustelėkite Praleisti."
     },
     uninstallModal: {
       titleForce: (name) => `Priverstinai pašalinti ${name}`,
@@ -19569,7 +19632,10 @@ export const CATALOG = {
       registryExcludedNote: (count) => `Kunci registri yang ditinggalkan kerana berada dalam pengecualian anda: ${count}.`,
       itemsSelected: 'item dipilih',
       reclaimable: 'boleh dituntut semula',
-      skip: 'Langkau'
+      skip: 'Langkau',
+      selectAll: "Pilih semua",
+      clearAll: "Kosongkan",
+      noneSelectedHint: "Tandakan sekurang-kurangnya satu item di atas, atau klik Langkau."
     },
     uninstallModal: {
       titleForce: (name) => `Paksa keluarkan ${name}`,
@@ -20465,7 +20531,10 @@ export const CATALOG = {
       registryExcludedNote: (count) => `Registernøkler utelatt fordi de står i unntakene dine: ${count}.`,
       itemsSelected: 'elementer valgt',
       reclaimable: 'kan frigjøres',
-      skip: 'Hopp over'
+      skip: 'Hopp over',
+      selectAll: "Velg alle",
+      clearAll: "Tøm",
+      noneSelectedHint: "Merk minst ett element ovenfor, eller klikk Hopp over."
     },
     uninstallModal: {
       titleForce: (name) => `Tving fjerning av ${name}`,
@@ -21359,7 +21428,10 @@ export const CATALOG = {
       registryExcludedNote: (count) => `Registersleutels weggelaten omdat ze in uw uitsluitingen staan: ${count}.`,
       itemsSelected: 'items geselecteerd',
       reclaimable: 'terug te winnen',
-      skip: 'Overslaan'
+      skip: 'Overslaan',
+      selectAll: "Alles selecteren",
+      clearAll: "Wissen",
+      noneSelectedHint: "Vink minstens één item hierboven aan, of klik op Overslaan."
     },
     uninstallModal: {
       titleForce: (name) => `${name} geforceerd verwijderen`,
@@ -22253,7 +22325,10 @@ export const CATALOG = {
       registryExcludedNote: (count) => `Klucze rejestru pominięte, ponieważ są na liście wykluczeń: ${count}.`,
       itemsSelected: 'zaznaczonych elementów',
       reclaimable: 'do odzyskania',
-      skip: 'Pomiń'
+      skip: 'Pomiń',
+      selectAll: "Zaznacz wszystko",
+      clearAll: "Wyczyść",
+      noneSelectedHint: "Zaznacz co najmniej jeden element powyżej lub kliknij Pomiń."
     },
     uninstallModal: {
       titleForce: (name) => `Wymuś usunięcie ${name}`,
@@ -23147,7 +23222,10 @@ export const CATALOG = {
       registryExcludedNote: (count) => `د ریجستري کیلي چې پریښودل شوې ځکه چې ستاسو په استثناوو کې دي: ${count}.`,
       itemsSelected: 'توکي ټاکل شوي',
       reclaimable: 'بیا ترلاسه کیدونکی',
-      skip: 'پریښودل'
+      skip: 'پریښودل',
+      selectAll: "ټول غوره کړئ",
+      clearAll: "پاک کړئ",
+      noneSelectedHint: "لږ تر لږه یو توکی پورته یې نښه کړئ، یا پریږده کلیک وکړئ."
     },
     uninstallModal: {
       titleForce: (name) => `د ${name} زوري لرې کول`,
@@ -24043,7 +24121,10 @@ export const CATALOG = {
       registryExcludedNote: (count) => `Chaves do Registro ignoradas porque estão nas suas exclusões: ${count}.`,
       itemsSelected: 'itens selecionados',
       reclaimable: 'recuperável',
-      skip: 'Pular'
+      skip: 'Pular',
+      selectAll: "Selecionar tudo",
+      clearAll: "Limpar",
+      noneSelectedHint: "Marque pelo menos um item acima ou clique em Pular."
     },
     uninstallModal: {
       titleForce: (name) => `Forçar remoção de ${name}`,
@@ -24937,7 +25018,10 @@ export const CATALOG = {
       registryExcludedNote: (count) => `Chaves de registo ignoradas porque estão nas suas exclusões: ${count}.`,
       itemsSelected: 'itens selecionados',
       reclaimable: 'recuperável',
-      skip: 'Ignorar'
+      skip: 'Ignorar',
+      selectAll: "Selecionar tudo",
+      clearAll: "Limpar",
+      noneSelectedHint: "Assinale pelo menos um item acima, ou clique em Ignorar."
     },
     uninstallModal: {
       titleForce: (name) => `Forçar remoção de ${name}`,
@@ -25833,7 +25917,10 @@ export const CATALOG = {
       registryExcludedNote: (count) => `Chei de registru omise pentru că se află în excepțiile tale: ${count}.`,
       itemsSelected: 'elemente selectate',
       reclaimable: 'recuperabil',
-      skip: 'Omite'
+      skip: 'Omite',
+      selectAll: "Selectează tot",
+      clearAll: "Golește",
+      noneSelectedHint: "Bifează cel puțin un element de mai sus sau apasă pe Omite."
     },
     uninstallModal: {
       titleForce: (name) => `Forțează eliminarea ${name}`,
@@ -26729,7 +26816,10 @@ export const CATALOG = {
       registryExcludedNote: (count) => `Разделы реестра, пропущенные, так как они в ваших исключениях: ${count}.`,
       itemsSelected: 'элементов выбрано',
       reclaimable: 'можно освободить',
-      skip: 'Пропустить'
+      skip: 'Пропустить',
+      selectAll: "Выбрать все",
+      clearAll: "Очистить",
+      noneSelectedHint: "Отметьте хотя бы один элемент выше или нажмите «Пропустить»."
     },
     uninstallModal: {
       titleForce: (name) => `Принудительно удалить ${name}`,
@@ -27623,7 +27713,10 @@ export const CATALOG = {
       registryExcludedNote: (count) => `Kľúče registra vynechané, pretože sú vo vašich vylúčeniach: ${count}.`,
       itemsSelected: 'vybraných položiek',
       reclaimable: 'možno uvoľniť',
-      skip: 'Preskočiť'
+      skip: 'Preskočiť',
+      selectAll: "Vybrať všetko",
+      clearAll: "Vymazať",
+      noneSelectedHint: "Začiarknite aspoň jednu položku vyššie, alebo kliknite na Preskočiť."
     },
     uninstallModal: {
       titleForce: (name) => `Vynútiť odstránenie ${name}`,
@@ -28517,7 +28610,10 @@ export const CATALOG = {
       registryExcludedNote: (count) => `Çelësat e regjistrit që u lanë jashtë sepse janë te përjashtimet e tua: ${count}.`,
       itemsSelected: 'artikuj të zgjedhur',
       reclaimable: 'i rikuperueshëm',
-      skip: 'Anashkalo'
+      skip: 'Anashkalo',
+      selectAll: "Zgjidh gjithçka",
+      clearAll: "Pastro",
+      noneSelectedHint: "Shëno të paktën një element më sipër, ose kliko Kapërce."
     },
     uninstallModal: {
       titleForce: (name) => `Detyro heqjen e ${name}`,
@@ -29413,7 +29509,10 @@ export const CATALOG = {
       registryExcludedNote: (count) => `Кључеви регистра изостављени јер су у вашим изузецима: ${count}.`,
       itemsSelected: 'ставки означено',
       reclaimable: 'може се ослободити',
-      skip: 'Прескочи'
+      skip: 'Прескочи',
+      selectAll: "Избери све",
+      clearAll: "Очисти",
+      noneSelectedHint: "Означите бар једну ставку изнад, или кликните Прескочи."
     },
     uninstallModal: {
       titleForce: (name) => `Присилно уклони ${name}`,
@@ -30307,7 +30406,10 @@ export const CATALOG = {
       registryExcludedNote: (count) => `Registernycklar som utelämnats eftersom de finns bland dina undantag: ${count}.`,
       itemsSelected: 'objekt valda',
       reclaimable: 'kan frigöras',
-      skip: 'Hoppa över'
+      skip: 'Hoppa över',
+      selectAll: "Markera alla",
+      clearAll: "Rensa",
+      noneSelectedHint: "Markera minst ett objekt ovan, eller klicka på Hoppa över."
     },
     uninstallModal: {
       titleForce: (name) => `Tvinga bort ${name}`,
@@ -31201,7 +31303,10 @@ export const CATALOG = {
       registryExcludedNote: (count) => `คีย์รีจิสทรีที่ถูกข้ามเพราะอยู่ในรายการยกเว้นของคุณ: ${count}`,
       itemsSelected: 'รายการที่เลือก',
       reclaimable: 'สามารถเรียกคืนได้',
-      skip: 'ข้าม'
+      skip: 'ข้าม',
+      selectAll: "เลือกทั้งหมด",
+      clearAll: "ล้าง",
+      noneSelectedHint: "ทำเครื่องหมายอย่างน้อยหนึ่งรายการด้านบน หรือคลิกข้าม"
     },
     uninstallModal: {
       titleForce: (name) => `บังคับลบ ${name}`,
@@ -32097,7 +32202,10 @@ export const CATALOG = {
       registryExcludedNote: (count) => `Dışlamalarınızda olduğu için atlanan kayıt defteri anahtarları: ${count}.`,
       itemsSelected: 'öğe seçildi',
       reclaimable: 'geri kazanılabilir',
-      skip: 'Atla'
+      skip: 'Atla',
+      selectAll: "Tümünü seç",
+      clearAll: "Temizle",
+      noneSelectedHint: "Yukarıdaki öğelerden en az birini işaretleyin veya Atla'ya tıklayın."
     },
     uninstallModal: {
       titleForce: (name) => `${name} zorla kaldır`,
@@ -32993,7 +33101,10 @@ export const CATALOG = {
       registryExcludedNote: (count) => `Розділи реєстру, пропущені, бо вони у ваших винятках: ${count}.`,
       itemsSelected: 'елементів вибрано',
       reclaimable: 'можна звільнити',
-      skip: 'Пропустити'
+      skip: 'Пропустити',
+      selectAll: "Вибрати все",
+      clearAll: "Очистити",
+      noneSelectedHint: "Позначте принаймні один елемент вище або натисніть «Пропустити»."
     },
     uninstallModal: {
       titleForce: (name) => `Примусово видалити ${name}`,
@@ -33887,7 +33998,10 @@ export const CATALOG = {
       registryExcludedNote: (count) => `Các khóa Registry bị bỏ qua vì nằm trong danh sách loại trừ của bạn: ${count}.`,
       itemsSelected: 'mục đã chọn',
       reclaimable: 'có thể thu hồi',
-      skip: 'Bỏ qua'
+      skip: 'Bỏ qua',
+      selectAll: "Chọn tất cả",
+      clearAll: "Xóa",
+      noneSelectedHint: "Đánh dấu ít nhất một mục ở trên, hoặc nhấn Bỏ qua."
     },
     uninstallModal: {
       titleForce: (name) => `Buộc gỡ bỏ ${name}`,
@@ -34783,7 +34897,10 @@ export const CATALOG = {
       registryExcludedNote: (count) => `因在你的排除项中而被略过的注册表项：${count}。`,
       itemsSelected: '个项目已选择',
       reclaimable: '可释放',
-      skip: '跳过'
+      skip: '跳过',
+      selectAll: "全选",
+      clearAll: "清除",
+      noneSelectedHint: "请至少勾选上方一项，或点击\"跳过\"。"
     },
     uninstallModal: {
       titleForce: (name) => `强制移除 ${name}`,
@@ -35679,7 +35796,10 @@ export const CATALOG = {
       registryExcludedNote: (count) => `因在你的排除項目中而被略過的登錄機碼：${count}。`,
       itemsSelected: '個項目已選取',
       reclaimable: '可釋放',
-      skip: '略過'
+      skip: '略過',
+      selectAll: "全選",
+      clearAll: "清除",
+      noneSelectedHint: "請至少勾選上方一項，或點擊「略過」。"
     },
     uninstallModal: {
       titleForce: (name) => `強制移除 ${name}`,

@@ -73,6 +73,13 @@ export default function LeftoverReview({ scanResult, selected, onToggle, onConfi
 
   const totalItems = groupsWithItems.reduce((sum, g) => sum + g.group.items.length, 0);
   const selectedCount = selected.size;
+
+  /** Flips every key in `keys` that is not already selected -- `onToggle` is a
+   * plain flip (both callers of this component implement it that way), so
+   * selecting a batch at once means calling it only on the ones that still
+   * need to change, never on one that is already where it should end up. */
+  const selectAll = (keys) => { for (const key of keys) if (!selected.has(key)) onToggle(key); };
+  const clearAll = (keys) => { for (const key of keys) if (selected.has(key)) onToggle(key); };
   const copy = DESTINATION_COPY[destination] || DESTINATION_COPY.quarantine;
   // Folders the scan found and held back because they are in the user's
   // exclusions (routes/leftovers.js). Said, so a leftover the user expected
@@ -118,14 +125,53 @@ export default function LeftoverReview({ scanResult, selected, onToggle, onConfi
             }))
             .filter((g) => g.entries.length > 0);
           if (rows.length === 0) return null;
+
+          // Every key a tier-wide "select all" acts on: every entry in this
+          // section that has a checkbox at all. A group marked `removable:
+          // false` (services) is read-only, so it never joins the count --
+          // selecting it would tick nothing a click could actually do anything
+          // with. 'possible' never gets this control at all (see below): it is
+          // the tier the review exists to make someone actually look at, and a
+          // one-click select would be exactly the blind tick this guards against.
+          const tierKeys = rows
+            .filter((g) => g.removable !== false)
+            .flatMap((g) => g.entries.map(({ i }) => `${g.key}:${i}`));
+          const tierAllSelected = tierKeys.length > 0 && tierKeys.every((key) => selected.has(key));
+          const offerBulkSelect = section !== 'possible' && tierKeys.length > 1;
+
           return (
         <section key={section ?? 'all'} data-tier={section ?? undefined}>
           {section && (
-            <div className="mb-2 px-1">
-              <h3 className="text-[11px] font-mono uppercase tracking-[0.14em] text-[color:var(--text-primary)]">
-                {t(`uninstallerV3.review.tier.${section}`)}
-              </h3>
-              <p className="text-[12px] text-[color:var(--text-muted)] mt-0.5">{t(`uninstallerV3.review.tier.${section}Hint`)}</p>
+            <div className="mb-2 px-1 flex items-start justify-between gap-3">
+              <div>
+                <h3 className="text-[11px] font-mono uppercase tracking-[0.14em] text-[color:var(--text-primary)]">
+                  {t(`uninstallerV3.review.tier.${section}`)}
+                </h3>
+                <p className="text-[12px] text-[color:var(--text-muted)] mt-0.5">{t(`uninstallerV3.review.tier.${section}Hint`)}</p>
+              </div>
+              {offerBulkSelect && (
+                <button
+                  type="button"
+                  className="text-[11.5px] font-medium text-[color:var(--accent-primary)] hover:underline shrink-0 mt-0.5"
+                  onClick={() => (tierAllSelected ? clearAll(tierKeys) : selectAll(tierKeys))}
+                >
+                  {tierAllSelected ? t('leftoverReview.clearAll') : t('leftoverReview.selectAll')}
+                </button>
+              )}
+            </div>
+          )}
+          {!section && offerBulkSelect && (
+            // No tiers at all (an older scan result): one toggle for the whole
+            // list stands in for the per-tier ones, since there is no tier
+            // distinction here to preserve by leaving it out.
+            <div className="mb-2 px-1 flex justify-end">
+              <button
+                type="button"
+                className="text-[11.5px] font-medium text-[color:var(--accent-primary)] hover:underline"
+                onClick={() => (tierAllSelected ? clearAll(tierKeys) : selectAll(tierKeys))}
+              >
+                {tierAllSelected ? t('leftoverReview.clearAll') : t('leftoverReview.selectAll')}
+              </button>
             </div>
           )}
         <div className="space-y-3">
@@ -236,14 +282,29 @@ export default function LeftoverReview({ scanResult, selected, onToggle, onConfi
         </p>
         <div className="flex items-center justify-between gap-4">
           <div className="text-[12px] text-[color:var(--text-secondary)]">
-            <span className="text-[color:var(--text-primary)] font-medium">{selectedCount}</span> {t('leftoverReview.itemsSelected')}
-            {selectedSize > 0 && (
-              <> · <span className="text-[color:var(--text-primary)] font-medium">{formatBytes(selectedSize)}</span> {t('leftoverReview.reclaimable')}</>
+            {selectedCount > 0 ? (
+              <>
+                <span className="text-[color:var(--text-primary)] font-medium">{selectedCount}</span> {t('leftoverReview.itemsSelected')}
+                {selectedSize > 0 && (
+                  <> · <span className="text-[color:var(--text-primary)] font-medium">{formatBytes(selectedSize)}</span> {t('leftoverReview.reclaimable')}</>
+                )}
+              </>
+            ) : (
+              // Visible text rather than a disabled button with no explanation --
+              // the same pattern Deep Clean's own footer uses before a Preview has
+              // run. This used to be a button that could be clicked with nothing
+              // ticked and would just close the dialog, identical to Skip from the
+              // outside: nothing told you which of the two just happened.
+              t('leftoverReview.noneSelectedHint')
             )}
           </div>
           <div className="flex items-center gap-2.5 shrink-0">
             <button className="btn-ghost px-4 py-2 rounded-lg text-[12.5px] font-medium" onClick={onSkip}>{t('leftoverReview.skip')}</button>
-            <button className={`${copy.danger ? 'btn-danger' : 'btn-primary'} px-4 py-2 rounded-lg text-[12.5px] font-medium`} onClick={onConfirm}>
+            <button
+              className={`${copy.danger ? 'btn-danger' : 'btn-primary'} px-4 py-2 rounded-lg text-[12.5px] font-medium disabled:opacity-50`}
+              onClick={onConfirm}
+              disabled={selectedCount === 0}
+            >
               {copy.button}
             </button>
           </div>

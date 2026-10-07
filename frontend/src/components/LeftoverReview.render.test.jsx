@@ -94,6 +94,9 @@ describe('the accent colour is only ever an action', () => {
       registryKeys: { ok: true, items: [{ path: 'HKCU\Software\Thing', name: 'Thing', kind: 'uninstall-entry' }] }
     } });
     expect(screen.getByText(/reclaimable/i)).toBeTruthy();
-    expect(container.innerHTML).not.toContain('var(--accent-primary)');
+    // Scoped to the confirm footer -- a Select-all/Clear bulk toggle
+    // elsewhere on the page is itself an action, so it's allowed the accent.
+    const footer = container.querySelector('[data-leftover-actions]');
+    expect(footer.innerHTML).not.toContain('var(--accent-primary)');
   });
 });

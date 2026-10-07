@@ -80,7 +80,7 @@ describe('a batch and the leftover settings', () => {
   it('starts with nothing ticked when no choice was recorded either', async () => {
     fetchSettings.mockResolvedValue({});
     await run();
-    expect(await screen.findByText(/^0$/)).toBeTruthy();
+    expect(await screen.findByText('Tick at least one item above, or Skip.')).toBeTruthy();
   });
 
   it('starts with everything ticked only when the setting is on', async () => {
@@ -92,6 +92,6 @@ describe('a batch and the leftover settings', () => {
   it('starts with nothing ticked when the setting is off', async () => {
     fetchSettings.mockResolvedValue({ preselectLeftovers: false });
     await run();
-    expect(await screen.findByText(/^0$/)).toBeTruthy();
+    expect(await screen.findByText('Tick at least one item above, or Skip.')).toBeTruthy();
   });
 });

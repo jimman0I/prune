@@ -155,7 +155,7 @@ describe('ticking leftovers', () => {
     fetchSettings.mockResolvedValue({});
     const { user } = await uninstall();
     await user.click(await screen.findByRole('button', { name: 'Scan for leftovers' }));
-    expect(await screen.findByText(/^0$/)).toBeTruthy();
+    expect(await screen.findByText('Tick at least one item above, or Skip.')).toBeTruthy();
   });
 
   it('starts with everything ticked when the setting is on', async () => {
@@ -169,7 +169,7 @@ describe('ticking leftovers', () => {
     fetchSettings.mockResolvedValue({ preselectLeftovers: false });
     const { user } = await uninstall();
     await user.click(await screen.findByRole('button', { name: 'Scan for leftovers' }));
-    expect(await screen.findByText(/^0$/)).toBeTruthy();
+    expect(await screen.findByText('Tick at least one item above, or Skip.')).toBeTruthy();
   });
 });
 
