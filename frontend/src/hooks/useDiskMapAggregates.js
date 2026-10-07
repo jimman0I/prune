@@ -22,7 +22,10 @@ export function hasWorkerSupport() {
  * biggest files that match. It travels alone -- the worker already holds the
  * tree -- so typing never re-sends it.
  *
- * Returns `{ result, computing }`. `result` is null before the first
+ * Returns `{ result, computing, error, retry }`. `error` is the reason counting
+ * failed (the worker threw, or could not be started or reached), and `retry`
+ * runs it again on a fresh worker; until one of those happens the screen should
+ * say it is counting, never that the folder is empty. `result` is null before the first
  * computation for the current tree has landed; from then on it holds the
  * last COMPLETED computation, which is deliberately not cleared back to
  * null while a newer one for a changed tree is still running -- keeping
@@ -50,18 +53,25 @@ export function useDiskMapAggregates(tree, { fileLimit = 60, filterText = '' } =
 
   const [state, setState] = useState(() => ({
     result: tree && !hasWorkerSupport() ? syncCompute() : null,
-    computing: Boolean(tree) && hasWorkerSupport()
+    computing: Boolean(tree) && hasWorkerSupport(),
+    error: null
   }));
+  // Bumped by retry(): a new value re-runs the effect on a fresh worker.
+  const [attempt, setAttempt] = useState(0);
 
   useEffect(() => {
     if (!tree) {
       sentTreeRef.current = null;
-      setState({ result: null, computing: false });
+      setState({ result: null, computing: false, error: null });
       return undefined;
     }
 
     if (!hasWorkerSupport()) {
-      setState({ result: syncCompute(), computing: false });
+      try {
+        setState({ result: syncCompute(), computing: false, error: null });
+      } catch (error) {
+        setState({ result: null, computing: false, error: String(error?.message ?? error) });
+      }
       return undefined;
     }
 
@@ -75,16 +85,31 @@ export function useDiskMapAggregates(tree, { fileLimit = 60, filterText = '' } =
     const worker = workerRef.current;
     const requestId = ++requestIdRef.current;
 
-    setState((prev) => ({ result: prev.result, computing: true }));
+    setState((prev) => ({ result: prev.result, computing: true, error: null }));
+
+    /** A worker that failed is not trusted again: it is thrown away so the next
+     * attempt starts a new one, with the tree sent afresh. */
+    const fail = (message) => {
+      if (requestId !== requestIdRef.current) return;
+      worker.terminate();
+      if (workerRef.current === worker) workerRef.current = null;
+      sentTreeRef.current = null;
+      setState((prev) => ({ result: prev.result, computing: false, error: message }));
+    };
+    const onError = (event) => fail(event?.message || 'the counting worker stopped');
+    const onMessageError = () => fail('the result could not be read');
 
     const onMessage = (event) => {
       // A later tree change bumps requestIdRef before this fires, so a
       // stale worker response for a folder the user has already left
       // never overwrites the answer for the one they are looking at now.
       if (event.data.requestId !== requestIdRef.current) return;
-      setState({ result: event.data, computing: false });
+      if (event.data.error) { fail(event.data.error); return; }
+      setState({ result: event.data, computing: false, error: null });
     };
     worker.addEventListener('message', onMessage);
+    worker.addEventListener('error', onError);
+    worker.addEventListener('messageerror', onMessageError);
     if (sentTreeRef.current !== tree) {
       sentTreeRef.current = tree;
       worker.postMessage({ requestId, tree, fileLimit, filterText });
@@ -92,13 +117,17 @@ export function useDiskMapAggregates(tree, { fileLimit = 60, filterText = '' } =
       worker.postMessage({ requestId, fileLimit, filterText });
     }
 
-    return () => worker.removeEventListener('message', onMessage);
+    return () => {
+      worker.removeEventListener('message', onMessage);
+      worker.removeEventListener('error', onError);
+      worker.removeEventListener('messageerror', onMessageError);
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [tree, fileLimit, filterText]);
+  }, [tree, fileLimit, filterText, attempt]);
 
   // The worker outlives any single tree change; it is only torn down
   // when Disk Map itself unmounts, not on every drill-down.
   useEffect(() => () => { workerRef.current?.terminate(); }, []);
 
-  return state;
+  return { ...state, retry: () => setAttempt((n) => n + 1) };
 }

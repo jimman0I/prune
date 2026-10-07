@@ -29,6 +29,13 @@ import { createAggregator } from '../lib/aggregator.js';
  * after that sends only its text. */
 const handle = createAggregator();
 
+/** A failure is reported, not swallowed: without this a tree that cannot be
+ * counted (too large to hand over, or a bug) left the screen waiting for an
+ * answer that never came, and it said the folder was empty. */
 self.onmessage = (event) => {
-  self.postMessage(handle(event.data));
+  try {
+    self.postMessage(handle(event.data));
+  } catch (error) {
+    self.postMessage({ requestId: event.data?.requestId, error: String(error?.message ?? error) });
+  }
 };

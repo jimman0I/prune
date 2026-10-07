@@ -53,3 +53,31 @@ describe('the folder table\'s size columns', () => {
     expect(table.className).not.toContain('overflow-hidden');
   });
 });
+
+describe('before the folder has been counted', () => {
+  it('says it is counting, never that the folder is empty', async () => {
+    renderScreen(<FolderTable folderRows={[]} counting onDrillDown={() => {}} />);
+    expect((await screen.findByRole('status')).textContent).toMatch(/Counting folders/);
+    expect(screen.queryByText(/Nothing to list/)).toBeNull();
+  });
+
+  it('says why counting failed and offers to try again', async () => {
+    const onRetryCount = vi.fn();
+    renderScreen(<FolderTable folderRows={[]} countError="tree too large" onRetryCount={onRetryCount} onDrillDown={() => {}} />);
+    const alert = await screen.findByRole('alert');
+    expect(alert.textContent).toMatch(/Couldn't count this folder: tree too large/);
+    await userEvent.setup().click(screen.getByRole('button', { name: 'Try again' }));
+    expect(onRetryCount).toHaveBeenCalledTimes(1);
+  });
+
+  it('still says the folder is empty once it has been counted and really is', async () => {
+    renderScreen(<FolderTable folderRows={[]} onDrillDown={() => {}} />);
+    expect(await screen.findByText('Nothing to list inside this folder.')).toBeTruthy();
+  });
+
+  it('keeps showing the last rows while a new count runs', async () => {
+    renderScreen(<FolderTable folderRows={rows} counting onDrillDown={() => {}} />);
+    expect(await screen.findByRole('table')).toBeTruthy();
+    expect(screen.queryByText(/Counting folders/)).toBeNull();
+  });
+});

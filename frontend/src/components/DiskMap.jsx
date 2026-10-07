@@ -427,10 +427,22 @@ function TreemapCell({ x, y, width, height, depth, name, size, allocated, modifi
  * depth limit -- 33.4 GB categorised out of a 35.1 GB tree here. A panel
  * that printed only the first number would be quietly claiming the
  * second. */
-function ExtensionPanel({ breakdown, shown, icons, typeColors }) {
+function ExtensionPanel({ breakdown, shown, icons, typeColors, counting = false }) {
   const { t } = useLanguage();
   const { rows, totalBytes, totalFiles, uncategorizedBytes } = breakdown;
-  if (rows.length === 0) return null;
+  if (rows.length === 0) {
+    // Still being counted: say so in the panel's own place, rather than leaving
+    // a blank column that reads as "this drive has no file types".
+    if (!counting) return null;
+    return (
+      <div className="glass-panel p-4 min-w-0" role="status">
+        <div className="text-[11px] font-mono uppercase tracking-[0.14em] text-[color:var(--text-secondary)] mb-2">
+          {t('diskMap.extensionPanel.header')}
+        </div>
+        <div className="text-[12.5px] text-[color:var(--text-muted)]">{t('diskMapCountingV1.countingTypes')}</div>
+      </div>
+    );
+  }
 
   return (
     <div className="glass-panel p-4 min-w-0">
@@ -1435,8 +1447,8 @@ function DiskMap() {
               last column is sliced off, as it was between 1024 and 1207 before
               the rail widened. Below the breakpoint they stack. */}
           <div className="grid gap-4 min-[1400px]:grid-cols-[minmax(0,1fr)_360px] items-start">
-            <FolderTable folderRows={aggregates.result?.folderRows ?? EMPTY_FOLDER_ROWS} onDrillDown={handleDrillDown} onContextMenu={handleContextMenu} onVisibleRows={onVisibleTreeRows} selectedPath={selectedPath} onSelect={handleSelect} filter={filter} searchText={searchText} />
-            <ExtensionPanel breakdown={breakdown} shown={shownExtensions} icons={typeIcons} typeColors={typeColors} />
+            <FolderTable folderRows={aggregates.result?.folderRows ?? EMPTY_FOLDER_ROWS} onDrillDown={handleDrillDown} onContextMenu={handleContextMenu} onVisibleRows={onVisibleTreeRows} selectedPath={selectedPath} onSelect={handleSelect} filter={filter} searchText={searchText} counting={aggregates.computing} countError={aggregates.error} onRetryCount={aggregates.retry} />
+            <ExtensionPanel breakdown={breakdown} shown={shownExtensions} icons={typeIcons} typeColors={typeColors} counting={aggregates.computing} />
           </div>
 
           <div ref={treemapPanelRef} className="glass-panel p-4 treemap-cells" style={{ position: 'relative' }} onMouseMove={handleContainerMouseMove}>
