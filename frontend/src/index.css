@@ -1,4 +1,7 @@
-@import url(https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=IBM+Plex+Serif:wght@400;500&family=JetBrains+Mono:wght@400;500&display=swap);
+/* Geist, IBM Plex Serif and JetBrains Mono are bundled with the app (see
+   the @fontsource imports at the top of main.jsx) rather than fetched
+   from fonts.googleapis.com here -- an offline desktop cleaner has no
+   business making a network call just to render its own text. */
 
 @tailwind base;
 @tailwind components;
