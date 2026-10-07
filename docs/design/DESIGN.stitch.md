@@ -1,6 +1,6 @@
 # Design System: Prune
 
-A Windows uninstaller, disk map and cleaner for one technical person on their own machine. This file describes the system as it ships, marks where it deliberately departs from the Stitch design-taste defaults (and why), and lists the adjustments proposed after running those rules against the app. Sections marked **Proposed** are not applied yet.
+A Windows uninstaller, disk map and cleaner for one technical person on their own machine. This file describes the system as it ships, marks where it deliberately departs from the Stitch design-taste defaults (and why), and lists the adjustments proposed after running those rules against the app. Sections marked **Proposed** are not applied yet; **Considered, declined** sections were weighed against an existing, deliberate decision and left as they were, with the reasoning given.
 
 ## 1. Visual Theme & Atmosphere
 
@@ -19,16 +19,14 @@ Dark (default)
 - **Zinc Mist** (#a1a1aa) - secondary text, 7.2:1 on panels.
 - **Quiet Slate** (#85858f) - third tier: column headers, placeholders, units. 5.1:1 on panels; chosen to clear 4.5:1 on every ground it sits on.
 - **Hairline** (rgba(255,255,255,0.06)) - panel borders. Control edges that must be found use rgba(255,255,255,0.36) (about 3.3:1).
-- **Instrument Cyan** (#06b6d4) - the one accent. Means "the thing you click" and nothing else.
+- **Instrument Cyan** (#18a9c2) - the one accent. Means "the thing you click" and nothing else. Was #06b6d4 at 94% saturation, over the rule's own 80% ceiling; lowered to 78%, same hue, 7.10:1 on the ground.
 
 Status colours (semantic, never decorative, always paired with a word): **Fault Rose** #ec5162, **Caution Amber** #f59e0b, **Running Green** #5db872.
 
 Light
-- **Warm Paper** (#f7f6f4) ground, **Pure Surface** (#ffffff) panel, **Ink** (#1c1917) text, **Stone** (#57534e) secondary, **Taupe** (#6b655f) third tier, **Deep Cyan** (#0e7490) accent.
+- **Warm Paper** (#f7f6f4) ground, **Pure Surface** (#ffffff) panel, **Ink** (#1c1917) text, **Stone** (#57534e) secondary, **Taupe** (#6b655f) third tier, **Deep Cyan** (#11728d) accent. Was #0e7490 at 82% saturation; lowered to 78%, 5.10:1 on the page ground.
 
-**Proposed:**
-- Lower the accent's saturation. Instrument Cyan is 94% saturated (Deep Cyan 82%); the rule is under 80%. **#18a9c2** (dark, 7.10:1 on the ground) and **#11728d** (light, 5.10:1) keep the hue and pass contrast.
-- Remove the purple and blue ambient colours. The aurora backdrop mixes violet (16%) and blue (10%) with cyan, which is the purple-blue neon look the rules ban, and the extension badge (purple) and one size band (blue) add accents that mean nothing to the task. Aurora tinted from the single accent only; badges and size bands in the neutral and status ramps.
+The ambient backdrop and two list badges used to carry purple and blue that meant nothing: the aurora mixed violet (16%) and blue (10%) in with the accent (the purple-blue neon look the rules ban), and the Applications list coloured its Store and browser-extension badges the same way. The aurora now tints from the single accent only, varying in opacity across its three layers rather than in hue; both badges are neutral outline. Purple and blue still mark genuinely categorical data -- the disk map's file types, the icon tiles -- where a hue tells two categories apart rather than decorating one.
 
 ## 3. Typography Rules
 
@@ -37,17 +35,17 @@ Light
 - **Data:** JetBrains Mono for every number, path, registry key and size; tabular figures.
 - **Banned here:** Inter, generic system fonts for UI, light weights at small sizes.
 
-**Proposed:** Geist is loaded through a Google Fonts import (`index.css` line 1). An offline desktop cleaner should not make a network call at launch; bundle Geist, Plex Serif and JetBrains Mono with the app.
+Geist and JetBrains Mono are bundled with the app (`@fontsource`, imported in `main.jsx`), not loaded from a Google Fonts network call -- an offline desktop cleaner has no business depending on fonts.googleapis.com being reachable just to render its own text. Plex Serif was bundled the same way while it still carried the display headings; dropped once Geist took that role over.
 
 ## 4. Component Stylings
 
-- **Buttons:** Primary is accent-filled with dark ink (text 8.19:1). Secondary is a ghost with a visible edge. Destructive is rose-tinted, never the default focus, and named for what it does. **Proposed:** remove the accent glow shadows on the primary button and the scan-progress bar; depth from a 1px edge and a -1px active translate only.
-- **Cards and panels:** Glass panel with a hairline border, used for dialogs and the Dashboard's single actions. **Proposed:** in Settings, replace one-card-per-toggle with rows separated by hairline dividers; and replace the Dashboard's three-up Drive health / Junk files / Left behind strip with three list rows (it is already one bordered panel, but it reads as the stat-card row the brief forbids).
-- **Inputs:** Label above, hint or error below, accent focus ring (2px, 8.19:1 on the ground). The exclusions field accepts a folder, a file type or a registry key.
-- **Tables:** Sticky header, 11px mono column labels, tinted row hover, a per-row action revealed on hover or focus. **Proposed:** show the row Uninstall button faintly at rest on the focused row; hover-only is the weakest discovery path.
-- **Badges:** 11px mono, uppercase, bordered. One meaning each: STORE, NEW, RUNNING, LEFT BEHIND, LOSES DATA. **Proposed:** neutral outline for LOSES DATA; reserve amber for irreversible mode and real faults.
-- **Loaders:** Determinate progress with counters where the work is countable. **Proposed:** replace the circular spinners (Deep Clean header, Disk Map scan, Duplicates) with a progress line and skeleton rows that match the layout.
-- **Empty states:** Say what is missing and the next action. **Proposed:** Duplicates, today a single field above a blank screen, gets a composed empty state with a Browse button and recent folders.
+- **Buttons:** Primary is accent-filled with dark ink (text 7.10:1). Secondary is a ghost with a visible edge. Destructive is rose-tinted, never the default focus, and named for what it does. No accent-tinted outer-glow shadow on the primary button, the scan-progress bar, or the disk-map treemap's hover highlight -- depth from a 1px edge, an ordinary black drop shadow, and a translate on press, not a simulated light source.
+- **Cards and panels:** Glass panel with a hairline border, used for dialogs and the Dashboard's single actions. Settings' General tab and the Dashboard's quiet row (Drive health / Junk files / Left behind) moved from one-card-per-toggle and a three-up strip to rows in a single panel, separated by hairline dividers -- three-up at any width still reads as the stat-card shape the brief forbids, chrome or no chrome.
+- **Inputs:** Label above, hint or error below, accent focus ring (2px, 7.10:1 on the ground). The exclusions field accepts a folder, a file type or a registry key.
+- **Tables:** Sticky header, 11px mono column labels, tinted row hover, a per-row action revealed on hover or focus. **Considered, declined:** showing the row Uninstall button faintly at rest. The current invisible-at-rest treatment is a deliberate, tested decision from an earlier apple-design pass (dense-table hover convention), and the row is already keyboard-focusable with the action revealed on focus-within -- the discoverability gap this would have closed is already closed for keyboard use; reversing the mouse-rest behaviour on top of that risked 212 rows of visible red Uninstall buttons for a marginal gain.
+- **Badges:** 11px mono, uppercase, bordered. One meaning each: STORE, NEW, RUNNING, LEFT BEHIND. LOSES DATA and the Deep Clean tree's "takes a long time" badge are neutral outline now; amber is reserved for irreversible mode (Delete now) and real faults.
+- **Loaders:** Determinate progress with counters where the work is countable. Duplicates' spinner became three skeleton group-cards (a hash scan has no total until it finishes, so a real progress bar would have to lie about one -- skeleton rows say "results shaped like this are coming" without claiming a percentage). **Considered, declined** for the other two named: Disk Map's breathing rings and Deep Clean's header dot are both already honest alternatives to a lying bar, not stand-ins for one -- Disk Map's own test suite documents "a real progress bar would have to lie" for a directory walk with no knowable total, and Deep Clean's dot is a liveness heartbeat beside an already-determinate bar+counter, covering the gap between discrete rule updates that a static bar can't.
+- **Empty states:** Say what is missing and the next action. Duplicates gained a native folder-browse button (the same chooser Forced Uninstall already used) so the field no longer requires a hand-typed path. **Proposed, not yet done:** a composed empty state with recent folders.
 
 ## 5. Layout Principles
 
