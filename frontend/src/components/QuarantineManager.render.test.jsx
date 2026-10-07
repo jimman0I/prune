@@ -24,6 +24,11 @@ const fetchQuarantineBatches = vi.fn();
 const restoreQuarantineBatch = vi.fn(async () => ({ restored: true }));
 const deleteQuarantineBatch = vi.fn(async () => ({ deleted: true }));
 const emptyQuarantine = vi.fn(async () => ({ deletedCount: 2, freedBytes: 0 }));
+// Resolved by default -- the removal-mode settings the empty state reads
+// (deepCleanRemoval, autoQuarantine, leftoverDestination) default to the
+// reversible choice, same as removalModeFrom/leftoverDestinationFrom's own
+// fallback for a settings object that never set them.
+const fetchSettings = vi.fn(async () => ({}));
 
 vi.mock('../lib/api.js', () => ({
   fetchQuarantineBatches: (...a) => fetchQuarantineBatches(...a),
@@ -33,7 +38,7 @@ vi.mock('../lib/api.js', () => ({
   // Imported by the same module for other screens; unused here but the
   // mock replaces the whole module, so they have to exist.
   fetchStartupItems: vi.fn(), fetchStartupIcons: vi.fn(), setStartupItemEnabled: vi.fn(),
-  fetchSettings: vi.fn(), updateSettings: vi.fn(),
+  fetchSettings: (...a) => fetchSettings(...a), updateSettings: vi.fn(),
   fetchDiskSpace: vi.fn(), fetchDiskHealth: vi.fn()
 }));
 
@@ -121,6 +126,42 @@ describe('the Quarantine screen', () => {
     renderScreen(<QuarantineManager />);
     expect(await screen.findByText('Nothing in quarantine.')).toBeTruthy();
     expect(screen.getByRole('button', { name: 'Empty Quarantine' }).disabled).toBe(true);
+  });
+
+  describe('what the empty state says is recoverable -- it must match what Settings actually does', () => {
+    beforeEach(() => {
+      fetchQuarantineBatches.mockResolvedValue(payload({ batches: [], batchCount: 0, totalBytes: 0 }));
+    });
+
+    it('on the reversible defaults, says both an uninstall and a Deep Clean land here', async () => {
+      renderScreen(<QuarantineManager />);
+      expect(await screen.findByText(/Anything an uninstall or a Deep Clean removes lands here first\./)).toBeTruthy();
+    });
+
+    it('with Delete now on, says only an uninstall\'s leftovers land here -- never "always recoverable"', async () => {
+      fetchSettings.mockResolvedValue({ deepCleanRemoval: 'delete' });
+      renderScreen(<QuarantineManager />);
+      expect(await screen.findByText(/Anything an uninstall's leftovers remove lands here first/)).toBeTruthy();
+      expect(screen.queryByText(/always recoverable/)).toBeNull();
+    });
+
+    it('with Auto-Quarantine off, also says only an uninstall\'s leftovers land here', async () => {
+      fetchSettings.mockResolvedValue({ autoQuarantine: false });
+      renderScreen(<QuarantineManager />);
+      expect(await screen.findByText(/Anything an uninstall's leftovers remove lands here first/)).toBeTruthy();
+    });
+
+    it('with the leftover destination set away from Quarantine, says only Deep Clean lands here', async () => {
+      fetchSettings.mockResolvedValue({ leftoverDestination: 'permanent' });
+      renderScreen(<QuarantineManager />);
+      expect(await screen.findByText(/Anything a Deep Clean removes lands here first/)).toBeTruthy();
+    });
+
+    it('with both set away from Quarantine, says nothing lands here at all', async () => {
+      fetchSettings.mockResolvedValue({ deepCleanRemoval: 'delete', leftoverDestination: 'recycle' });
+      renderScreen(<QuarantineManager />);
+      expect(await screen.findByText(/Nothing lands here right now\./)).toBeTruthy();
+    });
   });
 
   it('shows the load failure instead of an empty quarantine', async () => {
