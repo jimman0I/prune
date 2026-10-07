@@ -47,11 +47,15 @@
    * thing you click and the state you are reading. Every status that used
    * to be cyan has moved: running is green, an extension's browser badge
    * is purple, and the size bands are a severity ramp. */
-  --accent-primary: #06b6d4;
-  --accent-primary-glow: rgba(6, 182, 212, 0.35);
-  --accent-primary-soft: rgba(6, 182, 212, 0.12);
+  /* #06b6d4 was 94% saturated -- neon by the design system's own 80%
+     ceiling. #18a9c2 keeps the hue and the same lightness (so the
+     darker gradient stop below stays proportional) at 78%, and still
+     clears 7.10:1 on this ground. */
+  --accent-primary: #18a9c2;
+  --accent-primary-glow: rgba(24, 169, 194, 0.35);
+  --accent-primary-soft: rgba(24, 169, 194, 0.12);
   /* The darker stop of the primary button's gradient. */
-  --accent-primary-deep: #0596ae;
+  --accent-primary-deep: #148b9f;
 
   /* Ambient / data-viz accents -- decorative and categorical coloring
      only, never an interactive element's color. Cyan is deliberately NOT
@@ -168,11 +172,12 @@
  * -- roughly two points of chroma -- and is there to take the glare off,
  * not to make the app beige.
  *
- * The accent DARKENS rather than staying put. #06b6d4 is right on a
- * near-black ground and is 2.2:1 on white, which fails as text, fails as
- * a focus ring and fails as a button ground. #0e7490 is the same hue
- * carrying 5.36:1 with white on it, which is what lets the primary button
- * keep white text and the focus ring keep its 3:1 against the page. */
+ * The accent DARKENS rather than staying put. #18a9c2 (the dark theme's
+ * own accent, see above) is right on a near-black ground and is nowhere
+ * near enough contrast on white. #11728d is the same hue at 78%
+ * saturation, carrying 5.50:1 with white on it and 5.10:1 on the page
+ * ground, which is what lets the primary button keep white text and the
+ * focus ring keep its 3:1 against the page. */
 :root[data-theme='light'] {
   --bg-base: #f7f6f4;
   --bg-panel: #ffffff;
@@ -193,12 +198,12 @@
      which is the worst ground it ever sits on. */
   --text-muted: #6b655f;
 
-  --accent-primary: #0e7490;
-  --accent-primary-glow: rgba(14, 116, 144, 0.28);
+  --accent-primary: #11728d;
+  --accent-primary-glow: rgba(17, 114, 141, 0.28);
   /* 0.1 put the active tab's own label at 4.34:1 on it -- the same
-     badge trap the status colours fell into. 0.07 lifts it to 4.71. */
-  --accent-primary-soft: rgba(14, 116, 144, 0.07);
-  --accent-primary-deep: #0b5f76;
+     badge trap the status colours fell into. 0.07 lifts it to 5.00. */
+  --accent-primary-soft: rgba(17, 114, 141, 0.07);
+  --accent-primary-deep: #0e5d73;
   --accent-ink: #ffffff;
 
   /* The ambient and categorical hues darken too. At their dark-mode
@@ -668,9 +673,9 @@ body::before {
 /* Buttons */
 .btn-primary {
   background: linear-gradient(180deg, var(--accent-primary), var(--accent-primary-deep));
-  /* Dark ink, not white. White on this cyan is 2.43:1 -- the same trap the
+  /* Dark ink, not white. White on this cyan is 2.80:1 -- the same trap the
      coral it replaced had, and the reason that one already used dark ink.
-     Obsidian on #06b6d4 is 8.19:1. */
+     Obsidian on #18a9c2 is 7.10:1. */
   color: var(--accent-ink);
   border: 1px solid rgba(255, 255, 255, 0.1);
   box-shadow:

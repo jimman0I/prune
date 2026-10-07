@@ -14,8 +14,8 @@ describe('colorForNode', () => {
   });
 
   it('colors documents cyan', () => {
-    expect(colorForNode({ name: 'report.pdf', type: 'file' })).toBe('#06b6d4');
-    expect(colorForNode({ name: 'notes.docx', type: 'file' })).toBe('#06b6d4');
+    expect(colorForNode({ name: 'report.pdf', type: 'file' })).toBe('#18a9c2');
+    expect(colorForNode({ name: 'notes.docx', type: 'file' })).toBe('#18a9c2');
   });
 
   it('colors an unknown file extension gray', () => {
