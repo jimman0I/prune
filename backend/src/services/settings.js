@@ -252,7 +252,7 @@ const DEFAULT_SETTINGS = {
  * the guards should not have to know that a field is called
  * `skipRecentHours`, and a typo in that name would otherwise silently mean
  * "no guard" rather than failing anywhere visible. */
-export function cleanGuardsFrom(settings) {
+export function cleanGuardsFrom(settings, { removalOverride } = {}) {
   const hours = Number(settings?.skipRecentHours);
   return {
     excludeFolders: Array.isArray(settings?.excludeFolders) ? settings.excludeFolders : [],
@@ -262,7 +262,14 @@ export function cleanGuardsFrom(settings) {
     // Only an explicit false turns quarantining off. A settings file
     // written before this key existed must keep the safer behaviour.
     autoQuarantine: settings?.autoQuarantine !== false,
-    removal: normalizeRemoval(settings?.deepCleanRemoval),
+    // `removalOverride` is Deep Clean's confirm bar asking for THIS run only
+    // ('quarantine' or 'delete', from the client) -- never the global setting.
+    // Anything else (absent, or a stray value) falls through to the saved
+    // setting, so a bad override can only ever make a run SAFER, not more
+    // destructive, and recycle (autoQuarantine === false) is untouched by it.
+    removal: removalOverride === 'quarantine' || removalOverride === 'delete'
+      ? normalizeRemoval(removalOverride)
+      : normalizeRemoval(settings?.deepCleanRemoval),
     // 0 means "just delete"; 1 or 3 is how many overwrite passes come first.
     overwritePasses: settings?.overwriteBeforeDelete === true ? normalizePasses(settings?.overwritePasses) : 0,
     wipeDrive: normalizeWipeDrive(settings?.wipeDrive),

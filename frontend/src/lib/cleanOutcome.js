@@ -21,6 +21,30 @@ export function removalModeFrom(settings) {
   return 'quarantine';
 }
 
+/** What the confirm bar's "this run only" removal mode actually is, once the
+ * person's per-run choice is combined with the Settings default.
+ *
+ * `deleteNow` is the confirm bar's own toggle -- ticked makes this one clean
+ * delete, unticked leaves the Settings default alone. So: ticking it always
+ * means 'delete'; leaving it off keeps Recycle exactly as configured, and
+ * only replaces a Settings default of 'delete' with the reversible
+ * 'quarantine' -- backing out of a global delete-now default for one run is
+ * a request to be safe, never a request to guess which other mode they meant. */
+export function effectiveRemovalMode(settingsMode, deleteNow) {
+  if (deleteNow) return 'delete';
+  return settingsMode === 'delete' ? 'quarantine' : settingsMode;
+}
+
+/** The value sent to the backend for this one run, or undefined to say
+ * nothing and let it use the saved setting. Only ever 'delete' or
+ * 'quarantine' -- see cleanGuardsFrom's own doc comment: recycle is never
+ * something a client asks for, only something Settings configures. */
+export function removalOverrideFor(settingsMode, deleteNow) {
+  if (deleteNow) return 'delete';
+  if (settingsMode === 'delete') return 'quarantine';
+  return undefined;
+}
+
 /** The numbers and destination of a finished clean.
  *
  * `freedBytes` is what was deleted or compacted in place, `movedBytes` what

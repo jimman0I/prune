@@ -42,7 +42,9 @@ export function useDeepCleanExecute(nameOf, messages) {
   const [progress, setProgress] = useState(null);
   const abortRef = useRef(null);
 
-  const run = useCallback(async (ruleIds) => {
+  // `removalOverride` is the confirm bar's choice for this one run; see
+  // streamDeepCleanExecute's own doc comment for what it does when omitted.
+  const run = useCallback(async (ruleIds, removalOverride) => {
     setLog([]);
     setExecuted(0);
     setTotal(ruleIds.length);
@@ -80,7 +82,7 @@ export function useDeepCleanExecute(nameOf, messages) {
           // reported. Thrown once the stream itself ends, below.
           streamError = data.message;
         }
-      }, controller.signal);
+      }, controller.signal, removalOverride);
     } catch (err) {
       // Stop is a user action, not a failure -- whatever was cleaned
       // before that point already happened and is returned, not thrown.

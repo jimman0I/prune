@@ -707,10 +707,16 @@ export async function streamDeepCleanScan(onEvent, signal) {
  *
  * Events: 'start' { total }, 'rule' (one cleaned rule, carrying its own
  * name/category), 'done' { aborted, total, executed, freedBytes,
- * results }, 'error' { message }. */
-export async function streamDeepCleanExecute(ruleIds, onEvent, signal) {
+ * results }, 'error' { message }.
+ *
+ * `removalOverride` ('quarantine' or 'delete') is the confirm bar's choice
+ * for THIS run only; omitted, the backend uses the saved Settings default.
+ * Never sent for anything else -- see cleanGuardsFrom's own doc comment for
+ * why an unrecognised value can only make a run safer, never more so. */
+export async function streamDeepCleanExecute(ruleIds, onEvent, signal, removalOverride) {
   const ids = ruleIds.map(encodeURIComponent).join(',');
-  await streamSSE(`${API_URL}/deep-clean/execute/stream?ids=${ids}`, onEvent, signal);
+  const removal = removalOverride ? `&removal=${encodeURIComponent(removalOverride)}` : '';
+  await streamSSE(`${API_URL}/deep-clean/execute/stream?ids=${ids}${removal}`, onEvent, signal);
 }
 
 /** Reads a Server-Sent-Events response body, calling `onEvent(type, data)`
@@ -901,11 +907,11 @@ export async function fetchCookieDomains() {
   return { domains: data.domains ?? [], errors: data.errors ?? [] };
 }
 
-export async function executeDeepClean(ruleIds) {
+export async function executeDeepClean(ruleIds, removalOverride) {
   const res = await fetch(`${API_URL}/deep-clean/execute`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ ruleIds })
+    body: JSON.stringify(removalOverride ? { ruleIds, removal: removalOverride } : { ruleIds })
   });
   const data = await res.json();
   if (!res.ok) throw new Error(data.error || `Request failed: ${res.status}`);
@@ -920,11 +926,11 @@ export async function executeDeepClean(ruleIds) {
  * { ok:false, error } shape elevated.js's callers all use -- a declined
  * prompt is a normal outcome, not a thrown error, so this never throws
  * on `cancelled`. */
-export async function executeDeepCleanElevated(ruleIds) {
+export async function executeDeepCleanElevated(ruleIds, removalOverride) {
   const res = await fetch(`${API_URL}/deep-clean/execute-elevated`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ ruleIds })
+    body: JSON.stringify(removalOverride ? { ruleIds, removal: removalOverride } : { ruleIds })
   });
   const data = await res.json();
   if (!res.ok) throw new Error(data.error || `Request failed: ${res.status}`);

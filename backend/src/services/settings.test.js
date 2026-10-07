@@ -259,6 +259,38 @@ describe('cleanGuardsFrom', () => {
   it('reads a numeric string, which is what a number input gives back', () => {
     expect(cleanGuardsFrom({ skipRecentHours: '12' }).skipRecentHours).toBe(12);
   });
+
+  describe('removalOverride (Deep Clean\'s confirm bar, this run only)', () => {
+    it('with no override, uses the saved setting exactly as before', () => {
+      expect(cleanGuardsFrom({ deepCleanRemoval: 'delete' }).removal).toBe('delete');
+      expect(cleanGuardsFrom({ deepCleanRemoval: 'quarantine' }).removal).toBe('quarantine');
+      expect(cleanGuardsFrom({}).removal).toBe('quarantine');
+    });
+
+    it('a valid override replaces the saved setting, in either direction', () => {
+      expect(cleanGuardsFrom({ deepCleanRemoval: 'quarantine' }, { removalOverride: 'delete' }).removal).toBe('delete');
+      expect(cleanGuardsFrom({ deepCleanRemoval: 'delete' }, { removalOverride: 'quarantine' }).removal).toBe('quarantine');
+    });
+
+    it('anything that is not exactly quarantine or delete is ignored, falling back to the saved setting', () => {
+      for (const bad of ['recycle', 'permanent', 'DELETE', '', null, undefined, 5, {}]) {
+        expect(cleanGuardsFrom({ deepCleanRemoval: 'delete' }, { removalOverride: bad }).removal, String(bad)).toBe('delete');
+        expect(cleanGuardsFrom({ deepCleanRemoval: 'quarantine' }, { removalOverride: bad }).removal, String(bad)).toBe('quarantine');
+      }
+    });
+
+    it('never touches autoQuarantine, so recycle stays exactly what Settings configured', () => {
+      const guards = cleanGuardsFrom({ autoQuarantine: false, deepCleanRemoval: 'quarantine' }, { removalOverride: undefined });
+      expect(guards.autoQuarantine).toBe(false);
+      expect(guards.removal).toBe('quarantine'); // delete.js reads autoQuarantine on top of this to decide recycle
+    });
+
+    it('every other guard is unaffected by the override', () => {
+      const guards = cleanGuardsFrom({ excludeFolders: ['C:\\Games'], skipRecentHours: 48 }, { removalOverride: 'delete' });
+      expect(guards.excludeFolders).toEqual(['C:\\Games']);
+      expect(guards.skipRecentHours).toBe(48);
+    });
+  });
 });
 
 describe('hideUnavailableRules default', () => {
