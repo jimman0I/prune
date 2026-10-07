@@ -136,10 +136,17 @@
 
   /* The three ambient washes behind everything. Named here so the light
    * theme can retune them rather than inherit values chosen for
-   * near-black. */
-  --aurora-1: rgba(139, 92, 246, 0.16);
-  --aurora-2: rgba(59, 130, 246, 0.1);
-  --aurora-3: rgba(6, 182, 212, 0.14);
+   * near-black.
+   *
+   * All three are the accent now, not three different hues. Violet and
+   * blue alongside cyan is the purple-blue neon look the design system's
+   * own anti-patterns list bans, and neither colour means anything here
+   * -- an ambient backdrop has no status to report. Varying only in
+   * opacity still gives the three radial positions below some depth
+   * against each other without smuggling in a second and third accent. */
+  --aurora-1: rgba(24, 169, 194, 0.16);
+  --aurora-2: rgba(24, 169, 194, 0.1);
+  --aurora-3: rgba(24, 169, 194, 0.14);
   --grain-opacity: 0.035;
   --grain-blend: overlay;
 
@@ -266,10 +273,11 @@
   --shadow-raised: 0 2px 4px rgba(28, 25, 23, 0.06), 0 16px 32px -12px rgba(28, 25, 23, 0.18);
 
   /* A third of the dark side's strength. The same washes that read as an
-     aurora on obsidian read as spilled watercolour on white. */
-  --aurora-1: rgba(124, 58, 237, 0.05);
-  --aurora-2: rgba(37, 99, 235, 0.04);
-  --aurora-3: rgba(14, 116, 144, 0.05);
+     aurora on obsidian read as spilled watercolour on white. All three
+     are the light accent now -- see the dark theme's own note above. */
+  --aurora-1: rgba(17, 114, 141, 0.05);
+  --aurora-2: rgba(17, 114, 141, 0.04);
+  --aurora-3: rgba(17, 114, 141, 0.05);
   /* `overlay` lightens on a light ground, so the grain vanishes and then
      starts washing the page out. Multiply keeps it as texture. */
   --grain-opacity: 0.022;
@@ -375,18 +383,17 @@ select option {
    panel over a featureless backdrop reads as a solid tinted block, not
    glass. Panels need a backdrop with real color variation passing
    behind them for the blur to become visible as blur. Opacities roughly
-   doubled and spread widened; a third accent (--accent-blue, already
-   defined but unused here) added for more surface to catch across a
-   wide dashboard. Still decorative-only and low-key -- Aurora Deck's own
-   rule that these are ambient accents, never an interactive element's
-   color, is unchanged.
+   doubled and spread widened for more surface to catch across a wide
+   dashboard. Still decorative-only and low-key: ambient accents, never
+   an interactive element's colour.
 
    Kept at these opacities on the obsidian ground rather than halved back.
    The doubling was compensation for navy swallowing them, and against
    near-black the same values finally read as the aurora they are named
-   for -- which is most of what the ground change bought. The cyan stop
-   here is the one remaining ambient use of that hue and is deliberate: it
-   is a 14%-opacity wash behind everything, not a mark on a control, so it
+   for -- which is most of what the ground change bought. All three stops
+   are the single accent now (see --aurora-1/2/3 above): the second and
+   third used to be violet and blue, which was a second and third accent
+   that happened to sit in the backdrop rather than on a control --
    cannot be mistaken for the primary accent it now shares a value with. */
 body::before {
   content: '';
