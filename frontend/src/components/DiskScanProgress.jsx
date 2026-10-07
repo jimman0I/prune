@@ -176,17 +176,22 @@ function Bar({ percent }) {
 }
 
 /** Halts a running folder walk. Disabled once pressed: the walk then ends
- * on its own with the partial result, and a second press would ask twice. */
+ * on its own with the partial result, and a second press would ask twice.
+ *
+ * Plain text, no coloured glyph: this walk only counts what's there, so
+ * stopping it early loses nothing and risks nothing. The danger-red
+ * square this carried painted the same warning on a read-only scan that
+ * Duplicates' own identical Stop button -- beside an equally read-only
+ * hash scan -- never has. */
 function StopButton({ onStop }) {
   const { t } = useLanguage();
   const [asked, setAsked] = useState(false);
   return (
     <button
-      className="btn-ghost mt-4 px-4 py-2 rounded-lg text-[12.5px] font-medium flex items-center gap-2 disabled:opacity-50"
+      className="btn-ghost mt-4 px-4 py-2 rounded-lg text-[12.5px] font-medium disabled:opacity-50"
       disabled={asked}
       onClick={() => { setAsked(true); onStop(); }}
     >
-      <span aria-hidden="true" className="w-2 h-2 rounded-[2px] bg-[color:var(--danger)]" />
       {asked ? t('diskMap.scanProgress.stopping') : t('deepClean.stop')}
     </button>
   );

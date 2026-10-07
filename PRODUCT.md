@@ -81,9 +81,8 @@ Two rules hold this together, and both were nearly broken by the change itself:
   blue exist for the backdrop and for categorical data — the disk map's file
   types, the icon tiles. They never mark a control.
 
-Known exception, not yet resolved: the NEW badge and the "n new in 7 days"
-count still use the primary accent, which by the first rule they should not.
-That predates the palette change and is a real inconsistency.
+The NEW badge and the "n new in 7 days" count were the one exception to the
+first rule; both are neutral text/surface colour now, not the accent.
 
 ## Design Principles
 
