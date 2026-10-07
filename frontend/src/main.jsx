@@ -5,17 +5,16 @@ import { MotionConfig } from 'framer-motion';
 import '@fontsource/jetbrains-mono/400.css';
 import '@fontsource/jetbrains-mono/500.css';
 import '@fontsource/jetbrains-mono/600.css';
-// Geist (UI body) and IBM Plex Serif (page titles) used to come from a
-// Google Fonts @import in index.css -- a network call at launch for an
+// Geist (UI body and, at 600 weight, display headings) used to come from
+// a Google Fonts @import in index.css -- a network call at launch for an
 // offline desktop cleaner, and a dependency on fonts.googleapis.com
 // being reachable at all just to render legible text. Bundled instead,
-// the same way JetBrains Mono already was above.
+// the same way JetBrains Mono already was above. IBM Plex Serif carried
+// the headings for a while too; see index.css's own notes on both moves.
 import '@fontsource/geist/400.css';
 import '@fontsource/geist/500.css';
 import '@fontsource/geist/600.css';
 import '@fontsource/geist/700.css';
-import '@fontsource/ibm-plex-serif/400.css';
-import '@fontsource/ibm-plex-serif/500.css';
 import './index.css';
 import App from './App.jsx';
 import { queryClient } from './lib/queryClient.js';

@@ -339,8 +339,15 @@ body {
    * did, whose wider signage proportions cost horizontal room in columns
    * that had none to spare.
    *
-   * IBM Plex Serif still carries the display headings, so the contrast
-   * axis the previous note was protecting is unchanged.
+   * Display headings used IBM Plex Serif for a while, specifically so
+   * Geist would have something to contrast against rather than carrying
+   * both roles -- the "neutral, technical grotesque" read above was the
+   * body copy's job, and a single typeface doing both body and display
+   * risks disappearing into itself. Compared live against a Geist-only
+   * alternative (same typeface, 600 weight, tighter tracking) and the
+   * serif lost: this is still a cockpit-dense instrument panel first, and
+   * one typeface read as more of a piece with itself than two did. See
+   * .display-heading below.
    *
    * `cv11/ss01/ss03` stay off. They are Inter stylistic sets; Geist has
    * its own and none of them are wanted here. */
@@ -432,10 +439,15 @@ body::before {
   letter-spacing: 0;
 }
 
+/* Was IBM Plex Serif -- see body's own comment above for why that existed
+ * and what it was weighed against. Weight carries the hierarchy a second
+ * typeface used to: 600 against body text's 400-500, with tracking pulled
+ * in half again as far (-0.02em vs -0.01em) so the heavier weight does not
+ * read as merely bigger. */
 .display-heading {
-  font-family: 'IBM Plex Serif', Georgia, serif;
-  font-weight: 400;
-  letter-spacing: -0.01em;
+  font-family: 'Geist', 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-weight: 600;
+  letter-spacing: -0.02em;
 }
 
 .app-shell { padding: 24px; }
