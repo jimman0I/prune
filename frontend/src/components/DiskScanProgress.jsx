@@ -148,10 +148,7 @@ function Bar({ percent }) {
         {real ? (
           <motion.div
             className="relative h-full rounded-full overflow-hidden"
-            style={{
-              background: 'linear-gradient(90deg, var(--accent-primary), var(--accent-primary-deep))',
-              boxShadow: '0 0 12px var(--accent-primary-glow)'
-            }}
+            style={{ background: 'linear-gradient(90deg, var(--accent-primary), var(--accent-primary-deep))' }}
             initial={{ width: '0%' }}
             animate={{ width: `${width}%` }}
             transition={{ type: 'spring', stiffness: 120, damping: 24 }}
@@ -161,11 +158,7 @@ function Bar({ percent }) {
         ) : (
           <motion.div
             className="scan-indeterminate absolute inset-y-0 left-0 rounded-full overflow-hidden"
-            style={{
-              width: '35%',
-              background: 'linear-gradient(90deg, var(--accent-primary), var(--accent-primary-deep))',
-              boxShadow: '0 0 12px var(--accent-primary-glow)'
-            }}
+            style={{ width: '35%', background: 'linear-gradient(90deg, var(--accent-primary), var(--accent-primary-deep))' }}
           >
             <span aria-hidden="true" className="scan-shimmer absolute inset-0" />
           </motion.div>
