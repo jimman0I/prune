@@ -252,6 +252,18 @@ export const STORE_LIST_TTL_MS = 5 * 60 * 1000;
 let cached = null;
 let cachedAt = 0;
 
+/** Asks for a new scan now, behind the list that is already held, instead of
+ * waiting for the five minutes to pass. The screen calls this when the person
+ * comes back to the window, because that is when an app installed or removed in
+ * Windows has most likely changed. Nothing held yet means nothing to refresh:
+ * the first ask makes the list anyway. */
+export function refreshStoreAppsNow() {
+  if (!cached) return false;
+  cachedAt = Date.now();
+  refreshStoreList();
+  return true;
+}
+
 /** Testing seam -- the cache is process-wide. */
 export function clearStoreAppCache() {
   cached = null;

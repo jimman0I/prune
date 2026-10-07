@@ -4,7 +4,7 @@ import { getProgramIcons } from '../services/programIcons.js';
 import { getProgramSizes } from '../services/programSizes.js';
 import { getProgramVersions } from '../services/programVersions.js';
 import { getProgramInstallDates } from '../services/installDates.js';
-import { getStoreApps, getStorePackage, forgetStoreApp } from '../services/storeApps.js';
+import { getStoreApps, getStorePackage, forgetStoreApp, refreshStoreAppsNow } from '../services/storeApps.js';
 import { removeStoreApp } from '../services/removeStoreApp.js';
 import { getBrowserExtensions } from '../services/browserExtensions.js';
 import { extensionPageAddress } from '../services/extensionPage.js';
@@ -276,6 +276,15 @@ router.post('/apps-settings', async (req, res) => {
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
+});
+
+/** Starts a new Store scan behind the list the screen already has.
+ *
+ * 202 and nothing else: the answer arrives through GET /store a few seconds
+ * later, when the screen asks again. Changes nothing on the machine. */
+router.post('/store/refresh', (req, res) => {
+  refreshStoreAppsNow();
+  res.status(202).json({ ok: true });
 });
 
 /** Removes one Store app for the current user.
