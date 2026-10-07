@@ -34,6 +34,37 @@ async function launch(query) {
 }
 const names = (list) => list.map((a) => a.name);
 
+describe('asking for a new scan now', () => {
+  it('does nothing before a list is held, and otherwise swaps the new scan in behind the held one', async () => {
+    const scans = [[row('Alpha'), row('Beta')], [row('Beta')]];
+    const query = vi.fn(async () => scans.shift());
+    const { getStoreApps, refreshStoreAppsNow } = await launch(query);
+    expect(refreshStoreAppsNow()).toBe(false); // nothing held, nothing to refresh
+    expect(query).not.toHaveBeenCalled();
+
+    expect(names(await getStoreApps())).toEqual(['Alpha', 'Beta']);
+    expect(refreshStoreAppsNow()).toBe(true);
+    // the held list is still what is shown until the scan lands
+    expect(query).toHaveBeenCalledTimes(2);
+    await vi.waitFor(async () => expect(names(await getStoreApps())).toEqual(['Beta']));
+  });
+
+  it('runs one scan however many times it is asked', async () => {
+    let release;
+    const query = vi.fn()
+      .mockResolvedValueOnce([row('Alpha')])
+      .mockImplementationOnce(() => new Promise((resolve) => { release = () => resolve([row('Alpha'), row('Beta')]); }));
+    const { getStoreApps, refreshStoreAppsNow } = await launch(query);
+    await getStoreApps();
+    refreshStoreAppsNow();
+    refreshStoreAppsNow();
+    refreshStoreAppsNow();
+    expect(query).toHaveBeenCalledTimes(2);
+    release();
+    await vi.waitFor(async () => expect(names(await getStoreApps())).toEqual(['Alpha', 'Beta']));
+  });
+});
+
 describe('the Store list across launches', () => {
   it('the first launch scans, and saves the answer', async () => {
     const { getStoreApps } = await launch(vi.fn(async () => [row('Alpha'), row('Beta')]));

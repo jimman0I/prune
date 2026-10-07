@@ -1,10 +1,11 @@
-import { useEffect, useMemo } from 'react';
+import { useEffect, useMemo, useRef } from 'react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import {
   fetchPrograms, fetchProgramIcons, fetchProgramSizes, fetchProgramVersions,
   fetchProgramInstallDates, fetchStoreApps, fetchBrowserExtensions,
-  fetchPackageIcons, fetchRunningPrograms
+  fetchPackageIcons, fetchRunningPrograms, requestStoreRefresh
 } from '../lib/api.js';
+import { useReturnToWindow } from './useReturnToWindow.js';
 import { mergeMeasuredSizes } from '../lib/mergeSizes.js';
 import { mergeBinaryVersions } from '../lib/mergeVersions.js';
 import { mergeInstallDates } from '../lib/mergeInstallDates.js';
@@ -41,6 +42,10 @@ const DECORATION = { retry: 1 };
  * for again: long enough for the backend's refresh (the Store scan is about
  * seven seconds) to have landed. */
 export const REFRESH_AFTER_LAUNCH_MS = 15_000;
+
+/** After coming back to the window, how long until the refreshed Store list and
+ * icons are read: the Store scan the backend starts then takes about seven seconds. */
+export const REFRESH_AFTER_RETURN_MS = 12_000;
 
 /** `loadDecorations`: false defers every query below that only Applications
  * itself can show -- icons, versions, install dates, extensions, and the
@@ -101,6 +106,26 @@ export function useProgramData({ loadDecorations = true } = {}) {
     }, REFRESH_AFTER_LAUNCH_MS);
     return () => clearTimeout(timer);
   }, [loadDecorations, queryClient]);
+
+  // Coming back to the window after a real absence: whatever was installed or
+  // removed in Windows meanwhile is read now. The list and the sizes are cheap
+  // and fresh from the backend; the Store list is re-scanned behind the one the
+  // screen has, so it is asked for again once that has had time to land.
+  const returnTimer = useRef(null);
+  useReturnToWindow(() => {
+    queryClient.invalidateQueries({ queryKey: keys.programs, exact: true });
+    queryClient.invalidateQueries({ queryKey: keys.programSizes });
+    requestStoreRefresh();
+    clearTimeout(returnTimer.current);
+    returnTimer.current = setTimeout(() => {
+      queryClient.invalidateQueries({ queryKey: keys.storeApps });
+      if (loadDecorations) {
+        queryClient.invalidateQueries({ queryKey: keys.programIcons });
+        queryClient.invalidateQueries({ queryKey: keys.packageIcons });
+      }
+    }, REFRESH_AFTER_RETURN_MS);
+  });
+  useEffect(() => () => clearTimeout(returnTimer.current), []);
 
   const programs = useMemo(() => [
     ...mergeInstallDates(

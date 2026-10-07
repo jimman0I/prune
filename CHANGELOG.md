@@ -131,6 +131,13 @@ see v1.0.1 below) are documented here.
   window’s first load is over and one at a time, Prune makes and saves them. A
   failed or empty scan never overwrites a good saved list, and an app removed
   through Prune cannot be brought back by a scan that began before the removal.
+- **The program list follows changes made outside Prune.** Installing or removing
+  something in Windows, or finishing an installer, never reached an open window:
+  nothing refetched on focus and the screens stay mounted, so only a restart or a
+  removal made in Prune updated the list. Coming back to the window after being
+  away at least 15 seconds now reads the program list and sizes, and has the
+  backend re-scan the Store apps behind the list it holds (read again 12 seconds
+  later, when that scan has landed). A quick alt-tab does nothing.
 - Fixed: a Store app you had just removed stayed in the Applications list, and the
   Uninstall button waited several seconds before doing anything. The list of Store
   apps was kept for the whole session and never told about the removal, and the

@@ -77,6 +77,15 @@ export async function fetchStoreApps() {
   return data.apps ?? [];
 }
 
+/** Asks the backend to scan the Store apps again behind the list it holds. Fire
+ * and forget: the new list is read a few seconds later. A failure only means
+ * the list stays as it was. */
+export async function requestStoreRefresh() {
+  try {
+    await fetch(`${API_URL}/programs/store/refresh`, { method: 'POST' });
+  } catch { /* the list stays as it was */ }
+}
+
 /** Browser extensions, which no uninstall list mentions.
  *
  * Separate again: they live in browser profile folders rather than the
