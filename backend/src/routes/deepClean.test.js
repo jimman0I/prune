@@ -40,9 +40,18 @@ vi.mock('../lib/cleanerRules.js', () => ({
 }));
 
 const guards = { excludeFolders: ['C:\\Keep'], excludeExtensions: ['.psd'] };
+// A narrow stand-in for the real cleanGuardsFrom (services/settings.test.js
+// covers the real one in full): only an exact 'quarantine' or 'delete' second
+// argument is honoured, anything else is ignored -- the same whitelist the
+// real function uses, which is what keeps a per-run request from ever being
+// able to set anything BUT those two values.
+const cleanGuardsFrom = vi.fn((settings, opts) => ({
+  ...guards,
+  removal: opts?.removalOverride === 'quarantine' || opts?.removalOverride === 'delete' ? opts.removalOverride : undefined
+}));
 vi.mock('../services/settings.js', () => ({
   getSettings: async () => ({ excludeFolders: ['C:\\Keep'], excludeExtensions: ['.psd'] }),
-  cleanGuardsFrom: () => guards,
+  cleanGuardsFrom: (...a) => cleanGuardsFrom(...a),
   updateSettings: async (p) => p
 }));
 
@@ -112,6 +121,18 @@ describe('POST /deep-clean/execute', () => {
     expect(executeRules).toHaveBeenCalledWith(['temp', 'thumbs'], guards);
   });
 
+  it("carries the confirm bar's per-run removal choice, same as the streamed route", async () => {
+    const res = await execute({ ruleIds: ['temp'], removal: 'quarantine' });
+    expect(res.status).toBe(200);
+    expect(cleanGuardsFrom).toHaveBeenCalledWith(expect.anything(), { removalOverride: 'quarantine' });
+    expect(executeRules).toHaveBeenCalledWith(['temp'], { ...guards, removal: 'quarantine' });
+  });
+
+  it('with no removal in the body, asks for no override', async () => {
+    await execute({ ruleIds: ['temp'] });
+    expect(cleanGuardsFrom).toHaveBeenCalledWith(expect.anything(), { removalOverride: undefined });
+  });
+
   it('is not reachable by a GET', async () => {
     const res = await server.call('/deep-clean/execute');
     expect(res.status).toBe(404);
@@ -138,6 +159,12 @@ describe('POST /deep-clean/execute-elevated', () => {
     const res = await executeElevated({ ruleIds: ['windows_prefetch'] });
     expect(res.status).toBe(200);
     expect(executeRulesElevated).toHaveBeenCalledWith(['windows_prefetch'], guards);
+  });
+
+  it('also honours a per-run removal override, same as the unelevated route', async () => {
+    const res = await executeElevated({ ruleIds: ['windows_prefetch'], removal: 'delete' });
+    expect(res.status).toBe(200);
+    expect(executeRulesElevated).toHaveBeenCalledWith(['windows_prefetch'], { ...guards, removal: 'delete' });
   });
 
   it('passes a declined UAC prompt straight through, not as a 500', async () => {
@@ -256,17 +283,28 @@ describe('GET /deep-clean/execute/stream', () => {
     expect(executeRulesProgressively).toHaveBeenCalledWith(['temp', 'thumbs'], expect.any(Function), expect.objectContaining(guards));
   });
 
-  it("never lets a request choose how files are removed -- 'delete' comes from settings only", async () => {
+  it("carries the confirm bar's own removal choice for this run, on top of the usual exclusions", async () => {
+    // Deep Clean's confirm bar lets a person override Quarantine/Delete for
+    // one run without touching the Settings default -- see
+    // lib/cleanOutcome.js and settings.js's cleanGuardsFrom for the two
+    // halves of this. The route's whole job is to hand the value straight
+    // to cleanGuardsFrom as removalOverride and change nothing else.
     await (await fetch(`${server.base}/deep-clean/execute/stream?ids=temp&removal=delete`)).text();
-    const options = executeRulesProgressively.mock.calls.at(-1)[2];
-    expect(options.removal).toBeUndefined();
+    expect(cleanGuardsFrom).toHaveBeenCalledWith(expect.anything(), { removalOverride: 'delete' });
+    expect(executeRulesProgressively.mock.calls.at(-1)[2]).toMatchObject({ ...guards, removal: 'delete' });
+  });
 
-    await server.call('/deep-clean/execute', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ ruleIds: ['temp'], removal: 'delete' })
-    });
-    expect(executeRules.mock.calls.at(-1)[1].removal).toBeUndefined();
+  it("an unrecognised removal value is ignored, exactly as if none were sent", async () => {
+    // Not this route's job to validate -- cleanGuardsFrom's own whitelist
+    // (settings.test.js) is what makes a stray value fall back to Settings.
+    // This only checks the route passes along whatever it was given, untouched.
+    await (await fetch(`${server.base}/deep-clean/execute/stream?ids=temp&removal=permanent`)).text();
+    expect(cleanGuardsFrom).toHaveBeenCalledWith(expect.anything(), { removalOverride: 'permanent' });
+  });
+
+  it('with no removal in the request, asks for no override at all', async () => {
+    await (await fetch(`${server.base}/deep-clean/execute/stream?ids=temp`)).text();
+    expect(cleanGuardsFrom).toHaveBeenCalledWith(expect.anything(), { removalOverride: undefined });
   });
 
   it('refuses an empty or missing id list rather than cleaning nothing silently', async () => {

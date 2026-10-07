@@ -205,15 +205,70 @@ describe('honest result wording and the removal mode', () => {
       expect(screen.queryByRole('button', { name: 'Open Quarantine' })).toBeNull();
     });
 
-    it("does not send a removal choice to the backend -- it is read from settings there", async () => {
+    it('sends the per-run toggle\'s choice, which starts matching the Settings default', async () => {
+      // settings.deepCleanRemoval is 'delete' in this describe block, so the
+      // confirm bar's own toggle opens already on Delete now -- and the
+      // backend is told so explicitly (see lib/cleanOutcome.js), not left to
+      // infer it from Settings, since the person could change it right here.
       const user = userEvent.setup();
       renderScreen(<DeepClean />);
       await selectSomething(user);
       await user.click(cleanButton());
       await user.click(screen.getByRole('button', { name: 'Delete' }));
       await waitFor(() => expect(streamDeepCleanExecute).toHaveBeenCalledTimes(1));
-      expect(streamDeepCleanExecute.mock.calls[0]).toHaveLength(3); // ids, onEvent, signal
+      expect(streamDeepCleanExecute.mock.calls[0][3]).toBe('delete');
     });
+
+    it('backing Delete now out to Quarantine for one run sends that choice, and the safe prompt', async () => {
+      const user = userEvent.setup();
+      renderScreen(<DeepClean />);
+      await selectSomething(user);
+      await user.click(cleanButton());
+      // The toggle itself: "Quarantine" beside the already-selected "Delete now".
+      await user.click(screen.getByRole('radio', { name: 'Quarantine' }));
+      expect(screen.getByText(/Move 1 item \(1 KB\) to Quarantine\?/)).toBeTruthy();
+      await user.click(screen.getByRole('button', { name: 'Move to Quarantine' }));
+      await waitFor(() => expect(streamDeepCleanExecute).toHaveBeenCalledTimes(1));
+      expect(streamDeepCleanExecute.mock.calls[0][3]).toBe('quarantine');
+    });
+  });
+
+  it('turning Delete now on for one run, with Quarantine as the Settings default, sends that choice', async () => {
+    const user = userEvent.setup();
+    renderScreen(<DeepClean />);
+    await selectSomething(user);
+    await user.click(cleanButton());
+    // Default settings in this file are Quarantine: the toggle opens there.
+    expect(screen.getByRole('radio', { name: 'Quarantine' }).getAttribute('aria-checked')).toBe('true');
+    await user.click(screen.getByRole('radio', { name: 'Delete now' }));
+    expect(screen.getByText(/Delete 1 item \(1 KB\)\? This can't be undone\./)).toBeTruthy();
+    const confirm = screen.getByRole('button', { name: 'Delete' });
+    expect(confirm.className).toMatch(/btn-danger/);
+    await user.click(confirm);
+    await waitFor(() => expect(streamDeepCleanExecute).toHaveBeenCalledTimes(1));
+    expect(streamDeepCleanExecute.mock.calls[0][3]).toBe('delete');
+  });
+
+  it('leaving the toggle alone on the Quarantine default sends no override at all', async () => {
+    const user = userEvent.setup();
+    renderScreen(<DeepClean />);
+    await selectSomething(user);
+    await user.click(cleanButton());
+    await user.click(screen.getByRole('button', { name: 'Move to Quarantine' }));
+    await waitFor(() => expect(streamDeepCleanExecute).toHaveBeenCalledTimes(1));
+    expect(streamDeepCleanExecute.mock.calls[0][3]).toBeUndefined();
+  });
+
+  it('the toggle is gone once cleaning starts -- the choice that mattered already happened', async () => {
+    const user = userEvent.setup();
+    let resolveStream;
+    streamDeepCleanExecute.mockImplementation(() => new Promise((resolve) => { resolveStream = resolve; }));
+    renderScreen(<DeepClean />);
+    await selectSomething(user);
+    await user.click(cleanButton());
+    await user.click(screen.getByRole('button', { name: 'Move to Quarantine' }));
+    await waitFor(() => expect(screen.queryByRole('radiogroup')).toBeNull());
+    await act(async () => { resolveStream(); await Promise.resolve(); });
   });
 
   it('says Recycle Bin, not Quarantine, when Auto-Quarantine is off', async () => {

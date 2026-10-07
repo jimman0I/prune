@@ -231,7 +231,9 @@ router.get('/execute/stream', async (req, res) => {
       {
         signal: controller.signal,
         onProgress: (progress) => { if (!controller.signal.aborted) sendEvent(res, 'progress', progress); },
-        ...cleanGuardsFrom(await getSettings())
+        // Deep Clean's confirm bar can override Quarantine/Delete for this one
+        // run (never the saved setting); see cleanGuardsFrom's own doc comment.
+        ...cleanGuardsFrom(await getSettings(), { removalOverride: req.query.removal })
       }
     );
     if (!controller.signal.aborted) sendEvent(res, 'done', summary);
@@ -248,13 +250,13 @@ router.get('/execute/stream', async (req, res) => {
 });
 
 router.post('/execute', async (req, res) => {
-  const { ruleIds } = req.body || {};
+  const { ruleIds, removal } = req.body || {};
   if (!Array.isArray(ruleIds) || ruleIds.length === 0) {
     res.status(400).json({ error: 'ruleIds (a non-empty array) is required' });
     return;
   }
   try {
-    const result = await executeToSummary(ruleIds, cleanGuardsFrom(await getSettings()));
+    const result = await executeToSummary(ruleIds, cleanGuardsFrom(await getSettings(), { removalOverride: removal }));
     await recordFreed(result?.freedBytes);
     res.json(result);
   } catch (err) {
@@ -270,13 +272,13 @@ router.post('/execute', async (req, res) => {
  * seeing which rules it covers, never automatically. A declined prompt
  * is an ordinary outcome (`cancelled: true`), not a 500. */
 router.post('/execute-elevated', async (req, res) => {
-  const { ruleIds } = req.body || {};
+  const { ruleIds, removal } = req.body || {};
   if (!Array.isArray(ruleIds) || ruleIds.length === 0) {
     res.status(400).json({ error: 'ruleIds (a non-empty array) is required' });
     return;
   }
   try {
-    const result = await executeRulesElevated(ruleIds, cleanGuardsFrom(await getSettings()));
+    const result = await executeRulesElevated(ruleIds, cleanGuardsFrom(await getSettings(), { removalOverride: removal }));
     // The elevated helper is a separate process that does not know where this
     // app keeps its data, so what it freed is counted here, from its result.
     if (result?.ok) await recordFreed(result.data?.freedBytes);

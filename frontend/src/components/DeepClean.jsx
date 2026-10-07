@@ -14,7 +14,7 @@ import { defaultSelection, dropConfirmEveryTime, restoreSelection, selectableIds
 import { selectionTotal } from '../lib/selectionTotal.js';
 import { needsWarning, rememberedWith } from '../lib/cleanWarning.js';
 import { categoryTickPlan } from '../lib/categoryTickPlan.js';
-import { removalModeFrom, cleanOutcome } from '../lib/cleanOutcome.js';
+import { removalModeFrom, cleanOutcome, effectiveRemovalMode, removalOverrideFor } from '../lib/cleanOutcome.js';
 import { cleanResultSentences, cleanResultText } from '../lib/cleanResultText.js';
 import { batchDirsOfResults, ruleIdsOfBatches } from '../lib/undoQuarantine.js';
 import { useQuarantineUndo } from '../hooks/useQuarantineUndo.js';
@@ -281,6 +281,18 @@ function DeepClean({ onNavigate, shredRequest = null }) {
   // beforehand -- the backend decides for itself and takes no flag from here.
   const removalMode = removalModeFrom(settings);
 
+  // The confirm bar's own "Delete now, just this once" toggle -- see
+  // lib/cleanOutcome.js's effectiveRemovalMode/removalOverrideFor for what it
+  // means combined with the Settings default. Starts matching Settings every
+  // time the confirm bar opens fresh, so a choice from an earlier run never
+  // carries forward silently into this one.
+  const [deleteNowOverride, setDeleteNowOverride] = useState(false);
+  useEffect(() => {
+    if (confirmClean) setDeleteNowOverride(removalMode === 'delete');
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [confirmClean]);
+  const effectiveMode = effectiveRemovalMode(removalMode, deleteNowOverride);
+
   const shownCategories = useMemo(
     () => (categories ? visibleCategories(categories, hideUnavailable) : null),
     [categories, hideUnavailable]
@@ -510,7 +522,11 @@ function DeepClean({ onNavigate, shredRequest = null }) {
    * deliberate choice not to keep anything, and a partial undo of only the
    * databases it edited in place would read as more than it is. */
   const cleanToast = (message, cleaned, { treeBefore, scanAtBefore, tone }) => {
-    const dirs = removalMode === 'delete' ? [] : batchDirsOfResults(cleaned?.results);
+    // What actually ran, including this run's own override: Undo after a
+    // per-run "Delete now" must not offer to restore nothing, and Undo after
+    // backing a global Delete-now default out to Quarantine for this run
+    // must offer the real thing.
+    const dirs = effectiveMode === 'delete' ? [] : batchDirsOfResults(cleaned?.results);
     offerUndo(message, dirs, {
       tone,
       onRestored: (restoredDirs) => revertRows(treeBefore, ruleIdsOfBatches(cleaned.results, restoredDirs), scanAtBefore)
@@ -531,7 +547,7 @@ function DeepClean({ onNavigate, shredRequest = null }) {
       // Streamed -- see hooks/useDeepCleanExecute.js. `result` keeps the
       // same {freedBytes, results} shape the old one-shot POST returned,
       // so everything below reads it exactly as it always has.
-      const result = await runClean([...selected]);
+      const result = await runClean([...selected], removalOverrideFor(removalMode, deleteNowOverride));
       setCleanResult(result);
 
       // Stop is a user action, not a completion: whatever was cleaned
@@ -622,8 +638,8 @@ function DeepClean({ onNavigate, shredRequest = null }) {
 
   const cleanTotal = selectionTotal(categories, selected);
   const biggest = useMemo(
-    () => (removalMode === 'delete' && confirmClean ? biggestSelected(categories, selected, 3) : []),
-    [removalMode, confirmClean, categories, selected]
+    () => (effectiveMode === 'delete' && confirmClean ? biggestSelected(categories, selected, 3) : []),
+    [effectiveMode, confirmClean, categories, selected]
   );
   // Nothing can be cleaned blind: a completed Preview that measured at least
   // one ticked item is the precondition, and a running scan or clean is not.
@@ -900,6 +916,43 @@ function DeepClean({ onNavigate, shredRequest = null }) {
         <div className="flex flex-wrap items-center gap-2.5">
           {confirmClean ? (
             <>
+              {/* "For this clean" -- a per-run override of Settings' removal
+                  mode, never the other way round. Locked once cleaning starts:
+                  the choice that mattered was the one made before the click,
+                  and a control that still appeared to work mid-clean would be
+                  the "dangerous thing is never the easy thing" principle
+                  broken from the other side -- a choice with no effect that
+                  still looks like a choice. */}
+              {!cleaning && (
+                <div className="flex items-center gap-1.5 mr-1" role="radiogroup" aria-label={t('deepCleanRunRemovalV1.label')}>
+                  <button
+                    type="button"
+                    role="radio"
+                    aria-checked={effectiveMode !== 'delete'}
+                    className={`px-2.5 py-1 rounded-md text-[11px] font-mono uppercase tracking-wide border transition-colors ${
+                      effectiveMode !== 'delete'
+                        ? 'border-[color:var(--accent-primary)] text-[color:var(--accent-primary)] bg-[color:var(--accent-primary-soft)]'
+                        : 'border-[color:var(--border-subtle)] text-[color:var(--text-muted)] hover:text-[color:var(--text-secondary)] hover:border-[color:var(--border-hover)]'
+                    }`}
+                    onClick={() => setDeleteNowOverride(false)}
+                  >
+                    {t(removalMode === 'recycle' ? 'deepCleanRunRemovalV1.recycle' : 'deepCleanRunRemovalV1.quarantine')}
+                  </button>
+                  <button
+                    type="button"
+                    role="radio"
+                    aria-checked={effectiveMode === 'delete'}
+                    className={`px-2.5 py-1 rounded-md text-[11px] font-mono uppercase tracking-wide border transition-colors ${
+                      effectiveMode === 'delete'
+                        ? 'border-[color:var(--danger)] text-[color:var(--danger-ink)] bg-[color:var(--danger-soft)]'
+                        : 'border-[color:var(--border-subtle)] text-[color:var(--text-muted)] hover:text-[color:var(--text-secondary)] hover:border-[color:var(--border-hover)]'
+                    }`}
+                    onClick={() => setDeleteNowOverride(true)}
+                  >
+                    {t('deepCleanRunRemovalV1.deleteNow')}
+                  </button>
+                </div>
+              )}
               {/* The confirm carries the SIZE, not just the count. "Move
                   47 items to Quarantine?" is not a decision anyone can
                   make -- 47 items is a browser cache or most of a game
@@ -911,7 +964,7 @@ function DeepClean({ onNavigate, shredRequest = null }) {
                   confirm bar already made, since a translated catalog
                   function can only return a plain string. */}
               <span className="text-[12.5px] text-[color:var(--text-primary)] mr-1">
-                {t(CONFIRM_PROMPT[removalMode], selected.size, cleanTotal.anyMeasured, formatBytes(cleanTotal.bytes))}
+                {t(CONFIRM_PROMPT[effectiveMode], selected.size, cleanTotal.anyMeasured, formatBytes(cleanTotal.bytes))}
                 {wipeSelected && <> {t('deepClean.confirm.wipeNote')}</>}
                 {/* The number in the prompt is from an earlier scan: said so,
                     where it is read. Each rule is measured again as it is
@@ -923,7 +976,7 @@ function DeepClean({ onNavigate, shredRequest = null }) {
                 )}
                 {/* Only where it cannot be undone: naming the biggest items
                     is what lets someone tell a cache from a game install. */}
-                {removalMode === 'delete' && biggest.length > 0 && (
+                {effectiveMode === 'delete' && biggest.length > 0 && (
                   <span className="block mt-0.5 text-[11.5px] text-[color:var(--text-secondary)]">
                     {t('deepCleanV3.files.biggest', biggest.map((f) => `${fileName(f.path)} (${formatBytes(f.sizeBytes)})`).join(', '))}
                   </span>
@@ -951,11 +1004,11 @@ function DeepClean({ onNavigate, shredRequest = null }) {
               {/* Danger, not accent, when the confirm cannot be undone: the
                   accent is for the safe primary action. */}
               <button
-                className={`${removalMode === 'delete' ? 'btn-danger rounded-lg' : 'btn-primary'} px-5 py-2 text-[12.5px] font-medium disabled:opacity-50`}
+                className={`${effectiveMode === 'delete' ? 'btn-danger rounded-lg' : 'btn-primary'} px-5 py-2 text-[12.5px] font-medium disabled:opacity-50`}
                 onClick={handleClean}
                 disabled={cleaning}
               >
-                {cleaning ? t('deepClean.confirm.cleaning') : t(CONFIRM_BUTTON[removalMode])}
+                {cleaning ? t('deepClean.confirm.cleaning') : t(CONFIRM_BUTTON[effectiveMode])}
               </button>
             </>
           ) : (

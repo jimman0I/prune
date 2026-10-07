@@ -10,4 +10,6 @@ import whatsNew from './whatsNew.js';
 
 import diskMapCounting from './diskMapCounting.js';
 
-export const EXTRAS = [diskMap, deepClean, uninstaller, runAsAdmin, dashboardQol, diskMapQol, background, explorer, whatsNew, diskMapCounting];
+import deepCleanRunRemoval from './deepCleanRunRemoval.js';
+
+export const EXTRAS = [diskMap, deepClean, uninstaller, runAsAdmin, dashboardQol, diskMapQol, background, explorer, whatsNew, diskMapCounting, deepCleanRunRemoval];
