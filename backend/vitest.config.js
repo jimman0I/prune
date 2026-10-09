@@ -21,6 +21,16 @@ export default defineConfig({
     // CLI, and a slower CI runner's process-spawn overhead is a real,
     // honest cost of that, not a hung test to paper over.
     testTimeout: 30000,
+    // Vitest's hookTimeout defaults to 10000ms regardless of testTimeout
+    // above -- a separate setting the v2.6.0 fix never touched, because
+    // nothing had hit it yet. The real-worker-thread suites
+    // (cleanWorker.integration.test.js, routes/deepClean.worker.test.js)
+    // found it on a real CI run (v3.0.0's build, confirmed reproducing
+    // twice in a row): their `afterEach(() => rmSync(root, {recursive:
+    // true, force: true}))` was timing out at exactly 10000ms, the same
+    // Windows-runner slowness as above landing on a hook instead of a
+    // test. Same fix, same reasoning: raised to match, not mocked away.
+    hookTimeout: 30000,
     // The lifetime "freed" total (services/stats.js) is bumped by every real
     // removal a test performs. Pointed at a scratch file so none of them counts
     // towards the total on the machine running the suite.
