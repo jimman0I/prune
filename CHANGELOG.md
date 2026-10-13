@@ -3,6 +3,38 @@
 All notable changes to Prune (formerly named unrevo -- rebranded 2026-09-01,
 see v1.0.1 below) are documented here.
 
+## v3.0.1
+
+### Fixed
+
+- **An MSI program could report a successful uninstall and not actually be
+  removed.** Some registry UninstallStrings publish the Install verb
+  (`/I{GUID}`) instead of Uninstall (`/X{GUID}`) -- a known authoring
+  mistake. Making that silent ran a quiet repair instead of a removal: no
+  window, exit code 0, nothing gone. The verb is corrected before Prune
+  ever adds `/qn`.
+- **A program's own uninstaller could genuinely open and still never be
+  seen.** Windows grants permission to steal the foreground once, to
+  whichever process asks for it next -- not necessarily the uninstaller,
+  and a self-relaunching installer can hand the real window to a different
+  process than the one Prune started. Prune now actively searches for the
+  window (its own, or any process it spawns) for a few seconds after
+  launch and brings that exact one forward, rather than granting the
+  permission once before anything exists to use it.
+- **Nothing checked whether an uninstall actually worked.** A successful
+  spawn and a 0 exit code both say nothing reliable on their own -- Prune
+  now re-reads the registry once the uninstaller exits, and if the program
+  is still there, offers Forced Uninstall directly instead of moving on as
+  if it had succeeded.
+- The scan-depth picker (Safe / Moderate / Advanced) no longer sits on the
+  initial confirmation dialog. It is its own screen now, shown only once
+  the real uninstaller has already run -- the confirmation dialog asks one
+  question at a time.
+- The removal summary breaks a quarantined folder down into what was
+  actually inside it -- folders, files, registry keys and registry values
+  counted separately -- instead of rounding every quarantined item up to
+  "1 item".
+
 ## v3.0.0
 
 ### Added
