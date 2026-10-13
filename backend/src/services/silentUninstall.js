@@ -66,6 +66,31 @@ function hasUiLevel(command) {
   return /(^|\s)\/(q[nbrf!+-]*|quiet|passive)(\s|$)/i.test(command);
 }
 
+/** Real bug, found investigating a report that a program's own uninstaller
+ * "never appeared" and the program stayed installed: its UninstallString
+ * was `MsiExec.exe /I{GUID}` -- /I, not /X. /I is msiexec's INSTALL verb;
+ * against an already-installed product code it reruns the install
+ * sequence (a repair, functionally a no-op) rather than removing anything.
+ * Clicking it in Control Panel shows the modify/repair/remove dialog where
+ * a person picks Remove -- but making the command silent (below) skips
+ * straight past that dialog and silently repairs the program instead of
+ * uninstalling it. No window, no error, nothing removed: exactly what was
+ * reported.
+ *
+ * This is a known authoring mistake (some WiX-era and vendor-bundled MSI
+ * packages publish the Modify path's verb into the Uninstall registry
+ * value), not something specific to one program -- any MsiExec entry can
+ * have it. Swapping the verb before adding quiet flags is what makes the
+ * silent command actually uninstall, matching what a person would get by
+ * running it visibly and clicking Remove. `{GUID}` is matched loosely
+ * (anything inside the braces) rather than as a strict hex pattern,
+ * because msiexec itself does not validate the product code's shape
+ * before failing on it -- a tighter regex would just mean dead code for
+ * the lookalike-but-wrong `{GUID}` that would still break kept silent. */
+function useUninstallVerb(command) {
+  return command.replace(/(^|\s)\/I(\{[^}]*\})/i, '$1/X$2');
+}
+
 /** The command to actually run, given everything known about the program.
  *
  * `quietUninstallString` is the vendor's own answer and beats anything
@@ -81,7 +106,7 @@ export function silentUninstallCommand({ uninstallString, quietUninstallString, 
   if (typeof uninstallString !== 'string' || !uninstallString.trim()) return uninstallString;
 
   if (kind === 'msi') {
-    let command = uninstallString;
+    let command = useUninstallVerb(uninstallString);
     if (!hasUiLevel(command)) command += ' /qn';
     if (!hasFlag(command, '/norestart')) command += ' /norestart';
     return command;

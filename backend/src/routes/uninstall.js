@@ -113,7 +113,21 @@ router.post('/', async (req, res) => {
       return;
     }
     const result = await runUninstaller({ ...program, running }, (type, data) => sendEvent(res, type, data));
-    sendEvent(res, 'done', result);
+    // The exit code alone is not proof of anything -- see services/uninstall.js's
+    // own comment, "uninstallers routinely report success when they weren't, and
+    // vice versa." This is the fix for that: a fresh registry read, after the
+    // process exits, asking the one question that actually matters -- is the
+    // program's Add/Remove Programs entry still there. Found live: an MSI entry
+    // whose UninstallString named the Install verb instead of Uninstall ran to
+    // completion, exit code 0, and silently repaired the program instead of
+    // removing it -- the registry key never moved, and nothing before this told
+    // the person that. Compared by registryKey, the canonical path, rather than
+    // id: dedupeIds can suffix id on a collision, and a path never changes.
+    const after = await listInstalledPrograms().catch(() => null);
+    const stillInstalled = after
+      ? after.some((p) => (program.registryKey ? p.registryKey === program.registryKey : p.id === program.id))
+      : null; // The re-check itself failed; not claiming an answer we don't have.
+    sendEvent(res, 'done', { ...result, stillInstalled });
   } catch (err) {
     sendEvent(res, 'error', { message: err.message });
   } finally {

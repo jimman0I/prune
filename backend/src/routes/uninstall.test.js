@@ -74,9 +74,12 @@ describe('what POST /uninstall agrees to run', () => {
     // Not cached, deliberately. Every uninstall changes the registry this
     // reads, so a batch working from one snapshot would be checking each
     // program against a list that its own earlier removals invalidated.
+    // Twice per call, not once: the lookup before the uninstaller runs,
+    // and the stillInstalled re-check after it exits -- see that test
+    // below for why the second read exists at all.
     await start({ programId: 'Thing' });
     await start({ programId: 'Msi App' });
-    expect(listInstalledPrograms).toHaveBeenCalledTimes(2);
+    expect(listInstalledPrograms).toHaveBeenCalledTimes(4);
   });
 
   it('needs a program id', async () => {
@@ -154,5 +157,31 @@ describe('the stream, once a command has been settled on', () => {
     expect(res.status).toBe(200);
     expect(text).toContain('1603');
     expect(text).toContain('event: done');
+  });
+});
+
+describe('the fresh re-check once the uninstaller exits', () => {
+  // Real bug this exists to catch: an uninstaller can exit 0 and have
+  // removed nothing -- an MSI entry whose UninstallString named Install
+  // instead of Uninstall ran to completion and silently repaired the
+  // program instead. The exit code alone said nothing was wrong. A fresh
+  // read of the registry, asking the one question Windows itself answers
+  // authoritatively -- is the Add/Remove Programs entry still there -- is
+  // what actually catches that.
+  it('says stillInstalled: true when the registry still lists the program', async () => {
+    // The default mock returns the same static list on every call, which
+    // is exactly what a program whose uninstall silently did nothing
+    // looks like: still present on the fresh re-read.
+    const { text } = await start({ programId: 'Msi App' });
+    const done = text.split('event: done\ndata: ')[1]?.split('\n')[0];
+    expect(JSON.parse(done)).toMatchObject({ stillInstalled: true });
+  });
+
+  it('says stillInstalled: false once the entry is actually gone', async () => {
+    listInstalledPrograms.mockImplementationOnce(async () => programs); // the lookup before running it
+    listInstalledPrograms.mockImplementationOnce(async () => programs.filter((p) => p.id !== 'Msi App')); // the re-check after
+    const { text } = await start({ programId: 'Msi App' });
+    const done = text.split('event: done\ndata: ')[1]?.split('\n')[0];
+    expect(JSON.parse(done)).toMatchObject({ stillInstalled: false });
   });
 });
