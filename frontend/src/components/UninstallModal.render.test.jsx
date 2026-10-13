@@ -98,6 +98,33 @@ describe('where the leftovers go', () => {
     expect(await screen.findByText(/couldn.t be removed/i)).toBeTruthy();
     expect(screen.getByText(/The file is in use/)).toBeTruthy();
   });
+
+  it('breaks the removal down into folders, files, registry keys and values', async () => {
+    // Real counts, not the one-sentence summary's rounded-up "item"s: a
+    // quarantined install folder is one entry in `files`, but the backend
+    // (quarantine.js) counts what was actually inside it.
+    removeQuarantined.mockResolvedValue({
+      destination: 'quarantine', files: [{ originalPath: 'x', sizeBytes: 2048 }], registryKeys: ['k'],
+      totalSizeBytes: 2048, folderCount: 49, fileCount: 1478, registryKeyCount: 12, registryValueCount: 19
+    });
+    const { user } = await uninstall();
+    await user.click(await screen.findByRole('button', { name: 'Scan for leftovers' }));
+    await user.click(await screen.findByRole('button', { name: 'Remove selected' }));
+
+    expect(await screen.findByText('49 folders · 1,478 files · 12 registry keys · 19 registry values')).toBeTruthy();
+  });
+
+  it('shows no breakdown row when the manifest carries no counts', async () => {
+    // A legacy quarantine batch, or any caller that never populated the
+    // new fields -- must not crash, and must not print "0 folders · 0
+    // files · 0 registry keys · 0 registry values" either.
+    const { user } = await uninstall(); // default mock has no folderCount etc.
+    await user.click(await screen.findByRole('button', { name: 'Scan for leftovers' }));
+    await user.click(await screen.findByRole('button', { name: 'Remove selected' }));
+
+    await screen.findByText(/moved/i);
+    expect(screen.queryByText(/registry keys/i)).toBeNull();
+  });
 });
 
 describe('what can be copied', () => {

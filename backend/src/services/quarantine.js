@@ -26,6 +26,32 @@ function safeSegment(text) {
   return text.replace(/[^a-zA-Z0-9._-]+/g, '_').slice(0, 60) || 'unknown';
 }
 
+/** How many real files sit inside a directory, counted after it has
+ * already been moved into quarantine -- the same tree that was just
+ * quarantined, not a guess from before the move. A leftover is usually a
+ * whole folder (an install directory, a cache folder), and "1 item
+ * removed" undercounts what actually happened inside it by orders of
+ * magnitude; this is what lets the summary say "1,478 files" instead of
+ * "49 folders" and leave the real count unsaid. A directory entry that
+ * fails to read (a reparse point, a permissions quirk) counts as zero
+ * rather than aborting the whole batch -- same partial-results philosophy
+ * every other loop in this file follows. */
+async function countFilesRecursive(dir) {
+  let count = 0;
+  let entries;
+  try {
+    entries = await readdir(dir, { withFileTypes: true });
+  } catch {
+    return 0;
+  }
+  for (const entry of entries) {
+    const full = join(dir, entry.name);
+    if (entry.isDirectory()) count += await countFilesRecursive(full);
+    else count += 1;
+  }
+  return count;
+}
+
 /** `HKCU:\Software\Foo` (PowerShell provider syntax) -> `HKCU\Software\Foo`
  * (reg.exe syntax) — the two tools disagree on both the drive-colon and
  * path-separator convention for the registry root. */
@@ -82,10 +108,16 @@ export async function quarantineAndDelete({ programName, files, registryKeys, de
       // Stat BEFORE the rename -- same file either side of a same-volume move
       // (rename never changes size), but stat-ing after would be one more
       // opportunity to race a file that vanishes between the two calls.
-      const sizeBytes = (await stat(filePath)).size;
+      const st = await stat(filePath);
+      const sizeBytes = st.size;
+      const isDirectory = st.isDirectory();
       const dest = join(batchDir, `file-${movedFiles.length}-${basename(filePath)}`);
       await rename(filePath, dest);
-      movedFiles.push({ originalPath: filePath, quarantinedPath: dest, sizeBytes });
+      // Counted AFTER the move: the moved tree is the one actually
+      // quarantined, so this is a real count, not an estimate from before
+      // the rename.
+      const fileCount = isDirectory ? await countFilesRecursive(dest) : 1;
+      movedFiles.push({ originalPath: filePath, quarantinedPath: dest, sizeBytes, isDirectory, fileCount });
     } catch (err) {
       // A locked file (EBUSY, occasionally EPERM) must not abort every file
       // after it, or every registry key in the loop below -- same
@@ -150,11 +182,27 @@ export async function quarantineAndDelete({ programName, files, registryKeys, de
     }
   }
 
+  // Registry targets are a bare path string for a whole key, {path,
+  // valueName} for one value inside a shared key -- see toRegistryTarget
+  // above. Splitting the count here, once, rather than in every caller
+  // that wants to show it (the summary screen, history) the way
+  // folderCount/fileCount already are below.
+  const registryValueCount = exportedKeys.filter((e) => typeof e !== 'string' && e.valueName).length;
+
   const manifest = {
     programName, createdAt: Date.now(), batchDir,
     files: movedFiles, failedFiles, scheduledForReboot,
     registryKeys: exportedKeys, failedRegistryKeys: failedKeys, regFiles,
-    totalSizeBytes: movedFiles.reduce((sum, f) => sum + f.sizeBytes, 0)
+    totalSizeBytes: movedFiles.reduce((sum, f) => sum + f.sizeBytes, 0),
+    // Real counts for the summary screen -- a program's own install folder
+    // quarantined as one `files` entry is one item in that array, but
+    // tens of thousands of real files on disk; these are what let the
+    // summary say so instead of rounding every quarantined folder down to
+    // "1 item" and every leftover value up to "1 registry key".
+    folderCount: movedFiles.filter((f) => f.isDirectory).length,
+    fileCount: movedFiles.reduce((sum, f) => sum + (f.isDirectory ? f.fileCount : 1), 0),
+    registryKeyCount: exportedKeys.length - registryValueCount,
+    registryValueCount
   };
   await writeFile(join(batchDir, 'manifest.json'), JSON.stringify(manifest, null, 2), 'utf8');
   return manifest;

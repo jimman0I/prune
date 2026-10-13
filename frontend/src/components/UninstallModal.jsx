@@ -69,6 +69,28 @@ export function removalSummary(removal, messages = DEFAULT_REMOVAL_SUMMARY_MESSA
   return messages.quarantine(files, keys, freed);
 }
 
+/** The real counts behind the one-sentence summary above: folders and
+ * files counted separately (a quarantined install folder is one entry in
+ * `removal.files`, but can be thousands of real files on disk -- see
+ * quarantine.js's countFilesRecursive), registry keys and registry
+ * values the same way. `?? 0` on every field: a manifest from before this
+ * existed (an old quarantine batch reopened, a test's own mock) simply
+ * shows nothing here rather than NaN or a crash -- the sentence above it
+ * still says what happened either way.
+ *
+ * Returns null rather than an empty array when there is nothing to show,
+ * so a caller can skip the whole row with one check instead of rendering
+ * an empty flex container. */
+export function removalStats(removal, labels) {
+  const rows = [
+    [removal?.folderCount ?? 0, labels.folders],
+    [removal?.fileCount ?? 0, labels.files],
+    [removal?.registryKeyCount ?? 0, labels.registryKeys],
+    [removal?.registryValueCount ?? 0, labels.registryValues]
+  ].filter(([count]) => count > 0);
+  return rows.length ? rows : null;
+}
+
 /** Turns the review's "group:index" selection keys back into the real
  * paths the removal call takes. A scheduled task has no Recycle Bin, so the
  * backend exports its definition to the Backup Manager before unregistering
@@ -225,6 +247,7 @@ export default function UninstallModal({ program, running = false, onClose, onBu
       // The safety nets taken before the uninstaller ran, for the history.
       let restorePoint = null;
       let registryBackup = null;
+      let stillInstalled = false;
       await streamUninstall(program.id, (type, data) => {
         // The before-uninstall steps announce themselves, so the dialog
         // says what it is waiting on instead of "running the uninstaller"
@@ -238,6 +261,10 @@ export default function UninstallModal({ program, running = false, onClose, onBu
           restorePoint = { created: data.created, ...(typeof data.reason === 'string' ? { reason: data.reason } : {}) };
         }
         if (type === 'registryBackup' && data?.ok && typeof data.dir === 'string') registryBackup = data.dir;
+        // The backend's own fresh registry re-check, not a guess made here.
+        // A successful spawn and a nonzero exit code are both unreliable on
+        // their own -- this is the one signal that is not.
+        if (type === 'done' && data?.stillInstalled === true) stillInstalled = true;
       });
       // Recorded even if the dialog was closed while it ran: the program
       // really was uninstalled, and this is a log of that, not a next step.
@@ -255,6 +282,13 @@ export default function UninstallModal({ program, running = false, onClose, onBu
         outcome: 'uninstalled'
       }).then((id) => { historyId.current = id; });
       if (!alive.current) return;
+      // Caught live: an uninstaller can exit 0 and still not have removed
+      // anything -- the registry re-check says so, and this is where that
+      // gets acted on instead of silently believing the exit code. Routing
+      // into the SAME forced-removal path 'broken' programs use, not a new
+      // one: whatever is left of the program is found and removed the same
+      // way regardless of why the normal uninstall didn't finish.
+      if (stillInstalled) { setStep('stillInstalled'); return; }
       if (!scanAfter) { setStep('noScan'); return; }
       // Revo's own screen after the real uninstaller runs: it does not
       // race into a scan the instant the spawned process exits, because
@@ -500,7 +534,6 @@ export default function UninstallModal({ program, running = false, onClose, onBu
                 </p>
                 <p className="text-[11.5px] text-[color:var(--text-muted)] font-mono mb-6 break-all select-text">{command}</p>
                 {error && <p className="text-[12.5px] text-[color:var(--danger)] mb-4 select-text">{t('uninstallModal.uninstallFailed', error)}</p>}
-                {scanAfter && <ScanModePicker mode={scanMode} onChange={chooseScanMode} />}
                 {autoRemoveOffered && (
                   <label className="flex items-center gap-2.5 mb-5 cursor-pointer select-none">
                     <input
@@ -534,9 +567,46 @@ export default function UninstallModal({ program, running = false, onClose, onBu
             <p className="text-[13px] text-[color:var(--text-secondary)] mb-5">
               {t('uninstallModal.readyToScan.body', program.name)}
             </p>
+            <ScanModePicker mode={scanMode} onChange={chooseScanMode} />
             {error && <p className="text-[12.5px] text-[color:var(--danger)] mb-4 select-text">{t('uninstallModal.scanFailed', error)}</p>}
             <div className="flex items-center gap-2.5">
               <button className="btn-primary" onClick={startScan}>{t('uninstallModal.readyToScan.scanButton')}</button>
+              <button className="btn-ghost px-3 py-1.5 rounded-lg text-[12px] font-medium" onClick={onClose}>{t('uninstallModal.close')}</button>
+            </div>
+          </div>
+        )}
+        {step === 'stillInstalled' && (
+          <div>
+            <div className="flex items-start gap-2.5 mb-5 px-3.5 py-3 rounded-xl bg-[color:var(--warning-soft)] border border-[color:var(--warning)]/25">
+              <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" className="text-[color:var(--warning)] mt-0.5 shrink-0">
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="12" y1="8" x2="12" y2="12"></line>
+                <line x1="12" y1="16" x2="12.01" y2="16"></line>
+              </svg>
+              <div className="text-[12.5px] text-[color:var(--warning)] leading-relaxed">
+                {t('uninstallModal.stillInstalledWarning', program.name)}
+              </div>
+            </div>
+            <p className="text-[13px] text-[color:var(--text-secondary)] mb-4">
+              {t('uninstallModal.brokenIntro')}
+            </p>
+            <label className="block text-[11px] text-[color:var(--text-muted)] font-mono uppercase tracking-[0.14em] mb-1.5">
+              {t('uninstallModal.searchForLabel')}
+            </label>
+            <input
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="w-full bg-[color:var(--bg-panel)] border border-[color:var(--border-subtle)] rounded-xl px-3.5 py-2.5 text-[13px] font-mono focus:outline-none focus:border-[color:var(--accent-primary)] focus:ring-4 focus:ring-[color:var(--accent-primary)]/10 transition"
+            />
+            <p className="text-[12px] text-[color:var(--text-muted)] mt-1.5 mb-5">
+              {t('uninstallModal.searchHint', program.name)}
+            </p>
+            <ScanModePicker mode={scanMode} onChange={chooseScanMode} />
+            {error && <p className="text-[12.5px] text-[color:var(--danger)] mb-4 select-text">{t('uninstallModal.scanFailed', error)}</p>}
+            <div className="flex items-center gap-2.5">
+              <button className="btn-primary" onClick={startForcedScan} disabled={!searchTerm.trim()}>
+                {t('uninstallModal.searchButton')}
+              </button>
               <button className="btn-ghost px-3 py-1.5 rounded-lg text-[12px] font-medium" onClick={onClose}>{t('uninstallModal.close')}</button>
             </div>
           </div>
@@ -578,7 +648,14 @@ export default function UninstallModal({ program, running = false, onClose, onBu
           <div className="py-4">
             <div className="flex items-start gap-2.5 mb-5 px-3.5 py-3 rounded-xl bg-[color:var(--success)]/10 border border-[color:var(--success)]/25">
               <div className="text-[12.5px] text-[color:var(--success)] leading-relaxed">
-                {removalSummary(removal, t('uninstallModal.summary'))}
+                <p>{removalSummary(removal, t('uninstallModal.summary'))}</p>
+                {removalStats(removal, t('uninstallModal.doneStats')) && (
+                  <p className="mt-1.5 text-[color:var(--success)]/80 tabular-nums">
+                    {removalStats(removal, t('uninstallModal.doneStats'))
+                      .map(([count, label]) => `${count.toLocaleString()} ${label}`)
+                      .join(' · ')}
+                  </p>
+                )}
               </div>
             </div>
 
