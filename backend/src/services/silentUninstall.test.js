@@ -79,6 +79,27 @@ describe('the command it decides to run', () => {
       expect(silentUninstallCommand({ uninstallString: 'MsiExec.exe /X{GUID} /qn /norestart', kind: 'msi' }))
         .toBe('MsiExec.exe /X{GUID} /qn /norestart');
     });
+
+    it('swaps the Install verb for Uninstall before going silent', () => {
+      /* Real bug: some registry UninstallStrings publish /I{GUID} -- the
+       * Modify path's verb -- instead of /X{GUID}. Shown visibly that
+       * opens the modify/repair/remove dialog and a person picks Remove;
+       * forced silent without the swap it would quietly repair the
+       * program instead of removing it, so nothing would be uninstalled
+       * and nothing would appear on screen to say so. */
+      expect(silentUninstallCommand({ uninstallString: 'MsiExec.exe /I{GUID}', kind: 'msi' }))
+        .toBe('MsiExec.exe /X{GUID} /qn /norestart');
+    });
+
+    it('swaps a lowercase /i verb too', () => {
+      expect(silentUninstallCommand({ uninstallString: 'C:\\WINDOWS\\system32\\msiexec.exe /i{GUID}', kind: 'msi' }))
+        .toBe('C:\\WINDOWS\\system32\\msiexec.exe /X{GUID} /qn /norestart');
+    });
+
+    it('leaves an already-correct /X verb alone', () => {
+      expect(silentUninstallCommand({ uninstallString: 'MsiExec.exe /X{GUID}', kind: 'msi' }))
+        .toBe('MsiExec.exe /X{GUID} /qn /norestart');
+    });
   });
 
   describe('NSIS', () => {
