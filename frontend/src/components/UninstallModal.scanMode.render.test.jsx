@@ -5,7 +5,17 @@ import userEvent from '@testing-library/user-event';
 import { renderScreen } from '../testSupport/renderScreen.jsx';
 
 /** The scan depth the dialog offers, remembers and sends. The api module is
- * mocked; nothing is scanned or removed. */
+ * mocked; nothing is scanned or removed.
+ *
+ * The picker lives on the "ready to scan" screen, after the real
+ * uninstaller has run -- not on the initial confirm dialog. Moved there
+ * to match the reference flow this dialog models itself on, whose own
+ * confirm screen carries only the restore-point/registry-backup/
+ * auto-delete checkboxes; its scan-mode picker is a screen of its own,
+ * shown only once the real uninstaller has already finished. A forced
+ * removal (the program's own uninstaller is gone, or it ran but didn't
+ * actually remove anything) has no such screen -- there is no real
+ * uninstaller to wait on -- so it still offers the picker on confirm. */
 
 const streamUninstall = vi.fn();
 const scanForLeftovers = vi.fn();
@@ -43,9 +53,18 @@ beforeEach(() => {
 
 const radio = (name) => screen.getByRole('radio', { name });
 
+/** Runs the real uninstaller and lands on the "ready to scan" screen,
+ * where the picker now lives for a program whose own uninstaller works. */
+async function reachReadyToScan(user) {
+  await user.click(screen.getByRole('button', { name: 'Start uninstalling' }));
+  await screen.findByRole('button', { name: 'Scan for leftovers' });
+}
+
 describe('the scan depth picker', () => {
   it('offers Safe, Moderate and Advanced, with Moderate chosen by default', async () => {
+    const user = userEvent.setup();
     renderScreen(<UninstallModal program={program} onClose={vi.fn()} />);
+    await reachReadyToScan(user);
     expect(screen.getByRole('radiogroup', { name: 'Leftover scan' })).toBeTruthy();
     expect(radio('Moderate').getAttribute('aria-checked')).toBe('true');
     expect(radio('Safe').getAttribute('aria-checked')).toBe('false');
@@ -55,20 +74,24 @@ describe('the scan depth picker', () => {
   it('describes the chosen mode', async () => {
     const user = userEvent.setup();
     renderScreen(<UninstallModal program={program} onClose={vi.fn()} />);
+    await reachReadyToScan(user);
     expect(screen.getByText(/matched by name/i)).toBeTruthy();
     await user.click(radio('Advanced'));
     expect(screen.getByText(/several folders deep/i)).toBeTruthy();
   });
 
   it('starts on the remembered mode', async () => {
+    const user = userEvent.setup();
     fetchSettings.mockResolvedValue({ leftoverScanMode: 'advanced' });
     renderScreen(<UninstallModal program={program} onClose={vi.fn()} />);
+    await reachReadyToScan(user);
     await waitFor(() => expect(radio('Advanced').getAttribute('aria-checked')).toBe('true'));
   });
 
   it('remembers a new choice as a setting', async () => {
     const user = userEvent.setup();
     renderScreen(<UninstallModal program={program} onClose={vi.fn()} />);
+    await reachReadyToScan(user);
     await user.click(radio('Safe'));
     await waitFor(() => expect(updateSettings).toHaveBeenCalled());
     expect(updateSettings.mock.calls[0][0]).toEqual({ leftoverScanMode: 'safe' });
@@ -77,6 +100,7 @@ describe('the scan depth picker', () => {
   it('moves with the arrow keys and chooses as it goes', async () => {
     const user = userEvent.setup();
     renderScreen(<UninstallModal program={program} onClose={vi.fn()} />);
+    await reachReadyToScan(user);
     radio('Moderate').focus();
     await user.keyboard('{ArrowRight}');
     expect(radio('Advanced').getAttribute('aria-checked')).toBe('true');
@@ -85,8 +109,10 @@ describe('the scan depth picker', () => {
     expect(radio('Safe').getAttribute('aria-checked')).toBe('true');
   });
 
-  it('keeps only the chosen option in the tab order', () => {
+  it('keeps only the chosen option in the tab order', async () => {
+    const user = userEvent.setup();
     renderScreen(<UninstallModal program={program} onClose={vi.fn()} />);
+    await reachReadyToScan(user);
     expect(radio('Moderate').tabIndex).toBe(0);
     expect(radio('Safe').tabIndex).toBe(-1);
     expect(radio('Advanced').tabIndex).toBe(-1);
@@ -97,9 +123,9 @@ describe('what the scan is sent', () => {
   it('sends the chosen mode and the program\'s own anchors', async () => {
     const user = userEvent.setup();
     renderScreen(<UninstallModal program={program} onClose={vi.fn()} />);
+    await reachReadyToScan(user);
     await user.click(radio('Advanced'));
-    await user.click(screen.getByRole('button', { name: 'Start uninstalling' }));
-    await user.click(await screen.findByRole('button', { name: 'Scan for leftovers' }));
+    await user.click(screen.getByRole('button', { name: 'Scan for leftovers' }));
 
     await waitFor(() => expect(scanForLeftovers).toHaveBeenCalledTimes(1));
     expect(scanForLeftovers).toHaveBeenCalledWith('Thing', 'Acme', {
@@ -113,6 +139,8 @@ describe('what the scan is sent', () => {
   });
 
   it('does the same for a program whose own uninstaller is gone', async () => {
+    // No real uninstaller to run first, so the picker stays on confirm --
+    // there is no "ready to scan" screen for this path.
     const user = userEvent.setup();
     renderScreen(<UninstallModal program={{ ...program, health: { orphaned: true, reason: 'gone' } }} onClose={vi.fn()} />);
     await user.click(radio('Safe'));
@@ -126,8 +154,13 @@ describe('what the scan is sent', () => {
   });
 
   it('is not offered when the leftover scan after uninstall is turned off', async () => {
+    const user = userEvent.setup();
     fetchSettings.mockResolvedValue({ scanLeftoversAfterUninstall: false });
     renderScreen(<UninstallModal program={program} onClose={vi.fn()} />);
-    await waitFor(() => expect(screen.queryByRole('radiogroup')).toBeNull());
+    await user.click(screen.getByRole('button', { name: 'Start uninstalling' }));
+    // Skips straight past "ready to scan" to "noScan" -- nothing here to
+    // pick a depth for.
+    await screen.findByRole('button', { name: 'Done' });
+    expect(screen.queryByRole('radiogroup')).toBeNull();
   });
 });
