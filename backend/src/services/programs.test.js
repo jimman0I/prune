@@ -104,6 +104,28 @@ describe('listInstalledPrograms', () => {
     await expect(listInstalledPrograms()).resolves.toEqual([]);
   });
 
+  it('retries after the primary query THROWS outright, not just when it comes back empty', async () => {
+    // Real bug, found live on a GitHub Actions runner: a thrown first
+    // attempt (a spawn hiccup, a timeout -- transient) used to propagate
+    // straight out of listInstalledPrograms() instead of being retried,
+    // turning one bad PowerShell spawn into prune-cli's own "Could not
+    // read the installed programs" exit 1.
+    runPowerShellJsonMock
+      .mockRejectedValueOnce(new Error('PowerShell command failed: spawn ETIMEDOUT'))
+      .mockResolvedValueOnce([{ id: 'a', name: 'A' }]);
+    await expect(listInstalledPrograms()).resolves.toMatchObject([{ name: 'A' }]);
+    expect(runPowerShellJsonMock).toHaveBeenCalledTimes(2);
+    expect(listInstalledProgramsViaRegMock).not.toHaveBeenCalled();
+  });
+
+  it('falls all the way through to the fallback when BOTH primary attempts throw', async () => {
+    runPowerShellJsonMock.mockRejectedValue(new Error('PowerShell command failed: spawn ETIMEDOUT'));
+    listInstalledProgramsViaRegMock.mockResolvedValue([{ id: 'b', name: 'B' }]);
+    await expect(listInstalledPrograms()).resolves.toMatchObject([{ name: 'B' }]);
+    expect(runPowerShellJsonMock).toHaveBeenCalledTimes(2);
+    expect(listInstalledProgramsViaRegMock).toHaveBeenCalledTimes(1);
+  });
+
   it('never calls the fallback when the primary query succeeds on the first try', async () => {
     runPowerShellJsonMock.mockResolvedValue([{ id: 'a', name: 'A' }]);
     await listInstalledPrograms();

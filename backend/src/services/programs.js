@@ -55,7 +55,21 @@ async function enumerateViaPowerShell() {
  * instead of Get-ItemProperty -- no cmdlet pipeline, no computed
  * properties, a genuinely different failure mode. Only if that also
  * comes back empty does the list end up empty, which by then really
- * would mean the machine has nothing in Add/Remove Programs. */
+ * would mean the machine has nothing in Add/Remove Programs.
+ *
+ * Real bug, found live on a GitHub Actions Windows runner: the retry
+ * above only covered an EMPTY-but-successful first attempt. A first
+ * attempt that THROWS (`runPowerShellJson` rejects outright on a spawn
+ * hiccup or a timeout -- the exact kind of transient failure this retry
+ * exists for) propagated immediately instead of being retried at all,
+ * since `let items = await enumerateViaPowerShell();` has nothing to
+ * catch it before the `if (items.length === 0)` check that would have
+ * triggered the retry. `prune-cli programs` turned that into a flat exit
+ * 1 ("Could not read the installed programs") on a runner that, as far
+ * as anyone could tell, had nothing actually wrong with its registry --
+ * just one slow or contended PowerShell spawn. Both calls now treat a
+ * throw exactly like an empty result: fall through to the next source
+ * rather than failing the whole read over one bad attempt. */
 export async function listInstalledPrograms() {
   // The window asks for the list, the sizes and the Store apps together when
   // it opens, and each of those needs the list: without this each would spawn
@@ -69,8 +83,8 @@ export async function listInstalledPrograms() {
 let inflightList = null;
 
 async function enumerateInstalledPrograms() {
-  let items = await enumerateViaPowerShell();
-  if (items.length === 0) items = await enumerateViaPowerShell();
+  let items = await enumerateViaPowerShell().catch(() => []);
+  if (items.length === 0) items = await enumerateViaPowerShell().catch(() => []);
   if (items.length === 0) items = await listInstalledProgramsViaReg().catch(() => []);
   // The health check is a couple of existsSync calls per program -- a few
   // milliseconds across a whole machine's worth of entries, cheap enough
