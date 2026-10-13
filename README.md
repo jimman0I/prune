@@ -132,10 +132,10 @@ useful on an SSD with TRIM, and it adds write wear.
 Also: an opt-in **overwrite before deleting** (1 or 3 passes), a **Shred
 files…** tool, a free-space wipe on any local drive, locked files deleted at
 the next restart, a per-rule list of the biggest files in Preview, your own
-**Custom locations**, **BleachBit cleaner import**, and a `prune-cli` command
-line (`list`, `preview`, `clean`, and `programs`, which lists installed
-programs by wildcard name like Revo’s RevoCmd). Overwriting is not reliable on SSDs; Prune
-says so where you turn it on.
+**Custom locations**, a **cleaner rule import** for lists written in a common
+external format, and a `prune-cli` command line (`list`, `preview`, `clean`,
+and `programs`, which lists installed programs by wildcard name). Overwriting
+is not reliable on SSDs; Prune says so where you turn it on.
 
 </td>
 </tr>
@@ -273,9 +273,9 @@ off. [SECURITY.md](SECURITY.md) says exactly what the updater trusts.
 ## 📰 What's New in 3.0
 
 - **The sidebar is icons only until you point at it**, then widens over the page.
-- **Disk Map like WizTree** — any drive, size on disk, modified dates, search, export, saved scans and compare.
-- **Deep Clean like BleachBit** — overwrite and shred, any-drive free-space wipe, a command line, custom locations and BleachBit cleaner import, plus 16 new rules.
-- **Uninstaller like Revo** — Safe / Moderate / Advanced scans, confidence tiers, Forced uninstall, Hunter, install monitoring, Backups and History.
+- **Disk Map, reimagined** — any drive, size on disk, modified dates, search, export, saved scans and compare.
+- **Deep Clean, taken further** — overwrite and shred, any-drive free-space wipe, a command line, custom locations and a cleaner rule import, plus 16 new rules.
+- **Uninstaller, done properly** — Safe / Moderate / Advanced scans, confidence tiers, Forced uninstall, Hunter, install monitoring, Backups and History.
 - **Fixes** — Quick Access pins are no longer deleted, Stop keeps your ticks, the window controls stay aligned at any zoom, and Prune no longer sometimes opens in English.
 
 ## What's New in 2.9
