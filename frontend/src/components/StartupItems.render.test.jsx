@@ -179,8 +179,9 @@ describe('an entry Prune cannot switch', () => {
     // The enabled one draws the tick polyline; the disabled one draws an
     // empty box. Asserted on the mark itself because that is the only
     // thing separating them once the button is gone.
-    expect(rowFor('Task A').querySelector('svg')).toBeTruthy();
-    expect(rowFor('Task B').querySelector('svg')).toBeNull();
+    // The tick's own polyline, not any svg: the row's "…" menu button draws one too.
+    expect(rowFor('Task A').querySelector('polyline')).toBeTruthy();
+    expect(rowFor('Task B').querySelector('polyline')).toBeNull();
   });
 
   it('but a normal Run entry does get one', async () => {

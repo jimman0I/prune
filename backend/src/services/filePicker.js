@@ -17,7 +17,14 @@ import { isAbsolute } from 'node:path';
  *
  * The result is checked here rather than trusted: it has to exist and be the
  * kind of thing that was asked for. */
-export const PICKER_KINDS = ['folder', 'installer'];
+export const PICKER_KINDS = ['folder', 'installer', 'program'];
+
+/** The file dialogs, by kind: what the title says and what it lists.
+ * 'program' is the startup screen's "Add entry" -- something that runs. */
+const FILE_DIALOGS = {
+  installer: { title: 'Choose the installer to run', filter: 'Installers (*.exe;*.msi)|*.exe;*.msi' },
+  program: { title: 'Choose the program to start at sign-in', filter: 'Programs (*.exe;*.bat;*.cmd)|*.exe;*.bat;*.cmd' }
+};
 
 const OWNER = `
 Add-Type -AssemblyName System.Windows.Forms
@@ -41,11 +48,11 @@ $owner.Dispose()
 [Console]::Out.Write($chosen)
 `;
   }
-  if (kind === 'installer') {
+  if (FILE_DIALOGS[kind]) {
     return `${OWNER}
 $dialog = New-Object System.Windows.Forms.OpenFileDialog
-$dialog.Title = 'Choose the installer to run'
-$dialog.Filter = 'Installers (*.exe;*.msi)|*.exe;*.msi'
+$dialog.Title = '${FILE_DIALOGS[kind].title}'
+$dialog.Filter = '${FILE_DIALOGS[kind].filter}'
 $dialog.CheckFileExists = $true
 $dialog.Multiselect = $false
 $chosen = ''
@@ -83,7 +90,7 @@ export async function pickPath(kind, { run = (k) => runPickerScript(buildPickerS
     let info;
     try { info = statSync(path); } catch { return { path: null }; }
     if (kind === 'folder' && !info.isDirectory()) return { path: null };
-    if (kind === 'installer' && !info.isFile()) return { path: null };
+    if (kind !== 'folder' && !info.isFile()) return { path: null };
     return { path };
   } finally {
     open = false;
