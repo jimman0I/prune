@@ -5,6 +5,7 @@ import { normalizeScanMode, advancedFileRoots } from './leftoverModes.js';
 import { existsSync } from 'node:fs';
 import { anchorDirectories, virtualStoreMirrors } from './leftoverAnchors.js';
 import { walkForLeftovers, measureDirectory } from './leftoverWalk.js';
+import { scanCrashArtifacts } from './crashArtifacts.js';
 import { productTokens, buildTokenPattern, buildMatchers, classifyLabel } from './leftoverMatch.js';
 import { permanentDeletionRefusal } from './leftoverRemoval.js';
 import { osComponentRefusal, buildFootprints, otherPrograms, footprintRefusal } from './leftoverProtection.js';
@@ -339,6 +340,11 @@ async function scanFilesAdvanced(name, publisher, tokens, { fileRoots, walkOptio
       sizeBytes: match.isDirectory ? await measureDirectory(match.path) : await measureDirectory(match.path, { maxEntries: 1 }),
       ...(userDataRoots.has(String(match.root).toLowerCase()) ? { userData: true } : {})
     });
+  }
+  // Prefetch traces, error reports and crash dumps, named for an executable.
+  const crash = await scanCrashArtifacts({ matches: (exe) => nameRe.test(exe) || (tokenRe !== null && tokenRe.test(exe)) });
+  for (const item of crash.items) {
+    if (!items.some((known) => known.path.toLowerCase() === item.path.toLowerCase())) items.push(item);
   }
   return { ok: true, items, ...(truncated ? { truncated: true } : {}) };
 }

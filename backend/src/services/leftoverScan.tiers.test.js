@@ -205,6 +205,25 @@ describe('shared-component protection', () => {
     expect(result.files.items.every((i) => !('userData' in i))).toBe(true);
   });
 
+  it('Advanced offers the program\'s crash dumps and Prefetch trace, past every guard', async () => {
+    vi.stubEnv('SystemRoot', join(base, 'Windows'));
+    vi.stubEnv('windir', join(base, 'Windows'));
+    vi.stubEnv('LOCALAPPDATA', join(base, 'Local'));
+    vi.stubEnv('ProgramData', join(base, 'ProgramData'));
+    try {
+      const plant = (...parts) => { const p = join(base, ...parts); mkdirSync(join(p, '..'), { recursive: true }); writeFileSync(p, Buffer.alloc(10)); return p; };
+      const dump = plant('Local', 'CrashDumps', 'zephyr.exe.4242.dmp');
+      const pf = plant('Windows', 'Prefetch', 'ZEPHYR.EXE-1A2B3C4D.pf');
+      runPowerShellJsonMock.mockResolvedValue(null);
+      const result = await scanForLeftovers({ name: 'Zephyr', mode: 'advanced', fileRoots: [] });
+      const paths = result.files.items.map((i) => i.path);
+      expect(paths).toContain(dump);
+      expect(paths).toContain(pf);
+    } finally {
+      vi.unstubAllEnvs();
+    }
+  });
+
   it('drops scheduled tasks Windows ships', async () => {
     psSequence(null, null, [
       { name: 'Acme', path: '\\Microsoft\\Windows\\Acme\\', how: 'name' },

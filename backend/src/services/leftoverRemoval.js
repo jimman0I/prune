@@ -7,6 +7,7 @@ import { protectionReason } from './pathGuard.js';
 import { shredPaths } from '../lib/shredFile.js';
 import { removeScheduledTasks } from './scheduledTaskRemoval.js';
 import { osComponentRefusal, buildFootprints, footprintRefusal } from './leftoverProtection.js';
+import { crashArtifactExe } from './crashArtifacts.js';
 import { recordFreed } from './stats.js';
 
 /** Where an uninstall's leftover files go.
@@ -66,6 +67,9 @@ const PROFILE_FOLDERS = new Set([
  * So a program's own folder is allowed, and the folders that hold
  * everyone's are refused by name. */
 export function permanentDeletionRefusal(path, options = {}) {
+  // A program's Prefetch trace sits under Windows; this exact file shape is
+  // the one thing there a leftover removal may take (see crashArtifacts.js).
+  if (crashArtifactExe(path) !== null) return null;
   const where = { ...defaultLocations(), ...options };
 
   const base = protectionReason(path, {

@@ -1,3 +1,5 @@
+import { crashArtifactExe } from './crashArtifacts.js';
+
 /** What a leftover scan must never offer for removal.
  *
  * The scan matches on names, and a name is a weak claim: a publisher called
@@ -52,6 +54,10 @@ export function osComponentRefusal(path, { env = process.env } = {}) {
   if (typeof path !== 'string' || !/^[a-z]:[\\/]/i.test(path.trim())) {
     return 'Only a full path can be a leftover.';
   }
+  // The one exception to everything below: a Prefetch trace, an error report
+  // or a crash dump named for a program, in exactly its own folder. See
+  // crashArtifacts.js for why these, and only these exact shapes.
+  if (crashArtifactExe(path, env) !== null) return null;
   const systemRoot = env?.SystemRoot || env?.windir;
   if (systemRoot && isAtOrUnder(path, systemRoot)) return 'That is Windows itself.';
 
