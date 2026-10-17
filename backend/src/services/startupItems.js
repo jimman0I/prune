@@ -6,6 +6,7 @@ import { isStartupEnabled, approvedLookupKey } from './startupApproved.js';
 import { getStartupDetails } from './startupDetails.js';
 import { toggleRefusal } from './startupToggle.js';
 import { appxDisplayName } from './appxName.js';
+import { readServicesSwitchedOff } from './startupSystemToggle.js';
 
 /** Everything Windows runs when you sign in.
  *
@@ -128,8 +129,12 @@ foreach ($t in (Get-ScheduledTask -ErrorAction SilentlyContinue)) {
 #
 # Keyed by service short name because DISPLAY names are not unique: two
 # different services on this machine are both called "Gaming Services".
+#
+# Plus the ones Prune itself switched to Manual ($switchedOff, prepended by
+# getStartupEntries), listed switched off: without them a service switched
+# off here would drop out of the list with no way to switch it back on.
 foreach ($s in (Get-CimInstance Win32_Service -ErrorAction SilentlyContinue)) {
-  if ($s.StartMode -ne 'Auto') { continue }
+  if ($s.StartMode -ne 'Auto' -and -not ($switchedOff -contains [string]$s.Name)) { continue }
   if (-not $s.PathName) { continue }
   if ($s.PathName -match '^"?C:\\\\WINDOWS\\\\[Ss]ystem32\\\\') { continue }
   $out += [PSCustomObject]@{
@@ -139,7 +144,7 @@ foreach ($s in (Get-CimInstance Win32_Service -ErrorAction SilentlyContinue)) {
     scope = 'machine'
     location = 'Service'
     source = 'service'
-    enabled = $true
+    enabled = ($s.StartMode -eq 'Auto')
     description = [string]$s.Description
     registryKey = ''
   }
@@ -251,6 +256,9 @@ export function normalizeStartupItem(raw) {
     rawScope: raw.scope === 'machine' ? 'machine' : 'user',
     location: raw.location,
     source: raw.source,
+    // What Windows identifies a task (its full path) or a service (its short
+    // name) by -- what the switch acts on for those two sources.
+    key: raw.key || null,
     registryKey: raw.registryKey || null,
     isShortcut,
     // true, false, or null when there is nothing that can be checked.
@@ -299,10 +307,17 @@ export function attachEnabledState(items, approved) {
  * the UI made up would otherwise name a registry write target. The extra
  * columns cost about a second and a half and answer nothing the write
  * needs, so they are not read for it. */
+/** The query with the services Prune switched off declared first, as a
+ * PowerShell array of quoted literals. */
+export function withSwitchedOffServices(query, names) {
+  const literals = (names || []).map((name) => `'${String(name).replace(/'/g, "''")}'`).join(',');
+  return `$switchedOff = @(${literals})\n${query}`;
+}
+
 export async function getStartupEntries() {
   let raw;
   try {
-    raw = await runPowerShellJson(STARTUP_QUERY);
+    raw = await runPowerShellJson(withSwitchedOffServices(STARTUP_QUERY, readServicesSwitchedOff()));
   } catch {
     return [];
   }

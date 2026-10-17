@@ -1,6 +1,7 @@
 import { runPowerShellJson } from './powershell.js';
 import { runElevatedPowerShellJson } from '../lib/elevated.js';
 import { approvedKindFor, isPolicyRunEntry } from './startupApproved.js';
+import { setSystemStartupEnabled } from './startupSystemToggle.js';
 
 /** Switching a startup entry on and off, the way Windows does it.
  *
@@ -39,12 +40,16 @@ export function toggleRefusal(item) {
   // offering a switch that silently writes to the wrong place would not
   // be. Checked BEFORE the name check so each gets its own reason rather
   // than a generic one.
-  const BY_SOURCE = {
-    task: 'This is a scheduled task. Windows keeps its on/off state on the task itself, not with the sign-in entries — change it in Task Scheduler.',
-    service: 'This is a Windows service. It starts with the machine rather than at sign-in, and its startup type is changed in Services.',
-    appx: 'This is a Store app’s own startup task. It is switched from the app’s settings or from Windows’ Startup Apps page.'
-  };
-  if (BY_SOURCE[item.source]) return BY_SOURCE[item.source];
+  // Tasks and services are switched on the task or the service itself
+  // (startupSystemToggle.js); only a Store app's startup task is left
+  // read-only, since Windows keeps no switch for it that another program
+  // may set.
+  if (item.source === 'task' || item.source === 'service') {
+    return item.key ? null : 'Windows identifies this entry by a name the list did not receive.';
+  }
+  if (item.source === 'appx') {
+    return 'This is a Store app’s own startup task. It is switched from the app’s settings or from Windows’ Startup Apps page.';
+  }
 
   const name = item.approvedName || item.name;
   if (!name) {
@@ -213,6 +218,7 @@ ConvertTo-Json -Compress -InputObject ([PSCustomObject]@{ value = @($value) })
 export async function setStartupEnabled(item, enabled, { now = Date.now() } = {}) {
   const refusal = toggleRefusal(item);
   if (refusal) return { ok: false, error: refusal };
+  if (item.source === 'task' || item.source === 'service') return setSystemStartupEnabled(item, enabled);
 
   const previous = await readApprovedValue(item);
   const bytes = toggleBytes(enabled, previous, now);

@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { normalizeStartupItem, attachEnabledState } from './startupItems.js';
+import { normalizeStartupItem, attachEnabledState, withSwitchedOffServices } from './startupItems.js';
 
 /** The three autorun sources Prune did not read.
  *
@@ -91,23 +91,24 @@ describe('attachEnabledState, for the new sources', () => {
     expect(off.enabled).toBe(false);
   });
 
-  it('says why each new kind cannot be switched from here', () => {
-    // The screen renders an inert tick plus this sentence instead of a
-    // control that does nothing. Without a note of its own, each of these
-    // would inherit the RunOnce refusal, which says something untrue.
-    const kinds = [
-      ['task', 'Scheduled task'],
-      ['service', 'Service'],
-      ['appx', 'Windows app']
-    ];
-    for (const [source, location] of kinds) {
-      const [item] = attachEnabledState(
-        [normalizeStartupItem(task({ source, location, key: 'k-' + source }))],
-        approved
-      );
-      expect(item.toggleNote, source).toBeTruthy();
-      expect(item.toggleNote, source).not.toMatch(/RunOnce/);
+  it('lets tasks and services be switched, and says why a Store app\'s cannot', () => {
+    // Tasks and services are switched on the task or service itself
+    // (startupSystemToggle.js), so they carry no note and keep the key that
+    // switch acts on. A Store app's startup task stays read-only, with its
+    // own reason rather than the RunOnce one, which would be untrue.
+    for (const [source, location] of [['task', 'Scheduled task'], ['service', 'Service']]) {
+      const [item] = attachEnabledState([normalizeStartupItem(task({ source, location, key: 'k-' + source }))], approved);
+      expect(item.toggleNote, source).toBeNull();
+      expect(item.key, source).toBe('k-' + source);
     }
+    const [appx] = attachEnabledState([normalizeStartupItem(task({ source: 'appx', location: 'Windows app', key: 'k-appx' }))], approved);
+    expect(appx.toggleNote).toBeTruthy();
+    expect(appx.toggleNote).not.toMatch(/RunOnce/);
+  });
+
+  it('declares the services Prune switched off ahead of the query', () => {
+    expect(withSwitchedOffServices('Q', ['AcmeSvc', "O'Brien"])).toBe("$switchedOff = @('AcmeSvc','O''Brien')\nQ");
+    expect(withSwitchedOffServices('Q', [])).toBe('$switchedOff = @()\nQ');
   });
 
   it('leaves an ordinary Run entry reading StartupApproved as before', () => {
