@@ -7,7 +7,7 @@ import { useLanguage } from '../i18n/LanguageContext.jsx';
  * language. Escape clears it. A pattern that does not parse is said so under
  * the box and marked invalid for assistive tech -- nothing is filtered while
  * it is, so a half-typed regex never blanks the screen. */
-export function SearchBox({ value, onChange, invalid }) {
+export function SearchBox({ value, onChange, invalid, label, placeholder, widthClass = 'w-[260px]' }) {
   const { t } = useLanguage();
   return (
     <div className="min-w-0">
@@ -21,12 +21,12 @@ export function SearchBox({ value, onChange, invalid }) {
           value={value}
           onChange={(e) => onChange(e.target.value)}
           onKeyDown={(e) => { if (e.key === 'Escape' && value !== '') { e.preventDefault(); onChange(''); } }}
-          aria-label={t('diskMapV3.search.label')}
+          aria-label={label ?? t('diskMapV3.search.label')}
           aria-invalid={invalid ? 'true' : undefined}
-          placeholder={t('diskMapV3.search.placeholder')}
+          placeholder={placeholder ?? t('diskMapV3.search.placeholder')}
           spellCheck={false}
           autoComplete="off"
-          className={`w-[260px] max-w-full min-h-8 pl-8 pr-8 rounded-lg text-[12.5px] font-mono bg-[color:var(--surface-subtle)] text-[color:var(--text-primary)] placeholder:text-[color:var(--text-muted)] border outline-none focus-visible:border-[color:var(--accent-primary)] ${
+          className={`${widthClass} max-w-full min-h-8 pl-8 pr-8 rounded-lg text-[12.5px] font-mono bg-[color:var(--surface-subtle)] text-[color:var(--text-primary)] placeholder:text-[color:var(--text-muted)] border outline-none focus-visible:border-[color:var(--accent-primary)] ${
             invalid ? 'border-[color:var(--danger)]' : 'border-[color:var(--border-subtle)]'
           }`}
         />

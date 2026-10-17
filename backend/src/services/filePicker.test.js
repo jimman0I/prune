@@ -7,8 +7,15 @@ import { join } from 'node:path';
 import { buildPickerScript, pickPath, PICKER_KINDS } from './filePicker.js';
 
 describe('buildPickerScript', () => {
-  it('knows a folder picker and an installer picker', () => {
-    expect(PICKER_KINDS).toEqual(['folder', 'installer']);
+  it('knows a folder picker, an installer picker and a program picker', () => {
+    expect(PICKER_KINDS).toEqual(['folder', 'installer', 'program']);
+  });
+
+  it('asks the program picker (a new startup entry) for something that runs', () => {
+    const script = buildPickerScript('program');
+    expect(script).toContain('OpenFileDialog');
+    expect(script).toMatch(/\*\.exe/);
+    expect(script).not.toMatch(/\*\.msi/);
   });
 
   it('shows the dialog owned by a topmost form, so it cannot open behind Prune', () => {

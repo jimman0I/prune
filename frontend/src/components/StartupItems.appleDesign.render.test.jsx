@@ -73,10 +73,13 @@ describe('the column template', () => {
     }
   });
 
-  it('keeps Status a fixed, last column, so it is what stays when space runs out', () => {
-    expect(COLUMNS.at(-1).key).toBe('status');
-    expect(COLUMNS.at(-1).width).toMatch(/^\d+px$/);
-    expect(COLUMNS.at(-1).wideOnly).toBeFalsy();
+  it('keeps Status a fixed column at the end, so it is what stays when space runs out', () => {
+    // Only the row's own fixed-width "…" menu button follows it.
+    const status = COLUMNS.at(-2);
+    expect(status.key).toBe('status');
+    expect(status.width).toMatch(/^\d+px$/);
+    expect(status.wideOnly).toBeFalsy();
+    expect(COLUMNS.at(-1)).toMatchObject({ key: 'actions', width: expect.stringMatching(/^\d+px$/) });
   });
 
   it('needs less than the 900 px pane, where the old template needed 806 px', () => {
@@ -246,9 +249,9 @@ describe('table semantics', () => {
 
     const table = screen.getByRole('table', { name: 'Startup' });
     expect(within(table).getAllByRole('columnheader').map((h) => h.textContent)).toEqual(
-      ['', '', 'Startup name', 'Launch path', 'Description', 'Publisher', 'Status']);
+      ['', '', 'Startup name', 'Launch path', 'Description', 'Publisher', 'Status', '']);
     expect(within(table).getAllByRole('rowgroup')).toHaveLength(1);
     const row = within(table).getAllByRole('row').find((r) => r.textContent.includes('Thing Launcher'));
-    expect(within(row).getAllByRole('cell')).toHaveLength(7);
+    expect(within(row).getAllByRole('cell')).toHaveLength(8);
   });
 });

@@ -270,6 +270,32 @@ export async function setStartupItemEnabled(id, enabled) {
   }
 }
 
+/** The startup screen's other commands, with the same result-not-throw
+ * contract as the switch above: a declined consent prompt comes back as
+ * { ok: false, cancelled: true }, not as an exception. */
+async function startupCommand(path, body) {
+  try {
+    const res = await fetch(`${API_URL}/programs/startup/${path}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body)
+    });
+    let data = null;
+    try { data = await res.json(); } catch { return { ok: false, error: `The request failed (${res.status}).` }; }
+    if (!res.ok) return { ok: false, error: data?.error || `The request failed (${res.status}).` };
+    return data;
+  } catch (err) {
+    return { ok: false, error: err.message };
+  }
+}
+
+/** target: 'location' (where Windows keeps the entry) or 'folder' (where its program is). */
+export const openStartupItem = (id, target) => startupCommand('open', { id, target });
+/** action: 'run' or 'end'. */
+export const startupItemProcess = (id, action) => startupCommand('process', { id, action });
+/** { name, command, scope: 'user' | 'machine', kind: 'run' | 'runonce' | 'folder' } */
+export const addStartupItem = (entry) => startupCommand('add', entry);
+
 /** Opens File Explorer on a folder.
  *
  * Goes through the backend because the renderer cannot reach Electron's

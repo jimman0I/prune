@@ -174,6 +174,28 @@ export function useStartupRemove() {
   return { mutation, pendingIds };
 }
 
+/** "Remove N invalid": every invalid entry in ONE Quarantine batch, so one
+ * Undo on the toast puts them all back -- which is why it needs no
+ * confirmation dialog (an undoable action, however destructive it looks). */
+export function useStartupRemoveInvalid() {
+  const { t } = useLanguage();
+  const queryClient = useQueryClient();
+  const offerUndo = useQuarantineUndo();
+  return useMutation({
+    mutationFn: async (batch) => removeQuarantined({
+      programName: t('startup.removeInvalid.batchName'),
+      files: batch.files,
+      registryKeys: batch.registryKeys,
+      destination: 'quarantine'
+    }),
+    onSettled: (result, error, batch) => {
+      queryClient.invalidateQueries({ queryKey: keys.startupItems });
+      if (error) return;
+      offerUndo(t('startup.removeInvalid.toast', batch.ids.length), [result.batchDir]);
+    }
+  });
+}
+
 /* ----------------------------------------------------------- quarantine */
 
 export function useQuarantine() {

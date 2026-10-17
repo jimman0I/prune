@@ -1,6 +1,15 @@
 import { useCallback, useMemo, useState, memo } from 'react';
+import { useQueryClient } from '@tanstack/react-query';
 import { groupStartupItems, startupCounts } from '../lib/groupStartupItems.js';
-import { useStartupItems, useStartupToggle, useStartupRemove } from '../hooks/useSystemQueries.js';
+import { useStartupItems, useStartupToggle, useStartupRemove, useStartupRemoveInvalid } from '../hooks/useSystemQueries.js';
+import { filterStartupItems, invalidRemovalBatch, startupExport, startupActionsFor } from '../lib/startupListTools.js';
+import { openStartupItem, startupItemProcess } from '../lib/api.js';
+import { saveBlob } from '../lib/download.js';
+import { keys } from '../lib/queryClient.js';
+import { SearchBox } from './SearchBox.jsx';
+import ContextMenu from './ContextMenu.jsx';
+import ModalOverlay from './ModalOverlay.jsx';
+import AddStartupDialog from './AddStartupDialog.jsx';
 import { startupRemovalTarget } from '../lib/startupRemovalTarget.js';
 import TableSkeleton from './TableSkeleton.jsx';
 import { tileLetter } from '../lib/iconTileLetter.js';
@@ -47,7 +56,9 @@ export const COLUMNS = [
   { key: 'command', width: 'minmax(0,1.3fr)' },
   { key: 'description', width: 'minmax(0,0.9fr)', wideOnly: true },
   { key: 'publisher', width: 'minmax(0,0.8fr)' },
-  { key: 'status', width: '104px' }
+  { key: 'status', width: '104px' },
+  // The row's "…" menu: everything right-click offers, reachable by keyboard.
+  { key: 'actions', width: '28px' }
 ];
 
 // state/icon carry no header word -- both are icon/switch columns.
@@ -64,8 +75,8 @@ const COLUMN_KEYS = {
  * because Tailwind only emits classes it can read as whole strings in the
  * source; StartupItems.render.test.jsx asserts they equal what COLUMNS
  * says, so the two cannot drift apart. */
-export const GRID_NARROW = 'grid-cols-[30px_20px_minmax(0,0.9fr)_minmax(0,1.3fr)_minmax(0,0.8fr)_104px]';
-export const GRID_WIDE = 'min-[1100px]:grid-cols-[30px_20px_minmax(0,0.9fr)_minmax(0,1.3fr)_minmax(0,0.9fr)_minmax(0,0.8fr)_104px]';
+export const GRID_NARROW = 'grid-cols-[30px_20px_minmax(0,0.9fr)_minmax(0,1.3fr)_minmax(0,0.8fr)_104px_28px]';
+export const GRID_WIDE = 'min-[1100px]:grid-cols-[30px_20px_minmax(0,0.9fr)_minmax(0,1.3fr)_minmax(0,0.9fr)_minmax(0,0.8fr)_104px_28px]';
 export const GRID_CLASS = `grid ${GRID_NARROW} ${GRID_WIDE}`;
 /** Applied to the Description cell in the header and in every row. */
 const WIDE_ONLY_CELL = 'hidden min-[1100px]:block';
@@ -250,7 +261,7 @@ function LaunchPath({ item, open, onToggle }) {
   );
 }
 
-function StartupRow({ item, iconSrc, pending, error, onToggle, onRemove, removing = false, hideNote = false }) {
+function StartupRow({ item, iconSrc, pending, error, onToggle, onRemove, onMenu, removing = false, hideNote = false }) {
   const { t } = useLanguage();
   const toasts = useToasts();
   const [pathOpen, setPathOpen] = useState(false);
@@ -262,6 +273,7 @@ function StartupRow({ item, iconSrc, pending, error, onToggle, onRemove, removin
   return (
     <div
       role="row"
+      onContextMenu={(event) => { event.preventDefault(); onMenu?.(item, event.clientX, event.clientY); }}
       className={`${GRID_CLASS} gap-3 px-5 py-2 items-center transition-colors ${
         error ? 'bg-[color:var(--danger-soft)]' : 'hover:bg-[color:var(--surface-subtle)]'
       }`}
@@ -313,6 +325,26 @@ function StartupRow({ item, iconSrc, pending, error, onToggle, onRemove, removin
       </div>
 
       <div role="cell"><StatusPill item={item} /></div>
+
+      <div role="cell">
+        {/* Everything right-click offers, for keyboard and touch too: a
+            context menu's commands must also be reachable in the main
+            interface. Opened under the button rather than at a pointer. */}
+        <button
+          type="button"
+          aria-haspopup="menu"
+          aria-label={t('startup.menu.more', item.name)}
+          onClick={(event) => {
+            const box = event.currentTarget.getBoundingClientRect();
+            onMenu?.(item, box.left, box.bottom + 2);
+          }}
+          className="w-7 h-7 -mr-1 rounded-md flex items-center justify-center text-[color:var(--text-muted)] hover:text-[color:var(--text-primary)] hover:bg-[color:var(--surface-hover)] transition-colors"
+        >
+          <svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+            <circle cx="5" cy="12" r="1.8" /><circle cx="12" cy="12" r="1.8" /><circle cx="19" cy="12" r="1.8" />
+          </svg>
+        </button>
+      </div>
 
       {pathOpen && (
         // Under the whole row, so the path gets the full width rather than a
@@ -386,8 +418,66 @@ function StartupItems() {
     return map;
   }, [pendingIds]);
 
-  const groups = useMemo(() => groupStartupItems(items, t('startup.groups')), [items, t]);
+  const toasts = useToasts();
+  const queryClient = useQueryClient();
+  const [query, setQuery] = useState('');
+  // The row menu ({ item, x, y }) and the Export menu ({ x, y }).
+  const [menu, setMenu] = useState(null);
+  const [exportMenu, setExportMenu] = useState(null);
+  const [adding, setAdding] = useState(false);
+  const [addBusy, setAddBusy] = useState(false);
+  const removeInvalid = useStartupRemoveInvalid();
+
+  const visible = useMemo(() => filterStartupItems(items || [], query), [items, query]);
+  const groups = useMemo(() => groupStartupItems(visible, t('startup.groups')), [visible, t]);
   const counts = useMemo(() => startupCounts(items), [items]);
+  const invalidBatch = useMemo(() => invalidRemovalBatch(items || []), [items]);
+
+  const onMenu = useCallback((item, x, y) => setMenu({ item, x, y }), []);
+  const refreshSoon = () => setTimeout(() => queryClient.invalidateQueries({ queryKey: keys.startupItems }), 1200);
+
+  /** A command's result, said in the toast layer. A declined consent
+   * prompt is the person's choice and is not reported as a failure. */
+  const report = (result, success) => {
+    if (result?.ok) { if (success) toasts.info(success); return; }
+    if (!result?.cancelled) toasts.error(t('startup.menu.failed', result?.error || ''));
+  };
+
+  const menuItems = (item) => startupActionsFor(item).map((action) => {
+    switch (action) {
+      case 'run':
+        return { label: t('startup.menu.run'), onSelect: async () => { report(await startupItemProcess(item.id, 'run'), t('startup.menu.started', item.name)); refreshSoon(); } };
+      case 'end':
+        return { label: t('startup.menu.end'), onSelect: async () => { report(await startupItemProcess(item.id, 'end'), t('startup.menu.ended', item.name)); refreshSoon(); } };
+      case 'location':
+        return { label: t('startup.menu.openLocation'), separated: true, onSelect: async () => report(await openStartupItem(item.id, 'location')) };
+      case 'folder':
+        return { label: t('startup.menu.openFolder'), onSelect: async () => report(await openStartupItem(item.id, 'folder')) };
+      case 'copy':
+        return {
+          label: t('startup.menu.copyPath'),
+          onSelect: () => navigator.clipboard.writeText(item.command)
+            .then(() => toasts.info(t('startup.pathCopied')))
+            .catch(() => toasts.error(t('startup.copyFailed')))
+        };
+      case 'remove':
+        return { label: t('startup.menu.remove'), danger: true, separated: true, onSelect: () => onRemove(item) };
+      default:
+        return null;
+    }
+  }).filter(Boolean);
+
+  const exportAs = (format) => {
+    const labels = {
+      name: t('startup.columns.name'), command: t('startup.columns.command'), publisher: t('startup.columns.publisher'),
+      location: t('startup.export.location'), status: t('startup.columns.status'), title: t('startup.export.title')
+    };
+    const status = (item) => (item.exists === false ? t('startup.status.invalid')
+      : item.enabled === false ? t('startup.status.off')
+        : item.running ? t('startup.status.running') : t('startup.status.notRunning'));
+    const file = startupExport(visible, format, { labels, status });
+    saveBlob(new Blob([file.content], { type: file.type }), file.filename);
+  };
 
   return (
     <div className="px-12 py-10 max-w-[1400px]">
@@ -443,6 +533,49 @@ function StartupItems() {
             )}
           </div>
 
+          {/* The screen's commands: find, clean up, add, take a copy. Remove
+              N invalid needs no confirmation -- the whole batch goes to
+              Quarantine and one Undo on the toast puts it all back. */}
+          <div className="flex items-center flex-wrap gap-2 mb-4">
+            {/* Wider than the Disk Map's: the placeholder names three
+                fields, and at 260 px it was cut to "…path or pu". */}
+            <SearchBox value={query} onChange={setQuery} label={t('startup.search.placeholder')} placeholder={t('startup.search.placeholder')} widthClass="w-[340px]" />
+            <div className="flex items-center gap-2 ml-auto">
+              {invalidBatch.ids.length > 0 && (
+                <button
+                  type="button"
+                  disabled={removeInvalid.isPending}
+                  onClick={() => removeInvalid.mutate(invalidBatch)}
+                  className="btn-ghost px-3 py-1.5 rounded-lg text-[12.5px] font-medium text-[color:var(--danger)] disabled:opacity-50"
+                >
+                  {removeInvalid.isPending ? t('startup.removeInvalid.removing') : t('startup.removeInvalid.button', invalidBatch.ids.length)}
+                </button>
+              )}
+              <button type="button" onClick={() => setAdding(true)} className="btn-ghost px-3 py-1.5 rounded-lg text-[12.5px] font-medium">
+                {t('startup.add.button')}
+              </button>
+              <button
+                type="button"
+                aria-haspopup="menu"
+                onClick={(event) => {
+                  const box = event.currentTarget.getBoundingClientRect();
+                  setExportMenu({ x: box.left, y: box.bottom + 2 });
+                }}
+                className="btn-ghost px-3 py-1.5 rounded-lg text-[12.5px] font-medium inline-flex items-center gap-1.5"
+              >
+                {t('startup.export.button')}
+                <svg aria-hidden="true" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round"><polyline points="6 9 12 15 18 9" /></svg>
+              </button>
+            </div>
+          </div>
+
+          {visible.length === 0 && (
+            <div className="glass-panel p-6 text-center text-[13px] text-[color:var(--text-secondary)]">
+              {t('startup.search.noMatches', query.trim())}
+            </div>
+          )}
+
+          {visible.length > 0 && (
           <div className="glass-panel overflow-hidden" role="table" aria-label={t('startup.title')}>
             <div
               role="row"
@@ -499,6 +632,7 @@ function StartupItems() {
                       hideNote={Boolean(sharedNote(group))}
                       onToggle={onToggle}
                       onRemove={onRemove}
+                      onMenu={onMenu}
                       removing={removingIds.has(item.id)}
                     />
                   ))}
@@ -506,11 +640,47 @@ function StartupItems() {
               </div>
             ))}
           </div>
+          )}
 
           <p className="text-[11.5px] text-[color:var(--text-muted)] mt-4 max-w-[68ch]">
             {t('startup.footerNote')}
           </p>
+          <p className="text-[11.5px] text-[color:var(--text-muted)] mt-2 max-w-[68ch]">
+            {t('startup.footerNoteSystem')}
+          </p>
         </>
+      )}
+
+      <ContextMenu
+        open={Boolean(menu)}
+        x={menu?.x ?? 0}
+        y={menu?.y ?? 0}
+        onClose={() => setMenu(null)}
+        items={menu ? menuItems(menu.item) : []}
+      />
+      <ContextMenu
+        open={Boolean(exportMenu)}
+        x={exportMenu?.x ?? 0}
+        y={exportMenu?.y ?? 0}
+        onClose={() => setExportMenu(null)}
+        items={[
+          { label: t('startup.export.csv'), onSelect: () => exportAs('csv') },
+          { label: t('startup.export.html'), onSelect: () => exportAs('html') },
+          { label: t('startup.export.txt'), onSelect: () => exportAs('txt') }
+        ]}
+      />
+      {adding && (
+        <ModalOverlay label={t('startup.add.title')} onClose={() => setAdding(false)} dismissible={!addBusy}>
+          <AddStartupDialog
+            onClose={() => setAdding(false)}
+            onBusyChange={setAddBusy}
+            onAdded={(name) => {
+              setAdding(false);
+              toasts.info(t('startup.add.added', name));
+              queryClient.invalidateQueries({ queryKey: keys.startupItems });
+            }}
+          />
+        </ModalOverlay>
       )}
     </div>
   );

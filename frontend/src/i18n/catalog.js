@@ -570,6 +570,57 @@ export const CATALOG = {
         button: "Remove",
         removing: "Removing…",
         toast: (name) => `Removed ${name}.`
+      },
+      footerNoteSystem: 'A scheduled task is switched off on the task itself, and a service is set to start manually, so anything that needs it can still start it. Both switch back on the same way.',
+      removeInvalid: {
+        button: (n) => `Remove ${n} invalid`,
+        removing: 'Removing…',
+        toast: (n) => `Removed ${n} invalid ${n === 1 ? 'entry' : 'entries'}.`,
+        batchName: 'Invalid startup entries'
+      },
+      search: {
+        placeholder: 'Filter by name, path or publisher',
+        noMatches: (query) => `No entries match “${query}”.`
+      },
+      menu: {
+        more: (name) => `More actions for ${name}`,
+        run: 'Run now',
+        end: 'End process',
+        openLocation: 'Open location',
+        openFolder: 'Open containing folder',
+        copyPath: 'Copy launch path',
+        remove: 'Remove',
+        started: (name) => `Started ${name}.`,
+        ended: (name) => `Ended ${name}.`,
+        failed: (error) => `That didn't work: ${error}`
+      },
+      add: {
+        button: 'Add entry…',
+        title: 'Add a startup entry',
+        name: 'Name',
+        command: 'Program',
+        commandHint: 'The program to start, with any arguments after it.',
+        browse: 'Browse…',
+        scope: 'Start for',
+        user: 'This user',
+        machine: 'All users',
+        machineNote: 'Adding for all users asks for administrator.',
+        kind: 'Starts',
+        run: 'Every sign-in',
+        runOnce: 'Next sign-in only',
+        folder: 'Shortcut in the Startup folder',
+        cancel: 'Cancel',
+        confirm: 'Add entry',
+        adding: 'Adding…',
+        added: (name) => `Added ${name}.`
+      },
+      export: {
+        button: 'Export',
+        csv: 'CSV spreadsheet',
+        html: 'Web page',
+        txt: 'Plain text',
+        title: 'Startup entries',
+        location: 'Location'
       }
     },
     duplicates: {
@@ -1477,6 +1528,57 @@ export const CATALOG = {
         button: "Verwyder",
         removing: "Verwyder tans…",
         toast: (name) => `${name} is verwyder.`
+      },
+      footerNoteSystem: "'n Geskeduleerde taak word op die taak self afgeskakel, en 'n diens word ingestel om handmatig te begin, sodat enigiets wat dit nodig het dit steeds kan begin. Albei word op dieselfde manier weer aangeskakel.",
+      removeInvalid: {
+        button: (n) => `Verwyder ${n} ongeldige`,
+        removing: "Verwyder tans…",
+        toast: (n) => `${n} ongeldige ${n === 1 ? 'inskrywing' : 'inskrywings'} verwyder.`,
+        batchName: "Ongeldige opstartinskrywings"
+      },
+      search: {
+        placeholder: "Filtreer volgens naam, pad of uitgewer",
+        noMatches: (query) => `Geen inskrywings pas by “${query}” nie.`
+      },
+      menu: {
+        more: (name) => `Meer aksies vir ${name}`,
+        run: "Begin nou",
+        end: "Beëindig proses",
+        openLocation: "Open ligging",
+        openFolder: "Open bevattende vouer",
+        copyPath: "Kopieer beginpad",
+        remove: "Verwyder",
+        started: (name) => `${name} begin.`,
+        ended: (name) => `${name} beëindig.`,
+        failed: (error) => `Dit het nie gewerk nie: ${error}`
+      },
+      add: {
+        button: "Voeg inskrywing by…",
+        title: "Voeg 'n opstartinskrywing by",
+        name: "Naam",
+        command: "Program",
+        commandHint: "Die program om te begin, met enige argumente daarna.",
+        browse: "Blaai…",
+        scope: "Begin vir",
+        user: "Hierdie gebruiker",
+        machine: "Alle gebruikers",
+        machineNote: "Byvoeg vir alle gebruikers vra vir administrateur.",
+        kind: "Begin",
+        run: "Elke aanmelding",
+        runOnce: "Slegs volgende aanmelding",
+        folder: "Kortpad in die Startup-vouer",
+        cancel: "Kanselleer",
+        confirm: "Voeg inskrywing by",
+        adding: "Voeg tans by…",
+        added: (name) => `${name} bygevoeg.`
+      },
+      export: {
+        button: "Voer uit",
+        csv: "CSV-sigblad",
+        html: "Webblad",
+        txt: "Gewone teks",
+        title: "Opstartinskrywings",
+        location: "Ligging"
       }
     },
     duplicates: {
@@ -2384,6 +2486,57 @@ export const CATALOG = {
         button: "إزالة",
         removing: "جارٍ الإزالة…",
         toast: (name) => `تمت إزالة ${name}.`
+      },
+      footerNoteSystem: "تُوقَف المهمة المجدولة على المهمة نفسها، وتُضبط الخدمة لتبدأ يدويًا، فيظل بإمكان أي شيء يحتاجها أن يشغّلها. ويُعاد تشغيل كليهما بالطريقة نفسها.",
+      removeInvalid: {
+        button: (n) => `إزالة ${n} غير صالحة`,
+        removing: "جارٍ الإزالة…",
+        toast: (n) => `تمت إزالة ${n} من الإدخالات غير الصالحة.`,
+        batchName: "إدخالات بدء تشغيل غير صالحة"
+      },
+      search: {
+        placeholder: "التصفية حسب الاسم أو المسار أو الناشر",
+        noMatches: (query) => `لا توجد إدخالات تطابق “${query}”.`
+      },
+      menu: {
+        more: (name) => `مزيد من الإجراءات لـ ${name}`,
+        run: "تشغيل الآن",
+        end: "إنهاء العملية",
+        openLocation: "فتح الموقع",
+        openFolder: "فتح المجلد الحاوي",
+        copyPath: "نسخ مسار التشغيل",
+        remove: "إزالة",
+        started: (name) => `تم تشغيل ${name}.`,
+        ended: (name) => `تم إنهاء ${name}.`,
+        failed: (error) => `لم ينجح ذلك: ${error}`
+      },
+      add: {
+        button: "إضافة إدخال…",
+        title: "إضافة إدخال بدء تشغيل",
+        name: "الاسم",
+        command: "البرنامج",
+        commandHint: "البرنامج المطلوب تشغيله، متبوعًا بأي وسائط.",
+        browse: "استعراض…",
+        scope: "التشغيل لـ",
+        user: "هذا المستخدم",
+        machine: "جميع المستخدمين",
+        machineNote: "الإضافة لجميع المستخدمين تطلب صلاحيات المسؤول.",
+        kind: "يبدأ",
+        run: "عند كل تسجيل دخول",
+        runOnce: "عند تسجيل الدخول التالي فقط",
+        folder: "اختصار في مجلد Startup",
+        cancel: "إلغاء",
+        confirm: "إضافة الإدخال",
+        adding: "جارٍ الإضافة…",
+        added: (name) => `تمت إضافة ${name}.`
+      },
+      export: {
+        button: "تصدير",
+        csv: "جدول CSV",
+        html: "صفحة ويب",
+        txt: "نص عادي",
+        title: "إدخالات بدء التشغيل",
+        location: "الموقع"
       }
     },
     duplicates: {
@@ -3291,6 +3444,57 @@ export const CATALOG = {
         button: "Elimina",
         removing: "Eliminant…",
         toast: (name) => `S'ha eliminat ${name}.`
+      },
+      footerNoteSystem: "Una tasca programada es desactiva a la mateixa tasca, i un servei es configura per iniciar-se manualment, de manera que qualsevol cosa que el necessiti encara el pot iniciar. Tots dos es tornen a activar de la mateixa manera.",
+      removeInvalid: {
+        button: (n) => `Elimina ${n} no vàlides`,
+        removing: "S’està eliminant…",
+        toast: (n) => `S’han eliminat ${n} ${n === 1 ? 'entrada no vàlida' : 'entrades no vàlides'}.`,
+        batchName: "Entrades d'inici no vàlides"
+      },
+      search: {
+        placeholder: "Filtra per nom, camí o editor",
+        noMatches: (query) => `Cap entrada coincideix amb “${query}”.`
+      },
+      menu: {
+        more: (name) => `Més accions per a ${name}`,
+        run: "Executa ara",
+        end: "Finalitza el procés",
+        openLocation: "Obre la ubicació",
+        openFolder: "Obre la carpeta que el conté",
+        copyPath: "Copia el camí d'execució",
+        remove: "Elimina",
+        started: (name) => `S’ha iniciat ${name}.`,
+        ended: (name) => `S’ha finalitzat ${name}.`,
+        failed: (error) => `No ha funcionat: ${error}`
+      },
+      add: {
+        button: "Afegeix una entrada…",
+        title: "Afegeix una entrada d'inici",
+        name: "Nom",
+        command: "Programa",
+        commandHint: "El programa que s'ha d'iniciar, amb els arguments al darrere.",
+        browse: "Navega…",
+        scope: "Inicia per a",
+        user: "Aquest usuari",
+        machine: "Tots els usuaris",
+        machineNote: "Afegir-la per a tots els usuaris demana permisos d'administrador.",
+        kind: "S'inicia",
+        run: "A cada inici de sessió",
+        runOnce: "Només al proper inici de sessió",
+        folder: "Drecera a la carpeta Startup",
+        cancel: "Cancel·la",
+        confirm: "Afegeix l'entrada",
+        adding: "S’està afegint…",
+        added: (name) => `S’ha afegit ${name}.`
+      },
+      export: {
+        button: "Exporta",
+        csv: "Full de càlcul CSV",
+        html: "Pàgina web",
+        txt: "Text pla",
+        title: "Entrades d'inici",
+        location: "Ubicació"
       }
     },
     duplicates: {
@@ -4198,6 +4402,57 @@ export const CATALOG = {
         button: "Odstranit",
         removing: "Odstraňuje se…",
         toast: (name) => `Odstraněno: ${name}.`
+      },
+      footerNoteSystem: "Naplánovaná úloha se vypíná přímo na úloze a služba se přepne na ruční spuštění, takže cokoli, co ji potřebuje, ji stále může spustit. Obojí se zapíná zpět stejným způsobem.",
+      removeInvalid: {
+        button: (n) => `Odebrat neplatné (${n})`,
+        removing: "Odebírání…",
+        toast: (n) => `Odebráno neplatných položek: ${n}.`,
+        batchName: "Neplatné položky po spuštění"
+      },
+      search: {
+        placeholder: "Filtrovat podle názvu, cesty nebo vydavatele",
+        noMatches: (query) => `Výrazu „${query}“ neodpovídá žádná položka.`
+      },
+      menu: {
+        more: (name) => `Další akce pro ${name}`,
+        run: "Spustit nyní",
+        end: "Ukončit proces",
+        openLocation: "Otevřít umístění",
+        openFolder: "Otevřít nadřazenou složku",
+        copyPath: "Kopírovat cestu spuštění",
+        remove: "Odebrat",
+        started: (name) => `${name} spuštěno.`,
+        ended: (name) => `${name} ukončeno.`,
+        failed: (error) => `Nepodařilo se: ${error}`
+      },
+      add: {
+        button: "Přidat položku…",
+        title: "Přidat položku po spuštění",
+        name: "Název",
+        command: "Program",
+        commandHint: "Program ke spuštění, za ním případné argumenty.",
+        browse: "Procházet…",
+        scope: "Spouštět pro",
+        user: "Tento uživatel",
+        machine: "Všichni uživatelé",
+        machineNote: "Přidání pro všechny uživatele vyžaduje správce.",
+        kind: "Spouští se",
+        run: "Při každém přihlášení",
+        runOnce: "Jen při příštím přihlášení",
+        folder: "Zástupce ve složce Startup",
+        cancel: "Zrušit",
+        confirm: "Přidat položku",
+        adding: "Přidávání…",
+        added: (name) => `${name} přidáno.`
+      },
+      export: {
+        button: "Exportovat",
+        csv: "Tabulka CSV",
+        html: "Webová stránka",
+        txt: "Prostý text",
+        title: "Položky po spuštění",
+        location: "Umístění"
       }
     },
     duplicates: {
@@ -5103,6 +5358,57 @@ export const CATALOG = {
         button: "Dileu",
         removing: "Yn dileu…",
         toast: (name) => `Wedi dileu ${name}.`
+      },
+      footerNoteSystem: "Mae tasg wedi'i hamserlennu yn cael ei diffodd ar y dasg ei hun, ac mae gwasanaeth yn cael ei osod i ddechrau â llaw, felly gall unrhyw beth sydd ei angen ei ddechrau o hyd. Mae'r ddau'n cael eu troi'n ôl ymlaen yr un ffordd.",
+      removeInvalid: {
+        button: (n) => `Tynnu ${n} annilys`,
+        removing: "Yn tynnu…",
+        toast: (n) => `Wedi tynnu ${n} ${n === 1 ? 'cofnod annilys' : 'cofnod annilys'}.`,
+        batchName: "Cofnodion cychwyn annilys"
+      },
+      search: {
+        placeholder: "Hidlo yn ôl enw, llwybr neu gyhoeddwr",
+        noMatches: (query) => `Does dim cofnodion yn cyfateb i “${query}”.`
+      },
+      menu: {
+        more: (name) => `Rhagor o gamau ar gyfer ${name}`,
+        run: "Rhedeg nawr",
+        end: "Gorffen y broses",
+        openLocation: "Agor y lleoliad",
+        openFolder: "Agor y ffolder sy’n ei gynnwys",
+        copyPath: "Copïo’r llwybr lansio",
+        remove: "Tynnu",
+        started: (name) => `Wedi dechrau ${name}.`,
+        ended: (name) => `Wedi gorffen ${name}.`,
+        failed: (error) => `Wnaeth hynny ddim gweithio: ${error}`
+      },
+      add: {
+        button: "Ychwanegu cofnod…",
+        title: "Ychwanegu cofnod cychwyn",
+        name: "Enw",
+        command: "Rhaglen",
+        commandHint: "Y rhaglen i'w dechrau, gydag unrhyw ddadleuon ar ei hôl.",
+        browse: "Pori…",
+        scope: "Dechrau ar gyfer",
+        user: "Y defnyddiwr hwn",
+        machine: "Pob defnyddiwr",
+        machineNote: "Mae ychwanegu ar gyfer pob defnyddiwr yn gofyn am weinyddwr.",
+        kind: "Yn dechrau",
+        run: "Pob mewngofnodi",
+        runOnce: "Y mewngofnodi nesaf yn unig",
+        folder: "Llwybr byr yn y ffolder Startup",
+        cancel: "Canslo",
+        confirm: "Ychwanegu cofnod",
+        adding: "Yn ychwanegu…",
+        added: (name) => `Wedi ychwanegu ${name}.`
+      },
+      export: {
+        button: "Allforio",
+        csv: "Taenlen CSV",
+        html: "Tudalen we",
+        txt: "Testun plaen",
+        title: "Cofnodion cychwyn",
+        location: "Lleoliad"
       }
     },
     duplicates: {
@@ -6010,6 +6316,57 @@ export const CATALOG = {
         button: "Fjern",
         removing: "Fjerner…",
         toast: (name) => `Fjernede ${name}.`
+      },
+      footerNoteSystem: "En planlagt opgave slås fra på selve opgaven, og en tjeneste sættes til manuel start, så alt, der har brug for den, stadig kan starte den. Begge slås til igen på samme måde.",
+      removeInvalid: {
+        button: (n) => `Fjern ${n} ugyldige`,
+        removing: "Fjerner…",
+        toast: (n) => `Fjernede ${n} ugyldige ${n === 1 ? 'post' : 'poster'}.`,
+        batchName: "Ugyldige startposter"
+      },
+      search: {
+        placeholder: "Filtrer efter navn, sti eller udgiver",
+        noMatches: (query) => `Ingen poster matcher “${query}”.`
+      },
+      menu: {
+        more: (name) => `Flere handlinger for ${name}`,
+        run: "Kør nu",
+        end: "Afslut proces",
+        openLocation: "Åbn placering",
+        openFolder: "Åbn overordnet mappe",
+        copyPath: "Kopiér startsti",
+        remove: "Fjern",
+        started: (name) => `Startede ${name}.`,
+        ended: (name) => `Afsluttede ${name}.`,
+        failed: (error) => `Det lykkedes ikke: ${error}`
+      },
+      add: {
+        button: "Tilføj post…",
+        title: "Tilføj en startpost",
+        name: "Navn",
+        command: "Program",
+        commandHint: "Programmet, der skal startes, med eventuelle argumenter efter.",
+        browse: "Gennemse…",
+        scope: "Start for",
+        user: "Denne bruger",
+        machine: "Alle brugere",
+        machineNote: "Tilføjelse for alle brugere beder om administrator.",
+        kind: "Starter",
+        run: "Ved hver logon",
+        runOnce: "Kun ved næste logon",
+        folder: "Genvej i mappen Startup",
+        cancel: "Annuller",
+        confirm: "Tilføj post",
+        adding: "Tilføjer…",
+        added: (name) => `Tilføjede ${name}.`
+      },
+      export: {
+        button: "Eksportér",
+        csv: "CSV-regneark",
+        html: "Webside",
+        txt: "Almindelig tekst",
+        title: "Startposter",
+        location: "Placering"
       }
     },
     duplicates: {
@@ -6917,6 +7274,57 @@ export const CATALOG = {
         button: "Entfernen",
         removing: "Wird entfernt…",
         toast: (name) => `${name} entfernt.`
+      },
+      footerNoteSystem: "Eine geplante Aufgabe wird an der Aufgabe selbst ausgeschaltet, und ein Dienst wird auf manuellen Start gestellt, sodass alles, was ihn braucht, ihn weiterhin starten kann. Beide werden auf dieselbe Weise wieder eingeschaltet.",
+      removeInvalid: {
+        button: (n) => `${n} ungültige entfernen`,
+        removing: "Wird entfernt…",
+        toast: (n) => `${n} ungültige ${n === 1 ? 'Eintrag' : 'Einträge'} entfernt.`,
+        batchName: "Ungültige Autostart-Einträge"
+      },
+      search: {
+        placeholder: "Nach Name, Pfad oder Herausgeber filtern",
+        noMatches: (query) => `Keine Einträge passen zu „${query}“.`
+      },
+      menu: {
+        more: (name) => `Weitere Aktionen für ${name}`,
+        run: "Jetzt ausführen",
+        end: "Prozess beenden",
+        openLocation: "Speicherort öffnen",
+        openFolder: "Übergeordneten Ordner öffnen",
+        copyPath: "Startpfad kopieren",
+        remove: "Entfernen",
+        started: (name) => `${name} gestartet.`,
+        ended: (name) => `${name} beendet.`,
+        failed: (error) => `Das hat nicht funktioniert: ${error}`
+      },
+      add: {
+        button: "Eintrag hinzufügen…",
+        title: "Autostart-Eintrag hinzufügen",
+        name: "Name",
+        command: "Programm",
+        commandHint: "Das zu startende Programm, gefolgt von eventuellen Argumenten.",
+        browse: "Durchsuchen…",
+        scope: "Starten für",
+        user: "Diesen Benutzer",
+        machine: "Alle Benutzer",
+        machineNote: "Hinzufügen für alle Benutzer fragt nach Administratorrechten.",
+        kind: "Startet",
+        run: "Bei jeder Anmeldung",
+        runOnce: "Nur bei der nächsten Anmeldung",
+        folder: "Verknüpfung im Startup-Ordner",
+        cancel: "Abbrechen",
+        confirm: "Eintrag hinzufügen",
+        adding: "Wird hinzugefügt…",
+        added: (name) => `${name} hinzugefügt.`
+      },
+      export: {
+        button: "Exportieren",
+        csv: "CSV-Tabelle",
+        html: "Webseite",
+        txt: "Nur-Text",
+        title: "Autostart-Einträge",
+        location: "Speicherort"
       }
     },
     duplicates: {
@@ -7824,6 +8232,57 @@ export const CATALOG = {
         button: "Κατάργηση",
         removing: "Γίνεται κατάργηση…",
         toast: (name) => `Το ${name} καταργήθηκε.`
+      },
+      footerNoteSystem: "Μια προγραμματισμένη εργασία απενεργοποιείται στην ίδια την εργασία, και μια υπηρεσία ορίζεται να ξεκινά χειροκίνητα, ώστε ό,τι τη χρειάζεται να μπορεί ακόμα να την ξεκινήσει. Και οι δύο ενεργοποιούνται ξανά με τον ίδιο τρόπο.",
+      removeInvalid: {
+        button: (n) => `Κατάργηση ${n} μη έγκυρων`,
+        removing: "Γίνεται κατάργηση…",
+        toast: (n) => `Καταργήθηκαν ${n} μη έγκυρες ${n === 1 ? 'καταχώριση' : 'καταχωρίσεις'}.`,
+        batchName: "Μη έγκυρες καταχωρίσεις εκκίνησης"
+      },
+      search: {
+        placeholder: "Φιλτράρισμα κατά όνομα, διαδρομή ή εκδότη",
+        noMatches: (query) => `Καμία καταχώριση δεν ταιριάζει με «${query}».`
+      },
+      menu: {
+        more: (name) => `Περισσότερες ενέργειες για ${name}`,
+        run: "Εκτέλεση τώρα",
+        end: "Τερματισμός διεργασίας",
+        openLocation: "Άνοιγμα τοποθεσίας",
+        openFolder: "Άνοιγμα φακέλου που το περιέχει",
+        copyPath: "Αντιγραφή διαδρομής εκκίνησης",
+        remove: "Κατάργηση",
+        started: (name) => `Ξεκίνησε το ${name}.`,
+        ended: (name) => `Τερματίστηκε το ${name}.`,
+        failed: (error) => `Δεν λειτούργησε: ${error}`
+      },
+      add: {
+        button: "Προσθήκη καταχώρισης…",
+        title: "Προσθήκη καταχώρισης εκκίνησης",
+        name: "Όνομα",
+        command: "Πρόγραμμα",
+        commandHint: "Το πρόγραμμα που θα ξεκινά, με τυχόν ορίσματα μετά.",
+        browse: "Αναζήτηση…",
+        scope: "Εκκίνηση για",
+        user: "Αυτόν τον χρήστη",
+        machine: "Όλους τους χρήστες",
+        machineNote: "Η προσθήκη για όλους τους χρήστες ζητά δικαιώματα διαχειριστή.",
+        kind: "Ξεκινά",
+        run: "Σε κάθε σύνδεση",
+        runOnce: "Μόνο στην επόμενη σύνδεση",
+        folder: "Συντόμευση στον φάκελο Startup",
+        cancel: "Άκυρο",
+        confirm: "Προσθήκη καταχώρισης",
+        adding: "Γίνεται προσθήκη…",
+        added: (name) => `Προστέθηκε το ${name}.`
+      },
+      export: {
+        button: "Εξαγωγή",
+        csv: "Υπολογιστικό φύλλο CSV",
+        html: "Ιστοσελίδα",
+        txt: "Απλό κείμενο",
+        title: "Καταχωρίσεις εκκίνησης",
+        location: "Τοποθεσία"
       }
     },
     duplicates: {
@@ -8731,6 +9190,57 @@ export const CATALOG = {
         button: "Quitar",
         removing: "Quitando…",
         toast: (name) => `Se quitó ${name}.`
+      },
+      footerNoteSystem: "Una tarea programada se desactiva en la propia tarea, y un servicio se configura para iniciarse manualmente, de modo que cualquier cosa que lo necesite pueda seguir iniciándolo. Ambos se vuelven a activar de la misma manera.",
+      removeInvalid: {
+        button: (n) => `Quitar ${n} no válidas`,
+        removing: "Quitando…",
+        toast: (n) => `Se ${n === 1 ? 'quitó' : 'quitaron'} ${n} ${n === 1 ? 'entrada no válida' : 'entradas no válidas'}.`,
+        batchName: "Entradas de inicio no válidas"
+      },
+      search: {
+        placeholder: "Filtrar por nombre, ruta o editor",
+        noMatches: (query) => `Ninguna entrada coincide con “${query}”.`
+      },
+      menu: {
+        more: (name) => `Más acciones para ${name}`,
+        run: "Ejecutar ahora",
+        end: "Finalizar proceso",
+        openLocation: "Abrir ubicación",
+        openFolder: "Abrir carpeta contenedora",
+        copyPath: "Copiar ruta de inicio",
+        remove: "Quitar",
+        started: (name) => `Se inició ${name}.`,
+        ended: (name) => `Se finalizó ${name}.`,
+        failed: (error) => `No funcionó: ${error}`
+      },
+      add: {
+        button: "Agregar entrada…",
+        title: "Agregar una entrada de inicio",
+        name: "Nombre",
+        command: "Programa",
+        commandHint: "El programa que se iniciará, con los argumentos que lleve detrás.",
+        browse: "Examinar…",
+        scope: "Iniciar para",
+        user: "Este usuario",
+        machine: "Todos los usuarios",
+        machineNote: "Agregarla para todos los usuarios pide permisos de administrador.",
+        kind: "Se inicia",
+        run: "En cada inicio de sesión",
+        runOnce: "Solo en el próximo inicio de sesión",
+        folder: "Acceso directo en la carpeta Startup",
+        cancel: "Cancelar",
+        confirm: "Agregar entrada",
+        adding: "Agregando…",
+        added: (name) => `Se agregó ${name}.`
+      },
+      export: {
+        button: "Exportar",
+        csv: "Hoja de cálculo CSV",
+        html: "Página web",
+        txt: "Texto sin formato",
+        title: "Entradas de inicio",
+        location: "Ubicación"
       }
     },
     duplicates: {
@@ -9638,6 +10148,57 @@ export const CATALOG = {
         button: "Eemalda",
         removing: "Eemaldamine…",
         toast: (name) => `${name} eemaldatud.`
+      },
+      footerNoteSystem: "Ajastatud ülesanne lülitatakse välja ülesandes endas ja teenus seatakse käsitsi käivituma, nii et kõik, mis seda vajab, saab selle ikka käivitada. Mõlemad lülitatakse tagasi sisse samamoodi.",
+      removeInvalid: {
+        button: (n) => `Eemalda ${n} kehtetut`,
+        removing: "Eemaldamine…",
+        toast: (n) => `Eemaldati ${n} ${n === 1 ? 'kehtetu kirje' : 'kehtetut kirjet'}.`,
+        batchName: "Kehtetud käivituskirjed"
+      },
+      search: {
+        placeholder: "Filtreeri nime, tee või väljaandja järgi",
+        noMatches: (query) => `Ükski kirje ei vasta päringule „${query}“.`
+      },
+      menu: {
+        more: (name) => `Rohkem toiminguid: ${name}`,
+        run: "Käivita kohe",
+        end: "Lõpeta protsess",
+        openLocation: "Ava asukoht",
+        openFolder: "Ava sisaldav kaust",
+        copyPath: "Kopeeri käivitustee",
+        remove: "Eemalda",
+        started: (name) => `${name} käivitati.`,
+        ended: (name) => `${name} lõpetati.`,
+        failed: (error) => `See ei õnnestunud: ${error}`
+      },
+      add: {
+        button: "Lisa kirje…",
+        title: "Lisa käivituskirje",
+        name: "Nimi",
+        command: "Programm",
+        commandHint: "Käivitatav programm, selle järel võimalikud argumendid.",
+        browse: "Sirvi…",
+        scope: "Käivita",
+        user: "Sellele kasutajale",
+        machine: "Kõigile kasutajatele",
+        machineNote: "Kõigile kasutajatele lisamine küsib administraatori õigusi.",
+        kind: "Käivitub",
+        run: "Igal sisselogimisel",
+        runOnce: "Ainult järgmisel sisselogimisel",
+        folder: "Otsetee Startup-kaustas",
+        cancel: "Loobu",
+        confirm: "Lisa kirje",
+        adding: "Lisamine…",
+        added: (name) => `${name} lisati.`
+      },
+      export: {
+        button: "Ekspordi",
+        csv: "CSV-tabel",
+        html: "Veebileht",
+        txt: "Lihttekst",
+        title: "Käivituskirjed",
+        location: "Asukoht"
       }
     },
     duplicates: {
@@ -10545,6 +11106,57 @@ export const CATALOG = {
         button: "Poista",
         removing: "Poistetaan…",
         toast: (name) => `${name} poistettu.`
+      },
+      footerNoteSystem: "Ajoitettu tehtävä poistetaan käytöstä itse tehtävässä, ja palvelu asetetaan käynnistymään manuaalisesti, joten kaikki sitä tarvitsevat voivat yhä käynnistää sen. Molemmat otetaan takaisin käyttöön samalla tavalla.",
+      removeInvalid: {
+        button: (n) => `Poista ${n} virheellistä`,
+        removing: "Poistetaan…",
+        toast: (n) => `Poistettiin ${n} ${n === 1 ? 'virheellinen merkintä' : 'virheellistä merkintää'}.`,
+        batchName: "Virheelliset käynnistysmerkinnät"
+      },
+      search: {
+        placeholder: "Suodata nimen, polun tai julkaisijan mukaan",
+        noMatches: (query) => `Mikään merkintä ei vastaa hakua ”${query}”.`
+      },
+      menu: {
+        more: (name) => `Lisää toimintoja: ${name}`,
+        run: "Suorita nyt",
+        end: "Lopeta prosessi",
+        openLocation: "Avaa sijainti",
+        openFolder: "Avaa sisältävä kansio",
+        copyPath: "Kopioi käynnistyspolku",
+        remove: "Poista",
+        started: (name) => `${name} käynnistettiin.`,
+        ended: (name) => `${name} lopetettiin.`,
+        failed: (error) => `Se ei onnistunut: ${error}`
+      },
+      add: {
+        button: "Lisää merkintä…",
+        title: "Lisää käynnistysmerkintä",
+        name: "Nimi",
+        command: "Ohjelma",
+        commandHint: "Käynnistettävä ohjelma ja sen perään mahdolliset argumentit.",
+        browse: "Selaa…",
+        scope: "Käynnistä",
+        user: "Tälle käyttäjälle",
+        machine: "Kaikille käyttäjille",
+        machineNote: "Lisääminen kaikille käyttäjille pyytää järjestelmänvalvojan oikeuksia.",
+        kind: "Käynnistyy",
+        run: "Jokaisella kirjautumisella",
+        runOnce: "Vain seuraavalla kirjautumisella",
+        folder: "Pikakuvake Startup-kansiossa",
+        cancel: "Peruuta",
+        confirm: "Lisää merkintä",
+        adding: "Lisätään…",
+        added: (name) => `${name} lisättiin.`
+      },
+      export: {
+        button: "Vie",
+        csv: "CSV-taulukko",
+        html: "Verkkosivu",
+        txt: "Pelkkä teksti",
+        title: "Käynnistysmerkinnät",
+        location: "Sijainti"
       }
     },
     duplicates: {
@@ -11452,6 +12064,57 @@ export const CATALOG = {
         button: "Supprimer",
         removing: "Suppression…",
         toast: (name) => `${name} supprimé.`
+      },
+      footerNoteSystem: "Une tâche planifiée est désactivée sur la tâche elle-même, et un service est réglé pour démarrer manuellement, afin que tout ce qui en a besoin puisse encore le démarrer. Les deux se réactivent de la même façon.",
+      removeInvalid: {
+        button: (n) => `Supprimer ${n} non valides`,
+        removing: "Suppression…",
+        toast: (n) => `${n} ${n === 1 ? 'entrée non valide supprimée' : 'entrées non valides supprimées'}.`,
+        batchName: "Entrées de démarrage non valides"
+      },
+      search: {
+        placeholder: "Filtrer par nom, chemin ou éditeur",
+        noMatches: (query) => `Aucune entrée ne correspond à « ${query} ».`
+      },
+      menu: {
+        more: (name) => `Plus d’actions pour ${name}`,
+        run: "Exécuter maintenant",
+        end: "Terminer le processus",
+        openLocation: "Ouvrir l’emplacement",
+        openFolder: "Ouvrir le dossier parent",
+        copyPath: "Copier le chemin de lancement",
+        remove: "Supprimer",
+        started: (name) => `${name} démarré.`,
+        ended: (name) => `${name} terminé.`,
+        failed: (error) => `Cela n’a pas fonctionné : ${error}`
+      },
+      add: {
+        button: "Ajouter une entrée…",
+        title: "Ajouter une entrée de démarrage",
+        name: "Nom",
+        command: "Programme",
+        commandHint: "Le programme à démarrer, suivi de ses éventuels arguments.",
+        browse: "Parcourir…",
+        scope: "Démarrer pour",
+        user: "Cet utilisateur",
+        machine: "Tous les utilisateurs",
+        machineNote: "L’ajout pour tous les utilisateurs demande les droits d’administrateur.",
+        kind: "Démarre",
+        run: "À chaque ouverture de session",
+        runOnce: "Seulement à la prochaine ouverture de session",
+        folder: "Raccourci dans le dossier Startup",
+        cancel: "Annuler",
+        confirm: "Ajouter l’entrée",
+        adding: "Ajout…",
+        added: (name) => `${name} ajouté.`
+      },
+      export: {
+        button: "Exporter",
+        csv: "Feuille de calcul CSV",
+        html: "Page web",
+        txt: "Texte brut",
+        title: "Entrées de démarrage",
+        location: "Emplacement"
       }
     },
     duplicates: {
@@ -12359,6 +13022,57 @@ export const CATALOG = {
         button: "הסר",
         removing: "מסיר…",
         toast: (name) => `${name} הוסר.`
+      },
+      footerNoteSystem: "משימה מתוזמנת מכובה במשימה עצמה, ושירות מוגדר להתחיל באופן ידני, כך שכל מה שזקוק לו עדיין יכול להפעיל אותו. שניהם מופעלים מחדש באותה דרך.",
+      removeInvalid: {
+        button: (n) => `הסר ${n} לא תקינות`,
+        removing: "מסיר…",
+        toast: (n) => `הוסרו ${n} רשומות לא תקינות.`,
+        batchName: "רשומות הפעלה לא תקינות"
+      },
+      search: {
+        placeholder: "סינון לפי שם, נתיב או מפרסם",
+        noMatches: (query) => `אין רשומות התואמות ל“${query}”.`
+      },
+      menu: {
+        more: (name) => `פעולות נוספות עבור ${name}`,
+        run: "הפעל עכשיו",
+        end: "סיים תהליך",
+        openLocation: "פתח מיקום",
+        openFolder: "פתח את התיקייה המכילה",
+        copyPath: "העתק נתיב הפעלה",
+        remove: "הסר",
+        started: (name) => `${name} הופעל.`,
+        ended: (name) => `${name} הסתיים.`,
+        failed: (error) => `זה לא הצליח: ${error}`
+      },
+      add: {
+        button: "הוסף רשומה…",
+        title: "הוסף רשומת הפעלה",
+        name: "שם",
+        command: "תוכנית",
+        commandHint: "התוכנית להפעלה, ואחריה ארגומנטים אם יש.",
+        browse: "עיון…",
+        scope: "הפעל עבור",
+        user: "משתמש זה",
+        machine: "כל המשתמשים",
+        machineNote: "הוספה לכל המשתמשים מבקשת הרשאות מנהל.",
+        kind: "מתחיל",
+        run: "בכל כניסה",
+        runOnce: "רק בכניסה הבאה",
+        folder: "קיצור דרך בתיקיית Startup",
+        cancel: "ביטול",
+        confirm: "הוסף רשומה",
+        adding: "מוסיף…",
+        added: (name) => `${name} נוסף.`
+      },
+      export: {
+        button: "ייצוא",
+        csv: "גיליון CSV",
+        html: "דף אינטרנט",
+        txt: "טקסט פשוט",
+        title: "רשומות הפעלה",
+        location: "מיקום"
       }
     },
     duplicates: {
@@ -13266,6 +13980,57 @@ export const CATALOG = {
         button: "Eltávolítás",
         removing: "Eltávolítás…",
         toast: (name) => `${name} eltávolítva.`
+      },
+      footerNoteSystem: "Az ütemezett feladat magán a feladaton kapcsolható ki, a szolgáltatás pedig kézi indításra áll át, így bármi, aminek szüksége van rá, továbbra is elindíthatja. Mindkettő ugyanígy kapcsolható vissza.",
+      removeInvalid: {
+        button: (n) => `${n} érvénytelen eltávolítása`,
+        removing: "Eltávolítás…",
+        toast: (n) => `${n} érvénytelen bejegyzés eltávolítva.`,
+        batchName: "Érvénytelen indítási bejegyzések"
+      },
+      search: {
+        placeholder: "Szűrés név, útvonal vagy kiadó szerint",
+        noMatches: (query) => `Egy bejegyzés sem felel meg ennek: „${query}”.`
+      },
+      menu: {
+        more: (name) => `További műveletek: ${name}`,
+        run: "Futtatás most",
+        end: "Folyamat befejezése",
+        openLocation: "Hely megnyitása",
+        openFolder: "Tartalmazó mappa megnyitása",
+        copyPath: "Indítási útvonal másolása",
+        remove: "Eltávolítás",
+        started: (name) => `${name} elindítva.`,
+        ended: (name) => `${name} befejezve.`,
+        failed: (error) => `Ez nem sikerült: ${error}`
+      },
+      add: {
+        button: "Bejegyzés hozzáadása…",
+        title: "Indítási bejegyzés hozzáadása",
+        name: "Név",
+        command: "Program",
+        commandHint: "Az indítandó program, utána az esetleges argumentumokkal.",
+        browse: "Tallózás…",
+        scope: "Indítás ennek",
+        user: "Ez a felhasználó",
+        machine: "Minden felhasználó",
+        machineNote: "A minden felhasználóhoz való hozzáadás rendszergazdai jogot kér.",
+        kind: "Indul",
+        run: "Minden bejelentkezéskor",
+        runOnce: "Csak a következő bejelentkezéskor",
+        folder: "Parancsikon a Startup mappában",
+        cancel: "Mégse",
+        confirm: "Bejegyzés hozzáadása",
+        adding: "Hozzáadás…",
+        added: (name) => `${name} hozzáadva.`
+      },
+      export: {
+        button: "Exportálás",
+        csv: "CSV-táblázat",
+        html: "Weboldal",
+        txt: "Egyszerű szöveg",
+        title: "Indítási bejegyzések",
+        location: "Hely"
       }
     },
     duplicates: {
@@ -14173,6 +14938,57 @@ export const CATALOG = {
         button: "Hapus",
         removing: "Menghapus…",
         toast: (name) => `${name} dihapus.`
+      },
+      footerNoteSystem: "Tugas terjadwal dimatikan pada tugas itu sendiri, dan layanan diatur agar dimulai secara manual, sehingga apa pun yang membutuhkannya tetap dapat memulainya. Keduanya dinyalakan kembali dengan cara yang sama.",
+      removeInvalid: {
+        button: (n) => `Hapus ${n} yang tidak valid`,
+        removing: "Menghapus…",
+        toast: (n) => `${n} entri tidak valid dihapus.`,
+        batchName: "Entri startup tidak valid"
+      },
+      search: {
+        placeholder: "Saring menurut nama, jalur, atau penerbit",
+        noMatches: (query) => `Tidak ada entri yang cocok dengan “${query}”.`
+      },
+      menu: {
+        more: (name) => `Tindakan lain untuk ${name}`,
+        run: "Jalankan sekarang",
+        end: "Akhiri proses",
+        openLocation: "Buka lokasi",
+        openFolder: "Buka folder induk",
+        copyPath: "Salin jalur peluncuran",
+        remove: "Hapus",
+        started: (name) => `${name} dijalankan.`,
+        ended: (name) => `${name} diakhiri.`,
+        failed: (error) => `Itu tidak berhasil: ${error}`
+      },
+      add: {
+        button: "Tambah entri…",
+        title: "Tambah entri startup",
+        name: "Nama",
+        command: "Program",
+        commandHint: "Program yang akan dijalankan, diikuti argumen jika ada.",
+        browse: "Telusuri…",
+        scope: "Mulai untuk",
+        user: "Pengguna ini",
+        machine: "Semua pengguna",
+        machineNote: "Menambahkan untuk semua pengguna meminta hak administrator.",
+        kind: "Mulai",
+        run: "Setiap masuk",
+        runOnce: "Hanya saat masuk berikutnya",
+        folder: "Pintasan di folder Startup",
+        cancel: "Batal",
+        confirm: "Tambah entri",
+        adding: "Menambahkan…",
+        added: (name) => `${name} ditambahkan.`
+      },
+      export: {
+        button: "Ekspor",
+        csv: "Lembar kerja CSV",
+        html: "Halaman web",
+        txt: "Teks biasa",
+        title: "Entri startup",
+        location: "Lokasi"
       }
     },
     duplicates: {
@@ -15080,6 +15896,57 @@ export const CATALOG = {
         button: "Fjarlægja",
         removing: "Fjarlægi…",
         toast: (name) => `${name} fjarlægt.`
+      },
+      footerNoteSystem: "Áætluð verk eru gerð óvirk á verkinu sjálfu og þjónusta er stillt á handvirka ræsingu, svo að allt sem þarf á henni að halda getur samt ræst hana. Hvort tveggja er gert virkt aftur á sama hátt.",
+      removeInvalid: {
+        button: (n) => `Fjarlægja ${n} ógild`,
+        removing: "Fjarlægi…",
+        toast: (n) => `${n} ${n === 1 ? 'ógild færsla fjarlægð' : 'ógildar færslur fjarlægðar'}.`,
+        batchName: "Ógildar ræsifærslur"
+      },
+      search: {
+        placeholder: "Sía eftir heiti, slóð eða útgefanda",
+        noMatches: (query) => `Engar færslur passa við „${query}“.`
+      },
+      menu: {
+        more: (name) => `Fleiri aðgerðir fyrir ${name}`,
+        run: "Keyra núna",
+        end: "Ljúka ferli",
+        openLocation: "Opna staðsetningu",
+        openFolder: "Opna möppuna sem geymir það",
+        copyPath: "Afrita ræsislóð",
+        remove: "Fjarlægja",
+        started: (name) => `${name} ræst.`,
+        ended: (name) => `${name} lokið.`,
+        failed: (error) => `Það tókst ekki: ${error}`
+      },
+      add: {
+        button: "Bæta við færslu…",
+        title: "Bæta við ræsifærslu",
+        name: "Heiti",
+        command: "Forrit",
+        commandHint: "Forritið sem á að ræsa, með viðföngum á eftir ef einhver eru.",
+        browse: "Velja…",
+        scope: "Ræsa fyrir",
+        user: "Þennan notanda",
+        machine: "Alla notendur",
+        machineNote: "Að bæta við fyrir alla notendur biður um stjórnandaréttindi.",
+        kind: "Ræsist",
+        run: "Við hverja innskráningu",
+        runOnce: "Aðeins við næstu innskráningu",
+        folder: "Flýtileið í Startup-möppunni",
+        cancel: "Hætta við",
+        confirm: "Bæta við færslu",
+        adding: "Bæti við…",
+        added: (name) => `${name} bætt við.`
+      },
+      export: {
+        button: "Flytja út",
+        csv: "CSV-töflureiknir",
+        html: "Vefsíða",
+        txt: "Hreinn texti",
+        title: "Ræsifærslur",
+        location: "Staðsetning"
       }
     },
     duplicates: {
@@ -15987,6 +16854,57 @@ export const CATALOG = {
         button: "Rimuovi",
         removing: "Rimozione…",
         toast: (name) => `${name} rimosso.`
+      },
+      footerNoteSystem: "Un'attività pianificata viene disattivata sull'attività stessa, e un servizio viene impostato per l'avvio manuale, così tutto ciò che ne ha bisogno può ancora avviarlo. Entrambi si riattivano allo stesso modo.",
+      removeInvalid: {
+        button: (n) => `Rimuovi ${n} non valide`,
+        removing: "Rimozione…",
+        toast: (n) => `${n === 1 ? 'Rimossa' : 'Rimosse'} ${n} ${n === 1 ? 'voce non valida' : 'voci non valide'}.`,
+        batchName: "Voci di avvio non valide"
+      },
+      search: {
+        placeholder: "Filtra per nome, percorso o editore",
+        noMatches: (query) => `Nessuna voce corrisponde a “${query}”.`
+      },
+      menu: {
+        more: (name) => `Altre azioni per ${name}`,
+        run: "Esegui ora",
+        end: "Termina processo",
+        openLocation: "Apri percorso",
+        openFolder: "Apri cartella superiore",
+        copyPath: "Copia percorso di avvio",
+        remove: "Rimuovi",
+        started: (name) => `${name} avviato.`,
+        ended: (name) => `${name} terminato.`,
+        failed: (error) => `Non ha funzionato: ${error}`
+      },
+      add: {
+        button: "Aggiungi voce…",
+        title: "Aggiungi una voce di avvio",
+        name: "Nome",
+        command: "Programma",
+        commandHint: "Il programma da avviare, seguito dagli eventuali argomenti.",
+        browse: "Sfoglia…",
+        scope: "Avvia per",
+        user: "Questo utente",
+        machine: "Tutti gli utenti",
+        machineNote: "L'aggiunta per tutti gli utenti richiede i privilegi di amministratore.",
+        kind: "Si avvia",
+        run: "A ogni accesso",
+        runOnce: "Solo al prossimo accesso",
+        folder: "Collegamento nella cartella Startup",
+        cancel: "Annulla",
+        confirm: "Aggiungi voce",
+        adding: "Aggiunta…",
+        added: (name) => `${name} aggiunto.`
+      },
+      export: {
+        button: "Esporta",
+        csv: "Foglio di calcolo CSV",
+        html: "Pagina web",
+        txt: "Testo semplice",
+        title: "Voci di avvio",
+        location: "Percorso"
       }
     },
     duplicates: {
@@ -16894,6 +17812,57 @@ export const CATALOG = {
         button: "削除",
         removing: "削除中…",
         toast: (name) => `${name} を削除しました。`
+      },
+      footerNoteSystem: "スケジュールされたタスクはタスク自体で無効にし、サービスは手動で開始するように設定するため、それを必要とするものは引き続き開始できます。どちらも同じ方法で再び有効にできます。",
+      removeInvalid: {
+        button: (n) => `無効な ${n} 件を削除`,
+        removing: "削除しています…",
+        toast: (n) => `無効なエントリを ${n} 件削除しました。`,
+        batchName: "無効なスタートアップ エントリ"
+      },
+      search: {
+        placeholder: "名前、パス、発行元で絞り込み",
+        noMatches: (query) => `「${query}」に一致するエントリはありません。`
+      },
+      menu: {
+        more: (name) => `${name} のその他の操作`,
+        run: "今すぐ実行",
+        end: "プロセスを終了",
+        openLocation: "場所を開く",
+        openFolder: "格納フォルダーを開く",
+        copyPath: "起動パスをコピー",
+        remove: "削除",
+        started: (name) => `${name} を開始しました。`,
+        ended: (name) => `${name} を終了しました。`,
+        failed: (error) => `うまくいきませんでした: ${error}`
+      },
+      add: {
+        button: "エントリを追加…",
+        title: "スタートアップ エントリを追加",
+        name: "名前",
+        command: "プログラム",
+        commandHint: "開始するプログラムと、その後に続く引数。",
+        browse: "参照…",
+        scope: "対象",
+        user: "このユーザー",
+        machine: "すべてのユーザー",
+        machineNote: "すべてのユーザーに追加するには管理者権限が必要です。",
+        kind: "開始タイミング",
+        run: "サインインのたび",
+        runOnce: "次回のサインインのみ",
+        folder: "Startup フォルダーのショートカット",
+        cancel: "キャンセル",
+        confirm: "エントリを追加",
+        adding: "追加しています…",
+        added: (name) => `${name} を追加しました。`
+      },
+      export: {
+        button: "エクスポート",
+        csv: "CSV スプレッドシート",
+        html: "Web ページ",
+        txt: "プレーン テキスト",
+        title: "スタートアップ エントリ",
+        location: "場所"
       }
     },
     duplicates: {
@@ -17801,6 +18770,57 @@ export const CATALOG = {
         button: "제거",
         removing: "제거 중…",
         toast: (name) => `${name} 제거됨.`
+      },
+      footerNoteSystem: "예약된 작업은 작업 자체에서 끄고, 서비스는 수동으로 시작하도록 설정하므로 필요한 것은 여전히 시작할 수 있습니다. 둘 다 같은 방법으로 다시 켭니다.",
+      removeInvalid: {
+        button: (n) => `잘못된 항목 ${n}개 제거`,
+        removing: "제거하는 중…",
+        toast: (n) => `잘못된 항목 ${n}개를 제거했습니다.`,
+        batchName: "잘못된 시작 프로그램 항목"
+      },
+      search: {
+        placeholder: "이름, 경로 또는 게시자로 필터링",
+        noMatches: (query) => `“${query}”와 일치하는 항목이 없습니다.`
+      },
+      menu: {
+        more: (name) => `${name}에 대한 추가 작업`,
+        run: "지금 실행",
+        end: "프로세스 끝내기",
+        openLocation: "위치 열기",
+        openFolder: "포함 폴더 열기",
+        copyPath: "실행 경로 복사",
+        remove: "제거",
+        started: (name) => `${name}을(를) 시작했습니다.`,
+        ended: (name) => `${name}을(를) 종료했습니다.`,
+        failed: (error) => `작업하지 못했습니다: ${error}`
+      },
+      add: {
+        button: "항목 추가…",
+        title: "시작 프로그램 항목 추가",
+        name: "이름",
+        command: "프로그램",
+        commandHint: "시작할 프로그램과 그 뒤의 인수.",
+        browse: "찾아보기…",
+        scope: "대상",
+        user: "이 사용자",
+        machine: "모든 사용자",
+        machineNote: "모든 사용자용으로 추가하면 관리자 권한을 요청합니다.",
+        kind: "시작 시점",
+        run: "로그인할 때마다",
+        runOnce: "다음 로그인 때만",
+        folder: "Startup 폴더의 바로 가기",
+        cancel: "취소",
+        confirm: "항목 추가",
+        adding: "추가하는 중…",
+        added: (name) => `${name}을(를) 추가했습니다.`
+      },
+      export: {
+        button: "내보내기",
+        csv: "CSV 스프레드시트",
+        html: "웹 페이지",
+        txt: "일반 텍스트",
+        title: "시작 프로그램 항목",
+        location: "위치"
       }
     },
     duplicates: {
@@ -18708,6 +19728,57 @@ export const CATALOG = {
         button: "Pašalinti",
         removing: "Šalinama…",
         toast: (name) => `${name} pašalinta.`
+      },
+      footerNoteSystem: "Suplanuota užduotis išjungiama pačioje užduotyje, o tarnyba nustatoma paleisti rankiniu būdu, todėl viskas, kam jos reikia, vis tiek gali ją paleisti. Abi vėl įjungiamos tuo pačiu būdu.",
+      removeInvalid: {
+        button: (n) => `Pašalinti netinkamus (${n})`,
+        removing: "Šalinama…",
+        toast: (n) => `Pašalinta netinkamų įrašų: ${n}.`,
+        batchName: "Netinkami paleisties įrašai"
+      },
+      search: {
+        placeholder: "Filtruoti pagal pavadinimą, kelią ar leidėją",
+        noMatches: (query) => `Nė vienas įrašas neatitinka „${query}“.`
+      },
+      menu: {
+        more: (name) => `Daugiau veiksmų: ${name}`,
+        run: "Paleisti dabar",
+        end: "Baigti procesą",
+        openLocation: "Atidaryti vietą",
+        openFolder: "Atidaryti aplanką",
+        copyPath: "Kopijuoti paleidimo kelią",
+        remove: "Pašalinti",
+        started: (name) => `${name} paleista.`,
+        ended: (name) => `${name} baigta.`,
+        failed: (error) => `Nepavyko: ${error}`
+      },
+      add: {
+        button: "Pridėti įrašą…",
+        title: "Pridėti paleisties įrašą",
+        name: "Pavadinimas",
+        command: "Programa",
+        commandHint: "Paleidžiama programa, po jos – argumentai, jei yra.",
+        browse: "Naršyti…",
+        scope: "Paleisti",
+        user: "Šiam naudotojui",
+        machine: "Visiems naudotojams",
+        machineNote: "Pridedant visiems naudotojams prašoma administratoriaus teisių.",
+        kind: "Paleidžiama",
+        run: "Kiekvieno prisijungimo metu",
+        runOnce: "Tik kito prisijungimo metu",
+        folder: "Nuoroda Startup aplanke",
+        cancel: "Atšaukti",
+        confirm: "Pridėti įrašą",
+        adding: "Pridedama…",
+        added: (name) => `${name} pridėta.`
+      },
+      export: {
+        button: "Eksportuoti",
+        csv: "CSV skaičiuoklė",
+        html: "Tinklalapis",
+        txt: "Paprastas tekstas",
+        title: "Paleisties įrašai",
+        location: "Vieta"
       }
     },
     duplicates: {
@@ -19613,6 +20684,57 @@ export const CATALOG = {
         button: "Alih keluar",
         removing: "Mengalih keluar…",
         toast: (name) => `${name} dialih keluar.`
+      },
+      footerNoteSystem: "Tugas berjadual dimatikan pada tugas itu sendiri, dan perkhidmatan ditetapkan untuk bermula secara manual, jadi apa-apa yang memerlukannya masih boleh memulakannya. Kedua-duanya dihidupkan semula dengan cara yang sama.",
+      removeInvalid: {
+        button: (n) => `Alih keluar ${n} tidak sah`,
+        removing: "Mengalih keluar…",
+        toast: (n) => `${n} entri tidak sah dialih keluar.`,
+        batchName: "Entri permulaan tidak sah"
+      },
+      search: {
+        placeholder: "Tapis mengikut nama, laluan atau penerbit",
+        noMatches: (query) => `Tiada entri sepadan dengan “${query}”.`
+      },
+      menu: {
+        more: (name) => `Lagi tindakan untuk ${name}`,
+        run: "Jalankan sekarang",
+        end: "Tamatkan proses",
+        openLocation: "Buka lokasi",
+        openFolder: "Buka folder yang mengandunginya",
+        copyPath: "Salin laluan pelancaran",
+        remove: "Alih keluar",
+        started: (name) => `${name} dimulakan.`,
+        ended: (name) => `${name} ditamatkan.`,
+        failed: (error) => `Itu tidak berjaya: ${error}`
+      },
+      add: {
+        button: "Tambah entri…",
+        title: "Tambah entri permulaan",
+        name: "Nama",
+        command: "Program",
+        commandHint: "Program untuk dimulakan, diikuti sebarang argumen.",
+        browse: "Semak imbas…",
+        scope: "Mulakan untuk",
+        user: "Pengguna ini",
+        machine: "Semua pengguna",
+        machineNote: "Menambah untuk semua pengguna meminta hak pentadbir.",
+        kind: "Bermula",
+        run: "Setiap kali log masuk",
+        runOnce: "Hanya log masuk seterusnya",
+        folder: "Pintasan dalam folder Startup",
+        cancel: "Batal",
+        confirm: "Tambah entri",
+        adding: "Menambah…",
+        added: (name) => `${name} ditambah.`
+      },
+      export: {
+        button: "Eksport",
+        csv: "Hamparan CSV",
+        html: "Halaman web",
+        txt: "Teks biasa",
+        title: "Entri permulaan",
+        location: "Lokasi"
       }
     },
     duplicates: {
@@ -20520,6 +21642,57 @@ export const CATALOG = {
         button: "Fjern",
         removing: "Fjerner…",
         toast: (name) => `${name} fjernet.`
+      },
+      footerNoteSystem: "En planlagt oppgave slås av på selve oppgaven, og en tjeneste settes til manuell oppstart, slik at alt som trenger den fortsatt kan starte den. Begge slås på igjen på samme måte.",
+      removeInvalid: {
+        button: (n) => `Fjern ${n} ugyldige`,
+        removing: "Fjerner…",
+        toast: (n) => `Fjernet ${n} ugyldige ${n === 1 ? 'oppføring' : 'oppføringer'}.`,
+        batchName: "Ugyldige oppstartsoppføringer"
+      },
+      search: {
+        placeholder: "Filtrer etter navn, bane eller utgiver",
+        noMatches: (query) => `Ingen oppføringer samsvarer med «${query}».`
+      },
+      menu: {
+        more: (name) => `Flere handlinger for ${name}`,
+        run: "Kjør nå",
+        end: "Avslutt prosess",
+        openLocation: "Åpne plassering",
+        openFolder: "Åpne overordnet mappe",
+        copyPath: "Kopier oppstartsbane",
+        remove: "Fjern",
+        started: (name) => `Startet ${name}.`,
+        ended: (name) => `Avsluttet ${name}.`,
+        failed: (error) => `Det fungerte ikke: ${error}`
+      },
+      add: {
+        button: "Legg til oppføring…",
+        title: "Legg til en oppstartsoppføring",
+        name: "Navn",
+        command: "Program",
+        commandHint: "Programmet som skal startes, med eventuelle argumenter etter.",
+        browse: "Bla gjennom…",
+        scope: "Start for",
+        user: "Denne brukeren",
+        machine: "Alle brukere",
+        machineNote: "Å legge til for alle brukere ber om administrator.",
+        kind: "Starter",
+        run: "Ved hver pålogging",
+        runOnce: "Bare ved neste pålogging",
+        folder: "Snarvei i Startup-mappen",
+        cancel: "Avbryt",
+        confirm: "Legg til oppføring",
+        adding: "Legger til…",
+        added: (name) => `La til ${name}.`
+      },
+      export: {
+        button: "Eksporter",
+        csv: "CSV-regneark",
+        html: "Nettside",
+        txt: "Ren tekst",
+        title: "Oppstartsoppføringer",
+        location: "Plassering"
       }
     },
     duplicates: {
@@ -21425,6 +22598,57 @@ export const CATALOG = {
         button: "Verwijderen",
         removing: "Verwijderen…",
         toast: (name) => `${name} verwijderd.`
+      },
+      footerNoteSystem: "Een geplande taak wordt op de taak zelf uitgeschakeld, en een service wordt op handmatig starten gezet, zodat alles wat hem nodig heeft hem nog kan starten. Beide worden op dezelfde manier weer ingeschakeld.",
+      removeInvalid: {
+        button: (n) => `${n} ongeldige verwijderen`,
+        removing: "Verwijderen…",
+        toast: (n) => `${n} ongeldige ${n === 1 ? 'vermelding' : 'vermeldingen'} verwijderd.`,
+        batchName: "Ongeldige opstartvermeldingen"
+      },
+      search: {
+        placeholder: "Filteren op naam, pad of uitgever",
+        noMatches: (query) => `Geen vermeldingen komen overeen met ‘${query}’.`
+      },
+      menu: {
+        more: (name) => `Meer acties voor ${name}`,
+        run: "Nu uitvoeren",
+        end: "Proces beëindigen",
+        openLocation: "Locatie openen",
+        openFolder: "Bovenliggende map openen",
+        copyPath: "Startpad kopiëren",
+        remove: "Verwijderen",
+        started: (name) => `${name} gestart.`,
+        ended: (name) => `${name} beëindigd.`,
+        failed: (error) => `Dat is niet gelukt: ${error}`
+      },
+      add: {
+        button: "Vermelding toevoegen…",
+        title: "Een opstartvermelding toevoegen",
+        name: "Naam",
+        command: "Programma",
+        commandHint: "Het programma dat moet starten, met eventuele argumenten erachter.",
+        browse: "Bladeren…",
+        scope: "Starten voor",
+        user: "Deze gebruiker",
+        machine: "Alle gebruikers",
+        machineNote: "Toevoegen voor alle gebruikers vraagt om beheerdersrechten.",
+        kind: "Start",
+        run: "Bij elke aanmelding",
+        runOnce: "Alleen bij de volgende aanmelding",
+        folder: "Snelkoppeling in de map Startup",
+        cancel: "Annuleren",
+        confirm: "Vermelding toevoegen",
+        adding: "Toevoegen…",
+        added: (name) => `${name} toegevoegd.`
+      },
+      export: {
+        button: "Exporteren",
+        csv: "CSV-spreadsheet",
+        html: "Webpagina",
+        txt: "Platte tekst",
+        title: "Opstartvermeldingen",
+        location: "Locatie"
       }
     },
     duplicates: {
@@ -22330,6 +23554,57 @@ export const CATALOG = {
         button: "Usuń",
         removing: "Usuwanie…",
         toast: (name) => `Usunięto ${name}.`
+      },
+      footerNoteSystem: "Zaplanowane zadanie jest wyłączane w samym zadaniu, a usługa jest ustawiana na uruchamianie ręczne, więc wszystko, co jej potrzebuje, nadal może ją uruchomić. Oba włącza się z powrotem w ten sam sposób.",
+      removeInvalid: {
+        button: (n) => `Usuń nieprawidłowe (${n})`,
+        removing: "Usuwanie…",
+        toast: (n) => `Usunięto nieprawidłowe wpisy: ${n}.`,
+        batchName: "Nieprawidłowe wpisy autostartu"
+      },
+      search: {
+        placeholder: "Filtruj według nazwy, ścieżki lub wydawcy",
+        noMatches: (query) => `Żaden wpis nie pasuje do „${query}”.`
+      },
+      menu: {
+        more: (name) => `Więcej akcji dla ${name}`,
+        run: "Uruchom teraz",
+        end: "Zakończ proces",
+        openLocation: "Otwórz lokalizację",
+        openFolder: "Otwórz folder nadrzędny",
+        copyPath: "Kopiuj ścieżkę uruchamiania",
+        remove: "Usuń",
+        started: (name) => `Uruchomiono ${name}.`,
+        ended: (name) => `Zakończono ${name}.`,
+        failed: (error) => `Nie udało się: ${error}`
+      },
+      add: {
+        button: "Dodaj wpis…",
+        title: "Dodaj wpis autostartu",
+        name: "Nazwa",
+        command: "Program",
+        commandHint: "Program do uruchomienia, a po nim ewentualne argumenty.",
+        browse: "Przeglądaj…",
+        scope: "Uruchamiaj dla",
+        user: "Tego użytkownika",
+        machine: "Wszystkich użytkowników",
+        machineNote: "Dodanie dla wszystkich użytkowników wymaga uprawnień administratora.",
+        kind: "Uruchamia się",
+        run: "Przy każdym logowaniu",
+        runOnce: "Tylko przy następnym logowaniu",
+        folder: "Skrót w folderze Startup",
+        cancel: "Anuluj",
+        confirm: "Dodaj wpis",
+        adding: "Dodawanie…",
+        added: (name) => `Dodano ${name}.`
+      },
+      export: {
+        button: "Eksportuj",
+        csv: "Arkusz CSV",
+        html: "Strona internetowa",
+        txt: "Zwykły tekst",
+        title: "Wpisy autostartu",
+        location: "Lokalizacja"
       }
     },
     duplicates: {
@@ -23235,6 +24510,57 @@ export const CATALOG = {
         button: "لرې کول",
         removing: "لرې کول…",
         toast: (name) => `${name} لرې شو.`
+      },
+      footerNoteSystem: "مهالویشل شوې دنده پخپله په دنده کې بندېږي، او خدمت داسې ټاکل کېږي چې په لاسي ډول پیل شي، نو هر هغه څه چې ورته اړتیا لري لا هم کولی شي پیل یې کړي. دواړه په همدې ډول بیا چالانېږي.",
+      removeInvalid: {
+        button: (n) => `${n} ناسم لرې کړئ`,
+        removing: "لرې کېږي…",
+        toast: (n) => `${n} ناسم ننوتنې لرې شوې.`,
+        batchName: "ناسمې د پیل ننوتنې"
+      },
+      search: {
+        placeholder: "د نوم، لارې یا خپرونکي له مخې چاڼ",
+        noMatches: (query) => `هېڅ ننوتنه له “${query}” سره سمون نه خوري.`
+      },
+      menu: {
+        more: (name) => `د ${name} لپاره نورې کړنې`,
+        run: "اوس چلول",
+        end: "بهیر پای ته رسول",
+        openLocation: "ځای پرانیستل",
+        openFolder: "لرونکی فولډر پرانیستل",
+        copyPath: "د پیل لاره کاپي کول",
+        remove: "لرې کول",
+        started: (name) => `${name} پیل شو.`,
+        ended: (name) => `${name} پای ته ورسېد.`,
+        failed: (error) => `دا کار ونه کړ: ${error}`
+      },
+      add: {
+        button: "ننوتنه زیاتول…",
+        title: "د پیل ننوتنه زیاته کړئ",
+        name: "نوم",
+        command: "پروګرام",
+        commandHint: "هغه پروګرام چې پیل شي، او وروسته یې هر ډول دلیلونه.",
+        browse: "لټول…",
+        scope: "د چا لپاره پیل شي",
+        user: "دا کارن",
+        machine: "ټول کاروونکي",
+        machineNote: "د ټولو کاروونکو لپاره زیاتول د مدیر اجازه غواړي.",
+        kind: "پیلېږي",
+        run: "په هر ننوتلو",
+        runOnce: "یوازې په راتلونکي ننوتلو",
+        folder: "د Startup په فولډر کې شارټ کټ",
+        cancel: "لغوه",
+        confirm: "ننوتنه زیاتول",
+        adding: "زیاتېږي…",
+        added: (name) => `${name} زیات شو.`
+      },
+      export: {
+        button: "صادرول",
+        csv: "CSV سپریډشیټ",
+        html: "وېب پاڼه",
+        txt: "ساده متن",
+        title: "د پیل ننوتنې",
+        location: "ځای"
       }
     },
     duplicates: {
@@ -24142,6 +25468,57 @@ export const CATALOG = {
         button: "Remover",
         removing: "Removendo…",
         toast: (name) => `${name} removido.`
+      },
+      footerNoteSystem: "Uma tarefa agendada é desativada na própria tarefa, e um serviço é configurado para iniciar manualmente, para que qualquer coisa que precise dele ainda possa iniciá-lo. Ambos são reativados da mesma forma.",
+      removeInvalid: {
+        button: (n) => `Remover ${n} inválidas`,
+        removing: "Removendo…",
+        toast: (n) => `${n} ${n === 1 ? 'entrada inválida removida' : 'entradas inválidas removidas'}.`,
+        batchName: "Entradas de inicialização inválidas"
+      },
+      search: {
+        placeholder: "Filtrar por nome, caminho ou editor",
+        noMatches: (query) => `Nenhuma entrada corresponde a “${query}”.`
+      },
+      menu: {
+        more: (name) => `Mais ações para ${name}`,
+        run: "Executar agora",
+        end: "Finalizar processo",
+        openLocation: "Abrir local",
+        openFolder: "Abrir pasta que o contém",
+        copyPath: "Copiar caminho de inicialização",
+        remove: "Remover",
+        started: (name) => `${name} iniciado.`,
+        ended: (name) => `${name} finalizado.`,
+        failed: (error) => `Não funcionou: ${error}`
+      },
+      add: {
+        button: "Adicionar entrada…",
+        title: "Adicionar uma entrada de inicialização",
+        name: "Nome",
+        command: "Programa",
+        commandHint: "O programa a iniciar, seguido de quaisquer argumentos.",
+        browse: "Procurar…",
+        scope: "Iniciar para",
+        user: "Este usuário",
+        machine: "Todos os usuários",
+        machineNote: "Adicionar para todos os usuários pede permissão de administrador.",
+        kind: "Inicia",
+        run: "A cada entrada",
+        runOnce: "Só na próxima entrada",
+        folder: "Atalho na pasta Startup",
+        cancel: "Cancelar",
+        confirm: "Adicionar entrada",
+        adding: "Adicionando…",
+        added: (name) => `${name} adicionado.`
+      },
+      export: {
+        button: "Exportar",
+        csv: "Planilha CSV",
+        html: "Página da web",
+        txt: "Texto simples",
+        title: "Entradas de inicialização",
+        location: "Local"
       }
     },
     duplicates: {
@@ -25047,6 +26424,57 @@ export const CATALOG = {
         button: "Remover",
         removing: "A remover…",
         toast: (name) => `${name} removido.`
+      },
+      footerNoteSystem: "Uma tarefa agendada é desativada na própria tarefa, e um serviço é configurado para iniciar manualmente, para que tudo o que precise dele o possa continuar a iniciar. Ambos voltam a ser ativados da mesma forma.",
+      removeInvalid: {
+        button: (n) => `Remover ${n} inválidas`,
+        removing: "A remover…",
+        toast: (n) => `${n} ${n === 1 ? 'entrada inválida removida' : 'entradas inválidas removidas'}.`,
+        batchName: "Entradas de arranque inválidas"
+      },
+      search: {
+        placeholder: "Filtrar por nome, caminho ou editor",
+        noMatches: (query) => `Nenhuma entrada corresponde a “${query}”.`
+      },
+      menu: {
+        more: (name) => `Mais ações para ${name}`,
+        run: "Executar agora",
+        end: "Terminar processo",
+        openLocation: "Abrir localização",
+        openFolder: "Abrir pasta que o contém",
+        copyPath: "Copiar caminho de arranque",
+        remove: "Remover",
+        started: (name) => `${name} iniciado.`,
+        ended: (name) => `${name} terminado.`,
+        failed: (error) => `Não funcionou: ${error}`
+      },
+      add: {
+        button: "Adicionar entrada…",
+        title: "Adicionar uma entrada de arranque",
+        name: "Nome",
+        command: "Programa",
+        commandHint: "O programa a iniciar, seguido de quaisquer argumentos.",
+        browse: "Procurar…",
+        scope: "Iniciar para",
+        user: "Este utilizador",
+        machine: "Todos os utilizadores",
+        machineNote: "Adicionar para todos os utilizadores pede permissão de administrador.",
+        kind: "Inicia",
+        run: "Em cada início de sessão",
+        runOnce: "Só no próximo início de sessão",
+        folder: "Atalho na pasta Startup",
+        cancel: "Cancelar",
+        confirm: "Adicionar entrada",
+        adding: "A adicionar…",
+        added: (name) => `${name} adicionado.`
+      },
+      export: {
+        button: "Exportar",
+        csv: "Folha de cálculo CSV",
+        html: "Página web",
+        txt: "Texto simples",
+        title: "Entradas de arranque",
+        location: "Localização"
       }
     },
     duplicates: {
@@ -25954,6 +27382,57 @@ export const CATALOG = {
         button: "Elimină",
         removing: "Se elimină…",
         toast: (name) => `${name} a fost eliminat.`
+      },
+      footerNoteSystem: "O activitate programată se dezactivează chiar în activitate, iar un serviciu este setat să pornească manual, astfel încât orice are nevoie de el îl poate porni în continuare. Ambele se reactivează la fel.",
+      removeInvalid: {
+        button: (n) => `Elimină ${n} nevalide`,
+        removing: "Se elimină…",
+        toast: (n) => `S-au eliminat ${n} intrări nevalide.`,
+        batchName: "Intrări de pornire nevalide"
+      },
+      search: {
+        placeholder: "Filtrează după nume, cale sau editor",
+        noMatches: (query) => `Nicio intrare nu corespunde cu „${query}”.`
+      },
+      menu: {
+        more: (name) => `Mai multe acțiuni pentru ${name}`,
+        run: "Rulează acum",
+        end: "Încheie procesul",
+        openLocation: "Deschide locația",
+        openFolder: "Deschide folderul care îl conține",
+        copyPath: "Copiază calea de lansare",
+        remove: "Elimină",
+        started: (name) => `${name} a pornit.`,
+        ended: (name) => `${name} a fost oprit.`,
+        failed: (error) => `Nu a funcționat: ${error}`
+      },
+      add: {
+        button: "Adaugă intrare…",
+        title: "Adaugă o intrare de pornire",
+        name: "Nume",
+        command: "Program",
+        commandHint: "Programul de pornit, urmat de eventualele argumente.",
+        browse: "Răsfoiește…",
+        scope: "Pornește pentru",
+        user: "Acest utilizator",
+        machine: "Toți utilizatorii",
+        machineNote: "Adăugarea pentru toți utilizatorii cere drepturi de administrator.",
+        kind: "Pornește",
+        run: "La fiecare conectare",
+        runOnce: "Doar la următoarea conectare",
+        folder: "Comandă rapidă în folderul Startup",
+        cancel: "Anulează",
+        confirm: "Adaugă intrarea",
+        adding: "Se adaugă…",
+        added: (name) => `${name} a fost adăugat.`
+      },
+      export: {
+        button: "Exportă",
+        csv: "Foaie de calcul CSV",
+        html: "Pagină web",
+        txt: "Text simplu",
+        title: "Intrări de pornire",
+        location: "Locație"
       }
     },
     duplicates: {
@@ -26861,6 +28340,57 @@ export const CATALOG = {
         button: "Удалить",
         removing: "Удаление…",
         toast: (name) => `${name} удалено.`
+      },
+      footerNoteSystem: "Запланированная задача отключается в самой задаче, а служба переводится на ручной запуск, поэтому всё, чему она нужна, по-прежнему может её запустить. Включаются они обратно так же.",
+      removeInvalid: {
+        button: (n) => `Удалить недействительные (${n})`,
+        removing: "Удаление…",
+        toast: (n) => `Удалено недействительных записей: ${n}.`,
+        batchName: "Недействительные записи автозагрузки"
+      },
+      search: {
+        placeholder: "Фильтр по имени, пути или издателю",
+        noMatches: (query) => `Нет записей, соответствующих «${query}».`
+      },
+      menu: {
+        more: (name) => `Другие действия для ${name}`,
+        run: "Запустить сейчас",
+        end: "Завершить процесс",
+        openLocation: "Открыть расположение",
+        openFolder: "Открыть папку с файлом",
+        copyPath: "Копировать путь запуска",
+        remove: "Удалить",
+        started: (name) => `${name} запущено.`,
+        ended: (name) => `${name} завершено.`,
+        failed: (error) => `Не получилось: ${error}`
+      },
+      add: {
+        button: "Добавить запись…",
+        title: "Добавить запись автозагрузки",
+        name: "Имя",
+        command: "Программа",
+        commandHint: "Запускаемая программа и аргументы после неё.",
+        browse: "Обзор…",
+        scope: "Запускать для",
+        user: "Этого пользователя",
+        machine: "Всех пользователей",
+        machineNote: "Добавление для всех пользователей запросит права администратора.",
+        kind: "Запуск",
+        run: "При каждом входе",
+        runOnce: "Только при следующем входе",
+        folder: "Ярлык в папке Startup",
+        cancel: "Отмена",
+        confirm: "Добавить запись",
+        adding: "Добавление…",
+        added: (name) => `${name} добавлено.`
+      },
+      export: {
+        button: "Экспорт",
+        csv: "Таблица CSV",
+        html: "Веб-страница",
+        txt: "Обычный текст",
+        title: "Записи автозагрузки",
+        location: "Расположение"
       }
     },
     duplicates: {
@@ -27766,6 +29296,57 @@ export const CATALOG = {
         button: "Odstrániť",
         removing: "Odstraňuje sa…",
         toast: (name) => `${name} odstránené.`
+      },
+      footerNoteSystem: "Naplánovaná úloha sa vypína priamo na úlohe a služba sa prepne na ručné spúšťanie, takže čokoľvek, čo ju potrebuje, ju stále môže spustiť. Obe sa zapínajú späť rovnako.",
+      removeInvalid: {
+        button: (n) => `Odstrániť neplatné (${n})`,
+        removing: "Odstraňuje sa…",
+        toast: (n) => `Odstránené neplatné položky: ${n}.`,
+        batchName: "Neplatné položky po spustení"
+      },
+      search: {
+        placeholder: "Filtrovať podľa názvu, cesty alebo vydavateľa",
+        noMatches: (query) => `Výrazu „${query}“ nezodpovedá žiadna položka.`
+      },
+      menu: {
+        more: (name) => `Ďalšie akcie pre ${name}`,
+        run: "Spustiť teraz",
+        end: "Ukončiť proces",
+        openLocation: "Otvoriť umiestnenie",
+        openFolder: "Otvoriť nadradený priečinok",
+        copyPath: "Kopírovať cestu spustenia",
+        remove: "Odstrániť",
+        started: (name) => `${name} spustené.`,
+        ended: (name) => `${name} ukončené.`,
+        failed: (error) => `Nepodarilo sa: ${error}`
+      },
+      add: {
+        button: "Pridať položku…",
+        title: "Pridať položku po spustení",
+        name: "Názov",
+        command: "Program",
+        commandHint: "Program na spustenie, za ním prípadné argumenty.",
+        browse: "Prehľadávať…",
+        scope: "Spúšťať pre",
+        user: "Tohto používateľa",
+        machine: "Všetkých používateľov",
+        machineNote: "Pridanie pre všetkých používateľov vyžaduje správcu.",
+        kind: "Spúšťa sa",
+        run: "Pri každom prihlásení",
+        runOnce: "Len pri ďalšom prihlásení",
+        folder: "Odkaz v priečinku Startup",
+        cancel: "Zrušiť",
+        confirm: "Pridať položku",
+        adding: "Pridáva sa…",
+        added: (name) => `${name} pridané.`
+      },
+      export: {
+        button: "Exportovať",
+        csv: "Tabuľka CSV",
+        html: "Webová stránka",
+        txt: "Obyčajný text",
+        title: "Položky po spustení",
+        location: "Umiestnenie"
       }
     },
     duplicates: {
@@ -28671,6 +30252,57 @@ export const CATALOG = {
         button: "Hiq",
         removing: "Duke hequr…",
         toast: (name) => `${name} u hoq.`
+      },
+      footerNoteSystem: "Një detyrë e planifikuar çaktivizohet te vetë detyra, dhe një shërbim caktohet të niset me dorë, kështu që çdo gjë që ka nevojë për të mund ta nisë ende. Të dyja aktivizohen sërish në të njëjtën mënyrë.",
+      removeInvalid: {
+        button: (n) => `Hiq ${n} të pavlefshme`,
+        removing: "Po hiqet…",
+        toast: (n) => `U hoqën ${n} hyrje të pavlefshme.`,
+        batchName: "Hyrje nisjeje të pavlefshme"
+      },
+      search: {
+        placeholder: "Filtro sipas emrit, shtegut ose botuesit",
+        noMatches: (query) => `Asnjë hyrje nuk përputhet me “${query}”.`
+      },
+      menu: {
+        more: (name) => `Më shumë veprime për ${name}`,
+        run: "Ekzekuto tani",
+        end: "Përfundo procesin",
+        openLocation: "Hap vendndodhjen",
+        openFolder: "Hap dosjen që e përmban",
+        copyPath: "Kopjo shtegun e nisjes",
+        remove: "Hiq",
+        started: (name) => `${name} u nis.`,
+        ended: (name) => `${name} u përfundua.`,
+        failed: (error) => `Nuk funksionoi: ${error}`
+      },
+      add: {
+        button: "Shto hyrje…",
+        title: "Shto një hyrje nisjeje",
+        name: "Emri",
+        command: "Programi",
+        commandHint: "Programi që do të niset, me argumentet pas tij nëse ka.",
+        browse: "Shfleto…",
+        scope: "Nis për",
+        user: "Këtë përdorues",
+        machine: "Të gjithë përdoruesit",
+        machineNote: "Shtimi për të gjithë përdoruesit kërkon administrator.",
+        kind: "Niset",
+        run: "Në çdo hyrje",
+        runOnce: "Vetëm në hyrjen e radhës",
+        folder: "Shkurtore në dosjen Startup",
+        cancel: "Anulo",
+        confirm: "Shto hyrjen",
+        adding: "Po shtohet…",
+        added: (name) => `${name} u shtua.`
+      },
+      export: {
+        button: "Eksporto",
+        csv: "Fletë CSV",
+        html: "Faqe uebi",
+        txt: "Tekst i thjeshtë",
+        title: "Hyrje nisjeje",
+        location: "Vendndodhja"
       }
     },
     duplicates: {
@@ -29578,6 +31210,57 @@ export const CATALOG = {
         button: "Уклони",
         removing: "Уклањање…",
         toast: (name) => `${name} је уклоњено.`
+      },
+      footerNoteSystem: "Заказани задатак се искључује на самом задатку, а услуга се подешава да се покреће ручно, па све што јој треба и даље може да је покрене. Оба се поново укључују на исти начин.",
+      removeInvalid: {
+        button: (n) => `Уклони неважеће (${n})`,
+        removing: "Уклањање…",
+        toast: (n) => `Уклоњено неважећих ставки: ${n}.`,
+        batchName: "Неважеће ставке покретања"
+      },
+      search: {
+        placeholder: "Филтрирај по имену, путањи или издавачу",
+        noMatches: (query) => `Ниједна ставка не одговара „${query}“.`
+      },
+      menu: {
+        more: (name) => `Још радњи за ${name}`,
+        run: "Покрени сада",
+        end: "Заврши процес",
+        openLocation: "Отвори локацију",
+        openFolder: "Отвори фасциклу која га садржи",
+        copyPath: "Копирај путању покретања",
+        remove: "Уклони",
+        started: (name) => `${name} је покренут.`,
+        ended: (name) => `${name} је завршен.`,
+        failed: (error) => `Није успело: ${error}`
+      },
+      add: {
+        button: "Додај ставку…",
+        title: "Додај ставку покретања",
+        name: "Име",
+        command: "Програм",
+        commandHint: "Програм који се покреће, са аргументима иза њега.",
+        browse: "Прегледај…",
+        scope: "Покрени за",
+        user: "Овог корисника",
+        machine: "Све кориснике",
+        machineNote: "Додавање за све кориснике тражи администратора.",
+        kind: "Покреће се",
+        run: "При сваком пријављивању",
+        runOnce: "Само при следећем пријављивању",
+        folder: "Пречица у фасцикли Startup",
+        cancel: "Откажи",
+        confirm: "Додај ставку",
+        adding: "Додавање…",
+        added: (name) => `${name} је додат.`
+      },
+      export: {
+        button: "Извези",
+        csv: "CSV табела",
+        html: "Веб страница",
+        txt: "Обичан текст",
+        title: "Ставке покретања",
+        location: "Локација"
       }
     },
     duplicates: {
@@ -30483,6 +32166,57 @@ export const CATALOG = {
         button: "Ta bort",
         removing: "Tar bort…",
         toast: (name) => `${name} togs bort.`
+      },
+      footerNoteSystem: "En schemalagd aktivitet stängs av på själva aktiviteten, och en tjänst ställs in på manuell start, så att allt som behöver den fortfarande kan starta den. Båda slås på igen på samma sätt.",
+      removeInvalid: {
+        button: (n) => `Ta bort ${n} ogiltiga`,
+        removing: "Tar bort…",
+        toast: (n) => `Tog bort ${n} ogiltiga ${n === 1 ? 'post' : 'poster'}.`,
+        batchName: "Ogiltiga autostartsposter"
+      },
+      search: {
+        placeholder: "Filtrera efter namn, sökväg eller utgivare",
+        noMatches: (query) => `Inga poster matchar ”${query}”.`
+      },
+      menu: {
+        more: (name) => `Fler åtgärder för ${name}`,
+        run: "Kör nu",
+        end: "Avsluta process",
+        openLocation: "Öppna plats",
+        openFolder: "Öppna överordnad mapp",
+        copyPath: "Kopiera startsökväg",
+        remove: "Ta bort",
+        started: (name) => `Startade ${name}.`,
+        ended: (name) => `Avslutade ${name}.`,
+        failed: (error) => `Det fungerade inte: ${error}`
+      },
+      add: {
+        button: "Lägg till post…",
+        title: "Lägg till en autostartspost",
+        name: "Namn",
+        command: "Program",
+        commandHint: "Programmet som ska startas, med eventuella argument efter.",
+        browse: "Bläddra…",
+        scope: "Starta för",
+        user: "Den här användaren",
+        machine: "Alla användare",
+        machineNote: "Att lägga till för alla användare kräver administratör.",
+        kind: "Startar",
+        run: "Vid varje inloggning",
+        runOnce: "Bara vid nästa inloggning",
+        folder: "Genväg i mappen Startup",
+        cancel: "Avbryt",
+        confirm: "Lägg till post",
+        adding: "Lägger till…",
+        added: (name) => `Lade till ${name}.`
+      },
+      export: {
+        button: "Exportera",
+        csv: "CSV-kalkylblad",
+        html: "Webbsida",
+        txt: "Oformaterad text",
+        title: "Autostartsposter",
+        location: "Plats"
       }
     },
     duplicates: {
@@ -31388,6 +33122,57 @@ export const CATALOG = {
         button: "นำออก",
         removing: "กำลังนำออก…",
         toast: (name) => `นำ ${name} ออกแล้ว`
+      },
+      footerNoteSystem: "งานที่ตั้งเวลาไว้จะถูกปิดที่ตัวงานเอง และบริการจะถูกตั้งให้เริ่มด้วยตนเอง สิ่งใดที่ต้องการใช้จึงยังเริ่มมันได้ ทั้งสองอย่างเปิดกลับได้ด้วยวิธีเดียวกัน",
+      removeInvalid: {
+        button: (n) => `ลบรายการที่ไม่ถูกต้อง ${n} รายการ`,
+        removing: "กำลังลบ…",
+        toast: (n) => `ลบรายการที่ไม่ถูกต้อง ${n} รายการแล้ว`,
+        batchName: "รายการเริ่มต้นระบบที่ไม่ถูกต้อง"
+      },
+      search: {
+        placeholder: "กรองตามชื่อ เส้นทาง หรือผู้เผยแพร่",
+        noMatches: (query) => `ไม่มีรายการที่ตรงกับ “${query}”`
+      },
+      menu: {
+        more: (name) => `การดำเนินการเพิ่มเติมสำหรับ ${name}`,
+        run: "เรียกใช้ตอนนี้",
+        end: "สิ้นสุดกระบวนการ",
+        openLocation: "เปิดตำแหน่ง",
+        openFolder: "เปิดโฟลเดอร์ที่มีไฟล์",
+        copyPath: "คัดลอกเส้นทางเปิดใช้",
+        remove: "ลบ",
+        started: (name) => `เริ่ม ${name} แล้ว`,
+        ended: (name) => `สิ้นสุด ${name} แล้ว`,
+        failed: (error) => `ไม่สำเร็จ: ${error}`
+      },
+      add: {
+        button: "เพิ่มรายการ…",
+        title: "เพิ่มรายการเริ่มต้นระบบ",
+        name: "ชื่อ",
+        command: "โปรแกรม",
+        commandHint: "โปรแกรมที่จะเริ่ม ตามด้วยอาร์กิวเมนต์ถ้ามี",
+        browse: "เรียกดู…",
+        scope: "เริ่มสำหรับ",
+        user: "ผู้ใช้นี้",
+        machine: "ผู้ใช้ทั้งหมด",
+        machineNote: "การเพิ่มให้ผู้ใช้ทั้งหมดต้องใช้สิทธิ์ผู้ดูแลระบบ",
+        kind: "เริ่มเมื่อ",
+        run: "ทุกครั้งที่ลงชื่อเข้าใช้",
+        runOnce: "เฉพาะการลงชื่อเข้าใช้ครั้งถัดไป",
+        folder: "ทางลัดในโฟลเดอร์ Startup",
+        cancel: "ยกเลิก",
+        confirm: "เพิ่มรายการ",
+        adding: "กำลังเพิ่ม…",
+        added: (name) => `เพิ่ม ${name} แล้ว`
+      },
+      export: {
+        button: "ส่งออก",
+        csv: "สเปรดชีต CSV",
+        html: "หน้าเว็บ",
+        txt: "ข้อความธรรมดา",
+        title: "รายการเริ่มต้นระบบ",
+        location: "ตำแหน่ง"
       }
     },
     duplicates: {
@@ -32295,6 +34080,57 @@ export const CATALOG = {
         button: "Kaldır",
         removing: "Kaldırılıyor…",
         toast: (name) => `${name} kaldırıldı.`
+      },
+      footerNoteSystem: "Zamanlanmış bir görev doğrudan görevin kendisinde kapatılır, bir hizmet ise elle başlayacak şekilde ayarlanır; böylece ona ihtiyaç duyan her şey onu yine başlatabilir. İkisi de aynı yolla yeniden açılır.",
+      removeInvalid: {
+        button: (n) => `${n} geçersizi kaldır`,
+        removing: "Kaldırılıyor…",
+        toast: (n) => `${n} geçersiz giriş kaldırıldı.`,
+        batchName: "Geçersiz başlangıç girişleri"
+      },
+      search: {
+        placeholder: "Ada, yola veya yayımcıya göre filtrele",
+        noMatches: (query) => `“${query}” ile eşleşen giriş yok.`
+      },
+      menu: {
+        more: (name) => `${name} için diğer eylemler`,
+        run: "Şimdi çalıştır",
+        end: "İşlemi sonlandır",
+        openLocation: "Konumu aç",
+        openFolder: "İçeren klasörü aç",
+        copyPath: "Başlatma yolunu kopyala",
+        remove: "Kaldır",
+        started: (name) => `${name} başlatıldı.`,
+        ended: (name) => `${name} sonlandırıldı.`,
+        failed: (error) => `Bu işe yaramadı: ${error}`
+      },
+      add: {
+        button: "Giriş ekle…",
+        title: "Başlangıç girişi ekle",
+        name: "Ad",
+        command: "Program",
+        commandHint: "Başlatılacak program ve varsa ardından gelen bağımsız değişkenler.",
+        browse: "Gözat…",
+        scope: "Kimin için",
+        user: "Bu kullanıcı",
+        machine: "Tüm kullanıcılar",
+        machineNote: "Tüm kullanıcılar için eklemek yönetici izni ister.",
+        kind: "Başlar",
+        run: "Her oturum açışta",
+        runOnce: "Yalnızca sonraki oturum açışta",
+        folder: "Startup klasöründe kısayol",
+        cancel: "İptal",
+        confirm: "Giriş ekle",
+        adding: "Ekleniyor…",
+        added: (name) => `${name} eklendi.`
+      },
+      export: {
+        button: "Dışa aktar",
+        csv: "CSV elektronik tablo",
+        html: "Web sayfası",
+        txt: "Düz metin",
+        title: "Başlangıç girişleri",
+        location: "Konum"
       }
     },
     duplicates: {
@@ -33202,6 +35038,57 @@ export const CATALOG = {
         button: "Видалити",
         removing: "Видалення…",
         toast: (name) => `${name} видалено.`
+      },
+      footerNoteSystem: "Заплановане завдання вимикається в самому завданні, а службу переводять на ручний запуск, тож усе, чому вона потрібна, і далі може її запустити. Вмикаються вони назад так само.",
+      removeInvalid: {
+        button: (n) => `Видалити недійсні (${n})`,
+        removing: "Видалення…",
+        toast: (n) => `Видалено недійсних записів: ${n}.`,
+        batchName: "Недійсні записи автозапуску"
+      },
+      search: {
+        placeholder: "Фільтр за назвою, шляхом або видавцем",
+        noMatches: (query) => `Немає записів, що відповідають «${query}».`
+      },
+      menu: {
+        more: (name) => `Інші дії для ${name}`,
+        run: "Запустити зараз",
+        end: "Завершити процес",
+        openLocation: "Відкрити розташування",
+        openFolder: "Відкрити папку з файлом",
+        copyPath: "Копіювати шлях запуску",
+        remove: "Видалити",
+        started: (name) => `${name} запущено.`,
+        ended: (name) => `${name} завершено.`,
+        failed: (error) => `Не вдалося: ${error}`
+      },
+      add: {
+        button: "Додати запис…",
+        title: "Додати запис автозапуску",
+        name: "Назва",
+        command: "Програма",
+        commandHint: "Програма для запуску та аргументи після неї.",
+        browse: "Огляд…",
+        scope: "Запускати для",
+        user: "Цього користувача",
+        machine: "Усіх користувачів",
+        machineNote: "Додавання для всіх користувачів запитає права адміністратора.",
+        kind: "Запуск",
+        run: "Під час кожного входу",
+        runOnce: "Лише під час наступного входу",
+        folder: "Ярлик у папці Startup",
+        cancel: "Скасувати",
+        confirm: "Додати запис",
+        adding: "Додавання…",
+        added: (name) => `${name} додано.`
+      },
+      export: {
+        button: "Експорт",
+        csv: "Таблиця CSV",
+        html: "Вебсторінка",
+        txt: "Звичайний текст",
+        title: "Записи автозапуску",
+        location: "Розташування"
       }
     },
     duplicates: {
@@ -34107,6 +35994,57 @@ export const CATALOG = {
         button: "Xóa",
         removing: "Đang xóa…",
         toast: (name) => `Đã xóa ${name}.`
+      },
+      footerNoteSystem: "Tác vụ đã lên lịch được tắt ngay trên chính tác vụ, còn dịch vụ được đặt để khởi động thủ công, nên mọi thứ cần đến nó vẫn có thể khởi động nó. Cả hai được bật lại theo cùng một cách.",
+      removeInvalid: {
+        button: (n) => `Xóa ${n} mục không hợp lệ`,
+        removing: "Đang xóa…",
+        toast: (n) => `Đã xóa ${n} mục không hợp lệ.`,
+        batchName: "Mục khởi động không hợp lệ"
+      },
+      search: {
+        placeholder: "Lọc theo tên, đường dẫn hoặc nhà phát hành",
+        noMatches: (query) => `Không có mục nào khớp với “${query}”.`
+      },
+      menu: {
+        more: (name) => `Thêm thao tác cho ${name}`,
+        run: "Chạy ngay",
+        end: "Kết thúc tiến trình",
+        openLocation: "Mở vị trí",
+        openFolder: "Mở thư mục chứa",
+        copyPath: "Sao chép đường dẫn khởi chạy",
+        remove: "Xóa",
+        started: (name) => `Đã khởi động ${name}.`,
+        ended: (name) => `Đã kết thúc ${name}.`,
+        failed: (error) => `Không thực hiện được: ${error}`
+      },
+      add: {
+        button: "Thêm mục…",
+        title: "Thêm mục khởi động",
+        name: "Tên",
+        command: "Chương trình",
+        commandHint: "Chương trình cần khởi động, kèm các đối số phía sau nếu có.",
+        browse: "Duyệt…",
+        scope: "Khởi động cho",
+        user: "Người dùng này",
+        machine: "Mọi người dùng",
+        machineNote: "Thêm cho mọi người dùng sẽ yêu cầu quyền quản trị.",
+        kind: "Khởi động",
+        run: "Mỗi lần đăng nhập",
+        runOnce: "Chỉ lần đăng nhập tới",
+        folder: "Lối tắt trong thư mục Startup",
+        cancel: "Hủy",
+        confirm: "Thêm mục",
+        adding: "Đang thêm…",
+        added: (name) => `Đã thêm ${name}.`
+      },
+      export: {
+        button: "Xuất",
+        csv: "Bảng tính CSV",
+        html: "Trang web",
+        txt: "Văn bản thuần",
+        title: "Mục khởi động",
+        location: "Vị trí"
       }
     },
     duplicates: {
@@ -35014,6 +36952,57 @@ export const CATALOG = {
         button: "移除",
         removing: "正在移除…",
         toast: (name) => `已移除 ${name}。`
+      },
+      footerNoteSystem: "计划任务在任务本身上关闭，服务则设为手动启动，因此需要它的程序仍然可以启动它。两者都以同样的方式重新开启。",
+      removeInvalid: {
+        button: (n) => `删除 ${n} 个无效项`,
+        removing: "正在删除…",
+        toast: (n) => `已删除 ${n} 个无效条目。`,
+        batchName: "无效的启动条目"
+      },
+      search: {
+        placeholder: "按名称、路径或发布者筛选",
+        noMatches: (query) => `没有与“${query}”匹配的条目。`
+      },
+      menu: {
+        more: (name) => `${name} 的更多操作`,
+        run: "立即运行",
+        end: "结束进程",
+        openLocation: "打开位置",
+        openFolder: "打开所在文件夹",
+        copyPath: "复制启动路径",
+        remove: "删除",
+        started: (name) => `已启动 ${name}。`,
+        ended: (name) => `已结束 ${name}。`,
+        failed: (error) => `操作失败：${error}`
+      },
+      add: {
+        button: "添加条目…",
+        title: "添加启动条目",
+        name: "名称",
+        command: "程序",
+        commandHint: "要启动的程序，后面可带参数。",
+        browse: "浏览…",
+        scope: "启动对象",
+        user: "此用户",
+        machine: "所有用户",
+        machineNote: "为所有用户添加需要管理员权限。",
+        kind: "启动时机",
+        run: "每次登录",
+        runOnce: "仅下次登录",
+        folder: "Startup 文件夹中的快捷方式",
+        cancel: "取消",
+        confirm: "添加条目",
+        adding: "正在添加…",
+        added: (name) => `已添加 ${name}。`
+      },
+      export: {
+        button: "导出",
+        csv: "CSV 电子表格",
+        html: "网页",
+        txt: "纯文本",
+        title: "启动条目",
+        location: "位置"
       }
     },
     duplicates: {
@@ -35921,6 +37910,57 @@ export const CATALOG = {
         button: "移除",
         removing: "正在移除…",
         toast: (name) => `已移除 ${name}。`
+      },
+      footerNoteSystem: "排程工作會在工作本身上關閉，服務則設為手動啟動，因此需要它的程式仍可啟動它。兩者都以同樣的方式重新開啟。",
+      removeInvalid: {
+        button: (n) => `移除 ${n} 個無效項目`,
+        removing: "正在移除…",
+        toast: (n) => `已移除 ${n} 個無效項目。`,
+        batchName: "無效的啟動項目"
+      },
+      search: {
+        placeholder: "依名稱、路徑或發行者篩選",
+        noMatches: (query) => `沒有符合「${query}」的項目。`
+      },
+      menu: {
+        more: (name) => `${name} 的更多動作`,
+        run: "立即執行",
+        end: "結束處理程序",
+        openLocation: "開啟位置",
+        openFolder: "開啟所在資料夾",
+        copyPath: "複製啟動路徑",
+        remove: "移除",
+        started: (name) => `已啟動 ${name}。`,
+        ended: (name) => `已結束 ${name}。`,
+        failed: (error) => `沒有成功：${error}`
+      },
+      add: {
+        button: "新增項目…",
+        title: "新增啟動項目",
+        name: "名稱",
+        command: "程式",
+        commandHint: "要啟動的程式，後面可加上引數。",
+        browse: "瀏覽…",
+        scope: "啟動對象",
+        user: "這位使用者",
+        machine: "所有使用者",
+        machineNote: "為所有使用者新增需要系統管理員權限。",
+        kind: "啟動時機",
+        run: "每次登入",
+        runOnce: "僅下次登入",
+        folder: "Startup 資料夾中的捷徑",
+        cancel: "取消",
+        confirm: "新增項目",
+        adding: "正在新增…",
+        added: (name) => `已新增 ${name}。`
+      },
+      export: {
+        button: "匯出",
+        csv: "CSV 試算表",
+        html: "網頁",
+        txt: "純文字",
+        title: "啟動項目",
+        location: "位置"
       }
     },
     duplicates: {
