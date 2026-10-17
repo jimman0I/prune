@@ -87,10 +87,10 @@ describe('confidence tiers', () => {
   });
 
   it('advanced: a single word of the name is only possible', async () => {
-    folder('roots', 'Studio Cache');
+    folder('roots', 'Zephyr Cache');
     runPowerShellJsonMock.mockResolvedValue(null);
     const result = await scanForLeftovers({
-      name: 'Acme Studio', mode: 'advanced', fileRoots: [{ path: join(base, 'roots'), depth: 2 }]
+      name: 'Acme Zephyr', mode: 'advanced', fileRoots: [{ path: join(base, 'roots'), depth: 2 }]
     });
     expect(result.files.items.map((i) => i.confidence)).toEqual(['possible']);
   });
@@ -155,6 +155,22 @@ describe('shared-component protection', () => {
       installedPrograms: [{ id: 'VS2022', name: 'Visual Studio 2022', registryKey: 'HKLM:\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\VS2022' }]
     });
     expect(result.registryKeys.items.map((i) => i.path.split('\\').pop())).toEqual(['VS2019']);
+    expect(result.registryKeys.protected).toBe(1);
+  });
+
+  // A hidden system component never appears in the installed-programs list,
+  // so the check above cannot protect it. Found live: "Windows Team Extension
+  // SDK" was offered as a Notepad++ leftover on the strength of one word.
+  it('drops an Add/Remove entry that only shares a single word with the program', async () => {
+    // Advanced walks folders itself, so the registry scan is the first
+    // PowerShell call here.
+    runPowerShellJsonMock.mockResolvedValue(null);
+    runPowerShellJsonMock.mockResolvedValueOnce([
+      { path: 'HKEY_LOCAL_MACHINE\\SOFTWARE\\WOW6432Node\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\{E4C93AF3}', isUninstallEntry: true, text: 'Windows Team Extension SDK' },
+      { path: 'HKEY_LOCAL_MACHINE\\SOFTWARE\\WOW6432Node\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\Acme Tool', isUninstallEntry: true, text: 'Acme Tool' }
+    ]);
+    const result = await scanForLeftovers({ name: 'Acme Tool', publisher: 'Acme Team', mode: 'advanced', fileRoots: [] });
+    expect(result.registryKeys.items.map((i) => i.path.split('\\').pop())).toEqual(['Acme Tool']);
     expect(result.registryKeys.protected).toBe(1);
   });
 

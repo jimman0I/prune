@@ -227,7 +227,13 @@ function finishRegistry(group, ctx) {
     if (item.isUninstallEntry && !item.valueName && ctx.otherKeys.has(canonicalKeyPath(item.path))) { withheld += 1; continue; }
     const isOwnKey = ctx.registryKey && canonicalKeyPath(item.path) === canonicalKeyPath(ctx.registryKey);
     const label = text || (item.valueName ?? leafOf(item.path));
-    items.push({ ...item, confidence: anchored || isOwnKey ? 'certain' : classifyLabel(label, ctx.matchers) });
+    const confidence = anchored || isOwnKey ? 'certain' : classifyLabel(label, ctx.matchers);
+    // An Add/Remove entry is some product's live registration. A hidden
+    // system component is never in the installed list above, so one shared
+    // word is not enough to call it this program's: found live, "Windows
+    // Team Extension SDK" was offered as a Notepad++ leftover.
+    if (item.isUninstallEntry && !item.valueName && confidence === 'possible') { withheld += 1; continue; }
+    items.push({ ...item, confidence });
   }
   return { ...group, items, ...(withheld > 0 ? { protected: withheld } : {}) };
 }

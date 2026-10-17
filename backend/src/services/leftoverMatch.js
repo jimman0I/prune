@@ -20,7 +20,13 @@ const STOP_WORDS = new Set([
   'components', 'package', 'language', 'pack', 'library', 'libraries', 'framework', 'engine', 'player', 'launcher',
   'desktop', 'application', 'applications', 'program', 'programs', 'professional', 'enterprise', 'standard', 'common',
   'shared', 'system', 'systems', 'data', 'files', 'server', 'plugin', 'extension', 'support', 'free', 'trial', 'beta',
-  'x64', 'x86', 'amd64', 'arm64', 'bit', 'the', 'and', 'for', 'with', 'from'
+  'x64', 'x86', 'amd64', 'arm64', 'bit', 'the', 'and', 'for', 'with', 'from',
+  // Words that only say the publisher is an organization. Found live: "Team"
+  // from "Notepad++ Team" matched Adobe's "Team Projects Local Hub" and
+  // Microsoft's "Windows Team Extension SDK".
+  'team', 'group', 'labs', 'studio', 'studios', 'games', 'interactive', 'entertainment', 'technologies',
+  'technology', 'digital', 'media', 'solutions', 'development', 'developers', 'project', 'contributors',
+  'authors', 'community', 'foundation', 'international', 'global', 'online', 'network', 'official'
 ]);
 
 const MIN_TOKEN_LENGTH = 4;
