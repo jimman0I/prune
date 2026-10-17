@@ -15,6 +15,9 @@ import { getStartupIcons } from '../services/startupIcons.js';
 import { revealPath, openInstalledAppsSettings } from '../services/revealPath.js';
 import { getPackageIcons } from '../services/packageIcons.js';
 import { getRunningPrograms } from '../services/runningPrograms.js';
+import { readChocolateyPackages, chocolateyRows, managedPrograms, uninstallChocolateyPackage } from '../services/chocolateyApps.js';
+import { listUnregisteredPrograms } from '../services/unregisteredFolders.js';
+import { listWindowsFeatures, listWindowsUpdates, disableWindowsFeature, uninstallWindowsUpdate } from '../services/windowsComponents.js';
 
 const router = Router();
 
@@ -413,5 +416,91 @@ router.get('/running', async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 });
+
+/** Chocolatey packages, read from Chocolatey's own folder.
+ *
+ * `apps` are the packages with no Add/Remove entry of their own --
+ * metapackages, PATH shims, portable tools -- shaped like programs and
+ * marked source: 'chocolatey'. `managed` names the package behind each
+ * listed program a Chocolatey package installed, so the list can say so
+ * and remove it through Chocolatey, keeping Chocolatey's record true. */
+router.get('/chocolatey', async (req, res) => {
+  try {
+    const packages = await readChocolateyPackages();
+    const programs = packages.length ? await listInstalledPrograms().catch(() => []) : [];
+    res.json({ apps: chocolateyRows(packages), managed: managedPrograms(packages, programs) });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+/** Removes one package with `choco uninstall`, elevated. The id is checked
+ * against a fresh read of what is installed. */
+router.post('/chocolatey/remove', async (req, res) => {
+  try {
+    sendRemoval(res, await uninstallChocolateyPackage(req.body?.id));
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+/** Program folders in Program Files that nothing registered claims --
+ * copied in by hand, or left behind by an uninstaller. Marked
+ * source: 'unregistered'; removed through Forced Uninstall, which has every
+ * item reviewed first. Slow (it asks what every service, driver, process,
+ * task and Run value points at), so it has its own endpoint. */
+router.get('/unregistered', async (req, res) => {
+  try {
+    res.json({ apps: await listUnregisteredPrograms(await listInstalledPrograms()) });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+/** Windows' optional features that are turned on, marked source: 'feature'. */
+router.get('/windows-features', async (req, res) => {
+  try {
+    res.json({ features: await listWindowsFeatures() });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+/** Turns one feature off, elevated, after a restore point. When none could
+ * be made the answer is needsConsent and nothing changed; the screen asks,
+ * and only then sends allowWithoutRestorePoint. */
+router.post('/windows-features/disable', async (req, res) => {
+  try {
+    sendRemoval(res, await disableWindowsFeature(req.body?.name, { allowWithoutRestorePoint: req.body?.allowWithoutRestorePoint === true }));
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+/** Installed Windows updates, marked source: 'update'. */
+router.get('/windows-updates', async (req, res) => {
+  try {
+    res.json({ updates: await listWindowsUpdates() });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+/** Removes one update with Windows' own wusa, elevated, after a restore
+ * point -- same consent rule as the features. */
+router.post('/windows-updates/uninstall', async (req, res) => {
+  try {
+    sendRemoval(res, await uninstallWindowsUpdate(req.body?.kb, { allowWithoutRestorePoint: req.body?.allowWithoutRestorePoint === true }));
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+/** A removal's answer: done, cancelled at the UAC prompt and waiting for
+ * consent are all ordinary outcomes (200); a refusal or failure is 409. */
+function sendRemoval(res, result) {
+  if (result.ok || result.cancelled || result.needsConsent) res.json(result);
+  else res.status(409).json(result);
+}
 
 export default router;
