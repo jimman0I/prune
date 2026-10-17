@@ -2,7 +2,7 @@ import { describe, it, expect } from 'vitest';
 import { mkdtempSync, mkdirSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
-import { anchorDirectories } from './leftoverAnchors.js';
+import { anchorDirectories, virtualStoreMirrors } from './leftoverAnchors.js';
 
 describe('anchorDirectories (the program\'s own InstallLocation)', () => {
   it('returns the install location as the one authoritative folder', () => {
@@ -83,5 +83,38 @@ describe('anchorDirectories against the disk', () => {
     } finally {
       rmSync(base, { recursive: true, force: true });
     }
+  });
+});
+
+// UAC file virtualization: an unelevated program that writes into its own
+// folder under Program Files has the write redirected to a per-user mirror
+// under LocalAppData\VirtualStore. The uninstaller never knows it exists.
+describe('virtualStoreMirrors', () => {
+  const env = {
+    SystemDrive: 'C:',
+    ProgramFiles: 'C:\\Program Files',
+    'ProgramFiles(x86)': 'C:\\Program Files (x86)',
+    ProgramData: 'C:\\ProgramData',
+    LOCALAPPDATA: 'C:\\Users\\me\\AppData\\Local'
+  };
+
+  it('mirrors a folder under Program Files, Program Files (x86) or ProgramData', () => {
+    expect(virtualStoreMirrors(['C:\\Program Files (x86)\\Acme', 'C:\\Program Files\\Zed\\bin', 'C:\\ProgramData\\Acme'], env)).toEqual([
+      'C:\\Users\\me\\AppData\\Local\\VirtualStore\\Program Files (x86)\\Acme',
+      'C:\\Users\\me\\AppData\\Local\\VirtualStore\\Program Files\\Zed\\bin',
+      'C:\\Users\\me\\AppData\\Local\\VirtualStore\\ProgramData\\Acme'
+    ]);
+  });
+
+  it('ignores folders Windows never virtualizes: user folders and other drives', () => {
+    expect(virtualStoreMirrors(['C:\\Users\\me\\AppData\\Local\\Programs\\Acme', 'D:\\Program Files\\Acme', 'C:\\Games\\Acme'], env)).toEqual([]);
+  });
+
+  it('never mirrors a root itself, which would be the whole VirtualStore folder', () => {
+    expect(virtualStoreMirrors(['C:\\Program Files', 'C:\\ProgramData\\'], env)).toEqual([]);
+  });
+
+  it('returns nothing without LocalAppData', () => {
+    expect(virtualStoreMirrors(['C:\\Program Files\\Acme'], { ...env, LOCALAPPDATA: undefined })).toEqual([]);
   });
 });

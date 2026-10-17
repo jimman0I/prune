@@ -46,3 +46,31 @@ export function anchorDirectories(anchors, { existing = false } = {}) {
   add(anchorRootFromCommand(anchors?.uninstallString));
   return found;
 }
+
+/** Where UAC file virtualization would have put this program's writes.
+ *
+ * An unelevated program that writes into its own folder under Program Files
+ * or ProgramData has the write silently redirected to a per-user copy under
+ * LocalAppData\VirtualStore, mirroring the path without the drive. The
+ * program's uninstaller works on the real folder and never sees the copy, so
+ * it is left behind -- and, being a mirror of the program's own folder, it is
+ * as certain a leftover as that folder. Only the system drive is virtualized,
+ * and only a folder BELOW one of those roots: mirroring a root itself would
+ * name the whole VirtualStore subtree. */
+export function virtualStoreMirrors(dirs, env = process.env) {
+  const local = env?.LOCALAPPDATA;
+  if (!local) return [];
+  const systemDrive = String(env?.SystemDrive || 'C:').toLowerCase();
+  const roots = [env?.ProgramFiles, env?.['ProgramFiles(x86)'], env?.ProgramData]
+    .filter(Boolean)
+    .map((root) => String(root).replace(/[\\/]+$/, '').toLowerCase());
+  const mirrors = [];
+  for (const dir of dirs || []) {
+    const clean = String(dir).replace(/[\\/]+$/, '');
+    const lower = clean.toLowerCase();
+    if (!lower.startsWith(`${systemDrive}\\`)) continue;
+    if (!roots.some((root) => lower.startsWith(`${root}\\`))) continue;
+    mirrors.push(`${local.replace(/[\\/]+$/, '')}\\VirtualStore\\${clean.slice(systemDrive.length + 1)}`);
+  }
+  return mirrors;
+}

@@ -62,6 +62,24 @@ describe('advancedFileRoots', () => {
     expect(roaming.shortcuts).toBeFalsy();
   });
 
+  it('also looks at taskbar pins and Send To, for shortcuts only', () => {
+    const roots = advancedFileRoots(env);
+    const quickLaunch = roots.find((r) => /quick launch$/i.test(r.path));
+    const sendTo = roots.find((r) => /\\sendto$/i.test(r.path));
+    expect(quickLaunch).toMatchObject({ shortcuts: true });
+    expect(quickLaunch.depth).toBeGreaterThanOrEqual(3); // ...\User Pinned\TaskBar\App.lnk
+    expect(sendTo).toMatchObject({ shortcuts: true, depth: 1 });
+  });
+
+  it('looks one level into Documents, My Games and Saved Games, marked as the person\'s own data', () => {
+    const roots = advancedFileRoots(env);
+    for (const tail of ['documents', 'documents\\my games', 'saved games']) {
+      const root = roots.find((r) => r.path.toLowerCase() === `c:\\users\\me\\${tail}`);
+      expect(root, tail).toMatchObject({ depth: 1, userData: true });
+    }
+    expect(roots.filter((r) => r.userData).length).toBe(3);
+  });
+
   it('skips a root whose environment variable is not set rather than emitting "undefined"', () => {
     const roots = advancedFileRoots({ ProgramFiles: 'C:\\Program Files' });
     expect(roots.every((r) => !r.path.includes('undefined'))).toBe(true);

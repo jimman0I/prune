@@ -2,7 +2,8 @@ import { runPowerShellJson } from './powershell.js';
 import { scanRegistryLeftovers, scanRegistryAnchor, canonicalKeyPath } from './registryLeftovers.js';
 import { buildSearchPattern, psQuote } from './leftoverPattern.js';
 import { normalizeScanMode, advancedFileRoots } from './leftoverModes.js';
-import { anchorDirectories } from './leftoverAnchors.js';
+import { existsSync } from 'node:fs';
+import { anchorDirectories, virtualStoreMirrors } from './leftoverAnchors.js';
 import { walkForLeftovers, measureDirectory } from './leftoverWalk.js';
 import { productTokens, buildTokenPattern, buildMatchers, classifyLabel } from './leftoverMatch.js';
 import { permanentDeletionRefusal } from './leftoverRemoval.js';
@@ -99,8 +100,13 @@ export async function scanForLeftovers({
   // For the disk, only folders that still exist. For the registry and the
   // task list, every folder the program named: an uninstaller removes the
   // folder and leaves the startup entry pointing into it.
-  const anchorDirs = anchorDirectories(anchors, { existing: true });
   const referencedDirs = anchorDirectories(anchors);
+  // The program's VirtualStore copy counts as its own folder: computed from
+  // every folder it named, since the real one is usually gone by now.
+  const anchorDirs = [...anchorDirectories(anchors, { existing: true })];
+  for (const mirror of virtualStoreMirrors(referencedDirs)) {
+    if (existsSync(mirror) && !anchorDirs.some((d) => d.toLowerCase() === mirror.toLowerCase())) anchorDirs.push(mirror);
+  }
   const tokens = scanMode === 'advanced' ? productTokens(name, publisher) : [];
   const matchers = buildMatchers({ name, publisher, tokens });
   const others = await loadOtherPrograms(installedPrograms, { selfId, selfRegistryKey: anchors?.registryKey });
@@ -206,12 +212,15 @@ function finishFiles(group, ctx) {
   if (!group?.ok) return group;
   const items = [];
   let withheld = 0;
-  for (const item of group.items) {
+  for (const { userData, ...item } of group.items) {
     const certain = isUnder(item.path, ctx.anchorDirs) || ctx.extraFiles.some((p) => p.toLowerCase() === item.path.toLowerCase());
     const refusal = permanentDeletionRefusal(item.path) || osComponentRefusal(item.path) || footprintRefusal(item.path, ctx.footprints, { certain });
     if (refusal) { withheld += 1; continue; }
     const label = leafOf(item.path).replace(/\.(lnk|url)$/i, '');
-    items.push({ ...item, confidence: certain ? 'certain' : classifyLabel(label, ctx.matchers) });
+    // A name match in the person's own Documents or saves is never more than
+    // possible, whatever it is called: the folder may hold their own work.
+    const confidence = certain ? 'certain' : userData ? 'possible' : classifyLabel(label, ctx.matchers);
+    items.push({ ...item, confidence });
   }
   return { ...group, items, ...(withheld > 0 ? { protected: withheld } : {}) };
 }
@@ -314,8 +323,10 @@ async function scanFilesAdvanced(name, publisher, tokens, { fileRoots, walkOptio
     return nameRe.test(label) || (tokenRe !== null && tokenRe.test(label));
   };
 
+  const roots = fileRoots ?? advancedFileRoots();
+  const userDataRoots = new Set(roots.filter((root) => root.userData).map((root) => root.path.toLowerCase()));
   const { matches, truncated } = await walkForLeftovers({
-    roots: fileRoots ?? advancedFileRoots(),
+    roots,
     isMatch,
     skipDescent: (folder) => NEVER_ENTER.has(folder.toLowerCase()),
     ...walkOptions
@@ -325,7 +336,8 @@ async function scanFilesAdvanced(name, publisher, tokens, { fileRoots, walkOptio
   for (const match of matches) {
     items.push({
       path: match.path,
-      sizeBytes: match.isDirectory ? await measureDirectory(match.path) : await measureDirectory(match.path, { maxEntries: 1 })
+      sizeBytes: match.isDirectory ? await measureDirectory(match.path) : await measureDirectory(match.path, { maxEntries: 1 }),
+      ...(userDataRoots.has(String(match.root).toLowerCase()) ? { userData: true } : {})
     });
   }
   return { ok: true, items, ...(truncated ? { truncated: true } : {}) };
