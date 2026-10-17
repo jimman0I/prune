@@ -99,13 +99,13 @@ describe('scan mode: Moderate', () => {
 
 describe('scan mode: Advanced', () => {
   it('searches recursively below the roots, by name and by a distinctive word of it', async () => {
-    const byName = folder('roots', 'Vendor', 'Acme Photo Studio');
-    const byWord = folder('roots', 'Suite', 'Sub', 'Studio Cache');
+    const byName = folder('roots', 'Vendor', 'Acme Photo Zephyr');
+    const byWord = folder('roots', 'Suite', 'Sub', 'Zephyr Cache');
     folder('roots', 'Unrelated', 'Thing');
     runPowerShellJsonMock.mockResolvedValue(null);
 
     const result = await scanForLeftovers({
-      name: 'Acme Photo Studio', publisher: '', mode: 'advanced',
+      name: 'Acme Photo Zephyr', publisher: '', mode: 'advanced',
       fileRoots: [{ path: join(base, 'roots'), depth: 3 }]
     });
 

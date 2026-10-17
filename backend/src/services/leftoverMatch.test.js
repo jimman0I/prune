@@ -2,6 +2,15 @@ import { describe, it, expect } from 'vitest';
 import { productTokens, buildTokenPattern } from './leftoverMatch.js';
 
 describe('productTokens', () => {
+  // Found comparing a real Notepad++ uninstall: "Team" from the publisher
+  // "Notepad++ Team" matched Adobe's "Team Projects Local Hub" folders and
+  // Microsoft's "Windows Team Extension SDK" uninstall entries.
+  it('drops words that only say a publisher is an organization', () => {
+    expect(productTokens('Notepad++', 'Notepad++ Team')).toEqual(['notepad++']);
+    expect(productTokens('Acme', 'Acme Labs Group Studios')).toEqual(['acme']);
+    expect(productTokens('Rocket', 'Rocket Games Interactive Entertainment')).toEqual(['rocket']);
+  });
+
   it('splits a product name into its distinctive words, lower-cased', () => {
     expect(productTokens('Adobe Photoshop 2024', 'Adobe Inc.')).toEqual(['adobe', 'photoshop']);
   });
