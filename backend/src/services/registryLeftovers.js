@@ -106,6 +106,43 @@ export const EVENT_LOG_ROOTS = [
   'HKLM:\\System\\CurrentControlSet\\Services\\EventLog\\Application'
 ];
 
+/** Caches where Windows records a program's executable by its full path, and
+ * keeps the record after the program is gone. Found comparing a real
+ * Notepad++ uninstall: the UFH\SHC entry pairing its Start-menu shortcut with
+ * notepad++.exe was the one leftover the scan missed.
+ *
+ * Every entry here is reported only when its path points into the program's
+ * own folder: these caches name thousands of executables, and a name match
+ * alone says nothing about which one belonged to this program. The two
+ * exceptions are `tracing` and `radar`, keyed by executable NAME rather than
+ * path, which only the Advanced scan matches by name.
+ *
+ *  - ufh: shortcut/executable pairs (REG_MULTI_SZ values).
+ *  - muiCache: friendly names, value name "<exe>.FriendlyAppName".
+ *  - appCompat: compatibility settings and the Program Compatibility
+ *    Assistant's record, value name = the executable.
+ *  - userAssist: launch history, value names ROT13-encoded and often written
+ *    as a known-folder GUID followed by the rest of the path.
+ *  - audioPolicy: per-app audio device choices, recorded with a device path
+ *    (\Device\HarddiskVolumeN\...) instead of a drive letter.
+ *  - installerFolders: folders Windows Installer tracks, value name = folder.
+ *  - tracing: RAS tracing keys, "<exe name>_RASAPI32" and similar.
+ *  - radar: heap-leak diagnostics, one key per executable file name. */
+export const PATH_CACHE_ROOTS = {
+  ufh: ['HKCU:\\Software\\Microsoft\\Windows\\CurrentVersion\\UFH\\SHC'],
+  muiCache: ['HKCU:\\Software\\Classes\\Local Settings\\Software\\Microsoft\\Windows\\Shell\\MuiCache'],
+  appCompat: [
+    'HKCU:\\Software\\Microsoft\\Windows NT\\CurrentVersion\\AppCompatFlags\\Layers',
+    'HKLM:\\Software\\Microsoft\\Windows NT\\CurrentVersion\\AppCompatFlags\\Layers',
+    'HKCU:\\Software\\Microsoft\\Windows NT\\CurrentVersion\\AppCompatFlags\\Compatibility Assistant\\Store'
+  ],
+  userAssist: ['HKCU:\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\UserAssist'],
+  audioPolicy: ['HKCU:\\Software\\Microsoft\\Internet Explorer\\LowRegistry\\Audio\\PolicyConfig\\PropertyStore'],
+  installerFolders: ['HKLM:\\Software\\Microsoft\\Windows\\CurrentVersion\\Installer\\Folders'],
+  tracing: ['HKLM:\\Software\\Microsoft\\Tracing', 'HKLM:\\Software\\WOW6432Node\\Microsoft\\Tracing'],
+  radar: ['HKLM:\\Software\\Microsoft\\RADAR\\HeapLeakDetection\\DiagnosedApplications']
+};
+
 /** One comparable spelling for a registry path.
  *
  * The same key has several: PowerShell's providers say HKLM:\Software,
@@ -271,6 +308,131 @@ foreach ($root in ${psArray(eventLogRoots)}) {
 }
 `;
 
+/** The path-cache passes (see PATH_CACHE_ROOTS), anchored only. They run in
+ * Moderate as well as Advanced: an entry naming a file inside the program's
+ * own folder is no guess. */
+const pathCachePasses = (roots) => `
+# Path caches. Without the program's folder nothing here can be anchored.
+if ($anchors.Count -gt 0) {
+# The anchors with their drive removed, for the audio policy
+# store, which records \\Device\\HarddiskVolumeN\\... instead of a drive letter.
+$unrooted = @($anchors | ForEach-Object { $_ -replace '^[a-z]:', '' })
+function Test-AnchoredUnrooted($value) {
+  if (-not $value) { return $false }
+  $lower = ([string]$value).ToLowerInvariant()
+  foreach ($anchor in $unrooted) { if ($lower.Contains($anchor)) { return $true } }
+  return $false
+}
+# UserAssist writes a path under a known folder as that folder's GUID.
+$knownFolders = @{
+  '{6D809377-6AF0-444B-8957-A3773F02200E}' = $env:ProgramW6432
+  '{7C5A40EF-A0FB-4BFC-874A-C0F2E0B9FA8E}' = \${env:ProgramFiles(x86)}
+  '{905E63B6-C1BF-494E-B29C-65B732D3D21A}' = $env:ProgramFiles
+  '{F38BF404-1D43-42F2-9305-67DE0B28FC23}' = $env:windir
+  '{1AC14E77-02E7-4E5D-B744-2EB1AE5198B7}' = [Environment]::GetFolderPath('System')
+  '{D65231B0-B2F1-4857-A4CE-A8E7C6EA7D27}' = [Environment]::GetFolderPath('SystemX86')
+  '{F1B32785-6FBA-4FCF-9D55-7B8E7F157091}' = $env:LOCALAPPDATA
+  '{3EB685DB-65F9-4CF6-A03A-E3EF65729F3D}' = $env:APPDATA
+  '{62AB5D82-FDC1-4DC3-A9DD-070D1D495D97}' = $env:ProgramData
+  '{5CD7AEE2-2219-4A67-B85D-6C9CE15660CB}' = (Join-Path $env:LOCALAPPDATA 'Programs')
+  '{B4BFCC3A-DB2C-424C-B029-7FE99A87C641}' = [Environment]::GetFolderPath('Desktop')
+  '{0139D44E-6AFE-49F2-8690-3DAFCAE6FFB8}' = [Environment]::GetFolderPath('CommonPrograms')
+  '{A77F5D77-2E2B-44C3-A6A2-ABA601054A51}' = [Environment]::GetFolderPath('Programs')
+}
+function ConvertFrom-Rot13([string]$text) {
+  $chars = $text.ToCharArray()
+  for ($i = 0; $i -lt $chars.Length; $i++) {
+    $c = [int]$chars[$i]
+    if ($c -ge 65 -and $c -le 90) { $chars[$i] = [char]((($c - 65 + 13) % 26) + 65) }
+    elseif ($c -ge 97 -and $c -le 122) { $chars[$i] = [char]((($c - 97 + 13) % 26) + 97) }
+  }
+  return -join $chars
+}
+
+foreach ($root in ${psArray(roots.ufh)}) {
+  $key = Get-Item -Path $root -ErrorAction SilentlyContinue
+  if ($key) {
+    foreach ($valueName in $key.GetValueNames()) {
+      $data = (@($key.GetValue($valueName)) -join '|')
+      if (Test-Anchored $data) { Add-Found $key.Name $valueName $false 'anchor' $data }
+    }
+  }
+}
+
+# One regex over every value name at once: Installer\\Folders alone holds
+# thousands, and testing them one by one in a loop cost a second per scan.
+$anchorRx = '(?i)' + (($anchors | ForEach-Object { [regex]::Escape($_.TrimEnd('\\')) + '(\\\\|$)' }) -join '|')
+foreach ($root in ${psArray([...roots.muiCache, ...roots.appCompat, ...roots.installerFolders])}) {
+  $key = Get-Item -Path $root -ErrorAction SilentlyContinue
+  if ($key) {
+    foreach ($valueName in @($key.GetValueNames() -match $anchorRx)) {
+      Add-Found $key.Name $valueName $false 'anchor' $valueName
+    }
+  }
+}
+
+# ROT13 is its own inverse, so the few anchors are encoded once -- both as
+# plain paths and as the known-folder-GUID form -- and compared against the
+# raw value names. Decoding every one of several hundred value names in a
+# PowerShell loop instead added seconds to every scan.
+$encodedAnchors = New-Object System.Collections.ArrayList
+foreach ($anchor in $anchors) {
+  [void]$encodedAnchors.Add((ConvertFrom-Rot13 $anchor))
+  foreach ($guid in $knownFolders.Keys) {
+    $folder = [string]$knownFolders[$guid]
+    if (-not $folder) { continue }
+    $prefix = $folder.ToLowerInvariant().TrimEnd('\\') + '\\'
+    if ($anchor.StartsWith($prefix)) {
+      [void]$encodedAnchors.Add((ConvertFrom-Rot13 ($guid.ToLowerInvariant() + '\\' + $anchor.Substring($prefix.Length))))
+    }
+  }
+}
+foreach ($root in ${psArray(roots.userAssist)}) {
+  foreach ($guidKey in (Get-ChildItem -Path $root -ErrorAction SilentlyContinue)) {
+    $count = $guidKey.OpenSubKey('Count')
+    if (-not $count) { continue }
+    foreach ($valueName in $count.GetValueNames()) {
+      $lower = $valueName.ToLowerInvariant()
+      foreach ($encoded in $encodedAnchors) {
+        if ($lower.Contains($encoded)) {
+          $decoded = ConvertFrom-Rot13 $valueName
+          if ($decoded -match '^(\{[0-9A-Fa-f-]{36}\})(.*)$' -and $knownFolders[$Matches[1].ToUpperInvariant()]) {
+            $decoded = $knownFolders[$Matches[1].ToUpperInvariant()] + $Matches[2]
+          }
+          Add-Found $count.Name $valueName $false 'anchor' $decoded $decoded
+          break
+        }
+      }
+    }
+    $count.Close()
+  }
+}
+
+foreach ($root in ${psArray(roots.audioPolicy)}) {
+  foreach ($key in (Get-ChildItem -Path $root -ErrorAction SilentlyContinue)) {
+    $data = [string]$key.GetValue('')
+    if (Test-AnchoredUnrooted $data) { Add-Found $key.Name $null $false 'anchor' $data }
+  }
+}
+}
+`;
+
+/** The by-name half of the path caches, for the Advanced scan only: keys
+ * named for an executable, which no longer records where it lived. */
+const pathCacheNamePasses = (roots) => `
+foreach ($root in ${psArray(roots.tracing)}) {
+  foreach ($key in (Get-ChildItem -Path $root -ErrorAction SilentlyContinue)) {
+    $cut = $key.PSChildName.LastIndexOf('_')
+    if ($cut -gt 0 -and $key.PSChildName.Substring(0, $cut) -match $pattern) { Add-Found $key.Name $null $false 'name' $key.PSChildName }
+  }
+}
+foreach ($root in ${psArray(roots.radar)}) {
+  foreach ($key in (Get-ChildItem -Path $root -ErrorAction SilentlyContinue)) {
+    if (($key.PSChildName -replace '\\.exe$', '') -match $pattern) { Add-Found $key.Name $null $false 'name' $key.PSChildName }
+  }
+}
+`;
+
 /** The whole registry sweep as one script.
  *
  * One call rather than six: each pass is cheap, and six trips through
@@ -279,7 +441,8 @@ foreach ($root in ${psArray(eventLogRoots)}) {
  * cannot see a script that does not parse. */
 export function buildRegistryScript(pattern, {
   advanced = false, anchors = [], sharedDllRoots = SHARED_DLL_ROOTS,
-  firewallRoots = FIREWALL_RULE_ROOTS, msconfigRoots = MSCONFIG_STARTUP_ROOTS, eventLogRoots = EVENT_LOG_ROOTS
+  firewallRoots = FIREWALL_RULE_ROOTS, msconfigRoots = MSCONFIG_STARTUP_ROOTS, eventLogRoots = EVENT_LOG_ROOTS,
+  pathCacheRoots = PATH_CACHE_ROOTS
 } = {}) {
   return `
 $ErrorActionPreference = 'SilentlyContinue'
@@ -289,8 +452,8 @@ $pattern = '${psQuote(pattern)}'
 # "...\\foobar\\".
 $anchors = ${anchors.length > 0 ? `@(${anchors.map((a) => `'${psQuote(String(a).toLowerCase().replace(/[\\/]+$/, ''))}\\'`).join(',')})` : '@()'}
 $found = New-Object System.Collections.ArrayList
-function Add-Found($path, $valueName, $isUninstall, $how, $text) {
-  [void]$found.Add([pscustomobject]@{ path = $path; valueName = $valueName; isUninstallEntry = $isUninstall; how = $how; text = $text })
+function Add-Found($path, $valueName, $isUninstall, $how, $text, $label) {
+  [void]$found.Add([pscustomobject]@{ path = $path; valueName = $valueName; isUninstallEntry = $isUninstall; how = $how; text = $text; label = $label })
 }
 function Test-Anchored($value) {
   if (-not $value) { return $false }
@@ -319,7 +482,8 @@ foreach ($root in ${psArray(SOFTWARE_ROOTS)}) {
     }
   }
 }
-${advanced ? advancedRegistryPasses({ firewallRoots, eventLogRoots }) : ''}
+${pathCachePasses(pathCacheRoots)}
+${advanced ? advancedRegistryPasses({ firewallRoots, eventLogRoots }) + pathCacheNamePasses(pathCacheRoots) : ''}
 # The Add/Remove Programs entry. GetValue on the key object rather than
 # Get-ItemProperty: this runs for every one of several hundred entries, and
 # the cmdlet costs far more per call than the method it wraps.
@@ -437,6 +601,9 @@ export function normalizeRegistryItems(raw) {
     // that matched. Both are consumed by leftoverScan and not shown.
     if (entry.how === 'anchor') item.anchored = true;
     if (typeof entry.text === 'string' && entry.text.trim() !== '') item.text = entry.text.slice(0, 300);
+    // A readable form of a value name stored encoded (UserAssist's ROT13).
+    // Shown in the review; removal still uses the raw valueName.
+    if (valueName !== null && typeof entry.label === 'string' && entry.label !== '' && entry.label !== valueName) item.valueLabel = entry.label;
     items.push(item);
   }
 
