@@ -20,7 +20,7 @@ export const DEFAULT_LEFTOVER_NOTE_MESSAGES = {
 };
 
 export function leftoverItemNote(item, messages = DEFAULT_LEFTOVER_NOTE_MESSAGES) {
-  if (item?.valueName) return messages.valueOnly(item.valueName);
+  if (item?.valueName) return messages.valueOnly(item.valueLabel || item.valueName);
   if (item?.isUninstallEntry) return messages.uninstallEntry;
   return null;
 }

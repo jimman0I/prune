@@ -14,6 +14,19 @@ describe('leftoverItemNote', () => {
     ).toBe('Only the value "DeadUpdater" — the key it sits in is shared and stays');
   });
 
+  it('names an encoded value by its readable form', () => {
+    // UserAssist stores the program's path ROT13-encoded; the raw name reads
+    // as gibberish ("Abgrcnq++\abgrcnq++.rkr"). The backend sends the
+    // decoded path alongside; removal still uses the raw valueName.
+    expect(
+      leftoverItemNote({
+        path: 'HKCU:\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\UserAssist\\{G}\\Count',
+        valueName: '{6Q809377-6NS0-444O-8957-N3773S02200R}\\Abgrcnq++\\abgrcnq++.rkr',
+        valueLabel: 'C:\\Program Files\\Notepad++\\notepad++.exe'
+      })
+    ).toBe('Only the value "C:\\Program Files\\Notepad++\\notepad++.exe" — the key it sits in is shared and stays');
+  });
+
   it('calls out the Add/Remove Programs entry', () => {
     // Worth naming: this is the key that makes Windows list the program at
     // all, and the reason a dead entry never goes away on its own.
