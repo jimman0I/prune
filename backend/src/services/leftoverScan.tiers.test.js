@@ -174,6 +174,37 @@ describe('shared-component protection', () => {
     expect(result.registryKeys.protected).toBe(1);
   });
 
+  it('offers the program\'s VirtualStore copy as certain, even after its real folder is gone', async () => {
+    vi.stubEnv('LOCALAPPDATA', base);
+    vi.stubEnv('ProgramFiles', 'C:\\Program Files');
+    vi.stubEnv('SystemDrive', 'C:');
+    try {
+      const mirror = folder('VirtualStore', 'Program Files', 'PruneVsFixture9137');
+      runPowerShellJsonMock.mockResolvedValue(null);
+      const result = await scanForLeftovers({
+        name: 'Prune VS Fixture', mode: 'moderate',
+        anchors: { installLocation: 'C:\\Program Files\\PruneVsFixture9137' }
+      });
+      expect(result.files.items).toContainEqual(expect.objectContaining({ path: mirror, confidence: 'certain' }));
+    } finally {
+      vi.unstubAllEnvs();
+    }
+  });
+
+  it('never rates a match in the person\'s own documents above possible, so it is never pre-selected', async () => {
+    folder('docs', 'Acme Zephyr');
+    folder('roots', 'Acme Zephyr');
+    runPowerShellJsonMock.mockResolvedValue(null);
+    const result = await scanForLeftovers({
+      name: 'Acme Zephyr', mode: 'advanced',
+      fileRoots: [{ path: join(base, 'docs'), depth: 1, userData: true }, { path: join(base, 'roots'), depth: 1 }]
+    });
+    const tier = Object.fromEntries(result.files.items.map((i) => [i.path, i.confidence]));
+    expect(tier[join(base, 'docs', 'Acme Zephyr')]).toBe('possible');
+    expect(tier[join(base, 'roots', 'Acme Zephyr')]).toBe('likely');
+    expect(result.files.items.every((i) => !('userData' in i))).toBe(true);
+  });
+
   it('drops scheduled tasks Windows ships', async () => {
     psSequence(null, null, [
       { name: 'Acme', path: '\\Microsoft\\Windows\\Acme\\', how: 'name' },

@@ -54,6 +54,16 @@ export function advancedFileRoots(env = process.env) {
   add(env.ProgramData, ['Microsoft', 'Windows', 'Start Menu', 'Programs'], { depth: 3, shortcuts: true });
   add(env.USERPROFILE, ['Desktop'], { depth: 1, shortcuts: true });
   add(env.PUBLIC, ['Desktop'], { depth: 1, shortcuts: true });
+  // Taskbar and Start pins live under Quick Launch\User Pinned\{TaskBar,
+  // StartMenu}; Send To holds the shortcuts a program adds to that menu.
+  add(env.APPDATA, ['Microsoft', 'Internet Explorer', 'Quick Launch'], { depth: 3, shortcuts: true });
+  add(env.APPDATA, ['Microsoft', 'Windows', 'SendTo'], { depth: 1, shortcuts: true });
+  // Where programs, games above all, keep settings and saves in the person's
+  // own folders. `userData`: a match here is never rated above possible, so
+  // it is never pre-selected -- the folder may hold work the person made.
+  add(env.USERPROFILE, ['Documents'], { depth: 1, userData: true });
+  add(env.USERPROFILE, ['Documents', 'My Games'], { depth: 1, userData: true });
+  add(env.USERPROFILE, ['Saved Games'], { depth: 1, userData: true });
 
   // The same folder can be reached by two variables (TEMP sits under
   // LOCALAPPDATA); walking it twice would only report its matches twice.
