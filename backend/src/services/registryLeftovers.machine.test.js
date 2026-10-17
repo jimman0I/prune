@@ -1,5 +1,11 @@
-import { describe, it, expect, beforeAll, afterAll } from 'vitest';
+import { describe, it, expect, beforeAll, afterAll, vi } from 'vitest';
 import { execFile } from 'node:child_process';
+
+// Each Advanced case runs the whole real registry sweep, ~13 s alone. With
+// the full suite's other PowerShell-heavy files running at the same time it
+// intermittently passed the 30 s default once the path-cache passes made the
+// sweep longer -- a timeout, not a wrong answer.
+vi.setConfig({ testTimeout: 60000 });
 import { promisify } from 'node:util';
 import { writeFileSync, rmSync } from 'node:fs';
 import { join } from 'node:path';
