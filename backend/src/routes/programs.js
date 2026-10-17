@@ -10,6 +10,7 @@ import { getBrowserExtensions } from '../services/browserExtensions.js';
 import { extensionPageAddress } from '../services/extensionPage.js';
 import { getStartupItems, getStartupEntries } from '../services/startupItems.js';
 import { setStartupEnabled } from '../services/startupToggle.js';
+import { openStartupLocation, openContainingFolder, runStartupProcess, addStartupEntry } from '../services/startupActions.js';
 import { getStartupIcons } from '../services/startupIcons.js';
 import { revealPath, openInstalledAppsSettings } from '../services/revealPath.js';
 import { getPackageIcons } from '../services/packageIcons.js';
@@ -222,6 +223,66 @@ router.post('/startup/toggle', async (req, res) => {
 
     const result = await setStartupEnabled(item, enabled);
     res.json(result);
+  } catch (err) {
+    res.status(500).json({ ok: false, error: err.message });
+  }
+});
+
+/** The entry an id names, read again from the real startup locations --
+ * the same reason as the toggle above: the client names an entry, it never
+ * describes a path, key or command line for the server to act on. */
+async function freshStartupEntry(id) {
+  if (typeof id !== 'string' || !id) return null;
+  return (await getStartupEntries()).find((entry) => entry.id === id) || null;
+}
+
+const STALE_ENTRY = 'That entry is no longer in the startup locations.';
+
+/** Opens where an entry lives (Registry Editor, the Startup folder, Task
+ * Scheduler, Services) or the folder its program is in. */
+router.post('/startup/open', async (req, res) => {
+  try {
+    const { id, target } = req.body || {};
+    if (target !== 'location' && target !== 'folder') {
+      res.status(400).json({ ok: false, error: 'target must be "location" or "folder".' });
+      return;
+    }
+    const item = await freshStartupEntry(id);
+    if (!item) { res.status(404).json({ ok: false, error: STALE_ENTRY }); return; }
+    res.json(target === 'location' ? await openStartupLocation(item) : await openContainingFolder(item));
+  } catch (err) {
+    res.status(500).json({ ok: false, error: err.message });
+  }
+});
+
+/** Starts an entry's program now, or ends it. */
+router.post('/startup/process', async (req, res) => {
+  try {
+    const { id, action } = req.body || {};
+    if (action !== 'run' && action !== 'end') {
+      res.status(400).json({ ok: false, error: 'action must be "run" or "end".' });
+      return;
+    }
+    const item = await freshStartupEntry(id);
+    if (!item) { res.status(404).json({ ok: false, error: STALE_ENTRY }); return; }
+    res.json(await runStartupProcess(item, action));
+  } catch (err) {
+    res.status(500).json({ ok: false, error: err.message });
+  }
+});
+
+/** Adds a startup entry: a Run or RunOnce value, or a Startup-folder
+ * shortcut, for this user or for all users. Validated again in the service,
+ * which refuses a program that is not on disk and never overwrites an entry
+ * of the same name. */
+router.post('/startup/add', async (req, res) => {
+  try {
+    const { name, command, scope, kind } = req.body || {};
+    if ([name, command, scope, kind].some((value) => typeof value !== 'string')) {
+      res.status(400).json({ ok: false, error: 'Needs a name, a command, a scope and a kind.' });
+      return;
+    }
+    res.json(await addStartupEntry({ name, command, scope, kind }));
   } catch (err) {
     res.status(500).json({ ok: false, error: err.message });
   }
