@@ -90,7 +90,10 @@ outright** — it is moved to Quarantine first.
 
 Every installed program from all three registry Uninstall hives, plus the
 Store apps and browser extensions no uninstall list mentions. Real icons,
-measured sizes, and a warning before removing something that is running.
+measured sizes, a warning before removing something that is running, and
+whether each program's own files carry a valid digital signature, checked
+by Windows itself, so a file changed after its publisher signed it stands
+out.
 
 Also what Windows' own list misses: Chocolatey packages (removed through
 Chocolatey, so its record stays true), program folders nothing registered

@@ -29,6 +29,8 @@ vi.mock('../services/windowsComponents.js', () => ({
   uninstallWindowsUpdate: (...a) => uninstallWindowsUpdate(...a)
 }));
 
+vi.mock('../services/programSignatures.js', () => ({ getProgramSignatures: async () => ({ p1: { status: 'valid', signer: 'PSF' } }) }));
+
 const post = (path, body) => server.call(path, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
 
 let server;
@@ -82,6 +84,12 @@ describe('removal routes', () => {
     disableWindowsFeature.mockResolvedValue({ ok: true });
     await post('/programs/windows-features/disable', { name: 'X', allowWithoutRestorePoint: 'yes' });
     expect(disableWindowsFeature).toHaveBeenCalledWith('X', { allowWithoutRestorePoint: false });
+  });
+});
+
+describe('GET /programs/signatures', () => {
+  it('serves each program\'s signature by id', async () => {
+    expect((await server.call('/programs/signatures')).body).toEqual({ signatures: { p1: { status: 'valid', signer: 'PSF' } } });
   });
 });
 

@@ -13,5 +13,6 @@ import diskMapCounting from './diskMapCounting.js';
 import deepCleanRunRemoval from './deepCleanRunRemoval.js';
 import programSources from './programSources.js';
 import wizard from './wizard.js';
+import signatures from './signatures.js';
 
-export const EXTRAS = [diskMap, deepClean, uninstaller, runAsAdmin, dashboardQol, diskMapQol, background, explorer, whatsNew, diskMapCounting, deepCleanRunRemoval, programSources, wizard];
+export const EXTRAS = [diskMap, deepClean, uninstaller, runAsAdmin, dashboardQol, diskMapQol, background, explorer, whatsNew, diskMapCounting, deepCleanRunRemoval, programSources, wizard, signatures];

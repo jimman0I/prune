@@ -19,6 +19,12 @@ export async function fetchChocolatey() {
   return { apps: data.apps ?? [], managed: data.managed ?? {} };
 }
 
+/** Whether each program's own files are signed, and by whom:
+ * { programId: { status: 'valid' | 'unsigned' | 'broken', signer? } }. */
+export async function fetchProgramSignatures() {
+  return (await getJson('/programs/signatures')).signatures ?? {};
+}
+
 /** Program folders nothing registered claims, source: 'unregistered'. */
 export async function fetchUnregisteredPrograms() {
   return (await getJson('/programs/unregistered')).apps ?? [];
