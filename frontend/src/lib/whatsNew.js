@@ -24,6 +24,17 @@ export const WHATS_NEW = {
       { id: 'dashboard', icon: 'dashboard', target: { screen: 'dashboard' } },
       { id: 'settings', icon: 'settings', target: { screen: 'settings', settingsTab: 'general' } }
     ]
+  },
+  '3.1': {
+    namespace: 'whatsNewV31',
+    cards: [
+      { id: 'sources', icon: 'applications', target: { screen: 'applications' } },
+      { id: 'otherAccounts', icon: 'applications', target: { screen: 'applications' } },
+      { id: 'signatures', icon: 'applications', target: { screen: 'applications' } },
+      { id: 'wizards', icon: 'settings', target: { screen: 'settings', settingsTab: 'uninstall' } },
+      { id: 'startup', icon: 'startup', target: { screen: 'startup' } },
+      { id: 'leftovers', icon: 'deepclean' }
+    ]
   }
 };
 

@@ -80,7 +80,7 @@ describe('after an update', () => {
 
     const dialog = await screen.findByRole('dialog', NOTICE);
     expect(dialog.getAttribute('aria-modal')).toBe('true');
-    expect(within(dialog).getByText(/what's new in prune 3\.0/i)).toBeTruthy();
+    expect(within(dialog).getByText(/what's new in prune 3\.1/i)).toBeTruthy();
     expect(within(dialog).getAllByRole('listitem').length).toBeGreaterThanOrEqual(6);
     await waitFor(() => expect(document.activeElement).toBe(within(dialog).getByRole('button', { name: 'Got it' })));
   });
@@ -133,45 +133,45 @@ describe('after an update', () => {
     const dialog = await screen.findByRole('dialog', NOTICE);
     expect(current()).toBe('Dashboard');
 
-    const card = within(dialog).getByRole('heading', { name: 'Disk Map' }).closest('li');
+    const card = within(dialog).getByRole('heading', { name: 'Startup, fully managed' }).closest('li');
     await userEvent.setup().click(within(card).getByRole('button', { name: 'Show me' }));
 
     expect(noticeOpen()).toBeNull();
-    expect(current()).toBe('Disk Map');
+    expect(current()).toBe('Startup');
     expect(api.updateSettings.mock.calls.map((c) => c[0])).toContainEqual({ lastSeenVersion: APP_VERSION });
   });
 
-  it('the Settings card goes to Settings', async () => {
+  it('the wizards card goes to Settings', async () => {
     settingsState.lastSeenVersion = null;
     renderScreen(<App />);
     const dialog = await screen.findByRole('dialog', NOTICE);
 
-    const card = within(dialog).getByRole('heading', { name: 'More in Settings' }).closest('li');
+    const card = within(dialog).getByRole('heading', { name: 'Answer uninstall wizards for me' }).closest('li');
     await userEvent.setup().click(within(card).getByRole('button', { name: 'Show me' }));
 
     expect(current()).toBe('Settings');
   });
 
-  it('the sidebar card is information only, with no "Show me"', async () => {
+  it('the leftovers card is information only, with no "Show me"', async () => {
     settingsState.lastSeenVersion = null;
     renderScreen(<App />);
     const dialog = await screen.findByRole('dialog', NOTICE);
-    const card = within(dialog).getByRole('heading', { name: /sidebar/i }).closest('li');
+    const card = within(dialog).getByRole('heading', { name: /leftover scans/i }).closest('li');
     expect(within(card).queryByRole('button')).toBeNull();
   });
 
-  it('says plainly that the background options are off until turned on', async () => {
+  it('says plainly that answering wizards is off until turned on', async () => {
     settingsState.lastSeenVersion = null;
     renderScreen(<App />);
     const dialog = await screen.findByRole('dialog', NOTICE);
-    expect(within(dialog).getByText(/all off until you turn them on/i)).toBeTruthy();
+    expect(within(dialog).getByText(/off until you turn it on/i)).toBeTruthy();
   });
 });
 
 describe('when it does not open', () => {
   it.each([
     ['a fresh install (stamped with the running version)', () => { settingsState.lastSeenVersion = APP_VERSION; }],
-    ['a patch update of the same release', () => { settingsState.lastSeenVersion = '3.0.0'; }],
+    ['a patch update of the same release', () => { settingsState.lastSeenVersion = APP_VERSION.replace(/\.\d+$/, '.0'); }],
     ['settings that say nothing about it', () => {}]
   ])('%s', async (_name, arrange) => {
     arrange();

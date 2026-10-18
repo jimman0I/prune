@@ -15,5 +15,6 @@ import programSources from './programSources.js';
 import wizard from './wizard.js';
 import signatures from './signatures.js';
 import otherAccounts from './otherAccounts.js';
+import whatsNew31 from './whatsNew31.js';
 
-export const EXTRAS = [diskMap, deepClean, uninstaller, runAsAdmin, dashboardQol, diskMapQol, background, explorer, whatsNew, diskMapCounting, deepCleanRunRemoval, programSources, wizard, signatures, otherAccounts];
+export const EXTRAS = [diskMap, deepClean, uninstaller, runAsAdmin, dashboardQol, diskMapQol, background, explorer, whatsNew, diskMapCounting, deepCleanRunRemoval, programSources, wizard, signatures, otherAccounts, whatsNew31];

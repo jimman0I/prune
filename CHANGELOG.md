@@ -3,6 +3,68 @@
 All notable changes to Prune (formerly named unrevo -- rebranded 2026-09-01,
 see v1.0.1 below) are documented here.
 
+## v3.1.0
+
+### Added
+
+- **Programs Windows' own list never showed.** Applications now finds
+  Chocolatey packages that installed nothing Add/Remove lists (and tags the
+  programs a package did install, with "Uninstall with Chocolatey" beside
+  their own uninstaller); program folders in Program Files that nothing
+  installed claims ("Not registered", removed through Forced Uninstall
+  after you review what it finds); and Windows' optional features and
+  installed updates, each turned off or removed only after a restore point
+  -- and when none can be made, only after you say so a second time.
+- **Programs other accounts on this PC installed just for themselves.**
+  "Other accounts…" reads them with one administrator prompt. Their
+  registry files are copied and read by Prune itself, never mounted, so
+  nothing can stop that person's profile from loading. They are listed
+  with their owner and removed through Forced Uninstall: running another
+  account's uninstaller from yours would act on your account, not theirs.
+- **Digital signatures.** Each program's own files are checked by Windows
+  itself, file hash and certificate chain both. Unsigned programs get a
+  quiet badge, a signature that no longer matches its file gets a red one,
+  an "Unsigned" filter shows both, and the uninstall dialog says who
+  signed the program.
+- **Silent uninstalls for four more installer systems**: Inno Setup, WiX
+  Burn bundles (.NET and Visual C++ runtimes, SDKs, Python, PowerShell),
+  7-Zip and WinRAR, each recognised from the uninstaller file itself and
+  never by name alone. On the machine this was measured on, programs that
+  still opened a wizard went from 79 of 130 to 41.
+- **Answer uninstall wizards for me** (Settings › Uninstall, off by
+  default). For uninstallers with no silent mode, Prune presses Next,
+  Uninstall and Finish, picks "restart later" and unticks offers to open a
+  website. It hands the wizard back, in front, the moment a question is
+  yours: your settings or data, something to type, or a button it does not
+  recognise.
+- **Startup**: scheduled tasks and services can be switched on and off
+  where Windows keeps their state; open an entry's location or folder, run
+  it or end it; add an entry; remove every invalid entry as one undoable
+  batch; search; and export to CSV, a web page or text.
+- **Leftover scans find more**: the path caches Windows keeps for a
+  removed program (shortcut history, MuiCache, compatibility records,
+  UserAssist and others), VirtualStore copies, pinned and Send To
+  shortcuts, Prefetch traces, error reports and crash dumps, and settings
+  or saves in Documents and Saved Games (never pre-selected).
+- The filters are two groups -- where programs come from, and what needs a
+  look -- instead of one long row.
+- A "What's new in Prune 3.1" notice, shown once after the update, with a
+  way into each of the above.
+
+### Fixed
+
+- A closed Chrome or Brave never got its silent uninstall: the check for
+  whether the browser was running was made, then never reached the step
+  that builds the command.
+- An install date written with minutes in place of the month (Squirrel
+  installers such as Discord) showed as "Invalid Date" and earned a New
+  badge. A date that is not on the calendar is now no date.
+- A generic word in a publisher's name ("Team", "Games") could match other
+  products' folders and uninstall entries in an Advanced leftover scan.
+- A program's name keeps room beside two badges instead of being squeezed
+  to one letter, and the Applications toolbar wraps at the smallest window
+  size instead of squeezing the search box.
+
 ## v3.0.1
 
 ### Fixed
