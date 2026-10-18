@@ -102,8 +102,11 @@ describe('resolveSignatures', () => {
 describe('the script', () => {
   it('runs against a real file and gets an answer from Windows', async () => {
     const { runPowerShellJson } = await import('./powershell.js');
-    const notepad = join(process.env.SystemRoot || 'C:\\Windows', 'System32', 'notepad.exe');
-    const rows = await runPowerShellJson(buildSignatureScript([notepad]), { timeoutMs: 60000 });
+    // PowerShell itself rather than Notepad: the build runner's Windows
+    // Server image has no notepad.exe in System32, and this test runs
+    // through powershell.exe, so it is always there.
+    const file = join(process.env.SystemRoot || 'C:\\Windows', 'System32', 'WindowsPowerShell', 'v1.0', 'powershell.exe');
+    const rows = await runPowerShellJson(buildSignatureScript([file]), { timeoutMs: 60000 });
     const row = Array.isArray(rows) ? rows[0] : rows;
     expect(['Valid', 'NotSigned']).toContain(row.status);
   }, 60000);
