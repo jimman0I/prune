@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { APP_VERSION } from '../lib/appVersion.js';
 import { renderScreen } from '../testSupport/renderScreen.jsx';
 import { useWhatsNew } from '../hooks/useWhatsNew.js';
 
@@ -50,7 +51,7 @@ beforeEach(() => {
 describe('Settings > About', () => {
   it('has a button that opens the dialog and leaves the recorded version alone', async () => {
     // Already seen: nothing opens by itself, so any dialog here was asked for.
-    settingsState.lastSeenVersion = '3.0.0';
+    settingsState.lastSeenVersion = APP_VERSION;
     const user = userEvent.setup();
     renderScreen(<Harness />);
 
