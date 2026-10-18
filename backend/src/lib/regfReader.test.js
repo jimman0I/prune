@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { existsSync, readFileSync } from 'node:fs';
-import { openHive, readUninstallEntries } from './regfReader.js';
-import { buildHive, uninstallTree } from '../testSupport/regfBuilder.js';
+import { openHive, readUninstallEntries, replayLogs } from './regfReader.js';
+import { buildHive, uninstallTree, buildLog, markDirty } from '../testSupport/regfBuilder.js';
 
 
 describe('regfReader', () => {
@@ -43,15 +43,58 @@ describe('regfReader', () => {
   it('refuses what is not a hive', () => {
     expect(() => openHive(Buffer.from('not a hive'))).toThrow(/Not a registry hive/);
   });
+});
 
+describe('journal replay', () => {
+  // A hive whose newest change lives only in its journal: the base file
+  // still has the old name in one page, the journal holds that page fixed.
+  const fresh = buildHive(uninstallTree({ Discord: { $values: { DisplayName: 'Discord' } } }));
+  const at = fresh.indexOf(Buffer.from('Discord', 'utf16le'), 4096);
+  const pageStart = 4096 + Math.floor((at - 4096) / 512) * 512;
+  const stale = Buffer.from(fresh);
+  Buffer.from('Xiscord', 'utf16le').copy(stale, at);
+  const page = { offset: pageStart - 4096, bytes: fresh.subarray(pageStart, pageStart + 512) };
+  const binsSize = fresh.length - 4096;
+
+  it('applies the journal to a dirty hive before reading it', () => {
+    const dirty = markDirty(stale, 7);
+    expect(readUninstallEntries(dirty).entries[0].DisplayName).toBe('Xiscord');
+    const log = buildLog([{ sequence: 7, binsSize, pages: [page] }]);
+    const { dirty: stillDirty, entries } = readUninstallEntries(dirty, { logs: [log] });
+    expect(entries[0].DisplayName).toBe('Discord');
+    expect(stillDirty).toBe(false);
+  });
+
+  it('runs on across both journals in sequence, and stops at a gap', () => {
+    const dirty = markDirty(stale, 3);
+    const noop = { offset: 0, bytes: fresh.subarray(4096, 4096 + 512) };
+    // 3 in one journal, 4 (the fix) in the other: both apply.
+    const run = replayLogs(dirty, [buildLog([{ sequence: 4, binsSize, pages: [page] }]), buildLog([{ sequence: 3, binsSize, pages: [noop] }])]);
+    expect(run.replayed).toBe(2);
+    expect(readUninstallEntries(run.buffer).entries[0].DisplayName).toBe('Discord');
+    // 3 is missing: nothing after the gap is applied.
+    const gap = replayLogs(dirty, [buildLog([{ sequence: 4, binsSize, pages: [page] }])]);
+    expect(gap.replayed).toBe(0);
+  });
+
+  it('leaves a clean hive and a torn journal alone', () => {
+    expect(replayLogs(fresh, [buildLog([{ sequence: 1, binsSize, pages: [page] }])]).buffer).toBe(fresh);
+    const torn = buildLog([{ sequence: 7, binsSize, pages: [page] }]).subarray(0, 600);
+    expect(replayLogs(markDirty(stale, 7), [torn]).replayed).toBe(0);
+  });
+});
+
+describe('a real hive', () => {
   // The Default profile's hive is readable by every account on every Windows.
-  it.skipIf(!existsSync('C:\\Users\\Default\\NTUSER.DAT'))('reads a real NTUSER.DAT', () => {
-    // Only what every Default hive has: a Windows Server image (the build
-    // runner) has no Control Panel key at its root, so nothing below asks
-    // for one. Every key is walked and every value read, so a cell the
-    // reader cannot parse anywhere in a real hive fails here.
-    const root = openHive(readFileSync('C:\\Users\\Default\\NTUSER.DAT')).root();
-    expect(root.subkeys().map((k) => k.name)).toContain('Software');
+  // On the build runner, read without its journals, it had no Software key
+  // at all (most likely a dirty hive), so its journals are passed, as the
+  // scan does. The failure message says which it was.
+  const DEFAULT = 'C:\\Users\\Default\\NTUSER.DAT';
+  it.skipIf(!existsSync(DEFAULT))('reads the Default profile, journals applied', () => {
+    const logs = ['.LOG1', '.LOG2'].map((ext) => `${DEFAULT}${ext}`).filter((p) => existsSync(p)).map((p) => readFileSync(p));
+    const hive = openHive(readFileSync(DEFAULT), { logs });
+    const root = hive.root();
+    expect(root.subkeys().map((k) => k.name), `dirty=${hive.dirty}, journals=${logs.length}`).toContain('Software');
     expect(root.subkey('Software\\Microsoft')).not.toBeNull();
     let keys = 0;
     let values = 0;

@@ -41,3 +41,9 @@ describe('runPowerShellJson', () => {
     await expect(runPowerShellJson('script', { retries: 0 })).rejects.toThrow(/PowerShell command failed/);
   });
 });
+describe('windowsPowerShellEnv', () => {
+  it('drops PSModulePath, whatever its case, and keeps everything else', async () => {
+    const { windowsPowerShellEnv } = await import('./powershell.js');
+    expect(windowsPowerShellEnv({ PATH: 'x', PSModulePath: 'y', psmodulepath: 'z', TEMP: 't' })).toEqual({ PATH: 'x', TEMP: 't' });
+  });
+});

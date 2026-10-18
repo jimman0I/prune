@@ -114,3 +114,38 @@ export function buildHive(tree, { subkeyList = 'lh', dirty = false } = {}) {
 
 /** The Add/Remove part of a user hive, around the given entries. */
 export const uninstallTree = (apps) => ({ Software: { Microsoft: { Windows: { CurrentVersion: { Uninstall: apps } } } } });
+
+/** A journal (new format) holding the given entries:
+ * [{ sequence, binsSize, pages: [{ offset, bytes }] }]. */
+export function buildLog(entries) {
+  const header = Buffer.alloc(512);
+  header.write('regf', 0, 'ascii');
+  header.writeUInt32LE(6, 28); // file type: transaction log, new format
+  const blocks = entries.map(({ sequence, binsSize, pages }) => {
+    const body = 40 + pages.length * 8 + pages.reduce((n, p) => n + p.bytes.length, 0);
+    const size = Math.ceil(body / 512) * 512;
+    const entry = Buffer.alloc(size);
+    entry.write('HvLE', 0, 'ascii');
+    entry.writeUInt32LE(size, 4);
+    entry.writeUInt32LE(sequence, 12);
+    entry.writeUInt32LE(binsSize, 16);
+    entry.writeUInt32LE(pages.length, 20);
+    let data = 40 + pages.length * 8;
+    pages.forEach((page, i) => {
+      entry.writeUInt32LE(page.offset, 40 + i * 8);
+      entry.writeUInt32LE(page.bytes.length, 44 + i * 8);
+      page.bytes.copy(entry, data);
+      data += page.bytes.length;
+    });
+    return entry;
+  });
+  return Buffer.concat([header, ...blocks]);
+}
+
+/** A dirty hive: `sequence` as its secondary number, one higher as its primary. */
+export function markDirty(hive, sequence) {
+  const out = Buffer.from(hive);
+  out.writeUInt32LE(sequence + 1, 4);
+  out.writeUInt32LE(sequence, 8);
+  return out;
+}

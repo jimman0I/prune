@@ -15,9 +15,12 @@
  * the `vk` itself, and data over 16 344 bytes is split across a `db` cell's
  * segments.
  *
- * Only what reading needs: no log replay. A signed-out account's hive was
- * flushed when it signed out; a hive marked dirty (its two sequence numbers
- * differ) is still read and reported as such. */
+ * A hive marked dirty (its two sequence numbers differ) has changes that
+ * live only in its journals, NTUSER.DAT.LOG1 and .LOG2. Found on the build
+ * runner: its Default profile hive read back without its Software key at
+ * all. Pass the journals and their entries are replayed into a copy of the
+ * hive before anything is read (replayLogs below); without them a dirty
+ * hive is read as it stands and says so. */
 
 const BASE = 4096;
 const BIG_DATA_SEGMENT = 16344;
@@ -27,10 +30,70 @@ export const REG_EXPAND_SZ = 2;
 export const REG_DWORD = 4;
 export const REG_MULTI_SZ = 7;
 
-export function openHive(buffer) {
-  if (!Buffer.isBuffer(buffer) || buffer.length < BASE + 32 || buffer.toString('ascii', 0, 4) !== 'regf') {
+/** The hive with its journals' entries applied, or the hive itself when it
+ * is clean or no journal has anything to add.
+ *
+ * Journals in the format Windows has written since 8.1: a 512-byte header,
+ * then "HvLE" entries, each with a sequence number, the size of the hive
+ * bins after it, and a list of dirty pages (offset into the hive bins, and
+ * size) followed by those pages' bytes. The entries to apply start at the
+ * hive's own secondary sequence number and run on without a gap, across
+ * both journals; anything torn or out of bounds ends the run. */
+export function replayLogs(buffer, logs = []) {
+  if (buffer.readUInt32LE(4) === buffer.readUInt32LE(8)) return { buffer, replayed: 0 };
+  const entries = [];
+  for (const log of logs) {
+    if (!Buffer.isBuffer(log) || log.length < 1024 || log.toString('ascii', 0, 4) !== 'regf') continue;
+    for (let at = 512; at + 40 <= log.length;) {
+      if (log.toString('ascii', at, at + 4) !== 'HvLE') break;
+      const size = log.readUInt32LE(at + 4);
+      if (size < 40 || size % 512 !== 0 || at + size > log.length) break;
+      const entry = log.subarray(at, at + size);
+      const count = entry.readUInt32LE(20);
+      const pages = [];
+      let data = 40 + count * 8;
+      let valid = data <= size;
+      for (let i = 0; valid && i < count; i += 1) {
+        const offset = entry.readUInt32LE(40 + i * 8);
+        const pageSize = entry.readUInt32LE(44 + i * 8);
+        if (data + pageSize > size) { valid = false; break; }
+        pages.push({ offset, bytes: entry.subarray(data, data + pageSize) });
+        data += pageSize;
+      }
+      if (!valid) break;
+      entries.push({ sequence: entry.readUInt32LE(12), binsSize: entry.readUInt32LE(16), pages });
+      at += size;
+    }
+  }
+  entries.sort((a, b) => a.sequence - b.sequence);
+  let next = buffer.readUInt32LE(8);
+  let out = null;
+  let replayed = 0;
+  for (const entry of entries) {
+    if (entry.sequence < next) continue;
+    if (entry.sequence !== next) break;
+    if (!out) out = Buffer.from(buffer);
+    const needed = BASE + entry.binsSize;
+    if (out.length < needed) out = Buffer.concat([out, Buffer.alloc(needed - out.length)]);
+    for (const page of entry.pages) {
+      if (BASE + page.offset + page.bytes.length > out.length) continue;
+      page.bytes.copy(out, BASE + page.offset);
+    }
+    replayed += 1;
+    next += 1;
+  }
+  if (!out) return { buffer, replayed: 0 };
+  // Now consistent: both sequence numbers agree.
+  out.writeUInt32LE(next, 4);
+  out.writeUInt32LE(next, 8);
+  return { buffer: out, replayed };
+}
+
+export function openHive(input, { logs } = {}) {
+  if (!Buffer.isBuffer(input) || input.length < BASE + 32 || input.toString('ascii', 0, 4) !== 'regf') {
     throw new Error('Not a registry hive file.');
   }
+  const buffer = logs?.length ? replayLogs(input, logs).buffer : input;
   const minor = buffer.readUInt32LE(24);
   const dirty = buffer.readUInt32LE(4) !== buffer.readUInt32LE(8);
   const rootOffset = buffer.readUInt32LE(36);
@@ -144,8 +207,8 @@ export function openHive(buffer) {
 /** The Add/Remove entries in a user hive, shaped like the elevated scan's
  * own rows: { keyName, DisplayName, Publisher, ... } with every value a
  * string. */
-export function readUninstallEntries(buffer) {
-  const hive = openHive(buffer);
+export function readUninstallEntries(buffer, { logs } = {}) {
+  const hive = openHive(buffer, { logs });
   const uninstall = hive.root().subkey('Software\\Microsoft\\Windows\\CurrentVersion\\Uninstall');
   const entries = [];
   for (const k of uninstall ? uninstall.subkeys() : []) {

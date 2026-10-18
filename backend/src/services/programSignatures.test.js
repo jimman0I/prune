@@ -106,8 +106,18 @@ describe('the script', () => {
     // Server image has no notepad.exe in System32, and this test runs
     // through powershell.exe, so it is always there.
     const file = join(process.env.SystemRoot || 'C:\\Windows', 'System32', 'WindowsPowerShell', 'v1.0', 'powershell.exe');
-    const rows = await runPowerShellJson(buildSignatureScript([file]), { timeoutMs: 60000 });
-    const row = Array.isArray(rows) ? rows[0] : rows;
-    expect(['Valid', 'NotSigned']).toContain(row.status);
+    // A PowerShell 7 module path, as the GitHub runner sets it and as a
+    // PowerShell 7 terminal does: inherited raw, it stops Windows PowerShell
+    // loading the module Get-AuthenticodeSignature lives in, and the answer
+    // was silently empty. services/powershell.js now starts it without it.
+    const saved = process.env.PSModulePath;
+    process.env.PSModulePath = 'C:\\Program Files\\PowerShell\\Modules;c:\\program files\\powershell\\7\\Modules';
+    try {
+      const rows = await runPowerShellJson(buildSignatureScript([file]), { timeoutMs: 60000 });
+      const row = Array.isArray(rows) ? rows[0] : rows;
+      expect(['Valid', 'NotSigned']).toContain(row?.status);
+    } finally {
+      if (saved === undefined) delete process.env.PSModulePath; else process.env.PSModulePath = saved;
+    }
   }, 60000);
 });
