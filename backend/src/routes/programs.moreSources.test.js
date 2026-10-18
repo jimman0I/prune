@@ -29,6 +29,12 @@ vi.mock('../services/windowsComponents.js', () => ({
   uninstallWindowsUpdate: (...a) => uninstallWindowsUpdate(...a)
 }));
 
+const scanOtherAccounts = vi.fn();
+vi.mock('../services/otherAccounts.js', () => ({
+  getOtherAccounts: async () => ({ profiles: [{ sid: 'S-1-5-21-1-2-3-1005', name: 'nikos' }], scan: null }),
+  scanOtherAccounts: (...a) => scanOtherAccounts(...a)
+}));
+
 vi.mock('../services/programSignatures.js', () => ({ getProgramSignatures: async () => ({ p1: { status: 'valid', signer: 'PSF' } }) }));
 
 const post = (path, body) => server.call(path, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
@@ -90,6 +96,17 @@ describe('removal routes', () => {
 describe('GET /programs/signatures', () => {
   it('serves each program\'s signature by id', async () => {
     expect((await server.call('/programs/signatures')).body).toEqual({ signatures: { p1: { status: 'valid', signer: 'PSF' } } });
+  });
+});
+
+describe('other accounts', () => {
+  it('lists the accounts without elevating, and scans only on a POST', async () => {
+    expect((await server.call('/programs/other-accounts')).body.profiles[0].name).toBe('nikos');
+    expect(scanOtherAccounts).not.toHaveBeenCalled();
+    scanOtherAccounts.mockResolvedValue({ ok: false, cancelled: true });
+    const res = await post('/programs/other-accounts/scan', {});
+    expect(res.status).toBe(200);
+    expect(res.body).toEqual({ ok: false, cancelled: true });
   });
 });
 
