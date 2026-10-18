@@ -108,7 +108,7 @@ describe('scanUnregisteredFolders', () => {
 describe('readMachineUse', () => {
   it('returns the commands and the Windows Installer folders', async () => {
     const { readMachineUse } = await import('./unregisteredFolders.js');
-    expect(await readMachineUse({ run: async () => ({ commands: ['a.exe'], folders: ['C:\x\'] }) })).toEqual({ commands: ['a.exe'], folders: ['C:\x\'] });
+    expect(await readMachineUse({ run: async () => ({ commands: ['a.exe'], folders: ['C:\\x\\'] }) })).toEqual({ commands: ['a.exe'], folders: ['C:\\x\\'] });
     expect(await readMachineUse({ run: async () => ({ commands: ['a.exe'] }) })).toEqual({ commands: ['a.exe'], folders: [] });
   });
 
