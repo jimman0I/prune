@@ -92,6 +92,11 @@ Every installed program from all three registry Uninstall hives, plus the
 Store apps and browser extensions no uninstall list mentions. Real icons,
 measured sizes, and a warning before removing something that is running.
 
+Also what Windows' own list misses: Chocolatey packages (removed through
+Chocolatey, so its record stays true), program folders nothing registered
+claims, and Windows' optional features and installed updates — each
+turned off or removed only after a restore point.
+
 Batches run without a wizard per program — the vendor's own silent command
 where one is published, and the right flag for MSI, NSIS, Squirrel and
 closed Chromium browsers otherwise — and a game is removed before the
@@ -231,7 +236,7 @@ anything leaves the app.
 <td width="50%"><img src="docs/screenshots/deep-clean-dark.png" alt="Deep Clean after a scan: measured sizes per rule, a Loses data badge on the ones that sign you out or clear history, the new Deep scan group of backup, Office temp, Vim swap, .DS_Store and Thumbs.db rules, a scan log beside the tree, and a footer saying Deletes immediately when Delete now is chosen" /></td>
 </tr>
 <tr>
-<td align="center"><b>Applications</b><br/><sub>Every hive, plus Store apps and extensions — with Hunter, install monitoring and forced uninstall</sub></td>
+<td align="center"><b>Applications</b><br/><sub>Every hive, plus Store apps, extensions, Chocolatey and Windows updates — with Hunter, install monitoring and forced uninstall</sub></td>
 <td align="center"><b>Deep Clean</b><br/><sub>Measured sizes; rules that lose something are marked and never ticked by default</sub></td>
 </tr>
 <tr>
@@ -436,6 +441,13 @@ Produces an NSIS installer (`.exe`), a portable `.zip` and a generated
 - Store apps Windows marks as part of the system — the Security interface,
   the app installer — cannot be removed, and their rows open Windows' own
   page instead.
+- "Not registered" folders are offered, never removed directly: a portable
+  tool you put in Program Files on purpose looks exactly like an orphan.
+  Remove opens Forced uninstall, where every item is reviewed first.
+- Turning off a Windows feature or removing an update needs administrator
+  rights and a restore point. When Windows cannot make one, Prune asks again
+  before going ahead without it. Features Windows depends on (.NET 4,
+  Defender) are listed but never offered.
 - About one program in ten still uninstalls with its own wizard: anything
   whose installer Prune cannot positively identify runs exactly as
   registered, because a wrong silent flag is worse than a visible dialog.

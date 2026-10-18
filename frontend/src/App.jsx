@@ -19,6 +19,7 @@ import ModalOverlay from './components/ModalOverlay.jsx';
 import UninstallModal from './components/UninstallModal.jsx';
 import StoreRemoveDialog from './components/StoreRemoveDialog.jsx';
 import ApplicationsTools from './components/ApplicationsTools.jsx';
+import SourceRemovalDialog from './components/SourceRemovalDialog.jsx';
 import ProgramDropZone from './components/ProgramDropZone.jsx';
 import { onOpenRequest } from './lib/openRequests.js';
 import { rememberVisited } from './lib/visitedScreens.js';
@@ -87,6 +88,10 @@ export default function App() {
   // UninstallModal, which runs a registered uninstaller a Store app
   // does not have.
   const [storeAppToRemove, setStoreAppToRemove] = useState(null);
+  // A Chocolatey package, Windows feature or Windows update being removed.
+  const [sourceItemToRemove, setSourceItemToRemove] = useState(null);
+  // A "Not registered" row handed to Forced uninstall: { name, folder, nonce }.
+  const [forcedRequest, setForcedRequest] = useState(null);
   // What the Applications list is showing under its search and filter, for the
   // heading's count. The list owns both; the heading only reads the result.
   const [appsView, setAppsView] = useState(null);
@@ -137,7 +142,7 @@ export default function App() {
   // dates, extensions, the running-process poll) and stay off, via
   // `visited` -- the same tracking that decides which screens to mount --
   // until that screen has actually been opened once this session.
-  const { programs, icons, totalSize, extensions, running, loading, error, sizesSettled, refresh: refreshPrograms } =
+  const { programs, icons, totalSize, extensions, unregistered, windowsItems, running, loading, error, sizesSettled, refresh: refreshPrograms } =
     useProgramData({ loadDecorations: visited.has('applications') });
 
   // Bug report diagnostic (lib/lastProgramsCount.js). The base list query
@@ -156,7 +161,7 @@ export default function App() {
    * close without telling anyone, so an uninstalled program stayed in the list
    * until something else refreshed it; and what a removal moved into
    * Quarantine was not on that screen until it was next fetched. */
-  const removalDialogOpen = Boolean(selectedProgram || batchPrograms || storeAppToRemove);
+  const removalDialogOpen = Boolean(selectedProgram || batchPrograms || storeAppToRemove || sourceItemToRemove);
   useEffect(() => {
     if (!waitingFind || removalDialogOpen) return;
     requestCount.current += 1;
@@ -191,10 +196,21 @@ export default function App() {
     refreshPrograms();
   }, [refreshPrograms, queryClient]);
 
+  // A package, feature or update just removed: every list it could be in is
+  // read again (its row stays until then; Windows may need a restart to
+  // drop a feature, and the list says what Windows says).
+  const handleSourceItemRemoved = useCallback(() => {
+    queryClient.invalidateQueries({ queryKey: keys.chocolatey });
+    queryClient.invalidateQueries({ queryKey: keys.windowsFeatures });
+    queryClient.invalidateQueries({ queryKey: keys.windowsUpdates });
+    refreshPrograms();
+  }, [refreshPrograms, queryClient]);
+
   // The Applications tools (forced uninstall and the rest) change what is on
   // the machine and what is in Quarantine; this is what closing one does.
   const handleToolsChanged = useCallback(() => {
     refreshPrograms();
+    queryClient.invalidateQueries({ queryKey: keys.unregistered });
     queryClient.invalidateQueries({ queryKey: keys.quarantine });
   }, [refreshPrograms, queryClient]);
 
@@ -234,7 +250,7 @@ export default function App() {
      in the DOM. "Show me" lands on a screen and, for Settings, a tab. */
   const [settingsTabRequest, setSettingsTabRequest] = useState({ tab: null, nonce: 0 });
   const whatsNew = useWhatsNew({
-    blocked: showShortcuts || showBugReport || Boolean(selectedProgram || batchPrograms || storeAppToRemove)
+    blocked: showShortcuts || showBugReport || Boolean(selectedProgram || batchPrograms || storeAppToRemove || sourceItemToRemove)
   });
   const openWhatsNew = whatsNew.openManual;
   const goToWhatsNewTarget = useCallback((target) => {
@@ -319,7 +335,7 @@ export default function App() {
                 </p>
               </div>
               <div className="flex items-center gap-2">
-                <ApplicationsTools programs={programs} onChanged={handleToolsChanged} onUninstall={setSelectedProgram} findRequest={findRequest} />
+                <ApplicationsTools programs={programs} onChanged={handleToolsChanged} onUninstall={setSelectedProgram} findRequest={findRequest} forcedRequest={forcedRequest} />
                 <button className="btn-ghost" onClick={() => setScreen('quarantine')}>{t('nav.quarantine')}</button>
               </div>
             </div>
@@ -327,11 +343,15 @@ export default function App() {
               <ProgramList
                 programs={programs}
                 extensions={extensions}
+                unregistered={unregistered}
+                windowsItems={windowsItems}
                 running={running}
                 icons={icons}
                 onUninstall={setSelectedProgram}
                 onBatchUninstall={setBatchPrograms}
                 onRemoveStoreApp={setStoreAppToRemove}
+                onRemoveSourceItem={setSourceItemToRemove}
+                onRemoveUnregistered={(program) => setForcedRequest({ name: program.name, folder: program.installLocation, nonce: Date.now() })}
                 onViewChange={setAppsView}
               />
             </Suspense>
@@ -378,6 +398,20 @@ export default function App() {
             app={storeAppToRemove}
             onClose={closeDialog(setStoreAppToRemove)}
             onRemoved={handleStoreAppRemoved}
+            onBusyChange={setDialogBusy}
+          />
+        </ModalOverlay>
+      )}
+      {sourceItemToRemove && (
+        <ModalOverlay
+          label={sourceItemToRemove.name}
+          onClose={closeDialog(setSourceItemToRemove)}
+          dismissible={!dialogBusy}
+        >
+          <SourceRemovalDialog
+            item={sourceItemToRemove}
+            onClose={closeDialog(setSourceItemToRemove)}
+            onRemoved={handleSourceItemRemoved}
             onBusyChange={setDialogBusy}
           />
         </ModalOverlay>

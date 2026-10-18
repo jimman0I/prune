@@ -21,7 +21,10 @@ export const DEFAULT_BATCH_REASONS = {
   storeNoPackage: 'This Store app has no package name to remove.',
   storeProtected: 'Windows marks this app as part of the system and does not allow it to be removed.',
   storeUnknown: 'Windows has not said whether this app can be removed, so it is left out of the batch.',
-  noCommand: 'No uninstall command is registered for this program.'
+  noCommand: 'No uninstall command is registered for this program.',
+  chocolatey: 'Chocolatey packages are removed one at a time, through Chocolatey.',
+  unregistered: 'Programs that are not registered are removed one at a time, with Forced uninstall.',
+  windows: 'Windows features and updates are changed one at a time, each after a restore point.'
 };
 
 /** Why a program can't be batch-uninstalled, or null if it can.
@@ -39,6 +42,12 @@ export function batchIneligibleReason(program, reasons = DEFAULT_BATCH_REASONS) 
   if (program?.source === 'extension') {
     return reasons.extension;
   }
+  // Each of these is removed by its own route with its own question --
+  // Chocolatey's elevated uninstall, a Forced uninstall review, a restore
+  // point before Windows changes -- never run unattended in a queue.
+  if (program?.source === 'chocolatey') return reasons.chocolatey;
+  if (program?.source === 'unregistered') return reasons.unregistered;
+  if (program?.source === 'feature' || program?.source === 'update') return reasons.windows;
   if (program?.source === 'store') {
     /* Eligible since Prune can remove a Store app itself, but on a
      * stricter condition than the single-app button. A batch runs with

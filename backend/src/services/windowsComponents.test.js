@@ -27,7 +27,7 @@ describe('updateRows', () => {
       { id: 'KB5127648', description: 'Security Update', installedOn: '2026-10-15' },
       { id: 'File 1', description: '', installedOn: null }
     ]);
-    expect(rows.map((r) => r.name)).toEqual(['KB5127648', 'KB5054156']);
+    expect(rows.map((r) => r.name)).toEqual(['Security Update KB5127648', 'Update KB5054156']);
     expect(rows[0]).toMatchObject({ id: 'update:KB5127648', kb: '5127648', installDate: '2026-10-15', description: 'Security Update', source: 'update' });
   });
 });
