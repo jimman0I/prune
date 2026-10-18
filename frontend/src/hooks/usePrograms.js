@@ -5,6 +5,7 @@ import {
   fetchProgramInstallDates, fetchStoreApps, fetchBrowserExtensions,
   fetchPackageIcons, fetchRunningPrograms, requestStoreRefresh
 } from '../lib/api.js';
+import { fetchChocolatey, fetchUnregisteredPrograms, fetchWindowsFeatures, fetchWindowsUpdates } from '../lib/programSourcesApi.js';
 import { useReturnToWindow } from './useReturnToWindow.js';
 import { mergeMeasuredSizes } from '../lib/mergeSizes.js';
 import { mergeBinaryVersions } from '../lib/mergeVersions.js';
@@ -72,6 +73,15 @@ export function useProgramData({ loadDecorations = true } = {}) {
   const versionsQuery = useQuery({ queryKey: keys.programVersions, queryFn: fetchProgramVersions, ...DEFERRED });
   const datesQuery = useQuery({ queryKey: keys.installDates, queryFn: fetchProgramInstallDates, ...DEFERRED });
   const extensionsQuery = useQuery({ queryKey: keys.extensions, queryFn: fetchBrowserExtensions, ...DEFERRED });
+  // Eager like the Store apps: Chocolatey's package-only rows are part of the
+  // list and its total. Plain file reads, well under a second.
+  const chocolateyQuery = useQuery({ queryKey: keys.chocolatey, queryFn: fetchChocolatey, ...DECORATION });
+  // Lists of their own, like the extensions, so only Applications needs them.
+  // The unregistered folders are the slow one: they ask what every service,
+  // driver, process and task points at.
+  const unregisteredQuery = useQuery({ queryKey: keys.unregistered, queryFn: fetchUnregisteredPrograms, ...DEFERRED });
+  const featuresQuery = useQuery({ queryKey: keys.windowsFeatures, queryFn: fetchWindowsFeatures, ...DEFERRED });
+  const updatesQuery = useQuery({ queryKey: keys.windowsUpdates, queryFn: fetchWindowsUpdates, ...DEFERRED });
 
   // Two icon sources, one map. They come from genuinely different places
   // -- extracted from binaries, versus files sitting inside a package or
@@ -128,18 +138,26 @@ export function useProgramData({ loadDecorations = true } = {}) {
   useEffect(() => () => clearTimeout(returnTimer.current), []);
 
   const programs = useMemo(() => [
-    ...mergeInstallDates(
+    ...tagChocolateyManaged(mergeInstallDates(
       mergeBinaryVersions(
         mergeMeasuredSizes(programsQuery.data ?? [], sizesQuery.data ?? {}),
         versionsQuery.data ?? {}
       ),
       datesQuery.data ?? {}
-    ),
+    ), chocolateyQuery.data?.managed),
     // Appended rather than merged: a Store app is not a registry entry
     // and none of the three fallbacks above apply to it -- it already
     // carries its own name, version and measured size.
-    ...(storeQuery.data ?? [])
-  ], [programsQuery.data, sizesQuery.data, versionsQuery.data, datesQuery.data, storeQuery.data]);
+    ...(storeQuery.data ?? []),
+    // The packages that installed nothing Windows lists: PATH shims,
+    // metapackages, portable tools.
+    ...(chocolateyQuery.data?.apps ?? [])
+  ], [programsQuery.data, sizesQuery.data, versionsQuery.data, datesQuery.data, storeQuery.data, chocolateyQuery.data]);
+
+  const windowsItems = useMemo(
+    () => [...(featuresQuery.data ?? []), ...(updatesQuery.data ?? [])],
+    [featuresQuery.data, updatesQuery.data]
+  );
 
   const icons = useMemo(
     () => ({ ...(packageIconsQuery.data ?? {}), ...(programIconsQuery.data ?? {}) }),
@@ -156,6 +174,8 @@ export function useProgramData({ loadDecorations = true } = {}) {
     icons,
     totalSize,
     extensions: extensionsQuery.data ?? [],
+    unregistered: unregisteredQuery.data ?? [],
+    windowsItems,
     running: runningQuery.data ?? {},
     loading: programsQuery.isPending,
     /** True once the list, the measured sizes and the Store apps have each
@@ -170,4 +190,12 @@ export function useProgramData({ loadDecorations = true } = {}) {
      * so anything else observing the same key updates with it. */
     refresh: () => queryClient.invalidateQueries({ queryKey: keys.programs })
   };
+}
+
+/** Marks each listed program a Chocolatey package installed with that
+ * package's id, so the row can say so and offer removal through Chocolatey.
+ * The same array back when there is nothing to mark. */
+export function tagChocolateyManaged(programs, managed) {
+  if (!managed || Object.keys(managed).length === 0) return programs;
+  return programs.map((program) => (managed[program.id] ? { ...program, chocolateyId: managed[program.id] } : program));
 }

@@ -22,7 +22,7 @@ import { useLanguage } from '../i18n/LanguageContext.jsx';
  * hands a match to the ordinary uninstall dialog or offers Forced uninstall. A
  * request never replaces a tools dialog that is in the middle of a scan or a
  * removal: it waits for that to finish. */
-export default function ApplicationsTools({ programs = [], onChanged, onUninstall, findRequest = null }) {
+export default function ApplicationsTools({ programs = [], onChanged, onUninstall, findRequest = null, forcedRequest = null }) {
   const { t } = useLanguage();
   const [open, setOpen] = useState(null);
   const [seed, setSeed] = useState({ name: '', folder: '' });
@@ -45,6 +45,18 @@ export default function ApplicationsTools({ programs = [], onChanged, onUninstal
   useEffect(() => {
     if (findRequest) setHeldFind(findRequest);
   }, [findRequest]);
+  // A "Not registered" row's Remove: Forced uninstall, with its name and
+  // folder filled in. Held like a find request while another dialog is busy.
+  const [heldForced, setHeldForced] = useState(null);
+  useEffect(() => {
+    if (forcedRequest) setHeldForced(forcedRequest);
+  }, [forcedRequest]);
+  useEffect(() => {
+    if (!heldForced || busy) return;
+    setSeed({ name: heldForced.name, folder: heldForced.folder });
+    setOpen('forced');
+    setHeldForced(null);
+  }, [heldForced, busy]);
   useEffect(() => {
     if (!heldFind || busy) return;
     setFindPath(heldFind.path);

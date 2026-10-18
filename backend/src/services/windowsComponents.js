@@ -74,7 +74,9 @@ export function updateRows(updates) {
     .filter((u) => u && typeof u.id === 'string' && KB.test(u.id))
     .map((u) => ({
       id: `update:${u.id.toUpperCase()}`,
-      name: u.id.toUpperCase(),
+      // A bare KB number says nothing; Windows' own word for it does
+      // ('Security Update KB5127648').
+      name: u.description ? `${u.description} ${u.id.toUpperCase()}` : u.id.toUpperCase(),
       publisher: 'Microsoft',
       version: '',
       installLocation: null,

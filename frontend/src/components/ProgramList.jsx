@@ -309,7 +309,7 @@ function ManageExtensionButton({ program }) {
   );
 }
 
-function ProgramRow({ program, iconSrc, checked, running, isNew, monitored = false, tabStop, onFocusRow, onToggle, onUninstall, onRemoveStoreApp, onContextMenu }) {
+function ProgramRow({ program, iconSrc, checked, running, isNew, monitored = false, tabStop, onFocusRow, onToggle, onUninstall, onRemoveStoreApp, onRemoveSourceItem, onRemoveUnregistered, onContextMenu }) {
   const { t } = useLanguage();
   return (
     <div
@@ -374,6 +374,17 @@ function ProgramRow({ program, iconSrc, checked, running, isNew, monitored = fal
           Chromium keeps it somewhere this reader does not look, so those
           rows say nothing rather than guessing "enabled". A disabled
           add-on still occupies disk, which is what this list is about. */}
+      {/* Where it came from, when that decides how it is removed. Neutral
+          like the Store badge: none of them is a warning. */}
+      {(program.source === 'chocolatey' || program.chocolateyId) && (
+        <span className="text-[11px] font-mono uppercase tracking-wider px-1 py-px rounded bg-[color:var(--surface-hover)] text-[color:var(--text-secondary)] border border-[color:var(--border-subtle)] shrink-0">{t('sourcesV4.badges.chocolatey')}</span>
+      )}
+      {program.source === 'unregistered' && (
+        <span className="text-[11px] font-mono uppercase tracking-wider px-1 py-px rounded bg-[color:var(--surface-hover)] text-[color:var(--text-secondary)] border border-[color:var(--border-subtle)] shrink-0">{t('sourcesV4.badges.unregistered')}</span>
+      )}
+      {(program.source === 'feature' || program.source === 'update') && (
+        <span className="text-[11px] font-mono uppercase tracking-wider px-1 py-px rounded bg-[color:var(--surface-hover)] text-[color:var(--text-secondary)] border border-[color:var(--border-subtle)] shrink-0">{t(`sourcesV4.badges.${program.source}`)}</span>
+      )}
       {program.source === 'extension' && program.enabled === false && (
         <span className="text-[11px] font-mono uppercase tracking-wider px-1 py-px rounded bg-[color:var(--surface-hover)] text-[color:var(--text-muted)] border border-[color:var(--border-subtle)] shrink-0">
           {t('applications.badges.disabled')}
@@ -462,7 +473,28 @@ function ProgramRow({ program, iconSrc, checked, running, isNew, monitored = fal
       ) : (
       <div data-action-backing className={ACTION_BACKING}>
       <RevealButton program={program} />
-      {program.source === 'store' && program.nonRemovable ? (
+      {program.source === 'feature' && program.protected ? (
+        // Turning it off would break every .NET program or the antivirus, so
+        // there is no button -- the backend refuses it too.
+        <span className="text-[11px] font-mono text-[color:var(--text-muted)] px-2">
+          {t('sourcesV4.actions.required')}
+          {/* The reason, for screen readers: an aria-label on a plain span is
+              not reliably read out. */}
+          <span className="sr-only">{' — '}{t('sourcesV4.actions.requiredAria', program.name)}</span>
+        </span>
+      ) : program.source === 'feature' || program.source === 'update' || program.source === 'chocolatey' ? (
+        <button onClick={() => onRemoveSourceItem?.(program)} className="btn-remove">
+          <BinIcon />
+          {program.source === 'feature' ? t('sourcesV4.actions.turnOff') : t('applications.uninstall')}
+        </button>
+      ) : program.source === 'unregistered' ? (
+        // Forced uninstall, prefilled: it finds the rest of the program and
+        // has every item reviewed before anything is deleted.
+        <button onClick={() => onRemoveUnregistered?.(program)} className="btn-remove">
+          <BinIcon />
+          {t('sourcesV4.actions.remove')}
+        </button>
+      ) : program.source === 'store' && program.nonRemovable ? (
         /* Windows marks this package as part of the system and will not
          * let it go -- on the dev machine that is the Security interface
          * and the app installer. Prune could offer a button and let
@@ -504,7 +536,7 @@ function ProgramRow({ program, iconSrc, checked, running, isNew, monitored = fal
   );
 }
 
-export default function ProgramList({ programs: initialPrograms, extensions = [], icons = {}, running = {}, onUninstall, onBatchUninstall, onRemoveStoreApp = () => {}, onViewChange }) {
+export default function ProgramList({ programs: initialPrograms, extensions = [], unregistered = [], windowsItems = [], icons = {}, running = {}, onUninstall, onBatchUninstall, onRemoveStoreApp = () => {}, onRemoveSourceItem, onRemoveUnregistered, onViewChange }) {
   const { t } = useLanguage();
   const toasts = useToasts();
   // Programs the install monitor has a record of, and how to forget one.
@@ -558,17 +590,26 @@ export default function ProgramList({ programs: initialPrograms, extensions = []
 
   const brokenCount = useMemo(() => programs.filter(p => p.health?.orphaned).length, [programs]);
   const storeCount = useMemo(() => programs.filter(p => p.source === 'store').length, [programs]);
+  const chocolateyCount = useMemo(() => programs.filter(p => p.source === 'chocolatey' || p.chocolateyId).length, [programs]);
   // Offered only when something carries the flag, like Broken and Store: the
   // backend has no launch history to derive it from, so on a list where
   // nothing is flagged this chip could only ever open an empty table.
   const unusedCount = useMemo(() => programs.filter(p => p.unused).length, [programs]);
+
+  // Extensions, unregistered folders and Windows' own features and updates
+  // are lists of their own: none is an installed program in the sense the
+  // count and the total mean, and mixing them in would dilute both.
+  const listFor = (id) => (id === 'extensions' ? extensions
+    : id === 'unregistered' ? unregistered
+      : id === 'windows' ? windowsItems
+        : programs);
 
   const filtered = useMemo(() => {
     // Extensions are their own list, not part of the program list. Revo
     // gives them their own module for the same reason: an extension is
     // not an installed program, and mixing 24 of them in would dilute
     // both the count and the total.
-    const source = filter === 'extensions' ? extensions : programs;
+    const source = listFor(filter);
     const q = query.trim().toLowerCase();
     let list = q
       ? source.filter(p => p.name.toLowerCase().includes(q) || (p.publisher || '').toLowerCase().includes(q))
@@ -576,8 +617,9 @@ export default function ProgramList({ programs: initialPrograms, extensions = []
     if (filter === 'unused') list = list.filter(p => p.unused);
     if (filter === 'broken') list = list.filter(p => p.health?.orphaned);
     if (filter === 'store') list = list.filter(p => p.source === 'store');
+    if (filter === 'chocolatey') list = list.filter(p => p.source === 'chocolatey' || p.chocolateyId);
     return sortPrograms(list, sort.column, sort.direction);
-  }, [programs, extensions, query, sort, filter]);
+  }, [programs, extensions, unregistered, windowsItems, query, sort, filter]);
 
   const totalBytes = useMemo(
     () => filtered.reduce((sum, p) => sum + (p.sizeBytes || 0), 0),
@@ -588,10 +630,10 @@ export default function ProgramList({ programs: initialPrograms, extensions = []
   // filter live here, the heading does not, and a count that ignores them
   // stays at "210 installed applications" over a single visible row.
   const isNarrowed = query.trim() !== '' || filter !== 'all';
-  const shownTotal = (filter === 'extensions' ? extensions : programs).length;
+  const shownTotal = listFor(filter).length;
   useEffect(() => {
-    onViewChange?.({ filtered: isNarrowed, shown: filtered.length, total: shownTotal, bytes: totalBytes });
-  }, [onViewChange, isNarrowed, filtered.length, shownTotal, totalBytes]);
+    onViewChange?.({ filtered: isNarrowed, shown: filtered.length, total: shownTotal, bytes: filter === 'windows' ? null : totalBytes });
+  }, [onViewChange, isNarrowed, filtered.length, shownTotal, totalBytes, filter]);
 
   // Arrow keys move between rows only while the row itself has focus. From a
   // button or checkbox inside it they are left alone, so a control that uses
@@ -654,6 +696,11 @@ export default function ProgramList({ programs: initialPrograms, extensions = []
 
   const summary = batchSummary(selectedPrograms);
 
+  const menuItems = menu ? rowMenuItems(menu.program, {
+    t, toasts, onUninstall, onRemoveStoreApp, onRemoveSourceItem, onRemoveUnregistered,
+    trace: traceForProgram(menu.program, traces), onDeleteTrace: deleteTrace
+  }) : [];
+
   // The shape of the table that is coming, not a line of text where it
   // will be. The list takes about a second to arrive and the header,
   // filters and column set are all known before it does -- showing them
@@ -672,8 +719,11 @@ export default function ProgramList({ programs: initialPrograms, extensions = []
 
   return (
     <div className="flex flex-col min-h-0">
-      <div className="flex items-center gap-3 mb-4 shrink-0">
-        <div className="flex-1 max-w-md relative">
+      {/* Wraps rather than squeezing: with every source present the filters
+          alone are ~660px, and at the 900px minimum window the search box
+          was left 58px wide. The filters drop to their own line instead. */}
+      <div className="flex flex-wrap items-center gap-3 mb-4 shrink-0">
+        <div className="flex-1 min-w-[240px] max-w-md relative">
           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[color:var(--text-muted)]">
             <circle cx="11" cy="11" r="8"></circle>
             <path d="m21 21-4.35-4.35"></path>
@@ -703,7 +753,10 @@ export default function ProgramList({ programs: initialPrograms, extensions = []
             // when it does appear, it means something.
             ...(unusedCount > 0 ? [{ id: 'unused', label: t('applications.filters.unused') }] : []),
             ...(storeCount > 0 ? [{ id: 'store', label: t('applications.filters.storeCount', storeCount) }] : []),
+            ...(chocolateyCount > 0 ? [{ id: 'chocolatey', label: t('applications.filters.chocolateyCount', chocolateyCount) }] : []),
             ...(extensions.length > 0 ? [{ id: 'extensions', label: t('applications.filters.extensionsCount', extensions.length) }] : []),
+            ...(unregistered.length > 0 ? [{ id: 'unregistered', label: t('applications.filters.unregisteredCount', unregistered.length) }] : []),
+            ...(windowsItems.length > 0 ? [{ id: 'windows', label: t('applications.filters.windowsCount', windowsItems.length) }] : []),
             ...(brokenCount > 0 ? [{ id: 'broken', label: t('applications.filters.brokenCount', brokenCount) }] : [])
           ].map(f => (
             <button
@@ -723,6 +776,14 @@ export default function ProgramList({ programs: initialPrograms, extensions = []
           what it is based on before removing anything by it. */}
       {filter === 'unused' && (
         <p className="text-[12px] text-[color:var(--text-secondary)] -mt-2 mb-3 shrink-0">{t('applications.unusedDefinition')}</p>
+      )}
+      {/* Both lists need saying what they are before anything in them is
+          removed: one holds things that may be there on purpose, the other
+          is Windows itself. */}
+      {(filter === 'unregistered' || filter === 'windows') && (
+        <p className="text-[12px] text-[color:var(--text-secondary)] -mt-2 mb-3 shrink-0 max-w-[72ch]">
+          {t(filter === 'unregistered' ? 'sourcesV4.unregisteredDefinition' : 'sourcesV4.windowsDefinition')}
+        </p>
       )}
 
       <div className="glass-panel overflow-hidden flex flex-col min-h-0">
@@ -802,6 +863,8 @@ export default function ProgramList({ programs: initialPrograms, extensions = []
               onToggle={() => toggleRow(program)}
               onUninstall={onUninstall}
               onRemoveStoreApp={onRemoveStoreApp}
+              onRemoveSourceItem={onRemoveSourceItem}
+              onRemoveUnregistered={onRemoveUnregistered}
               onContextMenu={openMenu}
             />
           ))}
@@ -846,7 +909,7 @@ export default function ProgramList({ programs: initialPrograms, extensions = []
                       : t('applications.empty.withFilter', t(`applications.filters.${filter}`))}
                 </p>
                 <p className="text-[12.5px] text-[color:var(--text-muted)] mt-1.5">
-                  {t('applications.empty.hiddenCount', (filter === 'extensions' ? extensions : programs).length)}
+                  {t('applications.empty.hiddenCount', listFor(filter).length)}
                 </p>
                 <button
                   className="btn-ghost mt-4 px-3.5 py-2 rounded-lg text-[12.5px] font-medium"
@@ -898,7 +961,7 @@ export default function ProgramList({ programs: initialPrograms, extensions = []
                 // Against the list actually being filtered. Extensions are
                 // their own list, so "24 of 210" would be comparing them
                 // against a total they are not part of.
-                : t('applications.footer.showingOf', filtered.length, (filter === 'extensions' ? extensions : programs).length)}
+                : t('applications.footer.showingOf', filtered.length, listFor(filter).length)}
               {/* The count the old New Programs heading used to carry, and
                   the only place the column's window is spelled out. A
                   badge saying New is not self-explanatory about how new. */}
@@ -908,20 +971,20 @@ export default function ProgramList({ programs: initialPrograms, extensions = []
                 </span>
               )}
             </span>
-            <span>{formatBytes(totalBytes)} {t('applications.footer.total')}</span>
+            {/* Windows features and updates have no size to add up. */}
+            {filter !== 'windows' && <span>{formatBytes(totalBytes)} {t('applications.footer.total')}</span>}
           </div>
         )}
       </div>
 
       <ContextMenu
-        open={Boolean(menu)}
+        // A row with nothing to offer (a feature Windows depends on) opens no
+        // empty menu.
+        open={Boolean(menu) && menuItems.length > 0}
         x={menu?.x ?? 0}
         y={menu?.y ?? 0}
         onClose={() => setMenu(null)}
-        items={menu ? rowMenuItems(menu.program, {
-          t, toasts, onUninstall, onRemoveStoreApp,
-          trace: traceForProgram(menu.program, traces), onDeleteTrace: deleteTrace
-        }) : []}
+        items={menuItems}
       />
     </div>
   );
@@ -934,7 +997,7 @@ export default function ProgramList({ programs: initialPrograms, extensions = []
  * dialog and removes nothing by itself), Open folder is the Folder button,
  * and Copy is a read. An item that has nothing to act on is left out rather
  * than shown dead. */
-export function rowMenuItems(program, { t, toasts, onUninstall, onRemoveStoreApp, trace = null, onDeleteTrace }) {
+export function rowMenuItems(program, { t, toasts, onUninstall, onRemoveStoreApp, onRemoveSourceItem, onRemoveUnregistered, trace = null, onDeleteTrace }) {
   const items = [];
 
   if (program.installLocation) {
@@ -965,7 +1028,15 @@ export function rowMenuItems(program, { t, toasts, onUninstall, onRemoveStoreApp
   // with focus on the menu itself, and the choice that deletes is the one a
   // stray arrow key should reach last, not first.
   const removal = [];
-  if (program.source === 'store' && program.nonRemovable) {
+  if (program.source === 'feature' && program.protected) {
+    // Nothing to offer: see the row's "Required".
+  } else if (program.source === 'feature') {
+    removal.push({ label: t('sourcesV4.actions.turnOff'), danger: true, onSelect: () => onRemoveSourceItem?.(program) });
+  } else if (program.source === 'update' || program.source === 'chocolatey') {
+    removal.push({ label: t('applications.uninstall'), danger: true, onSelect: () => onRemoveSourceItem?.(program) });
+  } else if (program.source === 'unregistered') {
+    removal.push({ label: t('sourcesV4.actions.remove'), danger: true, onSelect: () => onRemoveUnregistered?.(program) });
+  } else if (program.source === 'store' && program.nonRemovable) {
     removal.push({
       label: t('applications.inWindows.button'),
       onSelect: () => { openInstalledAppsSettings().catch(() => {}); }
@@ -978,6 +1049,11 @@ export function rowMenuItems(program, { t, toasts, onUninstall, onRemoveStoreApp
       danger: true,
       onSelect: () => onUninstall?.(program)
     });
+  }
+  // A program a package installed keeps its own uninstaller as the main
+  // way; Chocolatey's is offered beside it, which keeps the package record true.
+  if (program.chocolateyId && program.source !== 'chocolatey') {
+    removal.push({ label: t('sourcesV4.actions.chocoUninstall'), danger: true, onSelect: () => onRemoveSourceItem?.(program) });
   }
   // A divider above a lone item would separate it from nothing.
   if (items.length > 0) removal.forEach((item) => { item.separated = true; });
