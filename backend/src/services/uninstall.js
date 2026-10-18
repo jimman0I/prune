@@ -1,5 +1,6 @@
 import { spawn } from 'node:child_process';
-import { resolveSilentCommand } from './silentUninstall.js';
+import { resolveSilentCommand, detectInstallerKind } from './silentUninstall.js';
+import { startWizardAutomation } from './wizardAutomation.js';
 import { runPowerShellText } from './powershell.js';
 
 /** Finds the uninstaller's own window, wherever it ends up, and forces it
@@ -116,13 +117,29 @@ while ((Get-Date) -lt $deadline) {
  * Takes the program rather than a bare string because making an uninstall
  * silent needs two registry values, not one: UninstallString and the
  * QuietUninstallString the vendor may have published beside it. See
- * services/silentUninstall.js for which wins and why. */
-export async function runUninstaller({ uninstallString, quietUninstallString } = {}, onEvent) {
+ * services/silentUninstall.js for which wins and why.
+ *
+ * `running` is the route's answer to "is this Chromium browser open", and
+ * goes to the resolver with the rest: it is what allows a closed browser's
+ * silent uninstall. It used to stop here -- the route asked, the tests of
+ * the route passed, and the resolver never heard the answer.
+ *
+ * `answerWizards`: when the command could not be made silent -- no vendor
+ * quiet string, an installer Prune does not recognise -- its wizard is
+ * answered by services/wizardAutomation.js, which hands it back when a
+ * question is the person's. Reported as 'wizard' events. Never for a
+ * recognised kind: a Chromium browser's dialog is left alone on purpose
+ * (see silentUninstall.js), and the others are already silent. */
+export async function runUninstaller({ uninstallString, quietUninstallString, running } = {}, onEvent, { answerWizards = false, startAutomation = startWizardAutomation } = {}) {
   if (!uninstallString) {
     throw new Error('This program has no registered uninstall command.');
   }
   return new Promise((resolve, reject) => {
-    const command = resolveSilentCommand({ uninstallString, quietUninstallString });
+    const command = resolveSilentCommand({ uninstallString, quietUninstallString, running });
+    const wizardExpected = answerWizards
+      && !(typeof quietUninstallString === 'string' && quietUninstallString.trim())
+      && command === uninstallString
+      && detectInstallerKind(uninstallString) === 'unknown';
     onEvent('running', { command });
 
     // cmd.exe /c: an UninstallString is a raw shell command line (e.g.
@@ -147,7 +164,15 @@ export async function runUninstaller({ uninstallString, quietUninstallString } =
     // can take a moment to appear), and the uninstall itself must not wait
     // on it -- a silent uninstaller that never shows a window at all would
     // otherwise sit here for the full timeout before 'running' even fires.
-    if (child.pid) bringUninstallerToForeground(child.pid);
+    if (child.pid && wizardExpected) {
+      // Not stopped when cmd.exe exits: a self-relaunching uninstaller keeps
+      // going as an orphan, still in the tree the observer follows, and the
+      // observer ends by itself when that tree is gone. It also brings the
+      // window forward when it hands a question back.
+      startAutomation(child.pid, (event) => onEvent('wizard', event));
+    } else if (child.pid) {
+      bringUninstallerToForeground(child.pid);
+    }
     let stderr = '';
     child.stderr?.on('data', (chunk) => { stderr += chunk.toString(); });
     child.on('error', (err) => reject(new Error(`Failed to launch uninstaller: ${err.message}`)));

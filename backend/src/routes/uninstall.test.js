@@ -65,7 +65,7 @@ describe('what POST /uninstall agrees to run', () => {
      * command run is the registry's, never the request's. */
     expect(runUninstaller).toHaveBeenCalledWith(
       expect.objectContaining({ uninstallString: '"C:\\Program Files\\Thing\\uninst.exe" /S' }),
-      expect.any(Function)
+      expect.any(Function), { answerWizards: false }
     );
     expect(text).not.toContain('calc.exe');
   });

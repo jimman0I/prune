@@ -55,6 +55,18 @@ describe('before the uninstaller runs', () => {
     expect(text.indexOf('event: registryBackup')).toBeLessThan(text.indexOf('event: done'));
   });
 
+  it('asks the runner to answer wizards only when Settings says so, with a literal true', async () => {
+    runPreUninstall.mockResolvedValue({ proceed: true });
+    settings = { answerUninstallWizards: true };
+    await start();
+    expect(runUninstaller.mock.calls[0][2]).toEqual({ answerWizards: true });
+
+    runUninstaller.mockClear();
+    settings = { answerUninstallWizards: 'yes' };
+    await start();
+    expect(runUninstaller.mock.calls[0][2]).toEqual({ answerWizards: false });
+  });
+
   it('never starts the uninstaller when a step says stop, and ends the stream with the reason', async () => {
     runPreUninstall.mockResolvedValue({ proceed: false, reason: 'The registry backup failed, so the uninstall did not run: disk full' });
     const { res, text } = await start();

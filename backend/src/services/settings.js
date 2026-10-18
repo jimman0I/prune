@@ -192,6 +192,12 @@ const DEFAULT_SETTINGS = {
      registry backup is about 140 MB (measured). See preUninstall.js. */
   restorePointBeforeUninstall: false,
   registryBackupBeforeUninstall: false,
+  /* Answer an uninstaller's own wizard when it has no silent switch (see
+     services/wizardAutomation.js). Off by default: it presses buttons in
+     another program's window, which should be the person's decision -- and
+     it only reaches an uninstaller that runs as administrator when Prune
+     does too. */
+  answerUninstallWizards: false,
   /* Revo's own "force deletion" cousin -- a file quarantine/removal
      couldn't move because something has it open gets scheduled for
      deletion at the next restart (MOVEFILE_DELAY_UNTIL_REBOOT's own
