@@ -537,7 +537,17 @@ export default function UninstallModal({ program, running = false, onClose, onBu
                 <p className="text-[13px] text-[color:var(--text-secondary)] mb-1">
                   {t('uninstallModal.normalIntro', program.name)}
                 </p>
-                <p className="text-[11.5px] text-[color:var(--text-muted)] font-mono mb-6 break-all select-text">{command}</p>
+                <p className={`text-[11.5px] text-[color:var(--text-muted)] font-mono break-all select-text ${program.signature ? 'mb-2' : 'mb-6'}`}>{command}</p>
+                {/* Who signed the program's own files, where the decision to run
+                    its uninstaller is made. Shown only once Windows has
+                    answered; a program it was not asked about says nothing. */}
+                {program.signature && (
+                  <p data-signature={program.signature.status} className={`text-[12px] mb-6 ${program.signature.status === 'broken' ? 'text-[color:var(--danger)]' : 'text-[color:var(--text-secondary)]'}`}>
+                    {program.signature.status === 'valid'
+                      ? t('sigV6.dialog.signedBy', program.signature.signer || program.publisher || '')
+                      : program.signature.status === 'broken' ? t('sigV6.dialog.broken') : t('sigV6.dialog.unsigned')}
+                  </p>
+                )}
                 {error && <p className="text-[12.5px] text-[color:var(--danger)] mb-4 select-text">{t('uninstallModal.uninstallFailed', error)}</p>}
                 {autoRemoveOffered && (
                   <label className="flex items-center gap-2.5 mb-5 cursor-pointer select-none">

@@ -5,7 +5,7 @@ import {
   fetchProgramInstallDates, fetchStoreApps, fetchBrowserExtensions,
   fetchPackageIcons, fetchRunningPrograms, requestStoreRefresh
 } from '../lib/api.js';
-import { fetchChocolatey, fetchUnregisteredPrograms, fetchWindowsFeatures, fetchWindowsUpdates } from '../lib/programSourcesApi.js';
+import { fetchChocolatey, fetchUnregisteredPrograms, fetchWindowsFeatures, fetchWindowsUpdates, fetchProgramSignatures } from '../lib/programSourcesApi.js';
 import { useReturnToWindow } from './useReturnToWindow.js';
 import { mergeMeasuredSizes } from '../lib/mergeSizes.js';
 import { mergeBinaryVersions } from '../lib/mergeVersions.js';
@@ -82,6 +82,8 @@ export function useProgramData({ loadDecorations = true } = {}) {
   const unregisteredQuery = useQuery({ queryKey: keys.unregistered, queryFn: fetchUnregisteredPrograms, ...DEFERRED });
   const featuresQuery = useQuery({ queryKey: keys.windowsFeatures, queryFn: fetchWindowsFeatures, ...DEFERRED });
   const updatesQuery = useQuery({ queryKey: keys.windowsUpdates, queryFn: fetchWindowsUpdates, ...DEFERRED });
+  // Seven seconds cold (Windows hashes every file it checks), so deferred.
+  const signaturesQuery = useQuery({ queryKey: keys.signatures, queryFn: fetchProgramSignatures, ...DEFERRED });
 
   // Two icon sources, one map. They come from genuinely different places
   // -- extracted from binaries, versus files sitting inside a package or
@@ -138,13 +140,13 @@ export function useProgramData({ loadDecorations = true } = {}) {
   useEffect(() => () => clearTimeout(returnTimer.current), []);
 
   const programs = useMemo(() => [
-    ...tagChocolateyManaged(mergeInstallDates(
+    ...withSignatures(tagChocolateyManaged(mergeInstallDates(
       mergeBinaryVersions(
         mergeMeasuredSizes(programsQuery.data ?? [], sizesQuery.data ?? {}),
         versionsQuery.data ?? {}
       ),
       datesQuery.data ?? {}
-    ), chocolateyQuery.data?.managed),
+    ), chocolateyQuery.data?.managed), signaturesQuery.data),
     // Appended rather than merged: a Store app is not a registry entry
     // and none of the three fallbacks above apply to it -- it already
     // carries its own name, version and measured size.
@@ -152,7 +154,7 @@ export function useProgramData({ loadDecorations = true } = {}) {
     // The packages that installed nothing Windows lists: PATH shims,
     // metapackages, portable tools.
     ...(chocolateyQuery.data?.apps ?? [])
-  ], [programsQuery.data, sizesQuery.data, versionsQuery.data, datesQuery.data, storeQuery.data, chocolateyQuery.data]);
+  ], [programsQuery.data, sizesQuery.data, versionsQuery.data, datesQuery.data, storeQuery.data, chocolateyQuery.data, signaturesQuery.data]);
 
   const windowsItems = useMemo(
     () => [...(featuresQuery.data ?? []), ...(updatesQuery.data ?? [])],
@@ -198,4 +200,11 @@ export function useProgramData({ loadDecorations = true } = {}) {
 export function tagChocolateyManaged(programs, managed) {
   if (!managed || Object.keys(managed).length === 0) return programs;
   return programs.map((program) => (managed[program.id] ? { ...program, chocolateyId: managed[program.id] } : program));
+}
+
+/** Puts each program's signature check on it as `signature`. The same array
+ * back when there is nothing to add. */
+export function withSignatures(programs, signatures) {
+  if (!signatures || Object.keys(signatures).length === 0) return programs;
+  return programs.map((program) => (signatures[program.id] ? { ...program, signature: signatures[program.id] } : program));
 }

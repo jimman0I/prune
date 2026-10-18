@@ -333,9 +333,12 @@ function ProgramRow({ program, iconSrc, checked, running, isNew, monitored = fal
       />
     </div>
 
-    <div role="cell" className="flex items-center gap-2.5 min-w-0">
+    <div role="cell" className="flex items-center gap-2.5 min-w-0 overflow-hidden">
       <ProgramIcon program={program} src={iconSrc} />
-      <span className="text-[12.5px] truncate">{program.name}</span>
+      {/* The name keeps at least a few words of room: with two badges
+          (Running, Unsigned) it was squeezed to "M...". The badges clip
+          instead -- the name is what identifies the row. */}
+      <span className="text-[12.5px] truncate min-w-[9ch] shrink">{program.name}</span>
       {program.health?.orphaned && (
         <span className="text-[11px] font-mono uppercase tracking-wider px-1 py-px rounded bg-[color:var(--danger-soft)] text-[color:var(--danger)] border border-[color:var(--danger)]/25 shrink-0">
           {t('applications.badges.broken')}
@@ -384,6 +387,18 @@ function ProgramRow({ program, iconSrc, checked, running, isNew, monitored = fal
       )}
       {(program.source === 'feature' || program.source === 'update') && (
         <span className="text-[11px] font-mono uppercase tracking-wider px-1 py-px rounded bg-[color:var(--surface-hover)] text-[color:var(--text-secondary)] border border-[color:var(--border-subtle)] shrink-0">{t(`sourcesV4.badges.${program.source}`)}</span>
+      )}
+      {/* Unsigned is a fact, not an accusation -- plenty of good free tools
+          are not signed -- so it is neutral. A signature that no longer
+          matches its file is different: the file changed after the vendor
+          signed it, which is what tampering looks like. */}
+      {program.signature?.status === 'unsigned' && (
+        <span className="text-[11px] font-mono uppercase tracking-wider px-1 py-px rounded bg-[color:var(--surface-hover)] text-[color:var(--text-muted)] border border-[color:var(--border-subtle)] shrink-0">{t('sigV6.badges.unsigned')}</span>
+      )}
+      {program.signature?.status === 'broken' && (
+        <span className="text-[11px] font-mono uppercase tracking-wider px-1 py-px rounded bg-[color:var(--danger-soft)] text-[color:var(--danger)] border border-[color:var(--danger)]/25 shrink-0">
+          {t('sigV6.badges.broken')}
+        </span>
       )}
       {program.source === 'extension' && program.enabled === false && (
         <span className="text-[11px] font-mono uppercase tracking-wider px-1 py-px rounded bg-[color:var(--surface-hover)] text-[color:var(--text-muted)] border border-[color:var(--border-subtle)] shrink-0">
@@ -536,6 +551,10 @@ function ProgramRow({ program, iconSrc, checked, running, isNew, monitored = fal
   );
 }
 
+/** No valid signature on the program's own files: none at all, or one that
+ * no longer matches. Programs not checked (yet, or ever) are not counted. */
+const isUnsigned = (program) => program.signature?.status === 'unsigned' || program.signature?.status === 'broken';
+
 export default function ProgramList({ programs: initialPrograms, extensions = [], unregistered = [], windowsItems = [], icons = {}, running = {}, onUninstall, onBatchUninstall, onRemoveStoreApp = () => {}, onRemoveSourceItem, onRemoveUnregistered, onViewChange }) {
   const { t } = useLanguage();
   const toasts = useToasts();
@@ -591,6 +610,7 @@ export default function ProgramList({ programs: initialPrograms, extensions = []
   const brokenCount = useMemo(() => programs.filter(p => p.health?.orphaned).length, [programs]);
   const storeCount = useMemo(() => programs.filter(p => p.source === 'store').length, [programs]);
   const chocolateyCount = useMemo(() => programs.filter(p => p.source === 'chocolatey' || p.chocolateyId).length, [programs]);
+  const unsignedCount = useMemo(() => programs.filter(isUnsigned).length, [programs]);
   // Offered only when something carries the flag, like Broken and Store: the
   // backend has no launch history to derive it from, so on a list where
   // nothing is flagged this chip could only ever open an empty table.
@@ -618,6 +638,7 @@ export default function ProgramList({ programs: initialPrograms, extensions = []
     if (filter === 'broken') list = list.filter(p => p.health?.orphaned);
     if (filter === 'store') list = list.filter(p => p.source === 'store');
     if (filter === 'chocolatey') list = list.filter(p => p.source === 'chocolatey' || p.chocolateyId);
+    if (filter === 'unsigned') list = list.filter(isUnsigned);
     return sortPrograms(list, sort.column, sort.direction);
   }, [programs, extensions, unregistered, windowsItems, query, sort, filter]);
 
@@ -744,31 +765,51 @@ export default function ProgramList({ programs: initialPrograms, extensions = []
             className="w-full bg-[color:var(--bg-panel)] border border-[color:var(--border-subtle)] rounded-xl pl-10 pr-4 py-2 text-[13px] placeholder:text-[color:var(--text-muted)] focus:outline-none focus:border-[color:var(--accent-primary)] focus:ring-4 focus:ring-[color:var(--accent-primary)]/10 transition"
           />
         </div>
-        <div className="flex items-center gap-1 p-1 bg-[color:var(--bg-panel)] border border-[color:var(--border-subtle)] rounded-xl">
-          {[
-            { id: 'all', label: t('applications.filters.all') },
+        {/* Two groups, not one row of nine. Where a program came from (All,
+            Store, Chocolatey...) and what is wrong with it (unused, unsigned,
+            left behind) are different questions, and together they ran past
+            the five-to-seven segments a control like this can carry. Still
+            one filter: choosing in either group replaces the other's choice. */}
+        {[
+          {
+            key: 'sources',
+            label: t('sigV6.groups.sources'),
+            items: [
+              { id: 'all', label: t('applications.filters.all') },
+              ...(storeCount > 0 ? [{ id: 'store', label: t('applications.filters.storeCount', storeCount) }] : []),
+              ...(chocolateyCount > 0 ? [{ id: 'chocolatey', label: t('applications.filters.chocolateyCount', chocolateyCount) }] : []),
+              ...(extensions.length > 0 ? [{ id: 'extensions', label: t('applications.filters.extensionsCount', extensions.length) }] : []),
+              ...(unregistered.length > 0 ? [{ id: 'unregistered', label: t('applications.filters.unregisteredCount', unregistered.length) }] : []),
+              ...(windowsItems.length > 0 ? [{ id: 'windows', label: t('applications.filters.windowsCount', windowsItems.length) }] : [])
+            ]
+          },
+          {
+            key: 'checks',
+            label: t('sigV6.groups.checks'),
             // Only offered when there's something to see. On a healthy
-            // machine this filter would return an empty list every time,
-            // and a permanently-empty view teaches people to ignore it --
-            // when it does appear, it means something.
-            ...(unusedCount > 0 ? [{ id: 'unused', label: t('applications.filters.unused') }] : []),
-            ...(storeCount > 0 ? [{ id: 'store', label: t('applications.filters.storeCount', storeCount) }] : []),
-            ...(chocolateyCount > 0 ? [{ id: 'chocolatey', label: t('applications.filters.chocolateyCount', chocolateyCount) }] : []),
-            ...(extensions.length > 0 ? [{ id: 'extensions', label: t('applications.filters.extensionsCount', extensions.length) }] : []),
-            ...(unregistered.length > 0 ? [{ id: 'unregistered', label: t('applications.filters.unregisteredCount', unregistered.length) }] : []),
-            ...(windowsItems.length > 0 ? [{ id: 'windows', label: t('applications.filters.windowsCount', windowsItems.length) }] : []),
-            ...(brokenCount > 0 ? [{ id: 'broken', label: t('applications.filters.brokenCount', brokenCount) }] : [])
-          ].map(f => (
-            <button
-              key={f.id}
-              aria-pressed={filter === f.id}
-              onClick={() => setFilter(f.id)}
-              className={`px-3 py-1.5 rounded-lg text-[12.5px] font-medium transition ${filter === f.id ? 'pill-selected bg-[color:var(--surface-hover)] text-[color:var(--text-primary)]' : 'text-[color:var(--text-muted)] hover:text-[color:var(--text-primary)]'}`}
-            >
-              {f.label}
-            </button>
-          ))}
-        </div>
+            // machine these would return an empty list every time, and a
+            // permanently-empty view teaches people to ignore it -- when one
+            // does appear, it means something.
+            items: [
+              ...(unusedCount > 0 ? [{ id: 'unused', label: t('applications.filters.unused') }] : []),
+              ...(unsignedCount > 0 ? [{ id: 'unsigned', label: t('applications.filters.unsignedCount', unsignedCount) }] : []),
+              ...(brokenCount > 0 ? [{ id: 'broken', label: t('applications.filters.brokenCount', brokenCount) }] : [])
+            ]
+          }
+        ].filter((group) => group.items.length > 0).map((group) => (
+          <div key={group.key} role="group" aria-label={group.label} className="flex items-center gap-1 p-1 bg-[color:var(--bg-panel)] border border-[color:var(--border-subtle)] rounded-xl">
+            {group.items.map(f => (
+              <button
+                key={f.id}
+                aria-pressed={filter === f.id}
+                onClick={() => setFilter(f.id)}
+                className={`px-3 py-1.5 rounded-lg text-[12.5px] font-medium transition ${filter === f.id ? 'pill-selected bg-[color:var(--surface-hover)] text-[color:var(--text-primary)]' : 'text-[color:var(--text-muted)] hover:text-[color:var(--text-primary)]'}`}
+              >
+                {f.label}
+              </button>
+            ))}
+          </div>
+        ))}
       </div>
 
       {/* Said while the filter is on rather than left for a tooltip: "unused"
@@ -780,6 +821,9 @@ export default function ProgramList({ programs: initialPrograms, extensions = []
       {/* Both lists need saying what they are before anything in them is
           removed: one holds things that may be there on purpose, the other
           is Windows itself. */}
+      {filter === 'unsigned' && (
+        <p className="text-[12px] text-[color:var(--text-secondary)] -mt-2 mb-3 shrink-0 max-w-[72ch]">{t('sigV6.definition')}</p>
+      )}
       {(filter === 'unregistered' || filter === 'windows') && (
         <p className="text-[12px] text-[color:var(--text-secondary)] -mt-2 mb-3 shrink-0 max-w-[72ch]">
           {t(filter === 'unregistered' ? 'sourcesV4.unregisteredDefinition' : 'sourcesV4.windowsDefinition')}

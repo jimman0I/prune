@@ -4,6 +4,7 @@ import { getProgramIcons } from '../services/programIcons.js';
 import { getProgramSizes } from '../services/programSizes.js';
 import { getProgramVersions } from '../services/programVersions.js';
 import { getProgramInstallDates } from '../services/installDates.js';
+import { getProgramSignatures } from '../services/programSignatures.js';
 import { getStoreApps, getStorePackage, forgetStoreApp, refreshStoreAppsNow } from '../services/storeApps.js';
 import { removeStoreApp } from '../services/removeStoreApp.js';
 import { getBrowserExtensions } from '../services/browserExtensions.js';
@@ -71,6 +72,20 @@ router.get('/sizes', async (req, res) => {
 router.get('/versions', async (req, res) => {
   try {
     res.json({ versions: await getProgramVersions() });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+/** Whether each program's own files are digitally signed, and by whom, as
+ * { programId: { status: 'valid' | 'unsigned' | 'broken', signer? } }.
+ *
+ * Windows' own check (WinVerifyTrust), which hashes the file as well as
+ * checking the chain. About seven seconds cold on the dev machine, so its
+ * own endpoint like the versions; remembered per file until it changes. */
+router.get('/signatures', async (req, res) => {
+  try {
+    res.json({ signatures: await getProgramSignatures() });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
