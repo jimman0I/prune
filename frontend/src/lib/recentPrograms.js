@@ -51,6 +51,11 @@ export function parseInstallDate(value) {
   if (typeof value !== 'string') return null;
   const match = value.match(/^(\d{4})-(\d{2})-(\d{2})$/);
   if (!match) return null;
-  const time = new Date(Number(match[1]), Number(match[2]) - 1, Number(match[3])).getTime();
+  const date = new Date(Number(match[1]), Number(match[2]) - 1, Number(match[3]));
+  // Date rolls an impossible day forward instead of failing: month 59 of
+  // 2026 is in 2030, which then counts as recent. Squirrel installers write
+  // minutes where the month belongs, so such dates do arrive.
+  if (date.getMonth() !== Number(match[2]) - 1 || date.getDate() !== Number(match[3])) return null;
+  const time = date.getTime();
   return Number.isFinite(time) ? time : null;
 }

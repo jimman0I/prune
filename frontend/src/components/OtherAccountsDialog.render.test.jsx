@@ -47,16 +47,12 @@ describe('OtherAccountsDialog', () => {
     expect(within(list).getByText(/under Other accounts/)).toBeTruthy();
   });
 
-  it('warns when a registry file was not released, and says nothing changed when UAC is declined', async () => {
+  it('says nothing changed when UAC is declined', async () => {
     const user = userEvent.setup();
     scanOtherAccounts.mockResolvedValueOnce({ ok: false, cancelled: true });
     renderScreen(<OtherAccountsDialog profiles={profiles} onClose={() => {}} />);
     await user.click(await screen.findByRole('button', { name: 'Read their programs' }));
     expect(await screen.findByText(/administrator permission wasn't given/)).toBeTruthy();
-
-    scanOtherAccounts.mockResolvedValueOnce({ ok: true, scan: { accounts: [], programs: [], stuck: ['PruneScan1_99'] } });
-    await user.click(screen.getByRole('button', { name: 'Read their programs' }));
-    expect((await screen.findByRole('alert')).textContent).toMatch(/Restart this PC before that person signs in/);
   });
 });
 

@@ -1,8 +1,9 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { mkdtempSync, writeFileSync, rmSync } from 'node:fs';
+import { mkdtempSync, writeFileSync, rmSync, existsSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { otherProfiles, buildScanScript, accountRows, scanOtherAccounts, clearOtherAccountsScan } from './otherAccounts.js';
+import { buildHive, uninstallTree } from '../testSupport/regfBuilder.js';
 
 const sid = (n) => `S-1-5-21-1-2-3-${n}`;
 
@@ -47,17 +48,18 @@ describe('accountRows', () => {
 });
 
 describe('buildScanScript', () => {
-  it('takes only real user SIDs, quotes paths, and always unloads what it loaded', () => {
+  it('takes only real user SIDs, quotes paths, and only COPIES a signed-out account\'s file', () => {
     const script = buildScanScript([
       { sid: sid(1005), path: "C:\\Users\\o'brien" },
       { sid: 'S-1-5-21-1; Remove-Item C:\\', path: 'C:\\x' }
-    ]);
+    ], 'C:\\Temp\\prune-accounts-1');
     expect(script).toContain(`'${sid(1005)}'`);
     expect(script).toContain("'C:\\Users\\o''brien'");
+    expect(script).toContain("$copyDir = 'C:\\Temp\\prune-accounts-1'");
     expect(script).not.toContain('Remove-Item');
-    // The unload sits in a finally, after a garbage collect, with retries.
-    expect(script).toMatch(/finally \{\s*\[GC\]::Collect\(\)[\s\S]*reg\.exe unload/);
-    expect(script).toContain('$stuck += $mount');
+    // Nothing is ever mounted: no reg load, no RegLoadKey, no app hive.
+    expect(script).not.toMatch(/reg(\.exe)? load|RegLoad/i);
+    expect(script).toContain('[IO.File]::Copy($hive, $copy, $true)');
   });
 
   it('parses as PowerShell (nothing is run)', async () => {
@@ -66,7 +68,7 @@ describe('buildScanScript', () => {
     const root = mkdtempSync(join(tmpdir(), 'prune-accounts-'));
     try {
       const file = join(root, 'scan.ps1');
-      writeFileSync(file, buildScanScript([{ sid: sid(1005), path: 'C:\\Users\\nikos' }]), 'utf8');
+      writeFileSync(file, buildScanScript([{ sid: sid(1005), path: 'C:\\Users\\nikos' }], root), 'utf8');
       const { stdout } = await promisify(execFile)('powershell', ['-NoProfile', '-NonInteractive', '-Command',
         `$e = $null; [System.Management.Automation.Language.Parser]::ParseFile('${file}', [ref]$null, [ref]$e) | Out-Null; 'errors=' + @($e).Count`], { timeout: 30000 });
       expect(stdout.trim()).toBe('errors=0');
@@ -80,21 +82,36 @@ describe('scanOtherAccounts', () => {
   beforeEach(() => clearOtherAccountsScan());
   const profiles = [{ sid: sid(1005), name: 'nikos', path: 'C:\\Users\\nikos', loaded: false }];
 
-  it('runs one elevated scan and keeps what it found', async () => {
-    const runElevated = vi.fn(async () => ({ ok: true, data: { accounts: [{ sid: sid(1005), programs: [{ keyName: 'x', DisplayName: 'Tool' }] }], stuck: [] } }));
+  it('reads the copied file itself, and deletes the copies afterwards', async () => {
+    let copyDir;
+    const runElevated = vi.fn(async (script) => {
+      copyDir = /\$copyDir = '([^']+)'/.exec(script)[1];
+      const copy = join(copyDir, 'account1.dat');
+      writeFileSync(copy, buildHive(uninstallTree({ Discord: { $values: { DisplayName: 'Discord', EstimatedSize: 100 } } })));
+      return { ok: true, data: { accounts: [{ sid: sid(1005), copy }] } };
+    });
     const result = await scanOtherAccounts({ runElevated, profiles });
     expect(runElevated).toHaveBeenCalledTimes(1);
     expect(result.scan.accounts).toEqual([{ sid: sid(1005), name: 'nikos', count: 1 }]);
-    expect(result.scan.programs[0]).toMatchObject({ name: 'Tool', owner: 'nikos' });
+    expect(result.scan.programs[0]).toMatchObject({ name: 'Discord', owner: 'nikos', sizeBytes: 100 * 1024 });
+    expect(existsSync(copyDir)).toBe(false);
   });
 
-  it('passes a cancelled prompt through and reports an account it could not read', async () => {
+  it('takes a signed-in account\'s rows as read, and reports a copy it could not read', async () => {
+    const runElevated = async (script) => {
+      const copyDir = /\$copyDir = '([^']+)'/.exec(script)[1];
+      const bad = join(copyDir, 'account2.dat');
+      writeFileSync(bad, 'not a hive');
+      return { ok: true, data: { accounts: [{ sid: sid(1005), programs: [{ keyName: 'x', DisplayName: 'Tool' }] }, { sid: sid(1006), copy: bad }] } };
+    };
+    const two = [...profiles, { sid: sid(1006), name: 'ana', path: 'C:\\Users\\ana', loaded: false }];
+    const result = await scanOtherAccounts({ runElevated, profiles: two });
+    expect(result.scan.accounts[0]).toEqual({ sid: sid(1005), name: 'nikos', count: 1 });
+    expect(result.scan.accounts[1].error).toMatch(/Not a registry hive/);
+  });
+
+  it('passes a cancelled prompt through, still cleaning up, and does not elevate with no other account', async () => {
     expect(await scanOtherAccounts({ runElevated: async () => ({ ok: false, cancelled: true }), profiles })).toEqual({ ok: false, cancelled: true });
-    const result = await scanOtherAccounts({ runElevated: async () => ({ ok: true, data: { accounts: [{ sid: sid(1005), programs: [], error: 'Windows would not open this account\'s registry file.' }], stuck: [] } }), profiles });
-    expect(result.scan.accounts[0].error).toMatch(/would not open/);
-  });
-
-  it('does not elevate when there is no other account', async () => {
     const runElevated = vi.fn();
     expect((await scanOtherAccounts({ runElevated, profiles: [] })).scan.programs).toEqual([]);
     expect(runElevated).not.toHaveBeenCalled();

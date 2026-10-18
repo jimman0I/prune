@@ -1,5 +1,10 @@
 import { runPowerShellJson } from './powershell.js';
+import { mkdtempSync, readFileSync, rmSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
 import { runElevatedPowerShellJson } from '../lib/elevated.js';
+import { readUninstallEntries } from '../lib/regfReader.js';
+import { parseRegistryDate } from './programs.js';
 
 /** Programs installed for the other people who use this PC.
  *
@@ -15,12 +20,17 @@ import { runElevatedPowerShellJson } from '../lib/elevated.js';
  * elevated script, run when the person asks for it, never in the
  * background.
  *
- * A hive this loads is ALWAYS unloaded again, because a hive left mounted
- * stops that user's profile from loading at their next sign-in. The script
- * reads through .NET registry handles it disposes itself, not the
- * PowerShell registry drive (which holds handles open and makes the
- * unload fail), collects garbage, retries the unload, and reports any hive
- * it could not release.
+ * A signed-out account's file is never opened in place. It is COPIED, with
+ * its .LOG1/.LOG2 journals, and the copy is opened with RegLoadAppKey: a
+ * hive loaded into this one process only, never under HKEY_USERS, and
+ * unloaded by Windows when its handle closes or the process ends. The
+ * person's own file is only ever read, and nothing can be left mounted to
+ * stop their profile loading at the next sign-in.
+ *
+ * The first version used `reg load` into HKEY_USERS, with a careful
+ * unload. On the dev machine it never got that far: reg.exe refused all
+ * three accounts with "The filename or extension is too long", found on
+ * the first real elevated run. The copy needs none of what reg load does.
  *
  * Listing only, plus Forced uninstall. Running another account's own
  * uninstaller from this account would act on THIS account's registry and
@@ -57,9 +67,13 @@ export async function listOtherProfiles({ run = runPowerShellJson } = {}) {
 const psLiteral = (value) => `'${String(value).replace(/'/g, "''")}'`;
 const SID = /^S-1-5-21-\d+-\d+-\d+-\d+$/;
 
-/** The elevated scan, for the given profiles. Its answer:
- *   { accounts: [{ sid, programs: [...], error? }], stuck: [mount names] } */
-export function buildScanScript(profiles) {
+/** The elevated half of the scan, for the given profiles. A signed-in
+ * account's hive is open in Windows already and is read where it is; a
+ * signed-out account's NTUSER.DAT is only COPIED, into `copyDir` (a folder
+ * Prune made, so this account can read and delete what lands there), and
+ * read by lib/regfReader.js afterwards. Its answer:
+ *   { accounts: [{ sid, programs?: [...], copy?: path, error? }] } */
+export function buildScanScript(profiles, copyDir) {
   const items = profiles
     .filter((p) => SID.test(p.sid))
     .map((p) => `[PSCustomObject]@{ sid = ${psLiteral(p.sid)}; path = ${psLiteral(p.path)} }`)
@@ -69,12 +83,12 @@ $ErrorActionPreference = 'Stop'
 $profiles = @(
   ${items}
 )
+$copyDir = ${psLiteral(copyDir)}
 $sub = 'Software\\Microsoft\\Windows\\CurrentVersion\\Uninstall'
 $fields = @('DisplayName','Publisher','DisplayVersion','UninstallString','QuietUninstallString','InstallLocation','DisplayIcon','EstimatedSize','InstallDate','SystemComponent','ParentKeyName','ReleaseType')
 
-function Read-Uninstall([string]$hiveName) {
+function Read-Uninstall($root) {
   $found = @()
-  $root = [Microsoft.Win32.Registry]::Users.OpenSubKey($hiveName + '\\' + $sub, $false)
   if ($null -eq $root) { return ,$found }
   try {
     foreach ($name in $root.GetSubKeyNames()) {
@@ -91,38 +105,26 @@ function Read-Uninstall([string]$hiveName) {
 }
 
 $accounts = @()
-$stuck = @()
 $n = 0
 foreach ($p in $profiles) {
   $n++
-  $result = [ordered]@{ sid = $p.sid; programs = @() }
+  $result = [ordered]@{ sid = $p.sid }
   try {
     if (Test-Path -LiteralPath ('Registry::HKEY_USERS\\' + $p.sid)) {
-      $result.programs = Read-Uninstall $p.sid
+      $result.programs = Read-Uninstall ([Microsoft.Win32.Registry]::Users.OpenSubKey($p.sid + '\\' + $sub, $false))
     } else {
       $hive = Join-Path $p.path 'NTUSER.DAT'
       if (-not (Test-Path -LiteralPath $hive)) { throw 'This account has no registry file.' }
-      $mount = 'PruneScan' + $n + '_' + $PID
-      & reg.exe load ('HKU\\' + $mount) $hive 2>&1 | Out-Null
-      if ($LASTEXITCODE -ne 0) { throw 'Windows would not open this account''s registry file.' }
-      try {
-        $result.programs = Read-Uninstall $mount
-      } finally {
-        [GC]::Collect(); [GC]::WaitForPendingFinalizers()
-        $released = $false
-        for ($try = 0; $try -lt 5 -and -not $released; $try++) {
-          & reg.exe unload ('HKU\\' + $mount) 2>&1 | Out-Null
-          if ($LASTEXITCODE -eq 0) { $released = $true } else { Start-Sleep -Milliseconds 400; [GC]::Collect() }
-        }
-        if (-not $released) { $stuck += $mount }
-      }
+      $copy = Join-Path $copyDir ('account' + $n + '.dat')
+      [IO.File]::Copy($hive, $copy, $true)
+      $result.copy = $copy
     }
   } catch {
     $result.error = $_.Exception.Message
   }
   $accounts += [PSCustomObject]$result
 }
-ConvertTo-Json -Compress -Depth 5 -InputObject ([PSCustomObject]@{ accounts = $accounts; stuck = $stuck })
+ConvertTo-Json -Compress -Depth 5 -InputObject ([PSCustomObject]@{ accounts = $accounts })
 `;
 }
 
@@ -141,7 +143,7 @@ export function accountRows(account, profile) {
       version: e.DisplayVersion || '',
       installLocation: e.InstallLocation || null,
       sizeBytes: Number.isFinite(kb) && kb > 0 ? kb * 1024 : null,
-      installDate: /^\d{8}$/.test(e.InstallDate || '') ? `${e.InstallDate.slice(0, 4)}-${e.InstallDate.slice(4, 6)}-${e.InstallDate.slice(6, 8)}` : null,
+      installDate: parseRegistryDate(e.InstallDate),
       owner: profile.name,
       ownerSid: profile.sid,
       source: 'otherUser'
@@ -159,23 +161,39 @@ export async function getOtherAccounts() {
 
 /** Scans every other account, elevated. { ok: true, scan } |
  * { ok: false, cancelled } | { ok: false, error }. */
-export async function scanOtherAccounts({ runElevated = runElevatedPowerShellJson, profiles } = {}) {
+export async function scanOtherAccounts({ runElevated = runElevatedPowerShellJson, profiles, readFile = readFileSync } = {}) {
   const list = profiles ?? await listOtherProfiles();
-  if (!list.length) return { ok: true, scan: (lastScan = { at: new Date().toISOString(), accounts: [], programs: [], stuck: [] }) };
-  const result = await runElevated(buildScanScript(list), { timeoutMs: 5 * 60 * 1000 });
-  if (!result.ok) return result;
-  const bySid = new Map(list.map((p) => [p.sid, p]));
-  const accounts = [];
-  const programs = [];
-  for (const account of result.data?.accounts || []) {
-    const profile = bySid.get(account.sid);
-    if (!profile) continue;
-    const rows = accountRows(account, profile);
-    programs.push(...rows);
-    accounts.push({ sid: profile.sid, name: profile.name, count: rows.length, ...(account.error ? { error: account.error } : {}) });
+  if (!list.length) return { ok: true, scan: (lastScan = { at: new Date().toISOString(), accounts: [], programs: [] }) };
+  // Made here, by this account, so it can read and delete what the elevated
+  // copy puts in it.
+  const copyDir = mkdtempSync(join(tmpdir(), 'prune-accounts-'));
+  try {
+    const result = await runElevated(buildScanScript(list, copyDir), { timeoutMs: 5 * 60 * 1000 });
+    if (!result.ok) return result;
+    const bySid = new Map(list.map((p) => [p.sid, p]));
+    const accounts = [];
+    const programs = [];
+    for (const account of result.data?.accounts || []) {
+      const profile = bySid.get(account.sid);
+      if (!profile) continue;
+      let read = account;
+      if (account.copy && !account.error) {
+        try {
+          read = { programs: readUninstallEntries(readFile(account.copy)).entries };
+        } catch (err) {
+          read = { programs: [], error: err.message };
+        }
+      }
+      const rows = accountRows(read, profile);
+      programs.push(...rows);
+      accounts.push({ sid: profile.sid, name: profile.name, count: rows.length, ...(read.error ? { error: read.error } : {}) });
+    }
+    lastScan = { at: new Date().toISOString(), accounts, programs };
+    return { ok: true, scan: lastScan };
+  } finally {
+    // The copies are other people's registries: never left behind.
+    rmSync(copyDir, { recursive: true, force: true });
   }
-  lastScan = { at: new Date().toISOString(), accounts, programs, stuck: result.data?.stuck || [] };
-  return { ok: true, scan: lastScan };
 }
 
 /** Testing seam. */

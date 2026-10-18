@@ -95,7 +95,7 @@ whether each program's own files carry a valid digital signature, checked
 by Windows itself, so a file changed after its publisher signed it stands
 out. Programs other accounts on the PC installed just for themselves can
 be read too, with one administrator prompt; their registry files are
-opened read-only and always closed again.
+copied and read by Prune itself, never mounted.
 
 Also what Windows' own list misses: Chocolatey packages (removed through
 Chocolatey, so its record stays true), program folders nothing registered

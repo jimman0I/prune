@@ -249,3 +249,17 @@ describe('website', () => {
     expect(normalizeProgram({ id: 'x', name: 'App' }).website).toBeNull();
   });
 });
+
+
+describe('parseRegistryDate', () => {
+  it('accepts a real YYYYMMDD and refuses one that is not on the calendar', async () => {
+    const { parseRegistryDate } = await import('./programs.js');
+    expect(parseRegistryDate('20261018')).toBe('2026-10-18');
+    // Squirrel installers (Discord) write minutes where the month belongs.
+    expect(parseRegistryDate('20252515')).toBeNull();
+    expect(parseRegistryDate('20250230')).toBeNull();
+    expect(parseRegistryDate('19000101')).toBeNull();
+    expect(parseRegistryDate('2026-10-18')).toBeNull();
+    expect(parseRegistryDate(undefined)).toBeNull();
+  });
+});
