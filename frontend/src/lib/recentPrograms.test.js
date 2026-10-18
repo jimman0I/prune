@@ -72,3 +72,15 @@ describe('parseInstallDate', () => {
     expect(parseInstallDate(1756771200000)).toBeNull();
   });
 });
+
+
+describe('a date that is not on the calendar', () => {
+  it('is no date, and never recent', async () => {
+    const { parseInstallDate, isRecentlyInstalled } = await import('./recentPrograms.js');
+    // Squirrel writes minutes where the month belongs.
+    expect(parseInstallDate('2026-59-13')).toBeNull();
+    expect(parseInstallDate('2025-02-30')).toBeNull();
+    expect(parseInstallDate('2025-02-28')).not.toBeNull();
+    expect(isRecentlyInstalled({ installDate: '2026-59-13' }, { now: new Date(2026, 9, 18).getTime() })).toBe(false);
+  });
+});

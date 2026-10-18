@@ -10,9 +10,9 @@ import { useLanguage } from '../i18n/LanguageContext.jsx';
  *
  * One question, asked before anything happens: this needs administrator
  * permission and changes nothing. Afterwards, what each account gave up,
- * and the list gains an "Other accounts" filter. A registry file Windows
- * did not release is said plainly, because it is the one outcome that
- * affects somebody else: that person's next sign-in. */
+ * and the list gains an "Other accounts" filter. Nothing is mounted (their
+ * registry files are copied and read), so nothing here can affect the
+ * other person's next sign-in. */
 export default function OtherAccountsDialog({ profiles, onClose, onBusyChange }) {
   const { t } = useLanguage();
   const queryClient = useQueryClient();
@@ -63,9 +63,6 @@ export default function OtherAccountsDialog({ profiles, onClose, onBusyChange })
               </li>
             ))}
           </ul>
-          {scan.stuck?.length > 0 && (
-            <p role="alert" className="text-[12.5px] text-[color:var(--danger)] leading-snug mb-4">{t('otherV7.stuck')}</p>
-          )}
           <p className="text-[12.5px] text-[color:var(--text-secondary)] leading-relaxed mb-5">
             {scan.programs.length > 0 ? t('otherV7.whereToFind') : t('otherV7.nothingFound')}
           </p>

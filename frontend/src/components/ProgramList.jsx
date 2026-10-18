@@ -10,7 +10,7 @@ import { traceForProgram } from '../lib/installTraces.js';
 import { sizeBadgeTone } from '../lib/sizeBadgeTone.js';
 import { sortPrograms, nextSortState } from '../lib/sortPrograms.js';
 import { canBatchUninstall, batchIneligibleReason, batchSummary } from '../lib/batchSelection.js';
-import { isRecentlyInstalled, RECENT_DAYS } from '../lib/recentPrograms.js';
+import { isRecentlyInstalled, parseInstallDate, RECENT_DAYS } from '../lib/recentPrograms.js';
 import TableSkeleton from './TableSkeleton.jsx';
 import { tileLetter } from '../lib/iconTileLetter.js';
 import { tileColor, TILE_INK } from '../lib/programTileColor.js';
@@ -454,7 +454,7 @@ function ProgramRow({ program, iconSrc, checked, running, isNew, monitored = fal
           : 'text-[color:var(--text-secondary)]'
       }`}
     >
-      {program.installDate ? new Date(program.installDate).toLocaleDateString() : '—'}
+      {parseInstallDate(program.installDate) !== null ? new Date(program.installDate).toLocaleDateString() : '—'}
     </div>
 
     {/* Blank, not a dash, for everything else. A dash means "we have no

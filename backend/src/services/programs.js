@@ -197,9 +197,17 @@ export function toPowerShellRegistryPath(psPath) {
 
 /** Registry InstallDate is YYYYMMDD (a plain string) or absent. Returns an
  * ISO date string or null — never throws on a malformed value, since this
- * is third-party-controlled data. */
-function parseRegistryDate(raw) {
+ * is third-party-controlled data.
+ *
+ * Eight digits are not enough: Squirrel installers (Discord among them)
+ * write the MINUTES where the month belongs, so "20252515" arrives and
+ * became "2025-25-15" -- "Invalid Date" on screen, and a New badge,
+ * because an unparseable date compared as recent. Found on another
+ * account's Discord. A date that is not on the calendar is no date. */
+export function parseRegistryDate(raw) {
   if (typeof raw !== 'string' || !/^\d{8}$/.test(raw)) return null;
-  const year = raw.slice(0, 4), month = raw.slice(4, 6), day = raw.slice(6, 8);
-  return `${year}-${month}-${day}`;
+  const year = Number(raw.slice(0, 4)), month = Number(raw.slice(4, 6)), day = Number(raw.slice(6, 8));
+  const date = new Date(Date.UTC(year, month - 1, day));
+  if (year < 1980 || date.getUTCMonth() !== month - 1 || date.getUTCDate() !== day) return null;
+  return `${raw.slice(0, 4)}-${raw.slice(4, 6)}-${raw.slice(6, 8)}`;
 }
