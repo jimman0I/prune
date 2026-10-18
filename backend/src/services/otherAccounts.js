@@ -118,6 +118,12 @@ foreach ($p in $profiles) {
       $copy = Join-Path $copyDir ('account' + $n + '.dat')
       [IO.File]::Copy($hive, $copy, $true)
       $result.copy = $copy
+      # Its journals too: a hive can hold its newest changes only there.
+      $result.logs = @()
+      foreach ($ext in @('.LOG1', '.LOG2')) {
+        $from = $hive + $ext
+        if (Test-Path -LiteralPath $from) { [IO.File]::Copy($from, ($copy + $ext), $true); $result.logs += ($copy + $ext) }
+      }
     }
   } catch {
     $result.error = $_.Exception.Message
@@ -179,7 +185,8 @@ export async function scanOtherAccounts({ runElevated = runElevatedPowerShellJso
       let read = account;
       if (account.copy && !account.error) {
         try {
-          read = { programs: readUninstallEntries(readFile(account.copy)).entries };
+          const logs = (Array.isArray(account.logs) ? account.logs : account.logs ? [account.logs] : []).map((log) => readFile(log));
+          read = { programs: readUninstallEntries(readFile(account.copy), { logs }).entries };
         } catch (err) {
           read = { programs: [], error: err.message };
         }

@@ -3,7 +3,7 @@ import { mkdtempSync, writeFileSync, rmSync, existsSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { otherProfiles, buildScanScript, accountRows, scanOtherAccounts, clearOtherAccountsScan } from './otherAccounts.js';
-import { buildHive, uninstallTree } from '../testSupport/regfBuilder.js';
+import { buildHive, uninstallTree, buildLog, markDirty } from '../testSupport/regfBuilder.js';
 
 const sid = (n) => `S-1-5-21-1-2-3-${n}`;
 
@@ -95,6 +95,23 @@ describe('scanOtherAccounts', () => {
     expect(result.scan.accounts).toEqual([{ sid: sid(1005), name: 'nikos', count: 1 }]);
     expect(result.scan.programs[0]).toMatchObject({ name: 'Discord', owner: 'nikos', sizeBytes: 100 * 1024 });
     expect(existsSync(copyDir)).toBe(false);
+  });
+
+  it('replays a copied hive\'s journals, so changes that live only there are not missed', async () => {
+    const fresh = buildHive(uninstallTree({ Tool: { $values: { DisplayName: 'Tool' } } }));
+    const at = fresh.indexOf(Buffer.from('Tool', 'utf16le'), 4096);
+    const pageStart = 4096 + Math.floor((at - 4096) / 512) * 512;
+    const stale = Buffer.from(fresh);
+    Buffer.from('Xool', 'utf16le').copy(stale, at);
+    const runElevated = async (script) => {
+      const copyDir = /\$copyDir = '([^']+)'/.exec(script)[1];
+      const copy = join(copyDir, 'account1.dat');
+      writeFileSync(copy, markDirty(stale, 9));
+      writeFileSync(`${copy}.LOG1`, buildLog([{ sequence: 9, binsSize: fresh.length - 4096, pages: [{ offset: pageStart - 4096, bytes: fresh.subarray(pageStart, pageStart + 512) }] }]));
+      return { ok: true, data: { accounts: [{ sid: sid(1005), copy, logs: `${copy}.LOG1` }] } };
+    };
+    const result = await scanOtherAccounts({ runElevated, profiles });
+    expect(result.scan.programs.map((p) => p.name)).toEqual(['Tool']);
   });
 
   it('takes a signed-in account\'s rows as read, and reports a copy it could not read', async () => {

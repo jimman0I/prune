@@ -53,6 +53,9 @@ see v1.0.1 below) are documented here.
 
 ### Fixed
 
+- Started from a PowerShell 7 terminal, Prune's Windows PowerShell queries
+  inherited PowerShell 7's module path and could fail to load built-in
+  commands, silently answering nothing. They now start with their own.
 - A closed Chrome or Brave never got its silent uninstall: the check for
   whether the browser was running was made, then never reached the step
   that builds the command.

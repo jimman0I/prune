@@ -42,12 +42,28 @@ export function runPowerShellText(script, { timeoutMs = TIMEOUT_MS, retries = 1 
  * this process only and needs no console to attach to. */
 const UTF8_PREAMBLE = '[Console]::OutputEncoding = [System.Text.Encoding]::UTF8; ';
 
+/** The environment powershell.exe is started with: this process's, minus
+ * PSModulePath.
+ *
+ * PowerShell 7 puts its own module folders in PSModulePath, and a Windows
+ * PowerShell 5.1 started from inside it inherits them and can then fail to
+ * load its own built-in modules -- Get-AuthenticodeSignature (in
+ * Microsoft.PowerShell.Security) answered nothing at all on the GitHub
+ * runner, whose environment is set up for PowerShell 7. Prune started from a
+ * PowerShell 7 terminal would hit the same. Without the variable, 5.1 uses
+ * its own default module paths, which is what it expects. */
+export function windowsPowerShellEnv(env = process.env) {
+  const out = { ...env };
+  for (const key of Object.keys(out)) if (key.toLowerCase() === 'psmodulepath') delete out[key];
+  return out;
+}
+
 function attempt(script, timeoutMs, retriesLeft) {
   return new Promise((resolve, reject) => {
     execFile(
       'powershell.exe',
       ['-NoProfile', '-NonInteractive', '-Command', UTF8_PREAMBLE + script],
-      { timeout: timeoutMs, maxBuffer: 32 * 1024 * 1024 },
+      { timeout: timeoutMs, maxBuffer: 32 * 1024 * 1024, env: windowsPowerShellEnv() },
       (err, stdout, stderr) => {
         if (err) {
           if (retriesLeft > 0) {
@@ -74,7 +90,7 @@ function attemptText(script, timeoutMs, retriesLeft) {
     execFile(
       'powershell.exe',
       ['-NoProfile', '-NonInteractive', '-Command', UTF8_PREAMBLE + script],
-      { timeout: timeoutMs, maxBuffer: 32 * 1024 * 1024 },
+      { timeout: timeoutMs, maxBuffer: 32 * 1024 * 1024, env: windowsPowerShellEnv() },
       (err, stdout, stderr) => {
         if (err) {
           if (retriesLeft > 0) {
