@@ -22,9 +22,8 @@ import { silentUninstallCommand, detectInstallerKind } from './silentUninstall.j
  *   0   are Inno Setup uninstallers lacking a quiet string
  *   38  are something else, mostly NSIS
  *
- * The zero is why there is no Inno branch here. Every Inno uninstaller on
- * that machine already published QuietUninstallString, so a detector for
- * it would be code that never runs.
+ * That zero was why there was no Inno branch at first. A second machine had
+ * thirteen, and 22 WiX Burn bundles besides: see the tests at the end.
  */
 
 let dir;
@@ -199,5 +198,70 @@ describe('working out what kind of installer it is', () => {
   it('says unknown for nothing at all', () => {
     expect(detectInstallerKind('')).toBe('unknown');
     expect(detectInstallerKind(null)).toBe('unknown');
+  });
+});
+
+describe('Inno Setup, WiX Burn, 7-Zip and WinRAR', () => {
+  const binary = (path, signature) => writeFileSync(path, Buffer.concat([Buffer.from('MZ'), Buffer.alloc(64), Buffer.from(signature), Buffer.alloc(32)]));
+  const touch = (path) => writeFileSync(path, '');
+
+  it('recognises an Inno uninstaller by its signature, its unins000 name and its .dat beside it', () => {
+    const exe = join(dir, 'unins000.exe');
+    binary(exe, 'Inno Setup Setup Data');
+    touch(join(dir, 'unins000.dat'));
+    expect(detectInstallerKind(`"${exe}"`)).toBe('inno');
+  });
+
+  it('does not call it Inno without every piece of evidence', () => {
+    const named = join(dir, 'unins000.exe');
+    binary(named, 'Inno Setup');
+    expect(detectInstallerKind(`"${named}"`), 'no .dat').toBe('unknown');
+    const other = join(dir, 'uninstall.exe');
+    binary(other, 'Inno Setup');
+    touch(join(dir, 'uninstall.dat'));
+    expect(detectInstallerKind(`"${other}"`), 'wrong name').toBe('unknown');
+  });
+
+  it('recognises a Burn bundle only when it is asked to uninstall', () => {
+    const exe = join(dir, 'VC_redist.x64.exe');
+    binary(exe, '.wixburn');
+    expect(detectInstallerKind(`"${exe}"  /uninstall`)).toBe('burn');
+    expect(detectInstallerKind(`"${exe}" -uninstall`)).toBe('burn');
+    expect(detectInstallerKind(`"${exe}"`)).toBe('unknown');
+  });
+
+  it('recognises 7-Zip and WinRAR only beside their own program files', () => {
+    const seven = join(dir, 'uninstall.exe');
+    binary(seven, '7-Zip');
+    expect(detectInstallerKind(`"${seven}"`), 'a string alone').toBe('unknown');
+    touch(join(dir, '7z.exe'));
+    touch(join(dir, '7z.dll'));
+    expect(detectInstallerKind(`"${seven}"`)).toBe('7zip');
+
+    rmSync(join(dir, '7z.exe'));
+    binary(seven, 'WinRAR');
+    expect(detectInstallerKind(`"${seven}"`), 'a string alone').toBe('unknown');
+    touch(join(dir, 'WinRAR.exe'));
+    expect(detectInstallerKind(`"${seven}"`)).toBe('winrar');
+  });
+
+  it('adds each one\'s documented switches, and never a reboot', () => {
+    expect(silentUninstallCommand({ uninstallString: '"C:\\Program Files\\Git\\unins000.exe"', kind: 'inno' }))
+      .toBe('"C:\\Program Files\\Git\\unins000.exe" /VERYSILENT /SUPPRESSMSGBOXES /NORESTART');
+    expect(silentUninstallCommand({ uninstallString: '"C:\\PC\\vc.exe"  /uninstall', kind: 'burn' }))
+      .toBe('"C:\\PC\\vc.exe"  /uninstall /quiet /norestart');
+    expect(silentUninstallCommand({ uninstallString: '"C:\\Program Files\\7-Zip\\Uninstall.exe"', kind: '7zip' }))
+      .toBe('"C:\\Program Files\\7-Zip\\Uninstall.exe" /S');
+    expect(silentUninstallCommand({ uninstallString: 'C:\\Program Files\\WinRAR\\uninstall.exe', kind: 'winrar' }))
+      .toBe('C:\\Program Files\\WinRAR\\uninstall.exe /S');
+  });
+
+  it('leaves a quiet level the entry already chose, and only adds no-reboot', () => {
+    expect(silentUninstallCommand({ uninstallString: '"C:\\PC\\b.exe" /uninstall /passive', kind: 'burn' }))
+      .toBe('"C:\\PC\\b.exe" /uninstall /passive /norestart');
+    expect(silentUninstallCommand({ uninstallString: '"C:\\PC\\b.exe" -uninstall -quiet -norestart', kind: 'burn' }))
+      .toBe('"C:\\PC\\b.exe" -uninstall -quiet -norestart');
+    expect(silentUninstallCommand({ uninstallString: '"C:\\x\\unins000.exe" /SILENT', kind: 'inno' }))
+      .toBe('"C:\\x\\unins000.exe" /SILENT /VERYSILENT /SUPPRESSMSGBOXES /NORESTART');
   });
 });

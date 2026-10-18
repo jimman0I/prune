@@ -98,8 +98,8 @@ claims, and Windows' optional features and installed updates — each
 turned off or removed only after a restore point.
 
 Batches run without a wizard per program — the vendor's own silent command
-where one is published, and the right flag for MSI, NSIS, Squirrel and
-closed Chromium browsers otherwise — and a game is removed before the
+where one is published, and the right flag for MSI, NSIS, Inno Setup, WiX
+Burn, Squirrel, 7-Zip, WinRAR and closed Chromium browsers otherwise — and a game is removed before the
 launcher it uninstalls through. Optional: a restore point or a full
 registry backup before each uninstall, and a choice of where leftover
 files go.
@@ -448,9 +448,10 @@ Produces an NSIS installer (`.exe`), a portable `.zip` and a generated
   rights and a restore point. When Windows cannot make one, Prune asks again
   before going ahead without it. Features Windows depends on (.NET 4,
   Defender) are listed but never offered.
-- About one program in ten still uninstalls with its own wizard: anything
-  whose installer Prune cannot positively identify runs exactly as
-  registered, because a wrong silent flag is worse than a visible dialog.
+- Some programs still uninstall with their own wizard: anything whose
+  installer Prune cannot positively identify runs exactly as registered,
+  because a wrong silent flag is worse than a visible dialog. Game
+  launchers (Steam, Ubisoft, Riot) always show their own.
 - A Chromium browser that is open when its uninstall runs shows its own
   dialog rather than being closed for you. Microsoft Edge and the WebView2
   runtime always show Microsoft's dialog: other programs, Windows Search

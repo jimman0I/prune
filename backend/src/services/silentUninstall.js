@@ -1,4 +1,5 @@
-import { readFileSync } from 'node:fs';
+import { readFileSync, existsSync } from 'node:fs';
+import { basename, dirname, join } from 'node:path';
 import { parseUninstallerPath } from './uninstallerPath.js';
 
 /** Running a program's uninstaller without a person at the keyboard.
@@ -25,12 +26,10 @@ import { parseUninstallerPath } from './uninstallerPath.js';
  *   0   are Inno Setup uninstallers WITHOUT a quiet string
  *   38  are something else, mostly NSIS
  *
- * There is no Inno branch because of that zero. Every Inno uninstaller on
- * that machine already published its own quiet string, so a detector for
- * `unins000.exe` would have been code that never ran. If that turns out to
- * be a quirk of one machine, the branch is three lines -- but it should be
- * added when a machine is found that needs it, not on the assumption that
- * one exists.
+ * There was no Inno branch because of that zero: every Inno uninstaller on
+ * that machine already published its own quiet string. The note here said
+ * to add one when a machine was found that needed it, and one was -- see
+ * kindFromContents below, which also covers WiX Burn, 7-Zip and WinRAR.
  */
 
 /** Silent flags per installer system, and why each is what it is. */
@@ -42,8 +41,28 @@ const SILENT = {
   msi: ['/qn', '/norestart'],
   // Case-sensitive in NSIS: /s is not /S.
   nsis: ['/S'],
-  squirrel: ['-s']
+  squirrel: ['-s'],
+  /* Inno Setup's own uninstaller switches (jrsoftware.org, "Uninstaller
+   * Command Line Parameters"). /VERYSILENT hides the progress window too,
+   * and on its own reboots WITHOUT ASKING when a restart is needed -- so
+   * /NORESTART is not optional here. /SUPPRESSMSGBOXES gives the default
+   * answer to the vendor's own message boxes; shared files no longer in use
+   * are removed, which is what the visible wizard does too. */
+  inno: ['/VERYSILENT', '/SUPPRESSMSGBOXES', '/NORESTART'],
+  // WiX Burn bundles: the standard bundle switches, in the form the
+  // Package Cache entries' own /uninstall already uses.
+  burn: ['/quiet', '/norestart'],
+  // 7-Zip's and WinRAR's own uninstallers. Uppercase, as both document it.
+  '7zip': ['/S'],
+  winrar: ['/S']
 };
+
+/** Whether a Burn bundle's command already says how quiet to be: /quiet,
+ * /passive, /silent, /q or /s, with either prefix. The same respect for a
+ * deliberate choice as hasUiLevel below. */
+function hasBurnUiLevel(command) {
+  return /(^|\s)[/-](q|quiet|passive|s|silent)(\s|$)/i.test(command);
+}
 
 /** Whether a flag is already on the command line.
  *
@@ -134,6 +153,11 @@ export function silentUninstallCommand({ uninstallString, quietUninstallString, 
 
   const flags = SILENT[kind];
   if (!flags) return uninstallString;
+  if (kind === 'burn' && hasBurnUiLevel(uninstallString)) {
+    return hasFlag(uninstallString, '/norestart') || hasFlag(uninstallString, '-norestart')
+      ? uninstallString
+      : `${uninstallString} /norestart`;
+  }
 
   return flags.reduce((command, flag) => (hasFlag(command, flag) ? command : `${command} ${flag}`), uninstallString);
 }
@@ -231,6 +255,7 @@ export function detectInstallerKind(uninstallString) {
      * that is NSIS, which is the wrong way for this to fail. */
     const contents = readFileSync(executable);
     if (contents.includes('NullsoftInst') || contents.includes('Nullsoft Install')) return 'nsis';
+    return kindFromContents(executable, contents, uninstallString);
   } catch {
     /* Gone, locked, or not readable. Reachable in normal use: the list on
      * screen is a snapshot and an uninstaller can be missing by the time a
@@ -239,6 +264,35 @@ export function detectInstallerKind(uninstallString) {
     return 'unknown';
   }
 
+  return 'unknown';
+}
+
+/** The installer systems recognised from more than the NSIS signature.
+ *
+ * Added after measuring a second machine, where 79 of 130 programs still
+ * ran their uninstaller as registered -- not the one in ten the first
+ * machine had. 38 of those were these four, each with documented switches:
+ *
+ *   22  WiX Burn bundles (every .NET runtime, SDK and VC++ redistributable,
+ *       Python, PowerShell 7) -- the .wixburn section is Burn's own
+ *   13  Inno Setup (Git, CPU-Z, GPU-Z, NordVPN, Telegram...) -- which the
+ *       header above once had no branch for, because the first machine had
+ *       none without a quiet string. This one had thirteen.
+ *    2  7-Zip,  1  WinRAR -- their own uninstallers, not an installer system
+ *
+ * Each needs two pieces of evidence, never a name alone: a signature in the
+ * binary AND the shape around it (Inno's unins000.exe naming and its .dat
+ * beside it; Burn's /uninstall verb; 7-Zip's and WinRAR's own program files
+ * in the same folder). "7-Zip" or "WinRAR" appear in plenty of other
+ * binaries' strings -- a license text, a bundled extractor. */
+function kindFromContents(executable, contents, uninstallString) {
+  const dir = dirname(executable);
+  const name = basename(executable).toLowerCase();
+  if (contents.includes('.wixburn') && /(^|\s)[/-]uninstall(\s|$)/i.test(uninstallString)) return 'burn';
+  if (/^unins\d{3}\.exe$/.test(name) && contents.includes('Inno Setup')
+    && existsSync(join(dir, name.replace(/\.exe$/, '.dat')))) return 'inno';
+  if (name === 'uninstall.exe' && contents.includes('7-Zip') && existsSync(join(dir, '7z.exe')) && existsSync(join(dir, '7z.dll'))) return '7zip';
+  if (name === 'uninstall.exe' && contents.includes('WinRAR') && existsSync(join(dir, 'WinRAR.exe'))) return 'winrar';
   return 'unknown';
 }
 
