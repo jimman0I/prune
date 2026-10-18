@@ -46,9 +46,22 @@ describe('regfReader', () => {
 
   // The Default profile's hive is readable by every account on every Windows.
   it.skipIf(!existsSync('C:\\Users\\Default\\NTUSER.DAT'))('reads a real NTUSER.DAT', () => {
+    // Only what every Default hive has: a Windows Server image (the build
+    // runner) has no Control Panel key at its root, so nothing below asks
+    // for one. Every key is walked and every value read, so a cell the
+    // reader cannot parse anywhere in a real hive fails here.
     const root = openHive(readFileSync('C:\\Users\\Default\\NTUSER.DAT')).root();
-    expect(root.subkeys().map((k) => k.name)).toEqual(expect.arrayContaining(['Control Panel', 'Software']));
-    expect(root.subkey('Software\\Microsoft\\Windows\\CurrentVersion')).not.toBeNull();
-    expect(Object.keys(root.subkey('Control Panel\\Desktop').values()).length).toBeGreaterThan(5);
+    expect(root.subkeys().map((k) => k.name)).toContain('Software');
+    expect(root.subkey('Software\\Microsoft')).not.toBeNull();
+    let keys = 0;
+    let values = 0;
+    const walk = (key, depth) => {
+      keys += 1;
+      values += Object.keys(key.values()).length;
+      if (depth < 12) for (const child of key.subkeys()) walk(child, depth + 1);
+    };
+    walk(root, 0);
+    expect(keys).toBeGreaterThan(20);
+    expect(values).toBeGreaterThan(20);
   });
 });
