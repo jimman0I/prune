@@ -8,7 +8,12 @@ import { runPreUninstall } from '../services/preUninstall.js';
 
 const router = Router();
 
+/** A write after the stream ended is dropped, not attempted: the wizard
+ * automation can still be answering a self-relaunched uninstaller after
+ * cmd.exe exited and the stream closed, and writing to an ended response
+ * emits an 'error' nothing is listening for. */
 function sendEvent(res, event, data) {
+  if (res.writableEnded || res.destroyed) return;
   res.write(`event: ${event}\ndata: ${JSON.stringify(data)}\n\n`);
 }
 
@@ -112,7 +117,10 @@ router.post('/', async (req, res) => {
       sendEvent(res, 'error', { message: pre.reason });
       return;
     }
-    const result = await runUninstaller({ ...program, running }, (type, data) => sendEvent(res, type, data));
+    const result = await runUninstaller({ ...program, running }, (type, data) => sendEvent(res, type, data), {
+      // Settings > Uninstall, off unless turned on: see services/wizardAutomation.js.
+      answerWizards: settings.answerUninstallWizards === true
+    });
     // The exit code alone is not proof of anything -- see services/uninstall.js's
     // own comment, "uninstallers routinely report success when they weren't, and
     // vice versa." This is the fix for that: a fresh registry read, after the

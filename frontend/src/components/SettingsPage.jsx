@@ -787,6 +787,20 @@ function SettingsPage({ onReportBug = null, onShowWhatsNew = null, tabRequest = 
               </div>
 
               <div className="glass-panel p-6">
+                <SectionHeading>{t('wizardV5.setting.heading')}</SectionHeading>
+                <div className="divide-y divide-[color:var(--border-subtle)]">
+                  {/* Off unless turned on: it presses buttons in another
+                      program's window. See backend services/wizardAutomation.js. */}
+                  <SettingRow
+                    title={t('wizardV5.setting.title')}
+                    description={t('wizardV5.setting.description')}
+                    checked={isOnlyIfTrue('answerUninstallWizards')}
+                    onChange={() => save({ answerUninstallWizards: !isOnlyIfTrue('answerUninstallWizards') })}
+                  />
+                </div>
+              </div>
+
+              <div className="glass-panel p-6">
                 <SectionHeading>{t('settings.uninstallTab.afterHeading')}</SectionHeading>
                 <div className="divide-y divide-[color:var(--border-subtle)]">
                   <SettingRow

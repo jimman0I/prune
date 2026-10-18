@@ -24,6 +24,7 @@ export const STALL_MS = 30000;
 import { useLanguage } from '../i18n/LanguageContext.jsx';
 import { useQuarantineUndo } from '../hooks/useQuarantineUndo.js';
 import { batchDirOfManifest } from '../lib/undoQuarantine.js';
+import WizardNote from './WizardNote.jsx';
 
 /** What a batch did, in the words of where its leftovers went. */
 export const DEFAULT_BATCH_SUMMARY_MESSAGES = {
@@ -113,6 +114,8 @@ export default function BatchUninstallModal({ programs, onClose, onFinished, onB
     Object.fromEntries(programs.map((p) => [p.id, { state: 'pending' }]))
   );
   const [leftovers, setLeftovers] = useState(null);
+  // Per program: the wizard automation's latest step, or its hand-back.
+  const [wizardEvents, setWizardEvents] = useState({});
   const [selected, setSelected] = useState(new Set());
   const [removal, setRemoval] = useState(null);
   const [error, setError] = useState(null);
@@ -203,7 +206,9 @@ export default function BatchUninstallModal({ programs, onClose, onFinished, onB
         if (program.source === 'store') {
           await removeStoreApp(program.packageFullName);
         } else {
-          await streamUninstall(program.id, () => {});
+          await streamUninstall(program.id, (type, data) => {
+            if (type === 'wizard') setWizardEvents((all) => ({ ...all, [program.id]: data }));
+          });
         }
         appendHistoryEntry({
           kind: program.source === 'store' ? 'store' : 'batch',
@@ -442,11 +447,18 @@ export default function BatchUninstallModal({ programs, onClose, onFinished, onB
             {ordered.map((program) => {
               const status = statuses[program.id] || { state: 'pending' };
               return (
-                <div key={program.id} className="flex items-center justify-between gap-4 px-3.5 py-2 rounded-lg bg-[color:var(--surface-subtle)]">
-                  <span className="text-[12.5px] truncate">{program.name}</span>
-                  <span className={`text-[11.5px] font-mono shrink-0 ${STATUS_STYLE[status.state]}`}>
-                    {STATUS_LABEL[status.state]}
-                  </span>
+                <div key={program.id} className="px-3.5 py-2 rounded-lg bg-[color:var(--surface-subtle)]">
+                  <div className="flex items-center justify-between gap-4">
+                    <span className="text-[12.5px] truncate">{program.name}</span>
+                    <span className={`text-[11.5px] font-mono shrink-0 ${STATUS_STYLE[status.state]}`}>
+                      {STATUS_LABEL[status.state]}
+                    </span>
+                  </div>
+                  {/* While it runs, and after a hand-back: the person may
+                      still have that window to answer. */}
+                  {(status.state === 'running' || wizardEvents[program.id]?.state === 'handover') && (
+                    <WizardNote event={wizardEvents[program.id]} className="mt-1" />
+                  )}
                 </div>
               );
             })}

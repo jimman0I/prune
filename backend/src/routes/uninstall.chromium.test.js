@@ -76,7 +76,7 @@ describe('the running check in front of a Chromium browser', () => {
     await start('Brave');
 
     expect(runUninstaller).toHaveBeenCalledWith(
-      expect.objectContaining({ id: 'Brave', running: false }), expect.any(Function)
+      expect.objectContaining({ id: 'Brave', running: false }), expect.any(Function), { answerWizards: false }
     );
   });
 
@@ -85,7 +85,7 @@ describe('the running check in front of a Chromium browser', () => {
     await start('Brave');
 
     expect(runUninstaller).toHaveBeenCalledWith(
-      expect.objectContaining({ id: 'Brave', running: true }), expect.any(Function)
+      expect.objectContaining({ id: 'Brave', running: true }), expect.any(Function), { answerWizards: false }
     );
   });
 

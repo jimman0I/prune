@@ -14,6 +14,7 @@ import { leftoverDestinationFrom } from '../lib/leftoverDestination.js';
 import { useLanguage } from '../i18n/LanguageContext.jsx';
 import { useQuarantineUndo } from '../hooks/useQuarantineUndo.js';
 import { batchDirOfManifest } from '../lib/undoQuarantine.js';
+import WizardNote from './WizardNote.jsx';
 
 /** Shared spinner + live-command UI for both the "running the native
  * uninstaller" and "scanning for leftovers" phases -- same treatment,
@@ -182,6 +183,8 @@ export default function UninstallModal({ program, running = false, onClose, onBu
   const preselect = settings?.preselectLeftovers === true;
   const scanAfter = settings?.scanLeftoversAfterUninstall !== false;
   const [progressTitle, setProgressTitle] = useState(null);
+  // The latest thing the wizard automation did, or why it handed back.
+  const [wizardEvent, setWizardEvent] = useState(null);
 
   /* Working, as opposed to waiting on the person. While the real uninstaller
    * runs, or a scan or a removal is in flight, this dialog is the only thing
@@ -248,7 +251,9 @@ export default function UninstallModal({ program, running = false, onClose, onBu
       let restorePoint = null;
       let registryBackup = null;
       let stillInstalled = false;
+      setWizardEvent(null);
       await streamUninstall(program.id, (type, data) => {
+        if (type === 'wizard') { setWizardEvent(data); return; }
         // The before-uninstall steps announce themselves, so the dialog
         // says what it is waiting on instead of "running the uninstaller"
         // through a registry backup.
@@ -555,6 +560,7 @@ export default function UninstallModal({ program, running = false, onClose, onBu
         {step === 'uninstalling' && (
           <>
             <ProgressPhase title={progressTitle || t('uninstallModal.progress.runningNative')} command={command} />
+            <WizardNote event={wizardEvent} className="text-center -mt-4 pb-2 px-4" />
             {stalled && (
               <p role="status" data-still-waiting className="text-[12.5px] text-[color:var(--text-secondary)] text-center -mt-4 pb-2 px-4">
                 {t('uninstallModal.stillWaiting')}

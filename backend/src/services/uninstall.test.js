@@ -143,3 +143,63 @@ describe('runUninstaller', () => {
     expect(runPowerShellTextMock).not.toHaveBeenCalled();
   });
 });
+describe('answering the wizard, and the running flag', () => {
+  it('starts the wizard automation for an uninstaller Prune cannot make silent, when asked to', async () => {
+    const child = makeFakeChild();
+    child.pid = 4242;
+    spawnMock.mockReturnValue(child);
+    const startAutomation = vi.fn();
+    const events = [];
+    const promise = runUninstaller({ uninstallString: '"C:/nowhere/custom-uninstaller.exe"' }, (type, data) => events.push([type, data]), { answerWizards: true, startAutomation });
+    await waitForSpawn();
+    expect(startAutomation).toHaveBeenCalledWith(4242, expect.any(Function));
+    // The foreground hunt is the automation's job now, not a second poller's.
+    expect(runPowerShellTextMock).not.toHaveBeenCalled();
+    startAutomation.mock.calls[0][1]({ state: 'answered', act: 'invoke', label: 'next', window: 'Setup' });
+    expect(events).toContainEqual(['wizard', { state: 'answered', act: 'invoke', label: 'next', window: 'Setup' }]);
+    child.emit('exit', 0);
+    await promise;
+  });
+
+  it('leaves the wizard alone when not asked, or when the command is already silent', async () => {
+    for (const [program, options] of [
+      [{ uninstallString: '"C:/nowhere/custom-uninstaller.exe"' }, {}],
+      [{ uninstallString: 'MsiExec.exe /X{GUID}' }, { answerWizards: true }],
+      [{ uninstallString: '"C:/nowhere/u.exe"', quietUninstallString: '"C:/nowhere/u.exe" /quiet' }, { answerWizards: true }]
+    ]) {
+      spawnMock.mockReset();
+      const child = makeFakeChild();
+      child.pid = 7;
+      spawnMock.mockReturnValue(child);
+      const startAutomation = vi.fn();
+      const promise = runUninstaller(program, () => {}, { ...options, startAutomation });
+      await waitForSpawn();
+      expect(startAutomation, JSON.stringify(program)).not.toHaveBeenCalled();
+      child.emit('exit', 0);
+      await promise;
+    }
+  });
+
+  it('hands the route\'s "not running" to the resolver, which is what lets a closed browser uninstall silently', async () => {
+    const { mkdtempSync, mkdirSync, writeFileSync, rmSync } = await import('node:fs');
+    const { tmpdir } = await import('node:os');
+    const { join } = await import('node:path');
+    const root = mkdtempSync(join(tmpdir(), 'prune-chromium-'));
+    try {
+      const installer = join(root, 'Application', '1.0', 'Installer');
+      mkdirSync(installer, { recursive: true });
+      const setup = join(installer, 'setup.exe');
+      writeFileSync(setup, 'MZ force-uninstall');
+      const child = makeFakeChild();
+      spawnMock.mockReturnValue(child);
+      const events = [];
+      const promise = runUninstaller({ uninstallString: `"${setup}" --uninstall --system-level`, running: false }, (type, data) => events.push([type, data]));
+      await waitForSpawn();
+      expect(events[0][1].command).toMatch(/--force-uninstall$/);
+      child.emit('exit', 0);
+      await promise;
+    } finally {
+      rmSync(root, { recursive: true, force: true });
+    }
+  });
+});

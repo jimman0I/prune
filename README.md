@@ -99,10 +99,13 @@ turned off or removed only after a restore point.
 
 Batches run without a wizard per program — the vendor's own silent command
 where one is published, and the right flag for MSI, NSIS, Inno Setup, WiX
-Burn, Squirrel, 7-Zip, WinRAR and closed Chromium browsers otherwise — and a game is removed before the
-launcher it uninstalls through. Optional: a restore point or a full
-registry backup before each uninstall, and a choice of where leftover
-files go.
+Burn, Squirrel, 7-Zip, WinRAR and closed Chromium browsers otherwise — and
+a game is removed before the launcher it uninstalls through. For the rest,
+Prune can answer the uninstaller's own wizard for you — Next, Uninstall,
+Finish, restart later — and hands it back the moment a question is yours:
+your settings or data, something to type, a button it doesn't know.
+Optional: a restore point or a full registry backup before each uninstall,
+and a choice of where leftover files go.
 
 A leftover scan in three depths — **Safe**, **Moderate** and **Advanced** —
 with results tiered *certain / likely / possible* and never offering
