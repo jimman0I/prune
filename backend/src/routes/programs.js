@@ -5,6 +5,7 @@ import { getProgramSizes } from '../services/programSizes.js';
 import { getProgramVersions } from '../services/programVersions.js';
 import { getProgramInstallDates } from '../services/installDates.js';
 import { getProgramSignatures } from '../services/programSignatures.js';
+import { getOtherAccounts, scanOtherAccounts } from '../services/otherAccounts.js';
 import { getStoreApps, getStorePackage, forgetStoreApp, refreshStoreAppsNow } from '../services/storeApps.js';
 import { removeStoreApp } from '../services/removeStoreApp.js';
 import { getBrowserExtensions } from '../services/browserExtensions.js';
@@ -506,6 +507,27 @@ router.get('/windows-updates', async (req, res) => {
 router.post('/windows-updates/uninstall', async (req, res) => {
   try {
     sendRemoval(res, await uninstallWindowsUpdate(req.body?.kb, { allowWithoutRestorePoint: req.body?.allowWithoutRestorePoint === true }));
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+/** The other people's accounts on this PC, and the last scan of their
+ * programs: { profiles, scan }. Reading the accounts needs no rights; the
+ * scan does. */
+router.get('/other-accounts', async (req, res) => {
+  try {
+    res.json(await getOtherAccounts());
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+/** Reads every other account's programs, elevated -- one UAC prompt. Only
+ * on a button the person pressed (see lib/elevated.js). */
+router.post('/other-accounts/scan', async (req, res) => {
+  try {
+    sendRemoval(res, await scanOtherAccounts());
   } catch (err) {
     res.status(500).json({ error: err.message });
   }

@@ -56,6 +56,7 @@ export const keys = {
   windowsFeatures: ['programs', 'windowsFeatures'],
   windowsUpdates: ['programs', 'windowsUpdates'],
   signatures: ['programs', 'signatures'],
+  otherAccounts: ['programs', 'otherAccounts'],
   running: ['programs', 'running'],
   diskHealth: ['disk', 'health'],
   startupItems: ['startup', 'items'],

@@ -25,6 +25,19 @@ export async function fetchProgramSignatures() {
   return (await getJson('/programs/signatures')).signatures ?? {};
 }
 
+/** The other people's accounts on this PC and the last scan of their
+ * programs: { profiles: [{ sid, name }], scan: null | { at, accounts, programs, stuck } }. */
+export async function fetchOtherAccounts() {
+  const data = await getJson('/programs/other-accounts');
+  return { profiles: data.profiles ?? [], scan: data.scan ?? null };
+}
+
+/** Reads the other accounts' programs, elevated. { ok: true, scan } |
+ * { ok: false, cancelled: true }; a failure throws. */
+export function scanOtherAccounts() {
+  return postRemoval('/programs/other-accounts/scan', {});
+}
+
 /** Program folders nothing registered claims, source: 'unregistered'. */
 export async function fetchUnregisteredPrograms() {
   return (await getJson('/programs/unregistered')).apps ?? [];

@@ -5,7 +5,7 @@ import {
   fetchProgramInstallDates, fetchStoreApps, fetchBrowserExtensions,
   fetchPackageIcons, fetchRunningPrograms, requestStoreRefresh
 } from '../lib/api.js';
-import { fetchChocolatey, fetchUnregisteredPrograms, fetchWindowsFeatures, fetchWindowsUpdates, fetchProgramSignatures } from '../lib/programSourcesApi.js';
+import { fetchChocolatey, fetchUnregisteredPrograms, fetchWindowsFeatures, fetchWindowsUpdates, fetchProgramSignatures, fetchOtherAccounts } from '../lib/programSourcesApi.js';
 import { useReturnToWindow } from './useReturnToWindow.js';
 import { mergeMeasuredSizes } from '../lib/mergeSizes.js';
 import { mergeBinaryVersions } from '../lib/mergeVersions.js';
@@ -84,6 +84,9 @@ export function useProgramData({ loadDecorations = true } = {}) {
   const updatesQuery = useQuery({ queryKey: keys.windowsUpdates, queryFn: fetchWindowsUpdates, ...DEFERRED });
   // Seven seconds cold (Windows hashes every file it checks), so deferred.
   const signaturesQuery = useQuery({ queryKey: keys.signatures, queryFn: fetchProgramSignatures, ...DEFERRED });
+  // Which other accounts exist (no rights needed) and what the last scan of
+  // them found. The scan itself is a button, never this query.
+  const otherAccountsQuery = useQuery({ queryKey: keys.otherAccounts, queryFn: fetchOtherAccounts, ...DEFERRED });
 
   // Two icon sources, one map. They come from genuinely different places
   // -- extracted from binaries, versus files sitting inside a package or
@@ -177,6 +180,8 @@ export function useProgramData({ loadDecorations = true } = {}) {
     totalSize,
     extensions: extensionsQuery.data ?? [],
     unregistered: unregisteredQuery.data ?? [],
+    otherProfiles: otherAccountsQuery.data?.profiles ?? [],
+    otherUsers: otherAccountsQuery.data?.scan?.programs ?? [],
     windowsItems,
     running: runningQuery.data ?? {},
     loading: programsQuery.isPending,

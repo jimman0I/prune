@@ -382,6 +382,9 @@ function ProgramRow({ program, iconSrc, checked, running, isNew, monitored = fal
       {(program.source === 'chocolatey' || program.chocolateyId) && (
         <span className="text-[11px] font-mono uppercase tracking-wider px-1 py-px rounded bg-[color:var(--surface-hover)] text-[color:var(--text-secondary)] border border-[color:var(--border-subtle)] shrink-0">{t('sourcesV4.badges.chocolatey')}</span>
       )}
+      {program.source === 'otherUser' && (
+        <span className="text-[11px] font-mono uppercase tracking-wider px-1 py-px rounded bg-[color:var(--surface-hover)] text-[color:var(--text-secondary)] border border-[color:var(--border-subtle)] shrink-0">{program.owner}</span>
+      )}
       {program.source === 'unregistered' && (
         <span className="text-[11px] font-mono uppercase tracking-wider px-1 py-px rounded bg-[color:var(--surface-hover)] text-[color:var(--text-secondary)] border border-[color:var(--border-subtle)] shrink-0">{t('sourcesV4.badges.unregistered')}</span>
       )}
@@ -502,6 +505,16 @@ function ProgramRow({ program, iconSrc, checked, running, isNew, monitored = fal
           <BinIcon />
           {program.source === 'feature' ? t('sourcesV4.actions.turnOff') : t('applications.uninstall')}
         </button>
+      ) : program.source === 'otherUser' ? (
+        // Another account's own uninstaller would act on THIS account's
+        // registry, so the way to remove one is Forced uninstall, with what
+        // its entry says. Nothing to offer when the entry names no folder.
+        program.installLocation ? (
+          <button onClick={() => onRemoveUnregistered?.(program)} className="btn-remove">
+            <BinIcon />
+            {t('sourcesV4.actions.remove')}
+          </button>
+        ) : null
       ) : program.source === 'unregistered' ? (
         // Forced uninstall, prefilled: it finds the rest of the program and
         // has every item reviewed before anything is deleted.
@@ -555,7 +568,7 @@ function ProgramRow({ program, iconSrc, checked, running, isNew, monitored = fal
  * no longer matches. Programs not checked (yet, or ever) are not counted. */
 const isUnsigned = (program) => program.signature?.status === 'unsigned' || program.signature?.status === 'broken';
 
-export default function ProgramList({ programs: initialPrograms, extensions = [], unregistered = [], windowsItems = [], icons = {}, running = {}, onUninstall, onBatchUninstall, onRemoveStoreApp = () => {}, onRemoveSourceItem, onRemoveUnregistered, onViewChange }) {
+export default function ProgramList({ programs: initialPrograms, extensions = [], unregistered = [], windowsItems = [], otherUsers = [], otherProfiles = [], onOpenOtherAccounts, icons = {}, running = {}, onUninstall, onBatchUninstall, onRemoveStoreApp = () => {}, onRemoveSourceItem, onRemoveUnregistered, onViewChange }) {
   const { t } = useLanguage();
   const toasts = useToasts();
   // Programs the install monitor has a record of, and how to forget one.
@@ -622,7 +635,8 @@ export default function ProgramList({ programs: initialPrograms, extensions = []
   const listFor = (id) => (id === 'extensions' ? extensions
     : id === 'unregistered' ? unregistered
       : id === 'windows' ? windowsItems
-        : programs);
+        : id === 'otherUsers' ? otherUsers
+          : programs);
 
   const filtered = useMemo(() => {
     // Extensions are their own list, not part of the program list. Revo
@@ -640,7 +654,7 @@ export default function ProgramList({ programs: initialPrograms, extensions = []
     if (filter === 'chocolatey') list = list.filter(p => p.source === 'chocolatey' || p.chocolateyId);
     if (filter === 'unsigned') list = list.filter(isUnsigned);
     return sortPrograms(list, sort.column, sort.direction);
-  }, [programs, extensions, unregistered, windowsItems, query, sort, filter]);
+  }, [programs, extensions, unregistered, windowsItems, otherUsers, query, sort, filter]);
 
   const totalBytes = useMemo(
     () => filtered.reduce((sum, p) => sum + (p.sizeBytes || 0), 0),
@@ -780,7 +794,8 @@ export default function ProgramList({ programs: initialPrograms, extensions = []
               ...(chocolateyCount > 0 ? [{ id: 'chocolatey', label: t('applications.filters.chocolateyCount', chocolateyCount) }] : []),
               ...(extensions.length > 0 ? [{ id: 'extensions', label: t('applications.filters.extensionsCount', extensions.length) }] : []),
               ...(unregistered.length > 0 ? [{ id: 'unregistered', label: t('applications.filters.unregisteredCount', unregistered.length) }] : []),
-              ...(windowsItems.length > 0 ? [{ id: 'windows', label: t('applications.filters.windowsCount', windowsItems.length) }] : [])
+              ...(windowsItems.length > 0 ? [{ id: 'windows', label: t('applications.filters.windowsCount', windowsItems.length) }] : []),
+              ...(otherUsers.length > 0 ? [{ id: 'otherUsers', label: t('applications.filters.otherUsersCount', otherUsers.length) }] : [])
             ]
           },
           {
@@ -796,7 +811,7 @@ export default function ProgramList({ programs: initialPrograms, extensions = []
               ...(brokenCount > 0 ? [{ id: 'broken', label: t('applications.filters.brokenCount', brokenCount) }] : [])
             ]
           }
-        ].filter((group) => group.items.length > 0).map((group) => (
+        ].filter((group) => group.items.length > 0).flatMap((group) => [(
           <div key={group.key} role="group" aria-label={group.label} className="flex items-center gap-1 p-1 bg-[color:var(--bg-panel)] border border-[color:var(--border-subtle)] rounded-xl">
             {group.items.map(f => (
               <button
@@ -809,7 +824,14 @@ export default function ProgramList({ programs: initialPrograms, extensions = []
               </button>
             ))}
           </div>
-        ))}
+        ), ...(group.key === 'sources' && otherProfiles.length > 0 && otherUsers.length === 0 ? [(
+          // An action, so not a segment: a control that shows which filter is
+          // on must not also run things. Only on a PC with other accounts,
+          // and only until they have been read -- then it is a filter above.
+          <button key="other-accounts" className="btn-ghost px-3 py-1.5 rounded-lg text-[12.5px] font-medium" onClick={() => onOpenOtherAccounts?.()}>
+            {t('otherV7.button')}
+          </button>
+        )] : [])])}
       </div>
 
       {/* Said while the filter is on rather than left for a tooltip: "unused"
@@ -821,6 +843,12 @@ export default function ProgramList({ programs: initialPrograms, extensions = []
       {/* Both lists need saying what they are before anything in them is
           removed: one holds things that may be there on purpose, the other
           is Windows itself. */}
+      {filter === 'otherUsers' && (
+        <div className="flex items-start gap-4 -mt-2 mb-3 shrink-0">
+          <p className="text-[12px] text-[color:var(--text-secondary)] max-w-[72ch]">{t('otherV7.definition')}</p>
+          <button className="btn-ghost px-2.5 py-1 rounded-md text-[11.5px] font-medium shrink-0" onClick={() => onOpenOtherAccounts?.()}>{t('otherV7.readAgain')}</button>
+        </div>
+      )}
       {filter === 'unsigned' && (
         <p className="text-[12px] text-[color:var(--text-secondary)] -mt-2 mb-3 shrink-0 max-w-[72ch]">{t('sigV6.definition')}</p>
       )}
@@ -1078,6 +1106,8 @@ export function rowMenuItems(program, { t, toasts, onUninstall, onRemoveStoreApp
     removal.push({ label: t('sourcesV4.actions.turnOff'), danger: true, onSelect: () => onRemoveSourceItem?.(program) });
   } else if (program.source === 'update' || program.source === 'chocolatey') {
     removal.push({ label: t('applications.uninstall'), danger: true, onSelect: () => onRemoveSourceItem?.(program) });
+  } else if (program.source === 'otherUser') {
+    if (program.installLocation) removal.push({ label: t('sourcesV4.actions.remove'), danger: true, onSelect: () => onRemoveUnregistered?.(program) });
   } else if (program.source === 'unregistered') {
     removal.push({ label: t('sourcesV4.actions.remove'), danger: true, onSelect: () => onRemoveUnregistered?.(program) });
   } else if (program.source === 'store' && program.nonRemovable) {

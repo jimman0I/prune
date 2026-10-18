@@ -20,6 +20,7 @@ import UninstallModal from './components/UninstallModal.jsx';
 import StoreRemoveDialog from './components/StoreRemoveDialog.jsx';
 import ApplicationsTools from './components/ApplicationsTools.jsx';
 import SourceRemovalDialog from './components/SourceRemovalDialog.jsx';
+import OtherAccountsDialog from './components/OtherAccountsDialog.jsx';
 import ProgramDropZone from './components/ProgramDropZone.jsx';
 import { onOpenRequest } from './lib/openRequests.js';
 import { rememberVisited } from './lib/visitedScreens.js';
@@ -92,6 +93,8 @@ export default function App() {
   const [sourceItemToRemove, setSourceItemToRemove] = useState(null);
   // A "Not registered" row handed to Forced uninstall: { name, folder, nonce }.
   const [forcedRequest, setForcedRequest] = useState(null);
+  // Reading the other accounts' programs (one UAC prompt, on request).
+  const [showOtherAccounts, setShowOtherAccounts] = useState(false);
   // What the Applications list is showing under its search and filter, for the
   // heading's count. The list owns both; the heading only reads the result.
   const [appsView, setAppsView] = useState(null);
@@ -142,7 +145,7 @@ export default function App() {
   // dates, extensions, the running-process poll) and stay off, via
   // `visited` -- the same tracking that decides which screens to mount --
   // until that screen has actually been opened once this session.
-  const { programs, icons, totalSize, extensions, unregistered, windowsItems, running, loading, error, sizesSettled, refresh: refreshPrograms } =
+  const { programs, icons, totalSize, extensions, unregistered, windowsItems, otherProfiles, otherUsers, running, loading, error, sizesSettled, refresh: refreshPrograms } =
     useProgramData({ loadDecorations: visited.has('applications') });
 
   // Bug report diagnostic (lib/lastProgramsCount.js). The base list query
@@ -345,6 +348,9 @@ export default function App() {
                 extensions={extensions}
                 unregistered={unregistered}
                 windowsItems={windowsItems}
+                otherUsers={otherUsers}
+                otherProfiles={otherProfiles}
+                onOpenOtherAccounts={() => setShowOtherAccounts(true)}
                 running={running}
                 icons={icons}
                 onUninstall={setSelectedProgram}
@@ -398,6 +404,19 @@ export default function App() {
             app={storeAppToRemove}
             onClose={closeDialog(setStoreAppToRemove)}
             onRemoved={handleStoreAppRemoved}
+            onBusyChange={setDialogBusy}
+          />
+        </ModalOverlay>
+      )}
+      {showOtherAccounts && (
+        <ModalOverlay
+          label={t('otherV7.title')}
+          onClose={closeDialog(setShowOtherAccounts)}
+          dismissible={!dialogBusy}
+        >
+          <OtherAccountsDialog
+            profiles={otherProfiles}
+            onClose={closeDialog(setShowOtherAccounts)}
             onBusyChange={setDialogBusy}
           />
         </ModalOverlay>
