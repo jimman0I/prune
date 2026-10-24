@@ -7,8 +7,8 @@ import { runPowerShellJson } from './powershell.js';
  * either way -- so the switch sat there doing nothing while claiming to
  * decide something.
  *
- * The alternative to quarantining is NOT deleting outright. Revo offers
- * exactly this choice ("Delete to bin") and the Recycle Bin is the right
+ * The alternative to quarantining is NOT deleting outright. "Delete to bin" is
+ * exactly this choice, and the Recycle Bin is the right
  * answer to it: the user gets their space back from a place they already
  * know how to empty, and a file taken by mistake is still recoverable
  * through a UI they already trust. An unrecoverable delete would be a

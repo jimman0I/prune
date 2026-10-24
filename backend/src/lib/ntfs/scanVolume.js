@@ -16,7 +16,7 @@ const BITMAP_RECORD = 6;
 
 /** Reads an NTFS volume's Master File Table and returns a directory tree.
  *
- * This is the WizTree approach, and the reason it's in a different speed
+ * This reads the NTFS Master File Table directly, and the reason it's in a different speed
  * class from walking directories: NTFS already maintains one flat table
  * describing every file on the volume, with its name, size and parent. A
  * recursive walk asks the filesystem about each directory in turn and
@@ -27,7 +27,7 @@ const BITMAP_RECORD = 6;
  * descriptor so the whole pipeline can be tested against a synthetic
  * volume built in memory. Reading a real volume requires Administrator
  * (Windows won't hand out a raw volume handle otherwise), which is why
- * this can't just open the drive itself and why WizTree asks for
+ * this can't just open the drive itself and why it asks for
  * elevation too.
  *
  * Returns { tree, stats } -- stats carries the honest caveats: how many

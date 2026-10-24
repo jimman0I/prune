@@ -68,7 +68,7 @@ describe('scanLogLine, partial searches', () => {
 });
 
 describe('executeLogLine', () => {
-  it('reports a real deletion, BleachBit-style ("Delete <name>")', () => {
+  it('reports a real deletion ("Delete <name>")', () => {
     expect(executeLogLine({ id: 'discord_cache', name: 'Discord Cache', freedBytes: 396361728, skipped: [] }))
       .toEqual({ label: 'Delete Discord Cache', detail: '378 MB', tone: 'size' });
   });

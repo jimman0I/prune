@@ -4,7 +4,7 @@ import { formatBytes } from '../lib/formatBytes.js';
 import { sortFolderRows, nextFolderSort } from '../lib/sortFolderRows.js';
 import { RowActionsButton } from './RowActionsButton.jsx';
 
-/** WizTree's Tree View: what is directly inside the folder in view, as a
+/** The tree view: what is directly inside the folder in view, as a
  * sortable table.
  *
  * The map answers "which of these is big" and nothing else. It cannot say

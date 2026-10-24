@@ -18,7 +18,7 @@ describe('useDeepCleanExecute', () => {
     expect(result.current.currentId).toBeNull();
   });
 
-  it('builds a BleachBit-style log line as each rule streams in, and reports the current one', async () => {
+  it('builds a log line as each rule streams in, and reports the current one', async () => {
     let deliver;
     streamDeepCleanExecute.mockImplementation((ids, onEvent) => new Promise((resolve) => {
       deliver = async () => {

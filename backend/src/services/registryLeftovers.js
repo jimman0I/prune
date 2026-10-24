@@ -4,8 +4,8 @@ import { buildSearchPattern, psQuote } from './leftoverPattern.js';
 /** Where a program's registry leftovers actually live.
  *
  * The original scan looked at the immediate children of HKCU:\Software and
- * HKLM:\Software and nothing else. That misses most of what Revo
- * Uninstaller Pro finds, and every miss is a key the user is never offered
+ * HKLM:\Software and nothing else. That misses most of what
+ * is actually left behind, and every miss is a key the user is never offered
  * and so never gets rid of:
  *
  *  - WOW6432Node. A 32-bit program on 64-bit Windows writes its settings
@@ -63,7 +63,7 @@ const RUN_ROOTS = [
   'HKLM:\\Software\\Microsoft\\Windows\\CurrentVersion\\RunOnce',
   'HKLM:\\Software\\WOW6432Node\\Microsoft\\Windows\\CurrentVersion\\Run',
   'HKLM:\\Software\\WOW6432Node\\Microsoft\\Windows\\CurrentVersion\\RunOnce',
-  // Revo's Autorun Manager reads these too. The first two are the policy-
+  // The startup list reads these too. The first two are the policy-
   // enforced Run list; RunServices(Once) are legacy keys that old installers
   // still write and nothing ever removes.
   'HKCU:\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer\\Run',
@@ -77,15 +77,14 @@ const RUN_ROOTS = [
 /** SharedDLLs: a reference count per shared file, keyed by the file's full
  * path. An installer adds one for every shared DLL it drops and an
  * uninstaller is meant to take it away again; one that does not leaves a
- * count for a file that is gone. Revo's leftover scan reads this list, and
- * so does Prune now. The entries are VALUES inside a key every program
+ * count for a file that is gone. The leftover scan reads this list too. The entries are VALUES inside a key every program
  * shares, so they come out one value at a time, like Run. */
 export const SHARED_DLL_ROOTS = [
   'HKLM:\\Software\\Microsoft\\Windows\\CurrentVersion\\SharedDLLs',
   'HKLM:\\Software\\WOW6432Node\\Microsoft\\Windows\\CurrentVersion\\SharedDLLs'
 ];
 
-/** Three more places Revo's leftover scan reads, all machine-wide.
+/** Three more places the leftover scan reads, all machine-wide.
  *
  *  - Firewall rules. Installing a networked program usually adds an allow
  *    rule; uninstalling it rarely removes it. Each rule is one VALUE in the

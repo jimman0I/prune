@@ -6,8 +6,8 @@ import { parseUninstallerPath } from './uninstallerPath.js';
  * Windows never cleans these up: a program removed by deleting its folder,
  * an installer that crashed halfway, a drive that no longer exists -- all
  * leave an entry behind that Add/Remove Programs still lists and that
- * fails, silently or loudly, when you click Uninstall. This is what Revo
- * Uninstaller means by a "leftover entry", and it's the one case where the
+ * fails, silently or loudly, when you click Uninstall. This is what counts
+ * as a "leftover entry", and it's the one case where the
  * normal uninstall path CAN'T work, so the app has to offer something else.
  *
  * Deliberately conservative: `orphaned` is true only on positive evidence

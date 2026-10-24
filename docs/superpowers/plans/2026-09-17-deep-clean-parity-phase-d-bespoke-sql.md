@@ -1,14 +1,14 @@
-# BleachBit-Parity Engine, Phase D (per-app bespoke SQL) — Implementation Plan
+# Deep Clean Parity Engine, Phase D (per-app bespoke SQL) — Implementation Plan
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
-**Goal:** Add 5 real, per-app bespoke cleaning action types — `chrome.history`, `chrome.autofill`, `chrome.keywords`, `mozilla.url.history`, `mozilla.favicons` — each ported from BleachBit's own `bleachbit/Special.py` but re-grounded against the REAL current schema (verified live on this machine for the Chrome-side ones; see the design spec for exact column/table evidence), not BleachBit's own stale version-branching logic.
+**Goal:** Add 5 real, per-app bespoke cleaning action types — `chrome.history`, `chrome.autofill`, `chrome.keywords`, `mozilla.url.history`, `mozilla.favicons` — each ported from the reference cleaner's own `Special.py` but re-grounded against the REAL current schema (verified live on this machine for the Chrome-side ones; see the design spec for exact column/table evidence), not the reference cleaner's own stale version-branching logic.
 
 **Architecture:** A new shared `backend/src/lib/cleanerActions/sqliteInspect.js` (one small existence-check helper, reused by every module in this phase, generalizing the pattern `cookie.js` already established for its own two-table detection). Five new action modules under `backend/src/lib/cleanerActions/`, each `scan(action)`/`execute(action, ruleName, guards)`, each quarantining the original file via `quarantineFileEdit()`'s `editFn` mode (Phase C) before running its own DELETE statements in place via the bundled `sqlite3.exe`. Wired into `cleanerRules.js`'s dispatcher as the 7th through 11th action types.
 
 **Tech Stack:** Node.js (backend, ESM), Vitest, the bundled `sqlite3.exe` CLI.
 
-**Spec:** `docs/superpowers/specs/2026-09-17-bleachbit-parity-phase-d-bespoke-sql-design.md`
+**Spec:** `docs/superpowers/specs/2026-09-17-deep-clean-parity-phase-d-bespoke-sql-design.md`
 
 ---
 
@@ -260,7 +260,7 @@ export function scan(action) {
 /** Executes a chrome.autofill action: clears the `autofill` table (raw
  * form-field value history) and VACUUMs, quarantining the original
  * first. Scoped to ONLY this table -- see the design spec for why the
- * saved-profile/address tables BleachBit's own version also touches are
+ * saved-profile/address tables the reference cleaner's own version also touches are
  * deliberately excluded (they don't exist under those names in the
  * current Chrome schema; the real current equivalent is a different,
  * riskier feature). A file with no `autofill` table (wrong file, or a
@@ -314,7 +314,7 @@ git commit -m "feat(cleanerActions): add chrome.autofill, standalone"
 - Create: `backend/src/lib/cleanerActions/chromeKeywords.js`
 - Test: `backend/src/lib/cleanerActions/chromeKeywords.test.js`
 
-Same shape as Task 2, one real difference: a WHERE predicate (only user-added keywords, `date_created != 0`, matching BleachBit's own predicate for "not a browser-shipped default engine") plus a `usage_count` reset, plus an existence-checked `keywords_backup` table (present on old Chrome only -- confirmed absent on this machine's real Web Data; must not assume it's there).
+Same shape as Task 2, one real difference: a WHERE predicate (only user-added keywords, `date_created != 0`, matching the reference cleaner's own predicate for "not a browser-shipped default engine") plus a `usage_count` reset, plus an existence-checked `keywords_backup` table (present on old Chrome only -- confirmed absent on this machine's real Web Data; must not assume it's there).
 
 - [ ] **Step 1: Write the failing tests**
 
@@ -627,7 +627,7 @@ export function scan(action) {
 /** Executes a chrome.history action: clears browsing history while
  * preserving bookmarked URLs' own rows in `urls` -- everything else
  * (visit timestamps, search terms, downloads, segment stats) clears
- * unconditionally, matching BleachBit's own real behavior: a bookmark
+ * unconditionally, matching the reference cleaner's own real behavior: a bookmark
  * keeps working, but its "recently visited" trail does not survive.
  * Every table beyond `urls` is existence-checked before being touched,
  * since a Chrome build old or new enough not to have one of them should
@@ -693,7 +693,7 @@ git commit -m "feat(cleanerActions): add chrome.history, standalone"
 - Create: `backend/src/lib/cleanerActions/mozillaUrlHistory.js`
 - Test: `backend/src/lib/cleanerActions/mozillaUrlHistory.test.js`
 
-Firefox/Firefox-family equivalent of Task 4, ported from BleachBit's real `delete_mozilla_url_history()` (already read in full this session). Every non-`moz_places` table is existence-checked, matching BleachBit's own defensive comments about tables that don't exist on all Firefox versions.
+Firefox/Firefox-family equivalent of Task 4, ported from the reference cleaner's real `delete_mozilla_url_history()` (already read in full this session). Every non-`moz_places` table is existence-checked, matching the reference cleaner's own defensive comments about tables that don't exist on all Firefox versions.
 
 - [ ] **Step 1: Write the failing tests**
 
@@ -785,7 +785,7 @@ npx vitest run src/lib/cleanerActions/mozillaUrlHistory.test.js
 
 - [ ] **Step 3: Implement it**
 
-Follow `chromeHistory.js`'s exact shape (same `heldReason`, missing-file/guard handling). The `editFn` body, translating BleachBit's real `delete_mozilla_url_history()` (already read this session) into plain DELETEs with no shred-column-wiping and existence-checks for every table beyond `moz_places`/`moz_bookmarks`:
+Follow `chromeHistory.js`'s exact shape (same `heldReason`, missing-file/guard handling). The `editFn` body, translating the reference cleaner's real `delete_mozilla_url_history()` (already read this session) into plain DELETEs with no shred-column-wiping and existence-checks for every table beyond `moz_places`/`moz_bookmarks`:
 
 ```js
 editFn: async (realPath) => {
@@ -949,7 +949,7 @@ npx vitest run src/lib/cleanerActions/mozillaFavicons.test.js
 
 - [ ] **Step 3: Implement it**
 
-Ported from BleachBit's real `delete_mozilla_favicons()` (already read in full this session), simplified: this codebase's `moz_icons`/`moz_pages_w_icons`/`moz_icons_to_pages` schema (BleachBit's OWN documented schema, since Firefox's favicon-storage tables are unrelated to Chrome's and were not independently re-verified against a live Firefox install -- same honest caveat as Task 5) is used AS-IS, no domain-level "keep the whole domain if any page is bookmarked" logic from BleachBit's own `_remove_path_from_url` (that's an extra refinement on top of the base page-level bookmark check; page-level matching -- keep exactly the bookmarked page's own favicon, drop others -- is a safe, simpler starting behavior and a legitimate scope-narrowing decision, not a bug, given the added URL-parsing complexity BleachBit's domain-level version carries):
+Ported from the reference cleaner's real `delete_mozilla_favicons()` (already read in full this session), simplified: this codebase's `moz_icons`/`moz_pages_w_icons`/`moz_icons_to_pages` schema (the reference cleaner's OWN documented schema, since Firefox's favicon-storage tables are unrelated to Chrome's and were not independently re-verified against a live Firefox install -- same honest caveat as Task 5) is used AS-IS, no domain-level "keep the whole domain if any page is bookmarked" logic from the reference cleaner's own `_remove_path_from_url` (that's an extra refinement on top of the base page-level bookmark check; page-level matching -- keep exactly the bookmarked page's own favicon, drop others -- is a safe, simpler starting behavior and a legitimate scope-narrowing decision, not a bug, given the added URL-parsing complexity the reference cleaner's domain-level version carries):
 
 ```js
 import { existsSync, statSync } from 'node:fs';
@@ -986,7 +986,7 @@ export function scan(action) {
  * (same directory) via a read-only ATTACH -- places.sqlite is never
  * written to and never quarantined, since nothing in it changes. Page-
  * level bookmark matching (keep exactly a bookmarked page's own icon),
- * not BleachBit's own domain-level refinement -- see this task's own
+ * not the reference cleaner's own domain-level refinement -- see this task's own
  * plan note for why that's a deliberate, safe scope decision. */
 export async function execute(action, ruleName, guards = {}) {
   if (!existsSync(action.expandedPath)) {

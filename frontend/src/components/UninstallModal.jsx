@@ -152,7 +152,7 @@ export default function UninstallModal({ program, running = false, onClose, onBu
   const [selected, setSelected] = useState(new Set());
   const [removal, setRemoval] = useState(null);
   const [error, setError] = useState(null);
-  // Revo's third checkbox: unticked by default (matching Revo's own
+  // The third checkbox: unticked by default (the safe
   // default), and read only once, at the moment the scan resolves --
   // ticking it after the scan has already started changes nothing, same
   // as the other two settings this dialog already reads once per run.
@@ -233,7 +233,7 @@ export default function UninstallModal({ program, running = false, onClose, onBu
   const allFoundIn = (result) => preselectKeys(result);
 
   const selectEverythingIn = (result) => {
-    // Revo's "Check mark all leftovers by default", which it ships off, and
+    // The "Check mark all leftovers by default" setting ships off, and
     // so does Prune now: nothing ticked unless the user turned it on.
     if (!preselect) { setSelected(new Set()); return; }
     setSelected(allFoundIn(result));
@@ -295,7 +295,7 @@ export default function UninstallModal({ program, running = false, onClose, onBu
       // way regardless of why the normal uninstall didn't finish.
       if (stillInstalled) { setStep('stillInstalled'); return; }
       if (!scanAfter) { setStep('noScan'); return; }
-      // Revo's own screen after the real uninstaller runs: it does not
+      // The screen after the real uninstaller runs: it does not
       // race into a scan the instant the spawned process exits, because
       // that process returning is not proof the program's own uninstall
       // work (background services, async cleanup) is actually done yet.
@@ -331,7 +331,7 @@ export default function UninstallModal({ program, running = false, onClose, onBu
       });
       setScanResult(result);
       patchHistory(historyId.current, { leftoversFound: foundCount(result) });
-      // Revo's "Automatically delete all found leftovers": skip the manual
+      // "Automatically delete all found leftovers": skip the manual
       // review screen and remove everything the scan just found, straight
       // away. It still goes through the exact same quarantine call the
       // manual review's own confirm button does -- this only skips the
@@ -463,7 +463,7 @@ export default function UninstallModal({ program, running = false, onClose, onBu
       <div data-modal-body className="px-6 py-5 overflow-y-auto min-h-0">
         {step === 'confirm' && (
           <div>
-            {/* Where the warning actually bites. Revo warns before
+            {/* Where the warning actually bites. It warns before
                 uninstalling something that is open, because an uninstaller
                 for a running program either fails outright or
                 half-succeeds and leaves files the next launch recreates.

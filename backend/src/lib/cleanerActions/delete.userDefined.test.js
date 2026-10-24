@@ -7,7 +7,7 @@ import { scan, resolveActionFiles } from './delete.js';
 /** Two things a rule written by the user (or imported) needs that the curated
  * rules did not:
  *
- * - `filesOnly`: BleachBit's search="file" and search="glob" take FILES. A
+ * - `filesOnly`: a cleaner's search="file" and search="glob" take FILES. A
  *   delete action given a folder walks all of it; one that is filesOnly must
  *   not, or a cleaner that names `%AppData%\Foo` meaning one file called Foo
  *   would clear a folder.

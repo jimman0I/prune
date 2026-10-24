@@ -34,7 +34,7 @@ afterEach(async () => {
 
 const names = (result) => result.files.map((f) => f.path.slice(root.length + 1).replace(/\\/g, '/')).sort();
 
-describe("BleachBit's deep-scan patterns, mirrored", () => {
+describe("the standard deep-scan patterns, mirrored", () => {
   it("backup: .bak in any case, or 1-4 letters then '~', at the end of the name", async () => {
     await touch('a/notes.bak');
     await touch('a2/NOTES.BAK');
@@ -87,7 +87,7 @@ describe("BleachBit's deep-scan patterns, mirrored", () => {
     expect(names(await findFiles(root, { patterns: BACKUP }))).toEqual([]);
   });
 
-  it('descends into every subfolder, including node_modules and .git (BleachBit does not skip them)', async () => {
+  it('descends into every subfolder, including node_modules and .git (the standard walk does not skip them)', async () => {
     await touch('proj/node_modules/pkg/index.js.bak');
     await touch('proj/.git/hooks/pre-commit.bak');
     const found = await findFiles(root, { patterns: BACKUP });

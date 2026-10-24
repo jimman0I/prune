@@ -107,8 +107,7 @@ vi.mock('node:fs/promises', async (importOriginal) => {
  * tool, and two suites racing it will occasionally lose. Run one suite at
  * a time; CONTRIBUTING.md says so.
  *
- * The name also no longer says "unrevo", which is what the app was called
- * before the rebrand. */
+ * The name also no longer carries the app's pre-rebrand name. */
 const TEST_KEY_NAME = `prune-test-${process.pid}`;
 const TEST_KEY = `HKCU\\Software\\${TEST_KEY_NAME}`;
 /* The same key as PowerShell spells it, which is the form quarantine.js

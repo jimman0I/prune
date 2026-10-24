@@ -184,7 +184,7 @@ describe('imported cleaners', () => {
   it.each([
     ['tooLarge', 'That file is too large to be a cleaner.'],
     ['notXml', 'That is not valid XML.'],
-    ['notCleaner', 'That is not a BleachBit cleaner file.'],
+    ['notCleaner', 'That is not a cleaner file.'],
     ['noId', 'That cleaner has no id.']
   ])('explains a refused file (%s)', async (code, words) => {
     importCleaner.mockRejectedValue(Object.assign(new Error('x'), { code }));

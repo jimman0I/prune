@@ -2,7 +2,7 @@ import { describe, it, expect } from 'vitest';
 import { parseXml, XmlError, childElements, firstChild, textOf } from './xmlParse.js';
 
 /** A small, strict XML parser -- a tokenizer, not pattern matching -- for the
- * one thing Prune reads XML for: BleachBit cleaner files. It builds a tree of
+ * one thing Prune reads XML for: cleaner XML files. It builds a tree of
  * elements and nothing else. It never fetches, includes or expands anything:
  * a DOCTYPE with an internal subset (where entities are declared, and where
  * "billion laughs" lives) is refused outright. */
@@ -26,7 +26,7 @@ describe('elements and attributes', () => {
     expect(parseXml('<a p="x > y"/>').attrs.p).toBe('x > y');
   });
 
-  it('keeps backslashes and dollar signs as they are (Windows paths, BleachBit variables)', () => {
+  it('keeps backslashes and dollar signs as they are (Windows paths, cleaner-file variables)', () => {
     const root = parseXml('<action path="%LocalAppData%\\Foo\\$$base$$/Bar"/>');
     expect(root.attrs.path).toBe('%LocalAppData%\\Foo\\$$base$$/Bar');
   });

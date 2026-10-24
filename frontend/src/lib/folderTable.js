@@ -1,6 +1,6 @@
 /** Rows for the folder table, one per direct child of the node in view.
  *
- * WizTree's Tree View, which answers questions the treemap cannot. A map
+ * The tree view, which answers questions the treemap cannot. A map
  * shows proportion and nothing else: it cannot tell you that a 2 GB
  * folder is two files or two hundred thousand, and "how many things are
  * in here" is what decides whether a folder is worth opening.

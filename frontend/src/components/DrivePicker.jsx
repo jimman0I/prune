@@ -4,7 +4,7 @@ import { driveUsage } from '../lib/driveRoot.js';
 
 /** The drive chooser: one button per local drive, showing what is on it.
  *
- * WizTree opens with a drive list; this app opened straight onto C:\ with no
+ * Before, this app opened straight onto C:\ with no
  * way to look at anything else. A chip carries the three facts that decide
  * which drive is worth opening (how full it is, what it is called, whether
  * it is the one Windows lives on) and nothing that needs a tooltip.

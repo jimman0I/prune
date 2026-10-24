@@ -86,7 +86,7 @@ export default {
       },
       imported: {
         title: "Imported cleaners",
-        description: "Import a BleachBit cleaner file (.xml). Prune brings over its delete options and tells you exactly what it skipped. Imported rules are never ticked by default and stay out of protected places.",
+        description: "Import a cleaner file (.xml). Prune brings over its delete options and tells you exactly what it skipped. Imported rules are never ticked by default and stay out of protected places.",
         button: "Import cleaner…",
         empty: "No imported cleaners.",
         meta: (a) => `Options imported: ${a}`,
@@ -105,7 +105,7 @@ export default {
         error: {
           tooLarge: "That file is too large to be a cleaner.",
           notXml: "That is not valid XML.",
-          notCleaner: "That is not a BleachBit cleaner file.",
+          notCleaner: "That is not a cleaner file.",
           noId: "That cleaner has no id.",
           failed: (a) => `Couldn't import: ${a}`
         }
@@ -196,7 +196,7 @@ export default {
       },
       imported: {
         title: "Ingevoerde skoonmakers",
-        description: "Voer ’n BleachBit-skoonmaakléer (.xml) in. Prune bring sy uitvee-opsies oor en vertel jou presies wat dit oorgeslaan het. Ingevoerde reëls word nooit by verstek gemerk nie en bly weg van beskermde plekke.",
+        description: "Voer ’n skoonmaakléer (.xml) in. Prune bring sy uitvee-opsies oor en vertel jou presies wat dit oorgeslaan het. Ingevoerde reëls word nooit by verstek gemerk nie en bly weg van beskermde plekke.",
         button: "Voer skoonmaker in…",
         empty: "Geen ingevoerde skoonmakers nie.",
         meta: (a) => `Opsies ingevoer: ${a}`,
@@ -215,7 +215,7 @@ export default {
         error: {
           tooLarge: "Daardie lêer is te groot om ’n skoonmaker te wees.",
           notXml: "Dit is nie geldige XML nie.",
-          notCleaner: "Dit is nie ’n BleachBit-skoonmaakléer nie.",
+          notCleaner: "Dit is nie ’n skoonmaakléer nie.",
           noId: "Daardie skoonmaker het geen id nie.",
           failed: (a) => `Kon nie invoer nie: ${a}`
         }
@@ -306,7 +306,7 @@ export default {
       },
       imported: {
         title: "أدوات التنظيف المستوردة",
-        description: "استورد ملف منظِّف BleachBit (‎.xml). يجلب Prune خيارات الحذف فيه ويخبرك بالضبط بما تخطّاه. القواعد المستوردة لا تُحدَّد افتراضيًا أبدًا وتبقى بعيدة عن الأماكن المحمية.",
+        description: "استورد ملف منظِّف (‎.xml). يجلب Prune خيارات الحذف فيه ويخبرك بالضبط بما تخطّاه. القواعد المستوردة لا تُحدَّد افتراضيًا أبدًا وتبقى بعيدة عن الأماكن المحمية.",
         button: "استيراد منظِّف…",
         empty: "لا توجد أدوات تنظيف مستوردة.",
         meta: (a) => `الخيارات المستوردة: ${a}`,
@@ -325,7 +325,7 @@ export default {
         error: {
           tooLarge: "هذا الملف أكبر من أن يكون منظِّفًا.",
           notXml: "هذا ليس XML صالحًا.",
-          notCleaner: "هذا ليس ملف منظِّف BleachBit.",
+          notCleaner: "هذا ليس ملف منظِّف.",
           noId: "هذا المنظِّف ليس له معرّف.",
           failed: (a) => `تعذّر الاستيراد: ${a}`
         }
@@ -416,7 +416,7 @@ export default {
       },
       imported: {
         title: "Netejadors importats",
-        description: "Importa un fitxer de netejador de BleachBit (.xml). Prune n’aprofita les opcions d’eliminació i et diu exactament què ha omès. Les regles importades mai no estan marcades per defecte i no toquen els llocs protegits.",
+        description: "Importa un fitxer de netejador (.xml). Prune n’aprofita les opcions d’eliminació i et diu exactament què ha omès. Les regles importades mai no estan marcades per defecte i no toquen els llocs protegits.",
         button: "Importa un netejador…",
         empty: "Cap netejador importat.",
         meta: (a) => `Opcions importades: ${a}`,
@@ -435,7 +435,7 @@ export default {
         error: {
           tooLarge: "Aquest fitxer és massa gran per ser un netejador.",
           notXml: "Això no és XML vàlid.",
-          notCleaner: "Aquest no és un fitxer de netejador de BleachBit.",
+          notCleaner: "Aquest no és un fitxer de netejador.",
           noId: "Aquest netejador no té cap identificador.",
           failed: (a) => `No s’ha pogut importar: ${a}`
         }
@@ -526,7 +526,7 @@ export default {
       },
       imported: {
         title: "Importované čističe",
-        description: "Importujte soubor čističe BleachBit (.xml). Prune převezme jeho možnosti mazání a přesně vám řekne, co přeskočil. Importovaná pravidla nejsou ve výchozím stavu zaškrtnutá a nesahají na chráněná místa.",
+        description: "Importujte soubor čističe (.xml). Prune převezme jeho možnosti mazání a přesně vám řekne, co přeskočil. Importovaná pravidla nejsou ve výchozím stavu zaškrtnutá a nesahají na chráněná místa.",
         button: "Importovat čistič…",
         empty: "Žádné importované čističe.",
         meta: (a) => `Importované možnosti: ${a}`,
@@ -545,7 +545,7 @@ export default {
         error: {
           tooLarge: "Tento soubor je příliš velký na to, aby to byl čistič.",
           notXml: "Toto není platný XML.",
-          notCleaner: "Toto není soubor čističe BleachBit.",
+          notCleaner: "Toto není soubor čističe.",
           noId: "Tento čistič nemá žádné id.",
           failed: (a) => `Nelze importovat: ${a}`
         }
@@ -636,7 +636,7 @@ export default {
       },
       imported: {
         title: "Glanhawyr wedi’u mewnforio",
-        description: "Mewnforiwch ffeil glanhawr BleachBit (.xml). Mae Prune yn dod â’i opsiynau dileu drosodd ac yn dweud wrthych yn union beth a hepgorodd. Ni thicir rheolau wedi’u mewnforio yn ddiofyn a maent yn aros allan o leoedd gwarchodedig.",
+        description: "Mewnforiwch ffeil glanhawr (.xml). Mae Prune yn dod â’i opsiynau dileu drosodd ac yn dweud wrthych yn union beth a hepgorodd. Ni thicir rheolau wedi’u mewnforio yn ddiofyn a maent yn aros allan o leoedd gwarchodedig.",
         button: "Mewnforio glanhawr…",
         empty: "Dim glanhawyr wedi’u mewnforio.",
         meta: (a) => `Opsiynau wedi’u mewnforio: ${a}`,
@@ -655,7 +655,7 @@ export default {
         error: {
           tooLarge: "Mae’r ffeil honno’n rhy fawr i fod yn lanhawr.",
           notXml: "Nid yw hwnnw’n XML dilys.",
-          notCleaner: "Nid ffeil glanhawr BleachBit yw honno.",
+          notCleaner: "Nid ffeil glanhawr yw honno.",
           noId: "Nid oes gan y glanhawr hwnnw id.",
           failed: (a) => `Methwyd mewnforio: ${a}`
         }
@@ -746,7 +746,7 @@ export default {
       },
       imported: {
         title: "Importerede renseværktøjer",
-        description: "Importér en BleachBit-renseværktøjsfil (.xml). Prune henter dens sletteindstillinger og fortæller dig præcis, hvad den sprang over. Importerede regler er aldrig afkrydset som standard og holder sig fra beskyttede steder.",
+        description: "Importér en renseværktøjsfil (.xml). Prune henter dens sletteindstillinger og fortæller dig præcis, hvad den sprang over. Importerede regler er aldrig afkrydset som standard og holder sig fra beskyttede steder.",
         button: "Importér renseværktøj…",
         empty: "Ingen importerede renseværktøjer.",
         meta: (a) => `Importerede indstillinger: ${a}`,
@@ -765,7 +765,7 @@ export default {
         error: {
           tooLarge: "Den fil er for stor til at være et renseværktøj.",
           notXml: "Det er ikke gyldig XML.",
-          notCleaner: "Det er ikke en BleachBit-renseværktøjsfil.",
+          notCleaner: "Det er ikke en renseværktøjsfil.",
           noId: "Det renseværktøj har intet id.",
           failed: (a) => `Kunne ikke importere: ${a}`
         }
@@ -856,7 +856,7 @@ export default {
       },
       imported: {
         title: "Importierte Cleaner",
-        description: "Importiere eine BleachBit-Cleaner-Datei (.xml). Prune übernimmt ihre Löschoptionen und sagt dir genau, was übersprungen wurde. Importierte Regeln sind nie standardmäßig angehakt und bleiben von geschützten Orten fern.",
+        description: "Importiere eine Cleaner-Datei (.xml). Prune übernimmt ihre Löschoptionen und sagt dir genau, was übersprungen wurde. Importierte Regeln sind nie standardmäßig angehakt und bleiben von geschützten Orten fern.",
         button: "Cleaner importieren…",
         empty: "Keine importierten Cleaner.",
         meta: (a) => `Importierte Optionen: ${a}`,
@@ -875,7 +875,7 @@ export default {
         error: {
           tooLarge: "Diese Datei ist zu groß für einen Cleaner.",
           notXml: "Das ist kein gültiges XML.",
-          notCleaner: "Das ist keine BleachBit-Cleaner-Datei.",
+          notCleaner: "Das ist keine Cleaner-Datei.",
           noId: "Dieser Cleaner hat keine ID.",
           failed: (a) => `Import nicht möglich: ${a}`
         }
@@ -966,7 +966,7 @@ export default {
       },
       imported: {
         title: "Εισαγόμενοι καθαριστές",
-        description: "Εισαγάγετε ένα αρχείο καθαριστή BleachBit (.xml). Το Prune μεταφέρει τις επιλογές διαγραφής του και σας λέει ακριβώς τι παρέλειψε. Οι εισαγόμενοι κανόνες δεν είναι ποτέ επιλεγμένοι από προεπιλογή και μένουν μακριά από προστατευμένες θέσεις.",
+        description: "Εισαγάγετε ένα αρχείο καθαριστή (.xml). Το Prune μεταφέρει τις επιλογές διαγραφής του και σας λέει ακριβώς τι παρέλειψε. Οι εισαγόμενοι κανόνες δεν είναι ποτέ επιλεγμένοι από προεπιλογή και μένουν μακριά από προστατευμένες θέσεις.",
         button: "Εισαγωγή καθαριστή…",
         empty: "Δεν υπάρχουν εισαγόμενοι καθαριστές.",
         meta: (a) => `Εισαγόμενες επιλογές: ${a}`,
@@ -985,7 +985,7 @@ export default {
         error: {
           tooLarge: "Αυτό το αρχείο είναι πολύ μεγάλο για να είναι καθαριστής.",
           notXml: "Αυτό δεν είναι έγκυρο XML.",
-          notCleaner: "Αυτό δεν είναι αρχείο καθαριστή BleachBit.",
+          notCleaner: "Αυτό δεν είναι αρχείο καθαριστή.",
           noId: "Αυτός ο καθαριστής δεν έχει αναγνωριστικό.",
           failed: (a) => `Δεν ήταν δυνατή η εισαγωγή: ${a}`
         }
@@ -1076,7 +1076,7 @@ export default {
       },
       imported: {
         title: "Limpiadores importados",
-        description: "Importa un archivo de limpiador de BleachBit (.xml). Prune incorpora sus opciones de eliminación y te dice exactamente qué omitió. Las reglas importadas nunca están marcadas por defecto y se mantienen fuera de los lugares protegidos.",
+        description: "Importa un archivo de limpiador (.xml). Prune incorpora sus opciones de eliminación y te dice exactamente qué omitió. Las reglas importadas nunca están marcadas por defecto y se mantienen fuera de los lugares protegidos.",
         button: "Importar limpiador…",
         empty: "No hay limpiadores importados.",
         meta: (a) => `Opciones importadas: ${a}`,
@@ -1095,7 +1095,7 @@ export default {
         error: {
           tooLarge: "Ese archivo es demasiado grande para ser un limpiador.",
           notXml: "Eso no es XML válido.",
-          notCleaner: "Ese no es un archivo de limpiador de BleachBit.",
+          notCleaner: "Ese no es un archivo de limpiador.",
           noId: "Ese limpiador no tiene id.",
           failed: (a) => `No se pudo importar: ${a}`
         }
@@ -1186,7 +1186,7 @@ export default {
       },
       imported: {
         title: "Imporditud puhastajad",
-        description: "Impordi BleachBiti puhastaja fail (.xml). Prune võtab üle selle kustutamisvalikud ja ütleb sulle täpselt, mida ta vahele jättis. Imporditud reegleid ei märgita vaikimisi ning need jäävad kaitstud kohtadest eemale.",
+        description: "Impordi puhastaja fail (.xml). Prune võtab üle selle kustutamisvalikud ja ütleb sulle täpselt, mida ta vahele jättis. Imporditud reegleid ei märgita vaikimisi ning need jäävad kaitstud kohtadest eemale.",
         button: "Impordi puhastaja…",
         empty: "Imporditud puhastajaid pole.",
         meta: (a) => `Imporditud valikuid: ${a}`,
@@ -1205,7 +1205,7 @@ export default {
         error: {
           tooLarge: "See fail on puhastajaks liiga suur.",
           notXml: "See ei ole kehtiv XML.",
-          notCleaner: "See ei ole BleachBiti puhastaja fail.",
+          notCleaner: "See ei ole puhastaja fail.",
           noId: "Sellel puhastajal pole id-d.",
           failed: (a) => `Importimine ebaõnnestus: ${a}`
         }
@@ -1296,7 +1296,7 @@ export default {
       },
       imported: {
         title: "Tuodut puhdistimet",
-        description: "Tuo BleachBit-puhdistintiedosto (.xml). Prune tuo sen poistovaihtoehdot ja kertoo tarkalleen, mitä se ohitti. Tuotuja sääntöjä ei koskaan valita oletuksena, ja ne pysyvät poissa suojatuista paikoista.",
+        description: "Tuo puhdistintiedosto (.xml). Prune tuo sen poistovaihtoehdot ja kertoo tarkalleen, mitä se ohitti. Tuotuja sääntöjä ei koskaan valita oletuksena, ja ne pysyvät poissa suojatuista paikoista.",
         button: "Tuo puhdistin…",
         empty: "Ei tuotuja puhdistimia.",
         meta: (a) => `Tuodut vaihtoehdot: ${a}`,
@@ -1315,7 +1315,7 @@ export default {
         error: {
           tooLarge: "Tiedosto on liian suuri ollakseen puhdistin.",
           notXml: "Tämä ei ole kelvollista XML:ää.",
-          notCleaner: "Tämä ei ole BleachBit-puhdistintiedosto.",
+          notCleaner: "Tämä ei ole puhdistintiedosto.",
           noId: "Tällä puhdistimella ei ole tunnusta.",
           failed: (a) => `Tuonti epäonnistui: ${a}`
         }
@@ -1406,7 +1406,7 @@ export default {
       },
       imported: {
         title: "Nettoyeurs importés",
-        description: "Importez un fichier de nettoyeur BleachBit (.xml). Prune reprend ses options de suppression et vous dit exactement ce qu’il a ignoré. Les règles importées ne sont jamais cochées par défaut et restent à l’écart des emplacements protégés.",
+        description: "Importez un fichier de nettoyeur (.xml). Prune reprend ses options de suppression et vous dit exactement ce qu’il a ignoré. Les règles importées ne sont jamais cochées par défaut et restent à l’écart des emplacements protégés.",
         button: "Importer un nettoyeur…",
         empty: "Aucun nettoyeur importé.",
         meta: (a) => `Options importées : ${a}`,
@@ -1425,7 +1425,7 @@ export default {
         error: {
           tooLarge: "Ce fichier est trop volumineux pour être un nettoyeur.",
           notXml: "Ce n’est pas du XML valide.",
-          notCleaner: "Ce n’est pas un fichier de nettoyeur BleachBit.",
+          notCleaner: "Ce n’est pas un fichier de nettoyeur.",
           noId: "Ce nettoyeur n’a pas d’identifiant.",
           failed: (a) => `Importation impossible : ${a}`
         }
@@ -1516,7 +1516,7 @@ export default {
       },
       imported: {
         title: "מנקים שיובאו",
-        description: "ייבא קובץ מנקה של BleachBit (‎.xml). Prune מביא את אפשרויות המחיקה שלו ואומר לך בדיוק מה דולג. כללים מיובאים לעולם אינם מסומנים כברירת מחדל ונשארים מחוץ למקומות מוגנים.",
+        description: "ייבא קובץ מנקה (‎.xml). Prune מביא את אפשרויות המחיקה שלו ואומר לך בדיוק מה דולג. כללים מיובאים לעולם אינם מסומנים כברירת מחדל ונשארים מחוץ למקומות מוגנים.",
         button: "ייבא מנקה…",
         empty: "אין מנקים מיובאים.",
         meta: (a) => `אפשרויות שיובאו: ${a}`,
@@ -1535,7 +1535,7 @@ export default {
         error: {
           tooLarge: "הקובץ גדול מדי מכדי להיות מנקה.",
           notXml: "זה אינו XML תקין.",
-          notCleaner: "זה אינו קובץ מנקה של BleachBit.",
+          notCleaner: "זה אינו קובץ מנקה.",
           noId: "למנקה הזה אין מזהה.",
           failed: (a) => `לא ניתן לייבא: ${a}`
         }
@@ -1626,7 +1626,7 @@ export default {
       },
       imported: {
         title: "Importált tisztítók",
-        description: "Importálj egy BleachBit-tisztítófájlt (.xml). A Prune átveszi a törlési lehetőségeit, és pontosan megmondja, mit hagyott ki. Az importált szabályok alapértelmezetten soha nincsenek kipipálva, és távol maradnak a védett helyektől.",
+        description: "Importálj egy tisztítófájlt (.xml). A Prune átveszi a törlési lehetőségeit, és pontosan megmondja, mit hagyott ki. Az importált szabályok alapértelmezetten soha nincsenek kipipálva, és távol maradnak a védett helyektől.",
         button: "Tisztító importálása…",
         empty: "Nincsenek importált tisztítók.",
         meta: (a) => `Importált lehetőségek: ${a}`,
@@ -1645,7 +1645,7 @@ export default {
         error: {
           tooLarge: "Ez a fájl túl nagy ahhoz, hogy tisztító legyen.",
           notXml: "Ez nem érvényes XML.",
-          notCleaner: "Ez nem BleachBit-tisztítófájl.",
+          notCleaner: "Ez nem tisztítófájl.",
           noId: "Ennek a tisztítónak nincs azonosítója.",
           failed: (a) => `Nem sikerült importálni: ${a}`
         }
@@ -1736,7 +1736,7 @@ export default {
       },
       imported: {
         title: "Pembersih yang diimpor",
-        description: "Impor file pembersih BleachBit (.xml). Prune membawa opsi hapusnya dan memberi tahu Anda persis apa yang dilewati. Aturan yang diimpor tidak pernah dicentang secara default dan tidak menyentuh lokasi yang dilindungi.",
+        description: "Impor file pembersih (.xml). Prune membawa opsi hapusnya dan memberi tahu Anda persis apa yang dilewati. Aturan yang diimpor tidak pernah dicentang secara default dan tidak menyentuh lokasi yang dilindungi.",
         button: "Impor pembersih…",
         empty: "Tidak ada pembersih yang diimpor.",
         meta: (a) => `Opsi yang diimpor: ${a}`,
@@ -1755,7 +1755,7 @@ export default {
         error: {
           tooLarge: "File itu terlalu besar untuk menjadi pembersih.",
           notXml: "Itu bukan XML yang valid.",
-          notCleaner: "Itu bukan file pembersih BleachBit.",
+          notCleaner: "Itu bukan file pembersih.",
           noId: "Pembersih itu tidak memiliki id.",
           failed: (a) => `Tidak dapat mengimpor: ${a}`
         }
@@ -1846,7 +1846,7 @@ export default {
       },
       imported: {
         title: "Innfluttir hreinsarar",
-        description: "Fluttu inn BleachBit hreinsiskrá (.xml). Prune tekur inn eyðingarvalkosti hennar og segir þér nákvæmlega hvað var sleppt. Innfluttar reglur eru aldrei hakaðar sjálfgefið og halda sig frá vernduðum stöðum.",
+        description: "Fluttu inn hreinsiskrá (.xml). Prune tekur inn eyðingarvalkosti hennar og segir þér nákvæmlega hvað var sleppt. Innfluttar reglur eru aldrei hakaðar sjálfgefið og halda sig frá vernduðum stöðum.",
         button: "Flytja inn hreinsara…",
         empty: "Engir innfluttir hreinsarar.",
         meta: (a) => `Innfluttir valkostir: ${a}`,
@@ -1865,7 +1865,7 @@ export default {
         error: {
           tooLarge: "Skráin er of stór til að vera hreinsari.",
           notXml: "Þetta er ekki gilt XML.",
-          notCleaner: "Þetta er ekki BleachBit hreinsiskrá.",
+          notCleaner: "Þetta er ekki hreinsiskrá.",
           noId: "Þessi hreinsari er ekki með auðkenni.",
           failed: (a) => `Ekki tókst að flytja inn: ${a}`
         }
@@ -1956,7 +1956,7 @@ export default {
       },
       imported: {
         title: "Cleaner importati",
-        description: "Importa un file di cleaner BleachBit (.xml). Prune ne porta le opzioni di eliminazione e ti dice esattamente cosa ha saltato. Le regole importate non sono mai selezionate per impostazione predefinita e restano fuori dai percorsi protetti.",
+        description: "Importa un file di cleaner (.xml). Prune ne porta le opzioni di eliminazione e ti dice esattamente cosa ha saltato. Le regole importate non sono mai selezionate per impostazione predefinita e restano fuori dai percorsi protetti.",
         button: "Importa cleaner…",
         empty: "Nessun cleaner importato.",
         meta: (a) => `Opzioni importate: ${a}`,
@@ -1975,7 +1975,7 @@ export default {
         error: {
           tooLarge: "Il file è troppo grande per essere un cleaner.",
           notXml: "Non è un XML valido.",
-          notCleaner: "Non è un file di cleaner BleachBit.",
+          notCleaner: "Non è un file di cleaner.",
           noId: "Quel cleaner non ha un id.",
           failed: (a) => `Impossibile importare: ${a}`
         }
@@ -2066,7 +2066,7 @@ export default {
       },
       imported: {
         title: "インポートしたクリーナー",
-        description: "BleachBit のクリーナー ファイル（.xml）をインポートします。Prune は削除オプションを取り込み、スキップした内容を正確にお知らせします。インポートしたルールは既定ではオンにならず、保護された場所には触れません。",
+        description: "クリーナー ファイル（.xml）をインポートします。Prune は削除オプションを取り込み、スキップした内容を正確にお知らせします。インポートしたルールは既定ではオンにならず、保護された場所には触れません。",
         button: "クリーナーをインポート…",
         empty: "インポートしたクリーナーはありません。",
         meta: (a) => `インポートしたオプション：${a}`,
@@ -2085,7 +2085,7 @@ export default {
         error: {
           tooLarge: "ファイルが大きすぎて、クリーナーではありません。",
           notXml: "有効な XML ではありません。",
-          notCleaner: "BleachBit のクリーナー ファイルではありません。",
+          notCleaner: "クリーナー ファイルではありません。",
           noId: "このクリーナーには ID がありません。",
           failed: (a) => `インポートできませんでした：${a}`
         }
@@ -2176,7 +2176,7 @@ export default {
       },
       imported: {
         title: "가져온 클리너",
-        description: "BleachBit 클리너 파일(.xml)을 가져옵니다. Prune은 삭제 옵션을 가져오고 건너뛴 항목을 정확히 알려 줍니다. 가져온 규칙은 기본적으로 선택되지 않으며 보호된 위치에는 접근하지 않습니다.",
+        description: "클리너 파일(.xml)을 가져옵니다. Prune은 삭제 옵션을 가져오고 건너뛴 항목을 정확히 알려 줍니다. 가져온 규칙은 기본적으로 선택되지 않으며 보호된 위치에는 접근하지 않습니다.",
         button: "클리너 가져오기…",
         empty: "가져온 클리너가 없습니다.",
         meta: (a) => `가져온 옵션: ${a}개`,
@@ -2195,7 +2195,7 @@ export default {
         error: {
           tooLarge: "파일이 너무 커서 클리너가 아닙니다.",
           notXml: "올바른 XML이 아닙니다.",
-          notCleaner: "BleachBit 클리너 파일이 아닙니다.",
+          notCleaner: "클리너 파일이 아닙니다.",
           noId: "이 클리너에는 id가 없습니다.",
           failed: (a) => `가져오지 못했습니다: ${a}`
         }
@@ -2286,7 +2286,7 @@ export default {
       },
       imported: {
         title: "Importuoti valikliai",
-        description: "Importuokite „BleachBit“ valiklio failą (.xml). „Prune“ perima jo trynimo parinktis ir tiksliai pasako, ką praleido. Importuotos taisyklės niekada nežymimos pagal numatytuosius nustatymus ir nesiartina prie saugomų vietų.",
+        description: "Importuokite valiklio failą (.xml). „Prune“ perima jo trynimo parinktis ir tiksliai pasako, ką praleido. Importuotos taisyklės niekada nežymimos pagal numatytuosius nustatymus ir nesiartina prie saugomų vietų.",
         button: "Importuoti valiklį…",
         empty: "Importuotų valiklių nėra.",
         meta: (a) => `Importuota parinkčių: ${a}`,
@@ -2305,7 +2305,7 @@ export default {
         error: {
           tooLarge: "Šis failas per didelis, kad būtų valiklis.",
           notXml: "Tai nėra tinkamas XML.",
-          notCleaner: "Tai nėra „BleachBit“ valiklio failas.",
+          notCleaner: "Tai nėra valiklio failas.",
           noId: "Šis valiklis neturi id.",
           failed: (a) => `Nepavyko importuoti: ${a}`
         }
@@ -2396,7 +2396,7 @@ export default {
       },
       imported: {
         title: "Pembersih yang diimport",
-        description: "Import fail pembersih BleachBit (.xml). Prune membawa masuk pilihan padamnya dan memberitahu anda dengan tepat apa yang dilangkau. Peraturan yang diimport tidak pernah ditanda secara lalai dan tidak menyentuh tempat yang dilindungi.",
+        description: "Import fail pembersih (.xml). Prune membawa masuk pilihan padamnya dan memberitahu anda dengan tepat apa yang dilangkau. Peraturan yang diimport tidak pernah ditanda secara lalai dan tidak menyentuh tempat yang dilindungi.",
         button: "Import pembersih…",
         empty: "Tiada pembersih yang diimport.",
         meta: (a) => `Pilihan diimport: ${a}`,
@@ -2415,7 +2415,7 @@ export default {
         error: {
           tooLarge: "Fail itu terlalu besar untuk menjadi pembersih.",
           notXml: "Itu bukan XML yang sah.",
-          notCleaner: "Itu bukan fail pembersih BleachBit.",
+          notCleaner: "Itu bukan fail pembersih.",
           noId: "Pembersih itu tiada id.",
           failed: (a) => `Tidak dapat mengimport: ${a}`
         }
@@ -2506,7 +2506,7 @@ export default {
       },
       imported: {
         title: "Importerte renseverktøy",
-        description: "Importer en BleachBit-renseverktøyfil (.xml). Prune henter inn slettealternativene og forteller deg nøyaktig hva som ble hoppet over. Importerte regler er aldri avkrysset som standard og holder seg unna beskyttede steder.",
+        description: "Importer en renseverktøyfil (.xml). Prune henter inn slettealternativene og forteller deg nøyaktig hva som ble hoppet over. Importerte regler er aldri avkrysset som standard og holder seg unna beskyttede steder.",
         button: "Importer renseverktøy…",
         empty: "Ingen importerte renseverktøy.",
         meta: (a) => `Importerte alternativer: ${a}`,
@@ -2525,7 +2525,7 @@ export default {
         error: {
           tooLarge: "Den filen er for stor til å være et renseverktøy.",
           notXml: "Det er ikke gyldig XML.",
-          notCleaner: "Det er ikke en BleachBit-renseverktøyfil.",
+          notCleaner: "Det er ikke en renseverktøyfil.",
           noId: "Det renseverktøyet har ingen id.",
           failed: (a) => `Kunne ikke importere: ${a}`
         }
@@ -2616,7 +2616,7 @@ export default {
       },
       imported: {
         title: "Geïmporteerde cleaners",
-        description: "Importeer een BleachBit-cleanerbestand (.xml). Prune neemt de verwijderopties over en vertelt je precies wat is overgeslagen. Geïmporteerde regels zijn nooit standaard aangevinkt en blijven weg van beschermde plaatsen.",
+        description: "Importeer een cleanerbestand (.xml). Prune neemt de verwijderopties over en vertelt je precies wat is overgeslagen. Geïmporteerde regels zijn nooit standaard aangevinkt en blijven weg van beschermde plaatsen.",
         button: "Cleaner importeren…",
         empty: "Geen geïmporteerde cleaners.",
         meta: (a) => `Geïmporteerde opties: ${a}`,
@@ -2635,7 +2635,7 @@ export default {
         error: {
           tooLarge: "Dat bestand is te groot voor een cleaner.",
           notXml: "Dat is geen geldige XML.",
-          notCleaner: "Dat is geen BleachBit-cleanerbestand.",
+          notCleaner: "Dat is geen cleanerbestand.",
           noId: "Die cleaner heeft geen id.",
           failed: (a) => `Importeren mislukt: ${a}`
         }
@@ -2726,7 +2726,7 @@ export default {
       },
       imported: {
         title: "Zaimportowane cleanery",
-        description: "Zaimportuj plik cleanera BleachBit (.xml). Prune przenosi jego opcje usuwania i dokładnie informuje, co pominął. Zaimportowane reguły nigdy nie są domyślnie zaznaczone i omijają chronione miejsca.",
+        description: "Zaimportuj plik cleanera (.xml). Prune przenosi jego opcje usuwania i dokładnie informuje, co pominął. Zaimportowane reguły nigdy nie są domyślnie zaznaczone i omijają chronione miejsca.",
         button: "Importuj cleaner…",
         empty: "Brak zaimportowanych cleanerów.",
         meta: (a) => `Zaimportowane opcje: ${a}`,
@@ -2745,7 +2745,7 @@ export default {
         error: {
           tooLarge: "Ten plik jest zbyt duży jak na cleaner.",
           notXml: "To nie jest prawidłowy XML.",
-          notCleaner: "To nie jest plik cleanera BleachBit.",
+          notCleaner: "To nie jest plik cleanera.",
           noId: "Ten cleaner nie ma identyfikatora.",
           failed: (a) => `Nie udało się zaimportować: ${a}`
         }
@@ -2836,7 +2836,7 @@ export default {
       },
       imported: {
         title: "وارد شوي پاکوونکي",
-        description: "د BleachBit د پاکوونکي فایل (.xml) وارد کړئ. Prune د هغه د ړنګولو اختیارونه راوړي او تاسو ته دقیقا وايي چې څه یې پریښودل. وارد شوې قاعدې په ډیفالټ نه نښه کیږي او له خوندي ځایونو لرې پاتې کیږي.",
+        description: "د پاکوونکي فایل (.xml) وارد کړئ. Prune د هغه د ړنګولو اختیارونه راوړي او تاسو ته دقیقا وايي چې څه یې پریښودل. وارد شوې قاعدې په ډیفالټ نه نښه کیږي او له خوندي ځایونو لرې پاتې کیږي.",
         button: "پاکوونکی وارد کړئ…",
         empty: "هیڅ وارد شوی پاکوونکی نشته.",
         meta: (a) => `وارد شوي اختیارونه: ${a}`,
@@ -2855,7 +2855,7 @@ export default {
         error: {
           tooLarge: "دا فایل د پاکوونکي لپاره ډېر لوی دی.",
           notXml: "دا معتبر XML نه دی.",
-          notCleaner: "دا د BleachBit د پاکوونکي فایل نه دی.",
+          notCleaner: "دا د پاکوونکي فایل نه دی.",
           noId: "دا پاکوونکی هیڅ id نه لري.",
           failed: (a) => `وارد نشو: ${a}`
         }
@@ -2946,7 +2946,7 @@ export default {
       },
       imported: {
         title: "Limpadores importados",
-        description: "Importe um arquivo de limpador do BleachBit (.xml). O Prune traz as opções de exclusão e diz exatamente o que foi ignorado. As regras importadas nunca vêm marcadas por padrão e ficam longe dos locais protegidos.",
+        description: "Importe um arquivo de limpador (.xml). O Prune traz as opções de exclusão e diz exatamente o que foi ignorado. As regras importadas nunca vêm marcadas por padrão e ficam longe dos locais protegidos.",
         button: "Importar limpador…",
         empty: "Nenhum limpador importado.",
         meta: (a) => `Opções importadas: ${a}`,
@@ -2965,7 +2965,7 @@ export default {
         error: {
           tooLarge: "Esse arquivo é grande demais para ser um limpador.",
           notXml: "Isso não é um XML válido.",
-          notCleaner: "Esse não é um arquivo de limpador do BleachBit.",
+          notCleaner: "Esse não é um arquivo de limpador.",
           noId: "Esse limpador não tem id.",
           failed: (a) => `Não foi possível importar: ${a}`
         }
@@ -3056,7 +3056,7 @@ export default {
       },
       imported: {
         title: "Limpadores importados",
-        description: "Importe um ficheiro de limpador do BleachBit (.xml). O Prune traz as opções de eliminação e diz exatamente o que foi ignorado. As regras importadas nunca vêm assinaladas por predefinição e ficam longe dos locais protegidos.",
+        description: "Importe um ficheiro de limpador (.xml). O Prune traz as opções de eliminação e diz exatamente o que foi ignorado. As regras importadas nunca vêm assinaladas por predefinição e ficam longe dos locais protegidos.",
         button: "Importar limpador…",
         empty: "Nenhum limpador importado.",
         meta: (a) => `Opções importadas: ${a}`,
@@ -3075,7 +3075,7 @@ export default {
         error: {
           tooLarge: "Esse ficheiro é demasiado grande para ser um limpador.",
           notXml: "Isso não é um XML válido.",
-          notCleaner: "Esse não é um ficheiro de limpador do BleachBit.",
+          notCleaner: "Esse não é um ficheiro de limpador.",
           noId: "Esse limpador não tem id.",
           failed: (a) => `Não foi possível importar: ${a}`
         }
@@ -3166,7 +3166,7 @@ export default {
       },
       imported: {
         title: "Curățătoare importate",
-        description: "Importă un fișier de curățător BleachBit (.xml). Prune preia opțiunile lui de ștergere și îți spune exact ce a omis. Regulile importate nu sunt niciodată bifate implicit și rămân departe de locurile protejate.",
+        description: "Importă un fișier de curățător (.xml). Prune preia opțiunile lui de ștergere și îți spune exact ce a omis. Regulile importate nu sunt niciodată bifate implicit și rămân departe de locurile protejate.",
         button: "Importă curățător…",
         empty: "Niciun curățător importat.",
         meta: (a) => `Opțiuni importate: ${a}`,
@@ -3185,7 +3185,7 @@ export default {
         error: {
           tooLarge: "Fișierul este prea mare pentru a fi un curățător.",
           notXml: "Acesta nu este XML valid.",
-          notCleaner: "Acesta nu este un fișier de curățător BleachBit.",
+          notCleaner: "Acesta nu este un fișier de curățător.",
           noId: "Acest curățător nu are id.",
           failed: (a) => `Nu s-a putut importa: ${a}`
         }
@@ -3276,7 +3276,7 @@ export default {
       },
       imported: {
         title: "Импортированные очистители",
-        description: "Импортируйте файл очистителя BleachBit (.xml). Prune переносит его параметры удаления и точно сообщает, что было пропущено. Импортированные правила никогда не отмечаются по умолчанию и не затрагивают защищённые места.",
+        description: "Импортируйте файл очистителя (.xml). Prune переносит его параметры удаления и точно сообщает, что было пропущено. Импортированные правила никогда не отмечаются по умолчанию и не затрагивают защищённые места.",
         button: "Импортировать очиститель…",
         empty: "Импортированных очистителей нет.",
         meta: (a) => `Импортировано параметров: ${a}`,
@@ -3295,7 +3295,7 @@ export default {
         error: {
           tooLarge: "Этот файл слишком велик для очистителя.",
           notXml: "Это не корректный XML.",
-          notCleaner: "Это не файл очистителя BleachBit.",
+          notCleaner: "Это не файл очистителя.",
           noId: "У этого очистителя нет id.",
           failed: (a) => `Не удалось импортировать: ${a}`
         }
@@ -3386,7 +3386,7 @@ export default {
       },
       imported: {
         title: "Importované čističe",
-        description: "Importujte súbor čističa BleachBit (.xml). Prune prevezme jeho možnosti odstraňovania a presne vám povie, čo preskočil. Importované pravidlá nie sú predvolene zaškrtnuté a nesiahajú na chránené miesta.",
+        description: "Importujte súbor čističa (.xml). Prune prevezme jeho možnosti odstraňovania a presne vám povie, čo preskočil. Importované pravidlá nie sú predvolene zaškrtnuté a nesiahajú na chránené miesta.",
         button: "Importovať čistič…",
         empty: "Žiadne importované čističe.",
         meta: (a) => `Importované možnosti: ${a}`,
@@ -3405,7 +3405,7 @@ export default {
         error: {
           tooLarge: "Tento súbor je príliš veľký na to, aby bol čističom.",
           notXml: "Toto nie je platný XML.",
-          notCleaner: "Toto nie je súbor čističa BleachBit.",
+          notCleaner: "Toto nie je súbor čističa.",
           noId: "Tento čistič nemá žiadne id.",
           failed: (a) => `Nepodarilo sa importovať: ${a}`
         }
@@ -3496,7 +3496,7 @@ export default {
       },
       imported: {
         title: "Pastrues të importuar",
-        description: "Importo një skedar pastruesi BleachBit (.xml). Prune sjell opsionet e tij të fshirjes dhe të tregon saktësisht çfarë anashkaloi. Rregullat e importuara nuk shënohen kurrë si parazgjedhje dhe qëndrojnë larg vendeve të mbrojtura.",
+        description: "Importo një skedar pastruesi (.xml). Prune sjell opsionet e tij të fshirjes dhe të tregon saktësisht çfarë anashkaloi. Rregullat e importuara nuk shënohen kurrë si parazgjedhje dhe qëndrojnë larg vendeve të mbrojtura.",
         button: "Importo pastrues…",
         empty: "Asnjë pastrues i importuar.",
         meta: (a) => `Opsione të importuara: ${a}`,
@@ -3515,7 +3515,7 @@ export default {
         error: {
           tooLarge: "Ai skedar është shumë i madh për të qenë pastrues.",
           notXml: "Ky nuk është XML i vlefshëm.",
-          notCleaner: "Ky nuk është skedar pastruesi BleachBit.",
+          notCleaner: "Ky nuk është skedar pastruesi.",
           noId: "Ai pastrues nuk ka id.",
           failed: (a) => `Nuk u importua dot: ${a}`
         }
@@ -3606,7 +3606,7 @@ export default {
       },
       imported: {
         title: "Увезени чистачи",
-        description: "Увезите датотеку чистача BleachBit (.xml). Prune преузима његове опције брисања и тачно вам каже шта је прескочио. Увезена правила никад нису подразумевано означена и остају ван заштићених места.",
+        description: "Увезите датотеку чистача (.xml). Prune преузима његове опције брисања и тачно вам каже шта је прескочио. Увезена правила никад нису подразумевано означена и остају ван заштићених места.",
         button: "Увези чистач…",
         empty: "Нема увезених чистача.",
         meta: (a) => `Увезене опције: ${a}`,
@@ -3625,7 +3625,7 @@ export default {
         error: {
           tooLarge: "Та датотека је превелика да би била чистач.",
           notXml: "Ово није исправан XML.",
-          notCleaner: "Ово није датотека чистача BleachBit.",
+          notCleaner: "Ово није датотека чистача.",
           noId: "Тај чистач нема id.",
           failed: (a) => `Није могло да се увезе: ${a}`
         }
@@ -3716,7 +3716,7 @@ export default {
       },
       imported: {
         title: "Importerade rensare",
-        description: "Importera en BleachBit-rensarfil (.xml). Prune tar över dess raderingsalternativ och berättar exakt vad som hoppades över. Importerade regler är aldrig förbockade som standard och håller sig borta från skyddade platser.",
+        description: "Importera en rensarfil (.xml). Prune tar över dess raderingsalternativ och berättar exakt vad som hoppades över. Importerade regler är aldrig förbockade som standard och håller sig borta från skyddade platser.",
         button: "Importera rensare…",
         empty: "Inga importerade rensare.",
         meta: (a) => `Importerade alternativ: ${a}`,
@@ -3735,7 +3735,7 @@ export default {
         error: {
           tooLarge: "Filen är för stor för att vara en rensare.",
           notXml: "Det är inte giltig XML.",
-          notCleaner: "Det är inte en BleachBit-rensarfil.",
+          notCleaner: "Det är inte en rensarfil.",
           noId: "Den rensaren har inget id.",
           failed: (a) => `Det gick inte att importera: ${a}`
         }
@@ -3826,7 +3826,7 @@ export default {
       },
       imported: {
         title: "เครื่องมือล้างข้อมูลที่นำเข้า",
-        description: "นำเข้าไฟล์เครื่องมือล้างข้อมูลของ BleachBit (.xml) Prune จะนำตัวเลือกการลบมา และบอกคุณอย่างชัดเจนว่าข้ามอะไรไป กฎที่นำเข้าจะไม่ถูกเลือกโดยค่าเริ่มต้น และอยู่ห่างจากตำแหน่งที่ได้รับการป้องกัน",
+        description: "นำเข้าไฟล์เครื่องมือล้างข้อมูล (.xml) Prune จะนำตัวเลือกการลบมา และบอกคุณอย่างชัดเจนว่าข้ามอะไรไป กฎที่นำเข้าจะไม่ถูกเลือกโดยค่าเริ่มต้น และอยู่ห่างจากตำแหน่งที่ได้รับการป้องกัน",
         button: "นำเข้าเครื่องมือล้างข้อมูล…",
         empty: "ไม่มีเครื่องมือล้างข้อมูลที่นำเข้า",
         meta: (a) => `ตัวเลือกที่นำเข้า: ${a}`,
@@ -3845,7 +3845,7 @@ export default {
         error: {
           tooLarge: "ไฟล์นั้นใหญ่เกินกว่าจะเป็นเครื่องมือล้างข้อมูล",
           notXml: "นั่นไม่ใช่ XML ที่ถูกต้อง",
-          notCleaner: "นั่นไม่ใช่ไฟล์เครื่องมือล้างข้อมูลของ BleachBit",
+          notCleaner: "นั่นไม่ใช่ไฟล์เครื่องมือล้างข้อมูล",
           noId: "เครื่องมือล้างข้อมูลนั้นไม่มี id",
           failed: (a) => `นำเข้าไม่ได้: ${a}`
         }
@@ -3936,7 +3936,7 @@ export default {
       },
       imported: {
         title: "İçe aktarılan temizleyiciler",
-        description: "Bir BleachBit temizleyici dosyasını (.xml) içe aktarın. Prune silme seçeneklerini getirir ve nelerin atlandığını size tam olarak söyler. İçe aktarılan kurallar varsayılan olarak asla işaretlenmez ve korunan yerlerden uzak durur.",
+        description: "Bir temizleyici dosyasını (.xml) içe aktarın. Prune silme seçeneklerini getirir ve nelerin atlandığını size tam olarak söyler. İçe aktarılan kurallar varsayılan olarak asla işaretlenmez ve korunan yerlerden uzak durur.",
         button: "Temizleyici içe aktar…",
         empty: "İçe aktarılmış temizleyici yok.",
         meta: (a) => `İçe aktarılan seçenekler: ${a}`,
@@ -3955,7 +3955,7 @@ export default {
         error: {
           tooLarge: "Bu dosya bir temizleyici olamayacak kadar büyük.",
           notXml: "Bu geçerli bir XML değil.",
-          notCleaner: "Bu bir BleachBit temizleyici dosyası değil.",
+          notCleaner: "Bu bir temizleyici dosyası değil.",
           noId: "Bu temizleyicinin kimliği yok.",
           failed: (a) => `İçe aktarılamadı: ${a}`
         }
@@ -4046,7 +4046,7 @@ export default {
       },
       imported: {
         title: "Імпортовані очисники",
-        description: "Імпортуйте файл очисника BleachBit (.xml). Prune переносить його параметри видалення й точно повідомляє, що було пропущено. Імпортовані правила ніколи не позначаються за замовчуванням і не зачіпають захищені місця.",
+        description: "Імпортуйте файл очисника (.xml). Prune переносить його параметри видалення й точно повідомляє, що було пропущено. Імпортовані правила ніколи не позначаються за замовчуванням і не зачіпають захищені місця.",
         button: "Імпортувати очисник…",
         empty: "Імпортованих очисників немає.",
         meta: (a) => `Імпортовано параметрів: ${a}`,
@@ -4065,7 +4065,7 @@ export default {
         error: {
           tooLarge: "Цей файл завеликий для очисника.",
           notXml: "Це не коректний XML.",
-          notCleaner: "Це не файл очисника BleachBit.",
+          notCleaner: "Це не файл очисника.",
           noId: "У цього очисника немає id.",
           failed: (a) => `Не вдалося імпортувати: ${a}`
         }
@@ -4156,7 +4156,7 @@ export default {
       },
       imported: {
         title: "Trình dọn dẹp đã nhập",
-        description: "Nhập một tệp trình dọn dẹp BleachBit (.xml). Prune đưa các tùy chọn xóa của nó vào và cho bạn biết chính xác những gì đã bị bỏ qua. Các quy tắc đã nhập không bao giờ được chọn mặc định và tránh xa các vị trí được bảo vệ.",
+        description: "Nhập một tệp trình dọn dẹp (.xml). Prune đưa các tùy chọn xóa của nó vào và cho bạn biết chính xác những gì đã bị bỏ qua. Các quy tắc đã nhập không bao giờ được chọn mặc định và tránh xa các vị trí được bảo vệ.",
         button: "Nhập trình dọn dẹp…",
         empty: "Chưa có trình dọn dẹp nào được nhập.",
         meta: (a) => `Tùy chọn đã nhập: ${a}`,
@@ -4175,7 +4175,7 @@ export default {
         error: {
           tooLarge: "Tệp đó quá lớn để là một trình dọn dẹp.",
           notXml: "Đó không phải là XML hợp lệ.",
-          notCleaner: "Đó không phải là tệp trình dọn dẹp BleachBit.",
+          notCleaner: "Đó không phải là tệp trình dọn dẹp.",
           noId: "Trình dọn dẹp đó không có id.",
           failed: (a) => `Không thể nhập: ${a}`
         }
@@ -4266,7 +4266,7 @@ export default {
       },
       imported: {
         title: "已导入的清理器",
-        description: "导入 BleachBit 清理器文件（.xml）。Prune 会带入其中的删除选项，并准确告诉你跳过了什么。导入的规则默认永不勾选，并且不会触及受保护的位置。",
+        description: "导入 清理器文件（.xml）。Prune 会带入其中的删除选项，并准确告诉你跳过了什么。导入的规则默认永不勾选，并且不会触及受保护的位置。",
         button: "导入清理器…",
         empty: "没有已导入的清理器。",
         meta: (a) => `已导入的选项：${a}`,
@@ -4285,7 +4285,7 @@ export default {
         error: {
           tooLarge: "该文件太大，不可能是清理器。",
           notXml: "这不是有效的 XML。",
-          notCleaner: "这不是 BleachBit 清理器文件。",
+          notCleaner: "这不是 清理器文件。",
           noId: "该清理器没有 id。",
           failed: (a) => `无法导入：${a}`
         }
@@ -4376,7 +4376,7 @@ export default {
       },
       imported: {
         title: "已匯入的清理器",
-        description: "匯入 BleachBit 清理器檔案（.xml）。Prune 會帶入其中的刪除選項，並準確告訴你略過了什麼。匯入的規則預設永不勾選，並且不會觸及受保護的位置。",
+        description: "匯入 清理器檔案（.xml）。Prune 會帶入其中的刪除選項，並準確告訴你略過了什麼。匯入的規則預設永不勾選，並且不會觸及受保護的位置。",
         button: "匯入清理器…",
         empty: "沒有已匯入的清理器。",
         meta: (a) => `已匯入的選項：${a}`,
@@ -4395,7 +4395,7 @@ export default {
         error: {
           tooLarge: "該檔案太大，不可能是清理器。",
           notXml: "這不是有效的 XML。",
-          notCleaner: "這不是 BleachBit 清理器檔案。",
+          notCleaner: "這不是 清理器檔案。",
           noId: "該清理器沒有 id。",
           failed: (a) => `無法匯入：${a}`
         }

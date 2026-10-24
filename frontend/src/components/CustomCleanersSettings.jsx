@@ -9,7 +9,7 @@ import { useLanguage } from '../i18n/LanguageContext.jsx';
 /** Settings -> Cleanup: "Custom locations" and "Imported cleaners".
  *
  * Two panels for the two ways someone adds their own rules to Deep Clean:
- * typing a path (or a pattern) and importing a BleachBit cleaner file. Both
+ * typing a path (or a pattern) and importing a cleaner file. Both
  * end up as ordinary rules in the Deep Clean list, never ticked by default.
  * What this screen owes the person is the truth about each: why a location
  * was refused, and, after an import, exactly how much of the file was

@@ -89,7 +89,7 @@ describe('groupStartupItems', () => {
 });
 
 describe('startupCounts', () => {
-  it('reports the numbers Revo puts in its status bar', () => {
+  it('reports the numbers shown in the status bar', () => {
     const counts = startupCounts([
       item({ enabled: true, running: true, exists: true }),
       item({ enabled: false, running: false, exists: true }),

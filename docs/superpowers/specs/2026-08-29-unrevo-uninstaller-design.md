@@ -2,7 +2,7 @@
 
 ## What this is
 
-A real, working Windows uninstaller utility inspired by Revo Uninstaller Pro,
+A real, working Windows uninstaller utility inspired by full-featured commercial uninstallers,
 built as a sibling app to Re:Route (`triclaude-web`) under
 `C:\Games\shortcuts\lol\unrevo`, and built USING Re:Route itself — a
 continuation of Re:Route's dogfooding sessions, applied to a brand-new

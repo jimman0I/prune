@@ -13,7 +13,7 @@ const router = Router();
 // so a failed history read or write left the request unanswered rather than
 // reporting anything.
 
-/** Revo's "Disable Uninstall History". Off means nothing is written -- the
+/** The "Disable Uninstall History" setting. Off means nothing is written -- the
  * point is that no record exists -- and only an explicit false turns it off,
  * so a settings file from before this keeps its history. */
 async function historyIsOff() {

@@ -1,6 +1,6 @@
 import { join } from 'node:path';
 
-/** How hard the leftover scan looks -- Revo's Safe / Moderate / Advanced.
+/** How hard the leftover scan looks -- Safe / Moderate / Advanced.
  *
  * Safe     only what the program itself names: the InstallLocation it
  *          registered and its own registry key. Nothing is guessed, so

@@ -4,13 +4,13 @@ import { sqliteTableExists } from './sqliteInspect.js';
 import { runSqlViaTempScript } from './sqliteExec.js';
 import { quarantineFileEdit } from '../../services/quarantine.js';
 
-/** Firefox/Firefox-family `places.sqlite` cleaner, ported from BleachBit's
- * real `delete_mozilla_url_history()`. NOTE: this schema was NOT
+/** Firefox/Firefox-family `places.sqlite` cleaner, a port of the standard
+ * URL-history logic. NOTE: this schema was NOT
  * independently re-verified against a live current Firefox install on
- * this machine (none available) -- it's ported from BleachBit's
- * documented schema as-is. Every non-`moz_places` table is
- * existence-checked before being touched, matching BleachBit's own
- * defensive comments about tables that don't exist on all Firefox
+ * this machine (none available) -- it's ported from the
+ * documented Firefox schema as-is. Every non-`moz_places` table is
+ * existence-checked before being touched, because some of them
+ * don't exist on all Firefox
  * versions. */
 
 function heldReason(expandedPath, mtimeMs, guards) {

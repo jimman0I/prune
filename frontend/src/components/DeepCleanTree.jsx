@@ -9,21 +9,21 @@ import { useCleanerText, ruleSearchText, categorySearchText } from '../i18n/clea
 
 /** The Deep Clean list.
  *
- * Rebuilt against BleachBit's tree, which is denser than what was here and
- * denser in the ways that matter for 74 rules under 29 headings: one
+ * Rebuilt as a denser tree than what was here, in the ways that matter for
+ * 74 rules under 29 headings: one
  * scroll region rather than a stack of cards, a single tri-state checkbox
  * per application rather than two text links, and one line per rule.
  * Before this, six rows of a single application filled the panel.
  *
- * The row content deliberately does not stay as bare as BleachBit's own,
- * though. BleachBit shows a name and nothing else, ever -- no size, and no
+ * The row content deliberately does not stay down to a bare name,
+ * though. A bare name carries no size, and no
  * explanation, so "Cookies" tells a non-expert exactly nothing. This keeps
  * the measured size, the three-way not-installed / needs-admin /
  * real-bytes distinction, and the plain-English description, on the same
  * line as the name rather than a second one -- denser than what it
  * replaced AND more informative than the thing it was modelled on. What IS
  * matched now is the timing: before a rule is measured the row is as bare
- * as BleachBit's own (name and a checkbox), and the description -- along
+ * as a name and a checkbox, and the description -- along
  * with the size -- reveals itself the moment that specific rule's real
  * result streams in, rather than a wall of explanatory text appearing for
  * 74 rules before anything is known about the machine. See `measured` in
@@ -376,7 +376,7 @@ function CategorySection({ category, items, allItems = items, iconSrc, selected,
                   {t('deepClean.tree.losesData')}
                 </span>
               )}
-              {/* A rule the user brought in from a BleachBit file, so it is
+              {/* A rule the user brought in from a cleaner file, so it is
                   clear it was not written (or curated) by Prune. */}
               {item.imported && (
                 <span className="text-[11px] font-mono uppercase tracking-wider px-1 rounded bg-[color:var(--surface-hover)] text-[color:var(--text-secondary)] border border-[color:var(--border-subtle)] shrink-0">
@@ -396,14 +396,14 @@ function CategorySection({ category, items, allItems = items, iconSrc, selected,
               )}
 
               {/* On the name's own line rather than under it. This is what
-                  buys the density back: BleachBit's rows are one line
-                  because they say nothing but the name, and these stay one
+                  buys the density back: a bare name is one line
+                  because it says nothing else, and these stay one
                   line while still saying what the rule does -- or two, at
                   most: a description cut to one line ended mid-word
                   ("...Bookmar") and there was no way to read the rest.
 
                   Held back until THIS rule is actually measured, though --
-                  BleachBit's own list is bare (name and a checkbox, nothing
+                  the list is bare (name and a checkbox, nothing
                   else) until Preview has run, and showing every rule's full
                   explanation before anything is known about the machine is
                   a wall of grey text nobody asked to read yet. `measured`

@@ -1,6 +1,6 @@
 /** Deep Clean's remembered scan.
  *
- * BleachBit scans once and then just cleans; Prune used to walk the disk for
+ * A clean should work from one scan; Prune used to walk the disk for
  * about twenty seconds on every launch. This keeps the last COMPLETE scan in
  * the renderer's localStorage so opening the screen can draw the tree at once.
  *

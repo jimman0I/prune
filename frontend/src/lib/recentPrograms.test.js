@@ -10,8 +10,8 @@ describe('isRecentlyInstalled', () => {
     expect(isRecentlyInstalled({ installDate: '2026-07-20' }, { now })).toBe(false);
   });
 
-  it('matches the split Revo shows on this machine', () => {
-    // Revo's "New Programs" here spans 27/08 to 02/09 while Wuthering
+  it('matches the split seen on this machine', () => {
+    // "New Programs" here spans 27/08 to 02/09 while Wuthering
     // Waves at 17/08 sits in "Other".
     const flagged = [
       { id: 'brave', installDate: '2026-09-02' },

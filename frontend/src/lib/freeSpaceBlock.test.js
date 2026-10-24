@@ -2,7 +2,7 @@ import { describe, it, expect } from 'vitest';
 import { withFreeSpace, FREE_SPACE_LABEL, mapTreeFor } from './freeSpaceBlock.js';
 import { withUnscannedRemainder, scanCoverage, UNSCANNED_LABEL } from './unscannedRemainder.js';
 
-/** WizTree's "Show Free Space on Treemap": the drive's free space drawn as
+/** Free space on the treemap: the drive's free space drawn as
  * one more block, so every folder reads as a share of the whole drive
  * rather than of the part in use. */
 

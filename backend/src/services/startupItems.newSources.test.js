@@ -3,7 +3,7 @@ import { normalizeStartupItem, attachEnabledState, withSwitchedOffServices } fro
 
 /** The three autorun sources Prune did not read.
  *
- * Revo's Autorun Manager lists 77 things on this machine and Prune listed
+ * A reference run listed 77 things on this machine and Prune listed
  * 15, and the difference was not a bug in the Run-key scan -- it was three
  * whole locations Prune never looked at: scheduled tasks, automatic
  * services, and the startup tasks Windows Store apps register. Measured

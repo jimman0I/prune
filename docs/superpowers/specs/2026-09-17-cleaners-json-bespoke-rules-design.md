@@ -15,7 +15,7 @@ Every bespoke single-file action type built in Phases B-D (`json`, `cookie`, `ch
 ## What's being authored
 
 **Upgraded (converted from plain `delete` to the new engine types), across Chrome/Brave/Edge (all 3 already have identical-shaped rules):**
-- `{chrome,brave,edge}_history`: gains a `chrome.history` action (bookmark-preserving) for the `History` file, keeping a `delete` action for `History-journal`/`Top Sites`/`Top Sites-journal`/`Visited Links` (files the bespoke action doesn't touch and a whole-file delete is still perfectly correct for -- they're not part of BleachBit's own `chrome.history` function either).
+- `{chrome,brave,edge}_history`: gains a `chrome.history` action (bookmark-preserving) for the `History` file, keeping a `delete` action for `History-journal`/`Top Sites`/`Top Sites-journal`/`Visited Links` (files the bespoke action doesn't touch and a whole-file delete is still perfectly correct for -- they're not part of the reference cleaner's own `chrome.history` function either).
 - `{chrome,brave,edge}_cookies`: gains a `cookie` action (default empty keep list = identical whole-file-delete behavior as today, unlocking future keep-list capability) for both real cookie file locations (`Cookies` and `Network\Cookies`), keeping a `delete` action for the two `-journal` sidecars.
 
 **New rules added, same 3 browsers, `recommended: false` (matching this project's existing convention for anything that touches saved user data):**

@@ -4,7 +4,7 @@ import { validateCustomLocation, normalizeCustomLocations } from '../lib/customL
 import { importBleachBitXml, ImportError, MAX_XML_BYTES } from '../lib/bleachbitImport.js';
 import { saveImported, removeImported, listImported } from '../lib/userRules.js';
 
-/** Custom locations and imported BleachBit cleaners.
+/** Custom locations and imported cleaner files.
  *
  * What the Settings screen manages; Deep Clean itself reads the result
  * through loadCleanerRules (lib/userRules.js). The XML arrives as the raw

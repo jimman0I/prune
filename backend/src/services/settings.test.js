@@ -7,7 +7,7 @@ import { getSettings, updateSettings, cleanGuardsFrom, isLowSpecHardware } from 
 
 let dir;
 beforeEach(() => {
-  dir = mkdtempSync(join(tmpdir(), 'unrevo-settings-'));
+  dir = mkdtempSync(join(tmpdir(), 'prune-settings-'));
   process.env.UNREVO_SETTINGS_PATH = join(dir, 'settings.json');
 });
 
@@ -47,7 +47,7 @@ describe('getSettings', () => {
     expect(settings.deleteLockedFilesOnRestart).toBe(false); // writes to HKLM, needs admin
     expect(settings.autoInstallUpdates).toBe(false);   // nothing installs unasked
     expect(settings.language).toBe('en');              // no Electron in this test env to detect another
-    expect(settings.showFreeSpaceOnMap).toBe(false);   // WizTree ships it off too
+    expect(settings.showFreeSpaceOnMap).toBe(false);   // off by default
     expect(settings.rememberDiskMapScans).toBe(true);  // on: it only keeps two small files per drive
   });
 

@@ -7,8 +7,8 @@ import { measuredScan } from '../testSupport/deepCleanPreview.js';
 import { APP_VERSION } from '../lib/appVersion.js';
 import { scanFingerprint, saveScanCache, loadScanCache, SCAN_CACHE_KEY } from '../lib/deepCleanScanCache.js';
 
-/** Deep Clean scans once, remembers it, and then just cleans -- BleachBit's
- * way. These pin the behaviour a person would notice: opening the screen on a
+/** Deep Clean scans once, remembers it, and then just cleans.
+ * These pin the behaviour a person would notice: opening the screen on a
  * remembered scan does not walk the disk, Clean works from it, a clean does
  * not trigger a rescan, and the rows stay honest afterwards. */
 

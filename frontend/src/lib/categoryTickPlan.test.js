@@ -5,8 +5,8 @@ import { categoryTickPlan } from './categoryTickPlan.js';
  *
  * It used to quietly skip every rule that loses data, on the reasoning
  * that a bulk click is the opposite of the deliberate choice the warning
- * exists to capture. Asked for directly, the behaviour is now the one
- * Revo and BleachBit both have: tick everything, and ask about each risky
+ * exists to capture. Asked for directly, the behaviour is now to
+ * tick everything, and ask about each risky
  * one in turn. The warnings still happen -- they are queued rather than
  * skipped -- so nothing gets selected without being seen.
  */

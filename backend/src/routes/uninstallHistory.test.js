@@ -2,7 +2,7 @@ import { describe, it, expect, beforeAll, afterAll, beforeEach, vi } from 'vites
 import { startTestServer } from '../testSupport/routeServer.js';
 
 /** The uninstall history, and the setting that stops it being kept --
- * Revo's "Disable Uninstall History". Off means nothing is written: the
+ * "Disable Uninstall History". Off means nothing is written: the
  * point of the setting is that there is no record, not a hidden one. */
 
 const appendHistoryEntry = vi.fn(async (fields) => ({ id: 'abc123', ...fields }));

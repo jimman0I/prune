@@ -2,7 +2,7 @@ import { compileFilter } from './searchFilter.js';
 
 /** The biggest individual files the scan found, largest first.
  *
- * WizTree's second tab, and the one that answers "what do I actually
+ * The second tab, and the one that answers "what do I actually
  * delete". A treemap is good at showing that a folder is enormous and bad
  * at showing that a single 8 GB file inside it is the reason -- and on
  * this machine two .ucas files account for a quarter of everything

@@ -13,8 +13,8 @@ import { join, isAbsolute } from 'node:path';
  * no Gecko profile exists on the machine this was written on -- no
  * Firefox, LibreWolf, Waterfox, Zen or SeaMonkey -- so unlike the
  * Chromium reader beside it, this has never been run against a real
- * profile. The profile LOCATIONS are verified (they match the paths
- * BleachBit ships for Firefox). The shape of extensions.json is from its
+ * profile. The profile LOCATIONS are verified (they match the standard
+ * Firefox profile paths). The shape of extensions.json is from its
  * documented format.
  *
  * Everything here is therefore written to fail closed. Each add-on must

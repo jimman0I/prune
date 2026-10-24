@@ -96,8 +96,8 @@ router.get('/signatures', async (req, res) => {
  * as { programId: 'YYYY-MM-DD' }.
  *
  * More than half the list on this machine -- 67 of 129 -- so the column
- * read as mostly empty next to Revo, which fills every row. Taken from the
- * uninstall key's own last-write time, which is what Revo uses too: its
+ * read as mostly empty when every row can carry a date. Taken from the
+ * uninstall key's own last-write time, which is reliable: the
  * dates for Steam, Ubisoft Connect, Rainbow Six and Wuthering Waves match
  * these exactly.
  *
@@ -115,7 +115,7 @@ router.get('/install-dates', async (req, res) => {
 /** Microsoft Store apps, which the uninstall registry does not list at all.
  *
  * 81 of them on this machine, 6.28 GB, entirely invisible to Prune until
- * now while Revo gives them a module of their own. They come back shaped
+ * now, though they deserve a module of their own. They come back shaped
  * like the registry programs so the same list can render them, marked with
  * source: 'store' because how you remove one is genuinely different.
  *
@@ -131,7 +131,7 @@ router.get('/store', async (req, res) => {
 
 /** Browser extensions, which no uninstall list mentions anywhere.
  *
- * Revo gives them a module of their own, and they are a real blind spot:
+ * They get a module of their own, and they are a real blind spot:
  * 24 of them here across Brave, Chrome and Edge totalling 390 MB, one of
  * which is 305 MB on its own. Pure filesystem work, about a second.
  *
@@ -176,7 +176,7 @@ router.post('/extensions/page-address', async (req, res) => {
 
 /** Everything Windows launches at sign-in.
  *
- * Revo keeps an autorun manager under Tools, and it belongs beside an
+ * An autorun manager belongs beside an
  * uninstaller: these entries outlive the programs that create them, so a
  * carelessly removed program leaves Windows trying to launch a file that
  * is not there at every sign-in. Read-only, and quick (0.5s). */
@@ -309,7 +309,7 @@ router.post('/startup/add', async (req, res) => {
 
 /** Opens File Explorer on a program's folder.
  *
- * Revo puts this behind its More Commands button and it is the most-used
+ * This sits behind the More Commands button and it is the most-used
  * thing there: the list says a program is 55 GB and the next question is
  * always where. POST rather than GET because it has an effect on the
  * machine -- a window opens -- and nothing with an effect should be
@@ -419,7 +419,7 @@ router.post('/store/remove', async (req, res) => {
 /** Which installed programs are running right now, as
  * { programId: { count, names } }.
  *
- * Revo warns before uninstalling something that is open, and the warning
+ * Prune warns before uninstalling something that is open, and the warning
  * earns its place: an uninstaller for a running program either fails or
  * half-succeeds and leaves files the next launch recreates.
  *

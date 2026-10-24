@@ -4,7 +4,7 @@ import { dirname, join, parse } from 'node:path';
 import { settingsPath } from '../../services/settings.js';
 import { normalizePasses } from '../shredFile.js';
 
-/** BleachBit's "Free disk space" (system.empty_space), for Windows.
+/** The "Free disk space" cleaner (system.empty_space), for Windows.
  *
  * What it does, exactly: it writes filler files onto the chosen drive until
  * only a reserve is left, then deletes them -- once for one pass (zeros), or

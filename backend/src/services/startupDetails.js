@@ -3,7 +3,7 @@ import { runPowerShellJson } from './powershell.js';
 /** Who wrote the thing Windows is about to launch, and whether it is
  * already running.
  *
- * Revo's Autorun Manager gives every row a Description, a Publisher and a
+ * Every row gets a Description, a Publisher and a
  * Status, and those three turn the list from a set of registry values into
  * something a person can make a decision about. "RtkAudUService" is a name
  * only its author loves; "Realtek Audio Universal Service, Realtek
@@ -17,7 +17,7 @@ import { runPowerShellJson } from './powershell.js';
  * Running state is a separate question with a separate answer -- a startup
  * entry that is switched on may still not be running (it crashed, it was
  * closed), and one that is switched OFF may be running because something
- * else started it. Revo reports these independently and so does this. */
+ * else started it. These are reported independently. */
 function buildScript(paths) {
   // Every path is single-quoted with its own quotes doubled, which is
   // PowerShell's escape inside a single-quoted string. A path with an
@@ -34,7 +34,7 @@ $ErrorActionPreference = 'SilentlyContinue'
 # answer, but reading .Path on a process owned by another user or running
 # elevated raises an access error and yields nothing -- and this backend is
 # not elevated. Found live: KeePassXC runs elevated here, so it was
-# reported as not running while Revo showed it RUNNING.
+# reported as not running although it was RUNNING.
 #
 # So the name is indexed too, and a match on either counts. That is looser
 # -- two different programs with the same executable name would be confused

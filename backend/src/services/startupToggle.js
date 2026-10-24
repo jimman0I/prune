@@ -5,7 +5,7 @@ import { setSystemStartupEnabled } from './startupSystemToggle.js';
 
 /** Switching a startup entry on and off, the way Windows does it.
  *
- * Revo's Autorun Manager has a checkbox per row, and it is the thing the
+ * The autorun list has a checkbox per row, and it is the thing the
  * screen is for -- a list that can only report is a worse Task Manager.
  * Prune reads the state from StartupApproved already (see
  * startupApproved.js); this writes the same place, so a change made here

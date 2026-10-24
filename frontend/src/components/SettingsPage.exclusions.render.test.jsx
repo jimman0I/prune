@@ -5,7 +5,7 @@ import userEvent from '@testing-library/user-event';
 import { renderScreen } from '../testSupport/renderScreen.jsx';
 
 /** Settings, Cleanup: the exclusions panel takes folders, file types and, now,
- * registry keys (Revo's RegExclude list), from one field, each kept in its own
+ * registry keys, from one field, each kept in its own
  * list and each with its own badge. */
 
 const fetchSettings = vi.fn();

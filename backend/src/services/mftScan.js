@@ -20,8 +20,8 @@ const MFT_TIMEOUT_MS = 15 * 60_000;
  * machine it took 15.2 seconds to walk a single 37 GB folder. NTFS
  * already keeps one flat table describing every file on the volume, so
  * reading that table sequentially and rebuilding the hierarchy afterward
- * does the WHOLE drive for a fraction of the work. It's the same trick
- * WizTree uses, and the same reason WizTree asks for administrator:
+ * does the WHOLE drive for a fraction of the work. It needs
+ * administrator rights for a simple reason:
  * Windows won't hand a raw volume handle to an unelevated process.
  *
  * Which is the whole design constraint here. Unless Prune itself was started

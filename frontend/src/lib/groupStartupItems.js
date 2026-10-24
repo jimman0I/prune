@@ -1,6 +1,6 @@
-/** The order Revo lists startup locations in, and the names it gives them.
+/** The order startup locations are listed in, and the names they get.
  *
- * Revo groups its Autorun Manager by location -- "Location : All Users
+ * The autorun list is grouped by location -- "Location : All Users
  * Startup", "Location : Registry: HKCU Run" -- and the grouping is the
  * useful part: where an entry lives is what decides who it affects, how it
  * is switched off, and whether removing it needs administrator rights. A
@@ -49,7 +49,7 @@ function groupKeyFor(item) {
   return `${item?.location ?? ''}|${item?.rawScope === 'machine' ? 'machine' : 'user'}`;
 }
 
-/** Splits the flat list into Revo's location groups.
+/** Splits the flat list into location groups.
  *
  * A group with nothing in it is left out entirely: a heading over an empty
  * list is a claim that the location exists and is empty, which is true but
@@ -78,7 +78,7 @@ export function groupStartupItems(items, labels = DEFAULT_GROUP_LABELS) {
   }));
 }
 
-/** The two numbers Revo puts in its status bar.
+/** The two numbers shown in the status bar.
  *
  * Enabled counts entries Windows will actually launch, which is not the
  * same as the number of entries: on this machine four of fifteen are

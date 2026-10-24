@@ -268,7 +268,7 @@ describe('progress events', () => {
 });
 
 describe('GET /deep-clean/execute/stream', () => {
-  it('streams a start, a line per cleaned rule, and a done -- the BleachBit-style clean output', async () => {
+  it('streams a start, a line per cleaned rule, and a done -- the live clean output', async () => {
     const res = await fetch(`${server.base}/deep-clean/execute/stream?ids=temp,thumbs`);
     expect(res.headers.get('content-type')).toMatch(/text\/event-stream/);
     expect(res.headers.get('x-accel-buffering')).toBe('no');

@@ -1,10 +1,10 @@
-# BleachBit-Parity Cleaning Engine — Phase A: Action-Type Foundation, sqlite.vacuum, winreg
+# Deep Clean Parity Cleaning Engine — Phase A: Action-Type Foundation, sqlite.vacuum, winreg
 
 ## Context
 
-Prune's 2.6.0 backlog item 5 ("full BleachBit-parity rewrite of the cleaning engine") is explicitly the largest item on the list and was sequenced last, as its own multi-session effort. `cleanerRules.js` today is a flat path-list walk-and-delete engine: a rule is a list of paths (or a single shell command), `scanRule` measures what exists, `executeRule` quarantines-or-deletes it. That covers exactly one of BleachBit's real action types.
+Prune's 2.6.0 backlog item 5 ("full Deep Clean parity rewrite of the cleaning engine") is explicitly the largest item on the list and was sequenced last, as its own multi-session effort. `cleanerRules.js` today is a flat path-list walk-and-delete engine: a rule is a list of paths (or a single shell command), `scanRule` measures what exists, `executeRule` quarantines-or-deletes it. That covers exactly one of the reference cleaner's real action types.
 
-BleachBit's actual action vocabulary, counted directly from its installed cleaner corpus (`%LOCALAPPDATA%\BleachBit\share\cleaners\*.xml`, GPL, read for factual counts/shapes only — never copied):
+The reference cleaner's actual action vocabulary, counted directly from its installed cleaner corpus (`share\cleaners\*.xml` under the installed cleaner's data folder, GPL, read for factual counts/shapes only — never copied):
 
 ```
 924 delete            -- Prune already has this
@@ -16,7 +16,7 @@ BleachBit's actual action vocabulary, counted directly from its installed cleane
   9 xml/ini/office_registrymodifications/process/etc. -- rare, long tail
 ```
 
-"Full parity" bundles at least four independent subsystems beyond what exists today. This spec covers only the first, highest-value slice: the architectural foundation plus the two action types that are both the biggest real chunk of BleachBit's actual behavior (302 of 1274 actions) and the lowest-risk to add (zero data loss for `sqlite.vacuum`; a narrow, already-proven primitive for `winreg`).
+"Full parity" bundles at least four independent subsystems beyond what exists today. This spec covers only the first, highest-value slice: the architectural foundation plus the two action types that are both the biggest real chunk of the reference cleaner's actual behavior (302 of 1274 actions) and the lowest-risk to add (zero data loss for `sqlite.vacuum`; a narrow, already-proven primitive for `winreg`).
 
 Deferred to later phases, each its own spec when picked up: `json` (Phase B), `cookie` (Phase C), per-app bespoke SQL (Phase D).
 
@@ -91,7 +91,7 @@ Each exports `scan(action, guards)` and `execute(action, guards)`, with the same
 
 ## `sqlite.vacuum` details
 
-**What it does:** runs `VACUUM;` against a SQLite database file, which rewrites the file to reclaim pages SQLite has internally marked free (deleted rows, old history entries) but never returned to the filesystem. This is real disk space BleachBit already counts as "freed" even though no application data is deleted — a browser's `History` file after months of use is very often 30-50% reclaimable this way.
+**What it does:** runs `VACUUM;` against a SQLite database file, which rewrites the file to reclaim pages SQLite has internally marked free (deleted rows, old history entries) but never returned to the filesystem. This is real disk space the reference cleaner already counts as "freed" even though no application data is deleted — a browser's `History` file after months of use is very often 30-50% reclaimable this way.
 
 **Implementation:** shell out to a bundled `sqlite3.exe` CLI via `execFile`, the same pattern this codebase already uses for `reg.exe` (quarantine.js) and PowerShell (registryLeftovers.js, launcher lookups) rather than a native Node module. This matters specifically here: the backend runs *inside Electron's own main process* via `await import(entry)` in `electron/main.cjs`, not as a separate plain-Node child process — so a native module like `better-sqlite3` would need to be compiled against Electron's own ABI (electron-rebuild or equivalent), a real ongoing build-pipeline cost this avoids entirely. `sqlite3.exe` ships as an `extraResource` in `electron-builder.config.cjs`, the same way `icon.png` already does.
 
@@ -103,7 +103,7 @@ Each exports `scan(action, guards)` and `execute(action, guards)`, with the same
 
 ## `winreg` details
 
-**What it does:** deletes one registry key (and everything under it) from `HKEY_CURRENT_USER`. Every `winreg` action in BleachBit's real corpus targets HKCU — nothing in the phase-A scope needs HKLM, which would additionally require elevation Deep Clean doesn't otherwise ask for.
+**What it does:** deletes one registry key (and everything under it) from `HKEY_CURRENT_USER`. Every `winreg` action in the reference cleaner's real corpus targets HKCU — nothing in the phase-A scope needs HKLM, which would additionally require elevation Deep Clean doesn't otherwise ask for.
 
 **Implementation — corrected from the first draft of this spec.** `quarantine.js`'s `quarantineAndDelete({ programName, files, registryKeys })` already does exactly this end to end: exports the key to a `.reg` file inside the batch directory (`reg export`), THEN deletes it (`reg delete ... /f`), records both in `manifest.json`, and `restoreQuarantineBatch` already re-imports that `.reg` file to undo it — this is the same machinery an uninstall's leftover registry removal already uses, not a separate raw `reg.exe` call. `isProtectedKey` (depth-under-3, or an explicit list of OS-critical keys) is already checked inside `quarantineAndDelete` before anything touches `reg.exe`. So a `winreg` action calls `quarantineAndDelete({ programName: \`Deep Clean: ${rule.name}\`, files: [], registryKeys: [expandedKeyPath] })` — zero new registry code, and it is undoable through the exact same Quarantine screen a deleted file already restores through.
 
@@ -128,5 +128,5 @@ No structural change. `DeepCleanTree`/`ScanLog`/`executeLogLine` already treat a
 ## Open questions resolved during this design (recorded so they aren't re-litigated)
 
 - **Why not a native SQLite module?** Backend runs inside Electron's own process (`await import()` in `main.cjs`), so any native module needs Electron-ABI builds specifically — a real, ongoing packaging cost. Shelling out to a bundled CLI matches this codebase's own established convention (reg.exe, PowerShell, makensis are already handled this way) and avoids it entirely.
-- **Why HKCU only?** Every real `winreg` action in BleachBit's corpus targets HKCU. HKLM would need elevation Deep Clean doesn't otherwise require; out of scope unless a concrete rule needs it later.
+- **Why HKCU only?** Every real `winreg` action in the reference cleaner's corpus targets HKCU. HKLM would need elevation Deep Clean doesn't otherwise require; out of scope unless a concrete rule needs it later.
 - **Why no registry-key backup in this phase?** Turned out not to be a gap at all — `quarantine.js`'s `quarantineAndDelete` already accepts `registryKeys` and exports-then-deletes-then-makes-restorable, the same path an uninstall's leftover registry removal already uses. The `winreg` action type calls that function directly rather than `reg.exe` on its own.

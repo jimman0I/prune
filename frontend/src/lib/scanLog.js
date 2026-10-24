@@ -113,13 +113,13 @@ export function scanLogLine(item, nameOf = (rule) => rule.name, messages = DEFAU
   return { label: name, detail: formatBytes(item.sizeBytes), tone: 'size' };
 }
 
-/** One line of the live CLEAN log -- BleachBit's own "Delete ..." /
- * "Vacuum ..." output, for the step that actually removes something
+/** One line of the live CLEAN log -- a "Delete ..." /
+ * "Vacuum ..." line, for the step that actually removes something
  * rather than the scan that only measures it.
  *
  * `item` is a streamed executeRulesProgressively result: { id, name,
  * freedBytes, skipped, recycled, error }. The label leads with a verb the
- * same way BleachBit's does (Delete / Recycle), because "Chrome Cache"
+ * same way (Delete / Recycle), because "Chrome Cache"
  * on its own doesn't say what just happened to it -- only what was
  * chosen a screen ago. */
 export function executeLogLine(item, nameOf = (rule) => rule.name, messages = DEFAULT_LOG_MESSAGES) {

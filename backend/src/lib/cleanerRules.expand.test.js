@@ -4,8 +4,8 @@ import { join } from 'node:path';
 import { expandPath } from './cleanerRules.js';
 
 /** The path variables a rule may use. The first group is what the built-in
- * rules always used; the second is what BleachBit's own cleaners add, which
- * an imported cleaner needs resolved the way BleachBit resolves them. */
+ * rules always used; the second is what imported cleaner files add, which
+ * an imported cleaner needs resolved. */
 
 const saved = { ...process.env };
 afterEach(() => { process.env = { ...saved }; });
@@ -23,7 +23,7 @@ describe('the variables built-in rules use', () => {
   });
 });
 
-describe('the variables BleachBit cleaners use', () => {
+describe('the variables imported cleaner files use', () => {
   it('%UserProfile% is the profile folder', () => {
     process.env.USERPROFILE = 'C:\\Users\\u';
     expect(expandPath('%UserProfile%\\AppData\\Roaming\\Slack')).toBe('C:\\Users\\u\\AppData\\Roaming\\Slack');

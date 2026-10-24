@@ -3,8 +3,7 @@ import { pickPath } from '../lib/api.js';
 import { useLanguage } from '../i18n/LanguageContext.jsx';
 import UninstallModal from './UninstallModal.jsx';
 
-/** Forced uninstall of software that is not listed: Revo's "Forced
- * Uninstall".
+/** Forced uninstall of software that is not listed.
  *
  * For a program that was never registered, whose uninstaller is gone, or
  * that was removed by deleting its folder. The person gives a name, a folder

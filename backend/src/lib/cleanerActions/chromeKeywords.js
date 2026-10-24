@@ -28,7 +28,7 @@ export function scan(action) {
 }
 
 /** Executes a chrome.keywords action: deletes only user-added search
- * engines (`date_created != 0`, BleachBit's own predicate for "not a
+ * engines (`date_created != 0`, the predicate for "not a
  * browser-shipped default engine") from the `keywords` table, resets
  * `usage_count` on what's left, and does the same to `keywords_backup`
  * when that table exists (old Chrome only -- confirmed absent on a

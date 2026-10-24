@@ -352,7 +352,7 @@ describe('the clean-in-progress output', () => {
     await waitFor(() => expect(cleanButton().disabled).toBe(false));
   };
 
-  it('shows the BleachBit-style log as each rule is cleaned', async () => {
+  it('shows the live clean log as each rule is cleaned', async () => {
     // Deliberately never resolved -- same as the "Cleaning…" busy-state
     // test in DeepClean.language.render.test.jsx. A resolved stream lets
     // handleClean run all the way through to the end of the clean inside
@@ -595,7 +595,7 @@ describe('the warning in front of a rule that loses data', () => {
 });
 
 describe('the tree/log split while a clean runs', () => {
-  // BleachBit inverts the split once you're watching a result instead of
+  // The split inverts once you're watching a result instead of
   // deciding what to clean: a narrow input sidebar, a wide output pane.
   // `cleaning` drives a `--dc-tree-w` custom property on the tree column,
   // consumed ONLY by the `lg:w-[var(--dc-tree-w)]` class -- below `lg` the

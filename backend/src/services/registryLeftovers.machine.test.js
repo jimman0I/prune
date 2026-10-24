@@ -18,7 +18,7 @@ import {
 const execFileAsync = promisify(execFile);
 
 /** Firewall rules, MSConfig's disabled-startup records and Event Log sources:
- * the three machine-wide places Revo's leftover scan reads that Prune did not.
+ * the three machine-wide places the leftover scan did not read before.
  *
  * All three live in HKLM, which a test cannot write without elevation, so the
  * script takes the roots as options and this points each at a throwaway HKCU

@@ -4,7 +4,7 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { createRegistryBackup, runPreUninstall, REGISTRY_BACKUP_KEYS, KEEP_BACKUPS } from './preUninstall.js';
 
-/** What happens before a program's own uninstaller runs: Revo's "Create a
+/** What happens before a program's own uninstaller runs: "Create a
  * System Restore Point before uninstall" and "Create a full Registry
  * Backup before uninstall". Both off unless the user turns them on.
  *

@@ -3,7 +3,7 @@
  * string literal in two places. */
 export const FREE_SPACE_LABEL = 'Free space';
 
-/** WizTree's "Show Free Space on Treemap": the drive's free space as one
+/** Free space on the treemap: the drive's free space as one
  * more block, so every folder reads as a share of the whole drive rather
  * than of the part in use.
  *

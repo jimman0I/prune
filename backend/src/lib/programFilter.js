@@ -1,6 +1,6 @@
-/** Picking installed programs by name, the way Revo's RevoCmd does.
+/** Picking installed programs by name, with a wildcard pattern.
  *
- * RevoCmd takes `/m "Microso*"`: `*` stands for any run of characters, `?` for
+ * The pattern is e.g. `--match "Microso*"`: `*` stands for any run of characters, `?` for
  * exactly one, and the pattern must match the WHOLE name, not a part of it. So
  * `Microso*` finds "Microsoft Edge" and `Edge` finds nothing. That strictness
  * is the point -- a script that asks for one program should not also get the
@@ -35,7 +35,7 @@ export function matchPrograms(programs, pattern) {
 }
 
 /** One program as the command line reports it. The install location and the
- * uninstall command are opt-in, like RevoCmd's /i and /u, because most callers
+ * uninstall command are opt-in (`--install-location` and `--uninstall-command`), because most callers
  * want the list and the rest is long. */
 export function describeProgram(program, { installLocation = false, uninstallCommand = false } = {}) {
   const row = {

@@ -202,7 +202,7 @@ describe('dedupeIds', () => {
 });
 
 describe('architecture', () => {
-  // Revo shows a 32/64-bit column. Windows records it structurally rather
+  // The list shows a 32/64-bit column. Windows records it structurally rather
   // than as a value: a 32-bit program on 64-bit Windows is registered
   // under WOW6432Node, and everything else in HKLM is native.
   it('reads 32-bit from the WOW6432Node hive', () => {

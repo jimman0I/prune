@@ -389,7 +389,7 @@ In `backend/src/services/settings.js`, find `restorePointBeforeUninstall: false,
 ```js
   restorePointBeforeUninstall: false,
   registryBackupBeforeUninstall: false,
-  /* Revo's own "force deletion" cousin -- a file quarantine/removal
+  /* A "force deletion" counterpart -- a file quarantine/removal
      couldn't move because something has it open gets scheduled for
      deletion at the next restart (MOVEFILE_DELAY_UNTIL_REBOOT's own
      mechanism -- see services/pendingReboot.js) instead of just being

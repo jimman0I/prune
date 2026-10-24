@@ -2,7 +2,7 @@
 
 ## Why this doc exists
 
-Requested: a technical breakdown of how an aggressive Windows uninstaller (Revo Uninstaller Pro-class) works — heuristic leftover scanning, registry traversal, locked-file bypass, MSI interaction — with an API map, control-flow graph, and pseudocode, to guide rewriting Prune's own uninstaller.
+Requested: a technical breakdown of how an aggressive Windows uninstaller works — heuristic leftover scanning, registry traversal, locked-file bypass, MSI interaction — with an API map, control-flow graph, and pseudocode, to guide rewriting Prune's own uninstaller.
 
 No proprietary binary was analyzed and none exists to analyze here. What follows is (a) the standard, publicly-documented Win32/MSI mechanism every tool in this category uses for each of the four vectors, and (b) an honest diff against what `C:\Games\shortcuts\lol\prune\backend\src\services\{leftoverScan,registryLeftovers,quarantine,preUninstall,silentUninstall}.js` already do. Three of the four vectors are already implemented to a standard matching or exceeding what's described below. The fourth — locked-file bypass — is a real, currently-missing capability, and is what this doc's implementation section actually builds.
 

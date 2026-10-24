@@ -2,7 +2,7 @@
 
 ## Why
 
-Phase C (`docs/superpowers/specs/2026-09-17-bleachbit-parity-phase-c-cookie-design.md`) built the `cookie` action type and a `cookieKeepList: []` setting, but deliberately scoped out the UI: "Phase C builds the ENGINE capability, not a domain-management UI." An empty `cookieKeepList` means every `cookie` action deletes the whole file — correct default behavior, but there's no way to actually keep anything without hand-editing settings JSON. This closes that gap: a real screen to see what cookie domains exist on the machine and choose which to keep.
+Phase C (`docs/superpowers/specs/2026-09-17-deep-clean-parity-phase-c-cookie-design.md`) built the `cookie` action type and a `cookieKeepList: []` setting, but deliberately scoped out the UI: "Phase C builds the ENGINE capability, not a domain-management UI." An empty `cookieKeepList` means every `cookie` action deletes the whole file — correct default behavior, but there's no way to actually keep anything without hand-editing settings JSON. This closes that gap: a real screen to see what cookie domains exist on the machine and choose which to keep.
 
 ## Scope
 
@@ -37,7 +37,7 @@ For each `cookie` action in `loadCleanerRules()`, expand + `resolveBespokeAction
 **Interaction:**
 1. An explicit "Scan for cookies" button — no auto-scan on tab open. Matches Deep Clean's own Preview and Disk Map's own fast-scan convention: nothing that reads across every browser's profile data on this machine happens without an explicit click.
 2. On click, `GET /api/deep-clean/cookie-domains`. While pending, the button shows a scanning state (reuse the small inline spinner glyph pattern already used in Deep Clean/Disk Map's own buttons — `border-2 border-t-transparent rounded-full animate-spin`).
-3. Results render as a scrollable, count-sorted checklist: `{domain} · {count} cookies`, a checkbox per row. A text filter input above the list, since a real profile can easily have 100+ distinct domains and BleachBit's own equivalent screen has the same problem.
+3. Results render as a scrollable, count-sorted checklist: `{domain} · {count} cookies`, a checkbox per row. A text filter input above the list, since a real profile can easily have 100+ distinct domains and the reference cleaner's own equivalent screen has the same problem.
 4. Ticking a row's checkbox calls `save({ cookieKeepList: next })` immediately — same pattern `handleAddExclusion`/`handleRemoveExclusion` already use for `excludeFolders`, no separate Save button anywhere else in this settings screen either.
 5. **Stale-entry handling:** `cookieKeepList` may already contain a domain not present in the just-completed scan (added on a previous scan, or the browser that had it is gone now). Those render as checked rows appended below the scanned list, visually distinguished (no count, since nothing this scan measured it) rather than silently disappearing — same "don't hide state" rule the Deep Clean hidden-cleaners note and the truncated-scan coverage message already follow elsewhere in this app.
 6. `errors` from the scan (a locked/corrupt cookie file) render as a small dismissible note below the list, naming which browser/profile failed — not a blocking error, since the other browsers' domains still scanned fine.

@@ -8,7 +8,7 @@ describe('uninstall history (real file I/O)', () => {
   let dir;
 
   beforeEach(() => {
-    dir = mkdtempSync(join(tmpdir(), 'unrevo-history-'));
+    dir = mkdtempSync(join(tmpdir(), 'prune-history-'));
     process.env.UNREVO_HISTORY_FILE = join(dir, 'uninstall-history.jsonl');
   });
 

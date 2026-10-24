@@ -1,4 +1,4 @@
-/** Resolves a BleachBit-style `/`-separated `address` (e.g.
+/** Resolves a slash-separated `address` (e.g.
  * `dns_prefetching/host_referral_list`) against a parsed JSON object.
  *
  * Returns `{ parent, key }` -- the object that directly holds the target
@@ -14,7 +14,7 @@
  * `undefined`).
  *
  * Purpose-built for this one shape, not a general "get/set/delete a
- * deep object path" utility -- BleachBit's own `address` values are
+ * deep object path" utility -- `address` values are
  * always a plain `/`-joined list of plain keys, never an array index or
  * a key containing a literal `/`, so nothing more general is needed. */
 export function resolveAddress(obj, address) {

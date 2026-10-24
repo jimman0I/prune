@@ -12,8 +12,8 @@ import { recordFreed } from './stats.js';
 
 /** Where an uninstall's leftover files go.
  *
- * Revo's "Delete files and folders: to the Backup folder / to the Recycle
- * Bin / Permanently", with Prune's Quarantine as the backup folder and the
+ * Three destinations: the backup folder / the Recycle
+ * Bin / permanently, with Prune's Quarantine as the backup folder and the
  * default. The choice is about FILES. A registry key has no Recycle Bin,
  * so whichever destination is picked, keys go through quarantineAndDelete
  * -- exported to a .reg file, then deleted -- and can still be put back.

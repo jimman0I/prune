@@ -5,7 +5,7 @@ import { isExcluded } from '../lib/cleanGuards.js';
 import { matchesExtension } from '../lib/exclusionInput.js';
 import { protectionReason } from './pathGuard.js';
 
-/** BleachBit's "Shred files" / "Shred folders", as a tool.
+/** "Shred files" / "Shred folders", as a tool.
  *
  * Everything else Prune deletes is chosen by a rule someone wrote. This is
  * chosen by the user, one path at a time, and destroyed for good -- so the

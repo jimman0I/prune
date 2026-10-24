@@ -14,7 +14,7 @@ job and be trusted while it deletes things.
 ## Users
 
 One person, on their own machine, who knows what a registry key is. They already
-use Revo Uninstaller Pro, BleachBit, WizTree and CrystalDiskInfo and are
+use dedicated uninstaller, cleaner, disk-map and drive-health tools and are
 replacing all four with this. That sets the bar: they will notice immediately if
 a number here disagrees with what those tools report, and they will check.
 
@@ -43,8 +43,8 @@ so instead of showing a plausible zero. The tone is a competent colleague
 telling you what they found, including the parts that are inconvenient.
 
 Reversibility is the default: Deep Clean moves files to Quarantine unless the
-person opts in to Delete now in Settings, an explicit choice that mirrors
-BleachBit and is never a side effect of anything else.
+person opts in to Delete now in Settings, an explicit choice that is
+never a side effect of anything else.
 
 Precise, quiet, and unhurried. It never celebrates. Clearing 40 GB gets a number,
 not a confetti animation.
@@ -103,7 +103,7 @@ first rule; both are neutral text/surface colour now, not the accent.
    summarise or hide detail for tidiness — hide it only when it is genuinely
    irrelevant to the machine in front of them.
 5. **Say where the number came from.** A figure that disagrees with Task Manager
-   or WizTree must be explainable, not just correct.
+   or another disk tool must be explainable, not just correct.
 
 ## Accessibility & Inclusion
 

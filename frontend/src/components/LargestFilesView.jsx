@@ -5,7 +5,7 @@ import { sortFiles } from '../lib/sortFiles.js';
 import { extensionOf, GENERIC_FILE_KEY } from '../lib/fileTypeIcon.js';
 import { RowActionsButton } from './RowActionsButton.jsx';
 
-/** The biggest individual files, WizTree's second tab.
+/** The biggest individual files, on their own tab.
  *
  * A treemap is good at showing that a folder is enormous and bad at
  * showing that one file inside it is the reason. Satisfactory's 8.4 GB

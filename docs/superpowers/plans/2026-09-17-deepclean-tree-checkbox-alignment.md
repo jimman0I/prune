@@ -1,8 +1,8 @@
-# Deep Clean Tree: BleachBit Checkbox Alignment + Selection-to-Output Transition Implementation Plan
+# Deep Clean Tree: Right-Edge Checkbox Alignment + Selection-to-Output Transition Implementation Plan
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
-**Goal:** (1) Move each row's checkbox in `DeepCleanTree.jsx` to the row's right edge, matching real BleachBit's own layout. (2) When a Clean run starts, animate the tree/log split from "tree wide, log narrow" to "tree narrow, log wide," and while narrow, show only the selected items (a live receipt of what's being cleaned) instead of the full browsable list.
+**Goal:** (1) Move each row's checkbox in `DeepCleanTree.jsx` to the row's right edge, matching the reference cleaner's own layout. (2) When a Clean run starts, animate the tree/log split from "tree wide, log narrow" to "tree narrow, log wide," and while narrow, show only the selected items (a live receipt of what's being cleaned) instead of the full browsable list.
 
 **Architecture:** (1) is pure JSX reordering in `DeepCleanTree.jsx`. (2) is a layout change in `DeepClean.jsx` (CSS Grid -> Flexbox with an animated `width` on the tree column, driven by the existing `cleaning` boolean) plus a new `receiptMode` filtering prop on `DeepCleanTree.jsx`.
 
@@ -56,7 +56,7 @@ Expected: all pass, including the new checkbox-alignment tests.
 
 ```bash
 git add frontend/src/components/DeepCleanTree.jsx frontend/src/components/DeepCleanTree.render.test.jsx
-git commit -m "feat(deepCleanTree): move each row's checkbox to the right edge, matching BleachBit's own layout"
+git commit -m "feat(deepCleanTree): move each row's checkbox to the right edge, matching the reference cleaner's own layout"
 ```
 
 ---

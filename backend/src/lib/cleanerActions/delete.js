@@ -105,7 +105,7 @@ export function collectFiles(targetPath, out, denied, excludeBasenames = null, o
     return;
   }
   if (!st.isDirectory()) return;
-  // BleachBit's search=file / glob take files. A folder that matches the
+  // A cleaner's search=file / glob take files. A folder that matches the
   // pattern is not walked: the rule named a file, not a tree.
   if (options.filesOnly) return;
   let entries;
@@ -335,7 +335,7 @@ export async function executeFiles(candidates, held, ruleName, guards = {}) {
 
   if (accessible.length === 0) return withScheduled({ freedBytes: 0, skipped });
 
-  // 'Delete now' -- BleachBit's behaviour, chosen in Settings and read from
+  // 'Delete now' -- chosen in Settings and read from
   // there by the route, never sent by a client. The same guards have already
   // run above (exclusions, recency, locked files); what is left is removed
   // through the one delete implementation the uninstall flow's "Delete
@@ -345,8 +345,8 @@ export async function executeFiles(candidates, held, ruleName, guards = {}) {
 
   // The other half of `autoQuarantine`, which used to be a switch in
   // Settings that decided nothing at all. Off means the Recycle Bin rather
-  // than Prune's own quarantine -- Revo offers the same choice ("Delete to
-  // bin") and the bin is the right alternative: the user gets the space
+  // than Prune's own quarantine ("Delete to
+  // bin"), and the bin is the right alternative: the user gets the space
   // back from somewhere they already know how to empty, and a file taken
   // by mistake is still recoverable through a UI they already trust.
   if (guards.autoQuarantine === false) {

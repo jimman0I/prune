@@ -3,7 +3,7 @@ import { canonicalKeyPath } from './registryLeftovers.js';
 
 /** What the user said never to touch, applied to a leftover scan.
  *
- * Revo keeps exclusion lists for its leftover scan, one for folders and one
+ * The leftover scan has exclusion lists, one for folders and one
  * for registry keys, so something the person has declared off limits is never
  * offered -- ticked by default -- after an uninstall whose name happens to
  * match it. Prune's Settings had the folder list (it also guards Deep Clean

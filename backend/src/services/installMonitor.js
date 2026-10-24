@@ -4,7 +4,7 @@ import { isAbsolute, extname } from 'node:path';
 import { captureSystemState, captureFiles, diffFiles, diffState, chooseProgram } from './installSnapshot.js';
 import { saveTrace, newTraceId } from './installTraces.js';
 
-/** "Install with monitoring": Revo's installation monitor.
+/** "Install with monitoring": watch an installation as it happens.
  *
  * Take a "before" picture, run the installer, take an "after" picture, and
  * keep the difference. Uninstalling that program later then knows exactly

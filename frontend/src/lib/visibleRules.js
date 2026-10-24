@@ -1,6 +1,6 @@
 /** Hides the cleaners that don't apply to this machine.
  *
- * BleachBit's "hide irrelevant cleaners", and on a list this long it earns
+ * Hiding cleaners that do not apply earns
  * its place: of Prune's 74 rules, most are for software the user does not
  * have. Scrolling past forty greyed-out browsers to find the two installed
  * ones is the whole reason someone would want this off.

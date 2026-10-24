@@ -28,8 +28,8 @@ export function expandPath(rawPath) {
     .replace(/%SYSTEMDRIVE%/gi, process.env.SystemDrive || (process.env.SYSTEMROOT || 'C:').slice(0, 2))
     .replace(/%PROGRAMFILES\(X86\)%/gi, process.env['ProgramFiles(x86)'] || '')
     .replace(/%PROGRAMFILES%/gi, process.env.ProgramFiles || '')
-    // The rest are the names BleachBit's own cleaners use, so an imported
-    // cleaner resolves them the way BleachBit does. A variable that is not
+    // The rest are the names cleaner XML files use, so an imported
+    // cleaner resolves them the same way. A variable that is not
     // set expands to '' like the others: the path then matches nothing.
     .replace(/%USERPROFILE%/gi, process.env.USERPROFILE || '')
     .replace(/%TEMP%/gi, process.env.TEMP || process.env.TMP || '')

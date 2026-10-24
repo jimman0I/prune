@@ -10,15 +10,14 @@ import { readServicesSwitchedOff } from './startupSystemToggle.js';
 
 /** Everything Windows runs when you sign in.
  *
- * Revo keeps an autorun manager under its Tools menu, and it is the one
- * tool there that belongs next to an uninstaller: the entries outlive the
+ * An autorun manager belongs next to an uninstaller: the entries outlive the
  * programs that created them. A program removed carelessly leaves its Run
  * key behind, and Windows goes on trying to launch a file that is not
  * there at every single sign-in.
  *
  * Read from seven places: the Run and RunOnce keys in both machine hives
  * and the user hive (plus the Policies\Explorer\Run key Group Policy and
- * some installers write, which Revo's Autorun Manager also lists), the two
+ * some installers write), the two
  * Startup folders, scheduled tasks, services
  * set to start automatically, and the startup tasks Windows Store apps
  * register.
@@ -29,8 +28,8 @@ import { readServicesSwitchedOff } from './startupSystemToggle.js';
  * are 202 scheduled tasks on this machine and 81 automatic services, and
  * filtering out the ones under \Microsoft\ and in system32 leaves 10 and
  * 20 -- all of them things a person installed. Skipping the whole
- * location to avoid the noise also skipped the signal, and left Prune
- * showing 15 entries where Revo showed 77.
+ * location to avoid the noise also skipped the signal, and left the list
+ * showing 15 entries where a full scan found 77.
  *
  * All three are read-only here. Each is switchable somewhere -- Task
  * Scheduler, services.msc, the app's own settings -- but none through
@@ -98,7 +97,7 @@ foreach ($f in $folders) {
 # almost all of them Windows' own, and a list nobody can read is not a
 # feature". True of all 202 on this machine; false once the \Microsoft\
 # tree is excluded, which leaves 11 -- every one of them something a
-# person installed. Revo lists them for the same reason.
+# person installed.
 #
 # Keyed by full path, not by name: task names are only unique within their
 # folder.
@@ -154,7 +153,7 @@ foreach ($s in (Get-CimInstance Win32_Service -ErrorAction SilentlyContinue)) {
 #
 # State 2 is enabled; 0 and 1 are the two ways of being off (off, and
 # turned off by the user). Verified against this machine's own list by
-# comparing every row with the ticks Revo shows for the same apps.
+# comparing every row with the ticks a reference list shows for the same apps.
 #
 # There is no command line for any of these: a Store app declares a
 # startup task by package identity and Windows launches it through the
@@ -338,7 +337,7 @@ export async function getStartupItems() {
   const base = await getStartupEntries();
   if (base.length === 0) return [];
 
-  // A second pass over the executables, for the three columns Revo shows
+  // A second pass over the executables, for the three columns
   // that the registry cannot answer: what the file says it is, who signed
   // it, and whether it is running right now. One call for the whole list.
   const details = await getStartupDetails(base.map((item) => item.executable));

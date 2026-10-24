@@ -86,8 +86,8 @@ ConvertTo-Json -InputObject @($rows) -Compress -Depth 3
  * keys still carries the moment Windows last wrote it, which is when the
  * entry was created and therefore when the program was installed.
  *
- * Confirmed as the right source by checking it against Revo Uninstaller,
- * which fills the column for all of them: its dates for Steam
+ * Confirmed as the right source by checking it against a reference
+ * install-date column that is filled for all of them: its dates for Steam
  * (20/07/2025), Ubisoft Connect (15/07/2026), Rainbow Six (16/07/2026) and
  * Wuthering Waves (17/08/2026) match these key write times exactly, and
  * match neither the install folder's creation time nor its modified time.

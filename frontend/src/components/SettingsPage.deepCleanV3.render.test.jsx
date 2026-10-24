@@ -4,7 +4,7 @@ import { screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { renderScreen } from '../testSupport/renderScreen.jsx';
 
-/** The Deep Clean settings added for the BleachBit-parity track, reached
+/** The Deep Clean settings added later, reached
  * the way a person reaches them: Settings, then the Cleanup tab. */
 
 const updateSettings = vi.fn(async (partial) => partial);

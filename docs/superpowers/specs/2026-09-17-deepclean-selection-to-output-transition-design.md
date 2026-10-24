@@ -2,7 +2,7 @@
 
 ## Context
 
-Extends the checkbox-alignment spec (`2026-09-17-deepclean-tree-checkbox-alignment-design.md`, same day). While grounding that spec against real BleachBit, a second, related gap surfaced: `DeepClean.jsx`'s tree/log split is a static CSS Grid (`minmax(0,1fr)_360px`) that never changes proportion -- the tree keeps the majority of the width whether someone is browsing 74 rules to decide what to clean, or watching a clean actually run. Real BleachBit inverts this: a narrow, fixed input sidebar (~210px in the reference screenshot) and a large output pane, because once you've picked what to clean, the interesting thing to watch is what's happening, not the list you already decided on.
+Extends the checkbox-alignment spec (`2026-09-17-deepclean-tree-checkbox-alignment-design.md`, same day). While grounding that spec against the reference cleaner, a second, related gap surfaced: `DeepClean.jsx`'s tree/log split is a static CSS Grid (`minmax(0,1fr)_360px`) that never changes proportion -- the tree keeps the majority of the width whether someone is browsing 74 rules to decide what to clean, or watching a clean actually run. The reference cleaner inverts this: a narrow, fixed input sidebar (~210px in the reference screenshot) and a large output pane, because once you've picked what to clean, the interesting thing to watch is what's happening, not the list you already decided on.
 
 User's own ask, verbatim: after selecting what to clean, transition aesthetically to the output, while still showing the input (what was selected).
 
@@ -12,7 +12,7 @@ User's own ask, verbatim: after selecting what to clean, transition aestheticall
 
 **Layout:** `DeepClean.jsx`'s tree/log split changes from a static CSS Grid to a flex row where only the tree column's `width` is driven by `cleaning` and transitions between two states:
 - **Browsing** (`cleaning` false): tree wide (`calc(100% - 380px)`, matching the outgoing "tree gets the majority" proportion), log narrow (`flex: 1 min-w-0` fills the remainder, ~380px in practice).
-- **Cleaning** (`cleaning` true): tree narrow (`260px`, close to BleachBit's own real sidebar width), log wide (still `flex: 1 min-w-0`, which now fills the much larger remaining space automatically -- no separate transition needed on the log side, since a flex sibling reflows every frame as the other side's width animates).
+- **Cleaning** (`cleaning` true): tree narrow (`260px`, close to the reference cleaner's own real sidebar width), log wide (still `flex: 1 min-w-0`, which now fills the much larger remaining space automatically -- no separate transition needed on the log side, since a flex sibling reflows every frame as the other side's width animates).
 
 Both tree-width values are `calc()`/`px` expressions (never `fr`), specifically because CSS reliably interpolates a `width` transition between two lengths that resolve to pixels, but does NOT reliably interpolate `grid-template-columns` across mismatched track types (`minmax(...)` vs a plain length) -- confirmed by reasoning through how each engine handles grid track animation, not assumed. This is why the layout mechanism changes from Grid to Flexbox as part of this work, not left as Grid with a mid-transition value swapped in.
 

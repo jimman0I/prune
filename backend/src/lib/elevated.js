@@ -11,8 +11,8 @@ const DEFAULT_TIMEOUT_MS = 120_000;
 /** Runs a PowerShell script ELEVATED and returns its JSON output.
  *
  * Three things on Windows genuinely need administrator, and every one of
- * them is something Prune's competitors do: drive wear counters
- * (Get-StorageReliabilityCounter), raw NTFS MFT reads (the WizTree-speed
+ * them is a real feature of Prune: drive wear counters
+ * (Get-StorageReliabilityCounter), raw NTFS MFT reads (the fast
  * scan), and force-removing another program's leftovers out of HKLM. So
  * this is a shared primitive rather than a one-off inside diskHealth.js.
  *

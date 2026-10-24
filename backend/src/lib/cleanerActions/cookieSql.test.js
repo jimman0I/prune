@@ -27,7 +27,7 @@ describe('buildKeepPredicate', () => {
     expect(sql).toBe("(host_key = 'o''brien.com' OR host_key LIKE '%.o''brien.com')");
   });
 
-  it('lowercases and strips a leading dot from each domain before building the predicate, matching BleachBit\'s own normalization', () => {
+  it('lowercases and strips a leading dot from each domain before building the predicate, matching the standard normalization', () => {
     const sql = buildKeepPredicate(['.Example.COM'], 'host');
     expect(sql).toBe("(host = 'example.com' OR host LIKE '%.example.com')");
   });

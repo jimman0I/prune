@@ -7,7 +7,7 @@ import { categorySelectionState, nextCategoryChecked } from './categorySelection
  * the heading needs to say at a glance whether that whole app is in or
  * out. Two text links ("Select All / Deselect All") said it in words and
  * cost two targets and a read; a single tri-state box says it in one
- * glance and one click, which is what BleachBit's own tree does.
+ * glance and one click.
  */
 
 const items = (...ids) => ids.map((id) => ({ id }));

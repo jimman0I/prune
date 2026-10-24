@@ -65,7 +65,7 @@ const COLUMNS = [
   // a grouping owns the order of the whole table -- sort by size and the
   // heading is still there, splitting the answer in two -- while a column
   // sits beside the date it comes from and brings the same rows to the top
-  // only when you click it. Sorted by it, this is Revo's New Programs list.
+  // only when you click it. Sorted by it, this is the New Programs list.
   // 46px is the header, not the badge: NEW plus its sort arrow is wider
   // than the badge it sits over.
   { key: 'recent', sort: 'recent', width: '46px' },
@@ -225,8 +225,8 @@ function SortArrow({ active, direction }) {
  * markup readable instead of reaching through it. */
 /** Opens the program's folder in Explorer.
  *
- * Revo keeps this behind More Commands and it is the most-used thing
- * there: the row says a program is 55 GB and the next question is always
+ * It is among the most-used actions:
+ * the row says a program is 55 GB and the next question is always
  * where. Shown only when there is a folder to open -- most Store apps and
  * every extension have one, but plenty of registry entries record none,
  * and a button that cannot work is worse than no button. */
@@ -344,7 +344,7 @@ function ProgramRow({ program, iconSrc, checked, running, isNew, monitored = fal
           {t('applications.badges.broken')}
         </span>
       )}
-      {/* Revo warns before uninstalling something that is open, and the
+      {/* Warn before uninstalling something that is open, and the
           warning earns its place: an uninstaller for a running program
           either fails, or half-succeeds and leaves files behind that the
           next launch recreates. */}
@@ -444,8 +444,8 @@ function ProgramRow({ program, iconSrc, checked, running, isNew, monitored = fal
     {/* An inferred date is shown muted. Two thirds of these come
         from the uninstall key's write time rather than from
         anything the installer declared, and that is a weaker
-        claim -- an update rewrites the key too. Revo shows both
-        identically; saying which is which costs nothing. */}
+        claim -- an update rewrites the key too. Showing both
+        identically hides it; saying which is which costs nothing. */}
     <div
       role="cell"
       className={`text-[11.5px] font-mono ${
@@ -639,8 +639,8 @@ export default function ProgramList({ programs: initialPrograms, extensions = []
           : programs);
 
   const filtered = useMemo(() => {
-    // Extensions are their own list, not part of the program list. Revo
-    // gives them their own module for the same reason: an extension is
+    // Extensions are their own list, not part of the program list. That is
+    // deliberate, for the same reason: an extension is
     // not an installed program, and mixing 24 of them in would dilute
     // both the count and the total.
     const source = listFor(filter);
@@ -995,7 +995,7 @@ export default function ProgramList({ programs: initialPrograms, extensions = []
         </div>
         </div>
 
-        {/* Revo puts the installation count at the bottom of the window,
+        {/* The installation count sits at the bottom of the window,
             and it earns the space: it's the one number that changes as
             you filter. */}
         {summary.count > 0 ? (

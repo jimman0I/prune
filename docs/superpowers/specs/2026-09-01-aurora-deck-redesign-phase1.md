@@ -41,7 +41,7 @@ cycle to Phase 1 only.
 **Explicitly out of scope for Phase 1** (the user's own Phase 2-4, deferred
 to their own future spec/plan cycles):
 - Disk Map / treemap visualization, and the native NTFS MFT reader it would
-  need for WizTree-speed scanning.
+  need for very fast scanning.
 - Smart Cleanup (browser cache / temp / thumbnail / Recycle Bin / old-Windows
   scanning and cleaning).
 - Quarantine screen redesign (it already exists and already uses the real

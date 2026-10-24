@@ -278,7 +278,7 @@ describe('the About panel', () => {
 });
 
 describe('the Uninstall tab', () => {
-  /* Revo's Uninstaller -> Backup and General pages, reduced to what Prune
+  /* The Uninstaller's Backup and General options, reduced to what Prune
    * can honestly do. Everything here defaults to how Prune already
    * behaved, except the two slow, admin-hungry steps, which are off. */
   const openUninstallTab = async () => {
@@ -331,7 +331,7 @@ describe('the Uninstall tab', () => {
 });
 
 describe('resetting warning confirmations', () => {
-  // BleachBit's "Reset warning confirmations". Prune remembered "don't ask
+  // "Reset warning confirmations". Prune remembered "don't ask
   // again" per risky cleaner and gave no way to take it back.
   it('clears every remembered choice', async () => {
     fetchSettings.mockResolvedValue({ ...DEFAULTS, acknowledgedCleanWarnings: ['chrome-cookies', 'recycle-bin'] });

@@ -4,7 +4,7 @@ import { previewShred, shredRequested, validate } from '../services/shredTool.js
 import { normalizePasses } from '../lib/shredFile.js';
 import { recordFreed } from '../services/stats.js';
 
-/** The Shred tool (BleachBit's "Shred files / folders").
+/** The Shred tool ("Shred files / folders").
  *
  * POST /preview  { paths }                         -> what would be destroyed
  * POST /         { paths, passes, confirmed:true } -> shreds, streaming progress

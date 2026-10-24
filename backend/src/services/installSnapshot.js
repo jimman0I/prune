@@ -6,7 +6,7 @@ import { measureDirectory } from './leftoverWalk.js';
 
 /** Before/after snapshots for the install monitor.
  *
- * Hunter-style removal by diff is Revo's strongest trick: watch an install,
+ * Removal by diff is the strongest trick available: watch an install,
  * and the uninstall afterwards knows exactly what the installer put where,
  * names or no names. This module takes the two halves of that picture --
  * the system state (Add/Remove entries, startup entries, services, scheduled

@@ -19,7 +19,7 @@ Steam's own real registry entry has no `InstallLocation` at all on real hardware
 
 ## Scope
 
-In scope: exactly the 8 existing game/launcher rules gain a `requiresProgram` field. Out of scope: the other ~70 rules (browsers, OS utilities) -- they've never shown this problem and BleachBit's own equivalent rules don't cross-check installs either; adding the extra registry round-trip cost there would be unjustified.
+In scope: exactly the 8 existing game/launcher rules gain a `requiresProgram` field. Out of scope: the other ~70 rules (browsers, OS utilities) -- they've never shown this problem and the reference cleaner's own equivalent rules don't cross-check installs either; adding the extra registry round-trip cost there would be unjustified.
 
 ## Gate behavior
 

@@ -2,8 +2,8 @@ import { useCallback, useRef, useState } from 'react';
 import { streamDeepCleanExecute } from '../lib/api.js';
 import { executeLogLine } from '../lib/scanLog.js';
 
-/** The clean itself, streamed a rule at a time -- BleachBit's own "Delete
- * ... Vacuum ..." output, for the step that actually removes something
+/** The clean itself, streamed a rule at a time -- one "Delete ..." /
+ * "Vacuum ..." line per rule, for the step that actually removes something
  * rather than for the scan that only measures it.
  *
  * Deliberately not a useQuery, unlike useDeepCleanScan: there is exactly

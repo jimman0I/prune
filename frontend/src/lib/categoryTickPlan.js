@@ -9,8 +9,8 @@ import { needsWarning } from './cleanWarning.js';
  * This used to skip every risky rule outright, on the reasoning that a
  * bulk click is the opposite of the deliberate choice the warning exists
  * to capture, and that five dialogs in a row would train anyone to
- * dismiss them unread. Asked for directly, the behaviour is now what Revo
- * and BleachBit both do -- tick everything, ask about each risky one in
+ * dismiss them unread. Asked for directly, the behaviour is now to
+ * tick everything and ask about each risky one in
  * turn. The concern was about dialogs being clicked through, not about
  * them being absent, so nothing here selects a risky rule without showing
  * its warning: they are QUEUED rather than skipped.

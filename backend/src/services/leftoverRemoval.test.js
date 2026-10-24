@@ -6,7 +6,7 @@ import { join } from 'node:path';
 /** Where an uninstall's leftover FILES go: Quarantine, the Recycle Bin, or
  * nowhere at all.
  *
- * Revo offers the same three. The third is the only removal in Prune that
+ * The third is the only removal in Prune that
  * cannot be undone from inside Prune or from Windows, so most of this file
  * is about what it refuses to touch. Registry keys are not part of the
  * choice: whichever destination is picked, a key is exported to a .reg

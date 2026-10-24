@@ -331,7 +331,7 @@ describe('clean --report (what Task Scheduler runs while Prune is closed)', () =
   });
 });
 
-describe('programs (what Revo\'s RevoCmd lists)', () => {
+describe('programs (the installed-programs listing)', () => {
   // The real installed-programs read, on whatever machine runs the tests: the
   // assertions are about the shape and the wildcard rule, never about which
   // programs happen to be here. 7-Zip, say, may not be.

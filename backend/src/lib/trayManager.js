@@ -45,7 +45,7 @@ async function buildTooltip() {
 
 /** The tray's "Quick Clean (Temp Files)": runs the Deep Clean rule rather than
  * a category of its own. The Smart Cleanup screen this used to share code with
- * is gone -- BleachBit's model, one list of everything with a checkbox each,
+ * is gone -- one list of everything with a checkbox each
  * replaced it -- and there is no reason for the tray to keep a second
  * definition of "temp files" alive behind it. What it deletes counts towards
  * the lifetime total like any other clean. */

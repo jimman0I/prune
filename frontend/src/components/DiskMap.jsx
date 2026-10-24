@@ -268,8 +268,8 @@ const MAX_CELLS = 120;
  * tail of single files and the panel stops being scannable. */
 const PANEL_ROWS = 14;
 
-/** How many files the list shows. WizTree's is unbounded and virtualised;
- * this is the honest depth for a plain list -- past it the sizes flatten
+/** How many files the list shows. A plain list is not virtualised, so
+ * this is the honest depth -- past it the sizes flatten
  * out and nothing on screen is worth acting on. */
 const FILE_ROWS = 60;
 
@@ -418,7 +418,7 @@ function TreemapCell({ x, y, width, height, depth, name, size, allocated, modifi
 
 /** What the space went TO, beside the map that shows where it went.
  *
- * WizTree puts this next to its treemap and it answers a question the map
+ * It sits next to the treemap and answers a question the map
  * cannot: a folder view will never reveal that a third of the drive is
  * .pdb files spread across a dozen projects.
  *
@@ -504,7 +504,7 @@ function ExtensionPanel({ breakdown, shown, icons, typeColors, counting = false 
             >
               {row.percent.toFixed(1)}%
             </div>
-            {/* WizTree's own Files column. A type can be big because one
+            {/* The Files column. A type can be big because one
                 file is enormous or because there are 391,670 of them, and
                 those are different problems with different fixes. */}
             <div
@@ -868,7 +868,7 @@ function DiskMap() {
   // drawing every one produced 10,086 DOM nodes and made the whole view
   // crawl. Past this many the rects are a few pixels wide and say
   // nothing that the aggregate cell doesn't say better.
-  // WizTree's "Show Free Space on Treemap", at a drive root only, and on
+  // Free space shown on the treemap, at a drive root only, and on
   // the map only: the folder table and the file-type breakdown describe
   // what is on the disk, and free space is not on it. scanCoverage keeps
   // reading `tree`, which never has the block.
@@ -1390,16 +1390,16 @@ function DiskMap() {
         <GrowthSummary key={`${last.previous.id}:${last.latest.id}`} older={last.previous} newer={last.latest} onDrill={handleDrillDown} />
       )}
 
-      {/* WizTree's own split, and only its own: Tree View and File View.
+      {/* Two views, and only two: Tree View and File View.
           The three panels that used to be tabs here -- map, folder table,
-          file types -- are three readings of ONE folder, and WizTree shows
+          file types -- are three readings of ONE folder, and they are shown
           all three at once for a reason. The table says a folder is 105 GB,
           the type list says the drive is 14% .pak, and the map is where you
           see that those are the same fact. Behind tabs, the reader has to
           hold one panel in their head while looking at another, which is
           the work the layout is supposed to be doing for them.
 
-          The flat file list stays a tab, exactly as it is in WizTree: it is
+          The flat file list stays a tab: it is
           not a reading of this folder, it is a different question ("which
           single file is biggest") asked of the whole subtree. */}
       {showViews && loading && (
@@ -1438,7 +1438,7 @@ function DiskMap() {
       {showViews && view !== 'files' && (
         <div className="flex flex-col gap-4">
           {/* Folder table and file types side by side, the map full width
-              beneath them -- WizTree's proportions, and the right ones: the
+              beneath them -- the right proportions: the
               two tables are read row by row and want height, the map is
               read as a picture and wants area. */}
           {/* Beside each other only from 1400 px. The table needs about 700 px

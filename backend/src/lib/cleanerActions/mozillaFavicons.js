@@ -6,8 +6,8 @@ import { escapeSqlString } from './cookieSql.js';
 import { runSqlViaTempScript } from './sqliteExec.js';
 import { quarantineFileEdit } from '../../services/quarantine.js';
 
-/** Firefox/Firefox-family `favicons.sqlite` cleaner, ported from
- * BleachBit's real `delete_mozilla_favicons()`. This is the most involved
+/** Firefox/Firefox-family `favicons.sqlite` cleaner, a port of
+ * the standard favicon-cleaning logic. This is the most involved
  * cleaner in this phase: favicons.sqlite cross-references bookmarked page
  * URLs from a SIBLING `places.sqlite` file (same directory) via a
  * read-only `ATTACH DATABASE` -- places.sqlite itself is never written to
@@ -20,9 +20,9 @@ import { quarantineFileEdit } from '../../services/quarantine.js';
  * absolute Windows backslash path in the ATTACH literal. NOTE: this schema
  * was NOT independently re-verified against a live current Firefox
  * install on this machine (none available) -- it's ported from
- * BleachBit's documented schema as-is, same honest caveat as
+ * the documented schema as-is, same honest caveat as
  * mozillaUrlHistory.js. Page-level bookmark matching (keep exactly a
- * bookmarked page's own icon) rather than BleachBit's own domain-level
+ * bookmarked page's own icon) rather than a domain-level
  * refinement -- a deliberate, safe scope decision for this phase. */
 
 function heldReason(expandedPath, mtimeMs, guards) {

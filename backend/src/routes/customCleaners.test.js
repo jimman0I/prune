@@ -80,7 +80,7 @@ describe('custom locations', () => {
   });
 });
 
-describe('importing a BleachBit cleaner', () => {
+describe('importing a cleaner file', () => {
   it('imports the delete options, reports what it skipped, and stores it', async () => {
     const res = await importXml(DEMO);
     expect(res.status).toBe(200);

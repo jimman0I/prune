@@ -89,7 +89,7 @@ router.get('/scan/stream', async (req, res) => {
  * screen a user first meets said nothing about what the feature even
  * cleans -- and the scan behind it takes half a minute. The rules are
  * just a JSON file, so the tree can be on screen immediately and the
- * sizes filled in afterwards, which is how BleachBit behaves and what
+ * sizes filled in afterwards, which is the behavior wanted, and what
  * this was asked to match.
  *
  * Every rule reports sizeBytes: null, which the tree already renders as a
@@ -193,7 +193,7 @@ router.get('/scan', async (req, res) => {
 });
 
 /** The same clean as POST /execute, streamed a rule at a time -- the
- * output BleachBit shows while it's actually working, moved to the step
+ * output a cleaner shows while it's actually working, moved to the step
  * that's actually working. `ids` is a comma-separated list rather than a
  * body: EventSource (and this route's own fetch-based reader on the
  * frontend, matching /scan/stream) only ever sends GET.

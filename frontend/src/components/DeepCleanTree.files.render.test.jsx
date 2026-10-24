@@ -36,7 +36,7 @@ function show(items, props = {}) {
 }
 
 describe('the Imported badge', () => {
-  it('marks a rule brought in from a BleachBit file, and only that', () => {
+  it('marks a rule brought in from a cleaner file, and only that', () => {
     show([item({ id: 'imp_x_cache', name: 'Imported cache', imported: true }), item({ id: 'own', name: 'Own rule' })]);
     expect(screen.getAllByText('Imported')).toHaveLength(1);
   });

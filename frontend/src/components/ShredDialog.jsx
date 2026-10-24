@@ -20,7 +20,7 @@ function cleanLine(line) {
 
 const bridge = () => (typeof window !== 'undefined' ? window.pruneWindow : undefined);
 
-/** BleachBit's "Shred files / folders".
+/** Shred files / folders.
  *
  * Four steps in one dialog: choose, confirm, shred, report. The confirm
  * step is not decoration -- the backend counts what would be destroyed and

@@ -720,8 +720,8 @@ export async function streamDeepCleanScan(onEvent, signal) {
   await streamSSE(`${API_URL}/deep-clean/scan/stream`, onEvent, signal);
 }
 
-/** The clean itself, streamed a rule at a time -- BleachBit's own "Delete
- * ... Vacuum ..." output, moved to the step that actually does either.
+/** The clean itself, streamed a rule at a time -- one "Delete ..." /
+ * "Vacuum ..." line per rule, moved to the step that actually does either.
  *
  * executeDeepClean below is a single POST that returns nothing until
  * every selected rule has been quarantined or deleted, which for a large
@@ -825,7 +825,7 @@ async function jsonOrThrow(res) {
   return data;
 }
 
-/** The user's Custom locations and their imported BleachBit cleaners:
+/** The user's Custom locations and their imported cleaners:
  * { locations: [path], imported: [{id, label, source, importedAt,
  * ruleCount, report}] }. */
 export async function fetchCustomCleaners() {
@@ -846,7 +846,7 @@ export async function removeCustomLocation(path) {
   }));
 }
 
-/** Imports a BleachBit cleaner file. `text` is the file's contents, sent as
+/** Imports a cleaner file. `text` is the file's contents, sent as
  * plain text (it can be bigger than the JSON body limit). Resolves
  * { imported, cleaner, report }; a refused file throws with `.code`. */
 export async function importCleaner(name, text) {
@@ -1011,7 +1011,7 @@ export async function fetchDiskSpace() {
 /** Whole-drive scan read straight from the NTFS Master File Table.
  *
  * Raises a UAC prompt -- Windows won't open a raw volume handle for an
- * unelevated process, which is why WizTree asks for administrator too. So
+ * unelevated process, which is why this needs administrator rights. So
  * this must only ever be called from a button the user pressed, never a
  * background refresh: a consent dialog nobody asked for is how software
  * teaches people to approve them without reading.

@@ -97,7 +97,7 @@ describe('the tree', () => {
   });
 
   it('says what each rule does, on the same line as its name', () => {
-    // The whole reason this is denser than BleachBit's tree and still
+    // The whole reason this is dense and still
     // more informative: "Cookies" tells a non-expert nothing.
     draw();
     expect(screen.getByText('Cached page data')).toBeTruthy();
@@ -245,7 +245,7 @@ describe('the rules that lose something', () => {
 });
 
 describe('the description line', () => {
-  // BleachBit's own list is bare -- a name and a checkbox, nothing else --
+  // The list is bare at first -- a name and a checkbox, nothing else --
   // until Preview has actually run. Prune keeps the description (it says
   // what a bare "Cookies" cannot), but holds it back until THIS rule is
   // measured, per-row, rather than showing a wall of explanatory text for
@@ -311,7 +311,7 @@ describe('the size column', () => {
 });
 
 describe('the checkbox position in each row', () => {
-  // Grounded against the real, installed BleachBit app: every row -- both
+  // Grounded against the real app: every row -- both
   // an application heading and each rule under it -- puts its checkbox in
   // a column at the row's far right edge, with the disclosure triangle and
   // the label at the left. Prune's rows used to do the opposite (checkbox

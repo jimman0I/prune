@@ -3,7 +3,7 @@ import { runSandboxTest } from './sandboxTest.js';
 
 // Real bug this whole function exists to prevent: a naive sandbox test
 // pointed at a literal path INSIDE the real Temp root (e.g.
-// "%TEMP%\unrevo-sandbox") would still be scanned/cleaned by the REAL
+// "%TEMP%\prune-sandbox") would still be scanned/cleaned by the REAL
 // tempFiles category. This test asserts runSandboxTest never touches this
 // machine's actual env vars for real Temp/LocalAppData roots -- only that
 // it temporarily overrode and then fully restored them.

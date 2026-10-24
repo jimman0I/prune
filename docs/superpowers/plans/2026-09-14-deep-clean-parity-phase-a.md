@@ -1,14 +1,14 @@
-# BleachBit-Parity Engine, Phase A — Implementation Plan
+# Deep Clean Parity Engine, Phase A — Implementation Plan
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
-**Goal:** Give Prune's cleaning engine a real multi-action-type model (today it only knows "delete a path" or "run a shell command"), and add the two highest-value BleachBit action types on top of it: `sqlite.vacuum` (compact a database file, reclaim real disk space, delete no data) and `winreg` (delete a registry key, fully quarantined/restorable).
+**Goal:** Give Prune's cleaning engine a real multi-action-type model (today it only knows "delete a path" or "run a shell command"), and add the two highest-value action types from the reference cleaner on top of it: `sqlite.vacuum` (compact a database file, reclaim real disk space, delete no data) and `winreg` (delete a registry key, fully quarantined/restorable).
 
 **Architecture:** `backend/src/data/cleaners.json` rules gain an optional `actions: [...]` array; a new `normalizeRule()` synthesizes one from the existing `paths`/`command` shape for all 75 current rules, so nothing already in the file needs to change. `scanRule`/`executeRule` in `backend/src/lib/cleanerRules.js` become per-action dispatchers over a small handler registry, one file per action type under `backend/src/lib/cleanerActions/` (`delete.js`, `shell.js`, `sqliteVacuum.js`, `winreg.js`). `sqlite.vacuum` shells out to a bundled `sqlite3.exe` CLI (the backend runs inside Electron's own process, so a native SQLite module would need Electron-ABI rebuilds — avoided). `winreg` calls the EXISTING `quarantineAndDelete()` in `backend/src/services/quarantine.js`, which already exports-then-deletes-then-makes-restorable a registry key — zero new registry code.
 
 **Tech Stack:** Node.js (backend, ESM), a bundled SQLite CLI binary (`sqlite3.exe`), Windows `reg.exe` (already wrapped by `quarantine.js`), Vitest.
 
-**Spec:** `docs/superpowers/specs/2026-09-14-bleachbit-parity-phase-a-design.md`
+**Spec:** `docs/superpowers/specs/2026-09-14-deep-clean-parity-phase-a-design.md`
 
 ---
 
@@ -1384,7 +1384,7 @@ Expected: all green across all three.
 
 - [ ] **Step 2: Cross-check against the spec's own goals**
 
-Re-read `docs/superpowers/specs/2026-09-14-bleachbit-parity-phase-a-design.md`'s "Goals" section against what was actually built:
+Re-read `docs/superpowers/specs/2026-09-14-deep-clean-parity-phase-a-design.md`'s "Goals" section against what was actually built:
 
 - "A rule can declare a mix of action types" -- Task 7's mixed-rule test proves this.
 - "Every one of the 75 existing rules keeps working exactly as it does today, with zero data migration" -- Task 2/3's zero-test-edit refactor plus Task 4's `normalizeRule` prove this; confirm by running `npx vitest run src/lib/cleanerRules.test.js` one more time and diffing the pass count against the very first `npm test` run at the top of this plan.

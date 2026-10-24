@@ -1,12 +1,12 @@
-# BleachBit-Parity Cleaning Engine — Phase B: `json` Action
+# Deep Clean Parity Cleaning Engine — Phase B: `json` Action
 
 ## Context
 
-Phase A (merged, `docs/superpowers/plans/2026-09-14-bleachbit-parity-phase-a.md`) built the action-type foundation and two action types: `sqlite.vacuum` and `winreg`. Deferred to their own future phases: `json`, `cookie`, and per-app bespoke SQL. This spec covers `json` — the third-largest real BleachBit action type (51 of 1274 real actions in the grepped corpus, behind `delete` and `sqlite.vacuum`).
+Phase A (merged, `docs/superpowers/plans/2026-09-14-deep-clean-parity-phase-a.md`) built the action-type foundation and two action types: `sqlite.vacuum` and `winreg`. Deferred to their own future phases: `json`, `cookie`, and per-app bespoke SQL. This spec covers `json` — the third-largest action type in the reference cleaner (51 of 1274 real actions in the grepped corpus, behind `delete` and `sqlite.vacuum`).
 
 ## What a real `json` action actually is
 
-Every one of the 51 real `command="json"` actions in BleachBit's installed cleaner corpus (`%LOCALAPPDATA%\BleachBit\share\cleaners\*.xml`) has the identical shape:
+Every one of the 51 real `command="json"` actions in the reference cleaner's installed cleaner corpus (`share\cleaners\*.xml` under the installed cleaner's data folder) has the identical shape:
 
 ```xml
 <action command="json" search="file" path="$$profile$$/Preferences" address="dns_prefetching/host_referral_list"/>

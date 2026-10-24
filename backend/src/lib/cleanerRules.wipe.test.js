@@ -23,7 +23,7 @@ const rule = loadCleanerRules().find((r) => r.id === 'system_empty_space');
 beforeEach(() => vi.clearAllMocks());
 
 describe('the Free disk space rule', () => {
-  it("sits in Windows, named as BleachBit's system.empty_space", () => {
+  it("sits in Windows, named as system.empty_space", () => {
     expect(rule.category).toBe('Windows');
     expect(rule.name).toBe('Free disk space');
   });

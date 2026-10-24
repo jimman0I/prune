@@ -4,7 +4,7 @@ import { join } from 'node:path';
 
 /** Where the Chromium-family browsers keep their profiles.
  *
- * Revo Uninstaller gives browser extensions a module of their own, and
+ * Browser extensions get a module of their own, and
  * they are a real blind spot: an extension can be as large as a small
  * application -- one here is 19 MB -- and nothing in Windows' own
  * uninstall list mentions any of them.

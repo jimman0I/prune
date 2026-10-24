@@ -19,15 +19,14 @@ import { useToasts } from '../hooks/useToasts.jsx';
 
 /** What Windows launches when you sign in.
  *
- * Revo keeps an autorun manager under its Tools menu, and it is the one
- * tool there that belongs beside an uninstaller: these entries outlive the
+ * An autorun manager belongs beside an uninstaller: these entries outlive the
  * programs that create them. A program removed carelessly leaves its Run
  * key behind, and Windows goes on trying to launch a file that is not
  * there at every sign-in -- the same orphan the Applications tab already
  * looks for, in a different place.
  *
- * The first column switches entries on and off, which is what Revo's own
- * checkbox does and what this screen was missing. Disabling writes to
+ * The first column switches entries on and off, which is what this screen
+ * was missing. Disabling writes to
  * StartupApproved rather than deleting anything: the Run value and the
  * shortcut stay exactly where they are, which is what "disable" means to
  * Windows and is why the change is reversible from here, from Task
@@ -35,7 +34,7 @@ import { useToasts } from '../hooks/useToasts.jsx';
  */
 
 /** The columns, defined once so the header and the rows cannot drift.
- * Revo's own: name, what it launches, what the file says it is, who signed
+ * Name, what it launches, what the file says it is, who signed
  * it, and whether it is running right now.
  *
  * Every flexible column is `minmax(0, Nfr)`, never `minmax(Npx, Nfr)`. The
@@ -594,7 +593,7 @@ function StartupItems() {
 
             {groups.map((group) => (
               <div key={group.key} role="rowgroup">
-                {/* Revo puts the count in the heading and it is the useful
+                {/* The count goes in the heading and it is the useful
                     part: "3 of 11 enabled" answers a question no row can. */}
                 <div role="row" className="flex items-baseline flex-wrap gap-x-2 gap-y-0.5 px-5 py-1.5 bg-[color:var(--surface-subtle)] border-y border-[color:var(--border-subtle)]">
                   <span role="rowheader" aria-colspan={COLUMNS.length} className="text-[11px] font-mono uppercase tracking-[0.14em] text-[color:var(--text-secondary)]">

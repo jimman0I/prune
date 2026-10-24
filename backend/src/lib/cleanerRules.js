@@ -53,7 +53,7 @@ export function loadCleanerRules() {
   // the user's own rules are not added to it.
   if (process.env.UNREVO_CLEANERS_PATH) return JSON.parse(readFileSync(process.env.UNREVO_CLEANERS_PATH, 'utf8'));
   // Prune's rules, then the user's: the Custom locations rule and any
-  // imported BleachBit cleaners (lib/userRules.js). Read fresh every time,
+  // imported cleaner files (lib/userRules.js). Read fresh every time,
   // like the file above, so an import shows on the next scan.
   return [...JSON.parse(readFileSync(CLEANERS_JSON_PATH, 'utf8')), ...loadUserRules()];
 }
@@ -82,7 +82,7 @@ export function normalizeRule(rule) {
  * Mode. Normalizes the rule to its `actions` array (normalizeRule) and
  * dispatches each action to its own module's `scan()` by `type` --
  * `shell`, `delete`, `sqlite.vacuum`, `winreg`, `json` (does the rule's
- * BleachBit-style `address` currently resolve inside the target JSON
+ * slash-separated `address` currently resolve inside the target JSON
  * file?), `cookie` (does the target cookie database exist, and how big is
  * it?), `chrome.autofill` (Chrome/Chromium Web Data file's saved
  * form-field values), `chrome.keywords` (the same Web Data file's
@@ -306,7 +306,7 @@ function pathExistsOrDenied(path) {
  *
  * "Discord isn't installed" and "Discord's cache is already empty" both
  * scan to 0 bytes, and showing both as a flat "0 B" tells the user
- * nothing. BleachBit's own UI makes the same distinction (it greys out
+ * nothing. The cleaner list makes the same distinction (it greys out
  * cleaners that don't apply to the machine), and with a rule set this
  * size most rules won't apply to any given user -- so the difference
  * carries most of the list's signal.
@@ -392,7 +392,7 @@ export function scanAllRules(guards = {}) {
  * - `winreg` removes the rule's registry keys and single values (an
  *   action with a `value`) through ONE quarantine batch, via the same
  *   quarantine-then-delete path `delete` uses.
- * - `json` deletes one key (BleachBit-style `address`) out of a parsed
+ * - `json` deletes one key (slash-separated `address`) out of a parsed
  *   JSON file and rewrites it in place, quarantining the original --
  *   never a whole-file delete, since the rest of the file's data must
  *   survive.
@@ -578,7 +578,7 @@ export async function executeRule(rule, guards = {}) {
  * or delete real files, one rule at a time, sometimes a large one (a game's
  * shader cache can take several seconds on its own). The one-shot
  * `executeRules` below returns nothing until every rule is done, which is
- * BleachBit's own "please wait, doing nothing visible" problem, just moved
+ * the "please wait, doing nothing visible" problem, just moved
  * from the scan to the clean -- and the clean is the step that actually
  * touches the disk, so silence here is worse, not better.
  *

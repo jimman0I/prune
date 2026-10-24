@@ -5,7 +5,7 @@ import { tmpdir } from 'node:os';
 import { join, dirname } from 'node:path';
 import { getSettings, updateSettings, cleanGuardsFrom } from './settings.js';
 
-/** The Deep Clean settings added for the BleachBit-parity track. Each one
+/** The Deep Clean settings added for the extended cleaner track. Each one
  * that removes a guard or does something irreversible is off by default,
  * and a corrupted or hand-edited file can only ever turn one ON with an
  * exact `true`. */

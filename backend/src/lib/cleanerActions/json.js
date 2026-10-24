@@ -19,7 +19,7 @@ function heldReason(expandedPath, mtimeMs, guards) {
   return null;
 }
 
-/** Scans a `json` action: does the BleachBit-style `address` genuinely
+/** Scans a `json` action: does the slash-separated `address` genuinely
  * resolve inside the file right now? A missing file, an unreadable file,
  * or invalid JSON all just mean `present: false`, the same "absence is
  * not an error" contract sqlite.vacuum's scan follows for a missing

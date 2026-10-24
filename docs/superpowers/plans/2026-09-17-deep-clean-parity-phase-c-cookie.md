@@ -1,14 +1,14 @@
-# BleachBit-Parity Engine, Phase C (`cookie` action) — Implementation Plan
+# Deep Clean Parity Engine, Phase C (`cookie` action) — Implementation Plan
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
-**Goal:** Add the `cookie` cleaning-engine action type — keep-list-driven surgical cookie-row deletion (or whole-file delete when nothing is being kept), the 4th-largest real BleachBit action type — grounded against BleachBit's own real `Cookie.py` source, not just its cleaner XML.
+**Goal:** Add the `cookie` cleaning-engine action type — keep-list-driven surgical cookie-row deletion (or whole-file delete when nothing is being kept), the 4th-largest action type in the reference cleaner — grounded against the reference cleaner's own real `Cookie.py` source, not just its cleaner XML.
 
 **Architecture:** A new `backend/src/lib/cleanerActions/cookieSql.js` (pure SQL-string helpers: table detection query, keep-predicate builder, string escaping — all unit-testable with zero I/O beyond a passed-in exec function) plus `backend/src/lib/cleanerActions/cookie.js` (`scan`/`execute`, matching the established action-module shape), wired as the 6th dispatch case into `cleanerRules.js`. Reuses `sqliteVacuum.js`'s bundled `sqlite3.exe` shellout convention (parameterization isn't available through that CLI, so values are escaped as SQL string literals, not bound params). Requires one small, backward-compatible extension to Phase B's `quarantineFileEdit()`: it currently only supports a pre-known text `newContent`, but a SQLite database is binary and gets mutated IN PLACE by an external tool (`sqlite3.exe`'s own DELETE+VACUUM) rather than replaced with content computed ahead of time — this plan's first task adds an alternative `editFn` callback mode.
 
 **Tech Stack:** Node.js (backend, ESM), Vitest, the bundled `sqlite3.exe` CLI (same one `sqliteVacuum.js` already uses).
 
-**Spec:** `docs/superpowers/specs/2026-09-17-bleachbit-parity-phase-c-cookie-design.md`
+**Spec:** `docs/superpowers/specs/2026-09-17-deep-clean-parity-phase-c-cookie-design.md`
 
 ---
 
@@ -186,10 +186,10 @@ Add, right after `excludeExtensions` (both are array-of-strings settings the cle
 ```js
   /** Cookie domains a `cookie` action must NEVER delete rows for -- an
    * exact-domain-or-any-subdomain match against each entry (so keeping
-   * "example.com" also keeps "sub.example.com", matching BleachBit's own
+   * "example.com" also keeps "sub.example.com", matching the reference cleaner's own
    * predicate). Empty by default, and an empty list is a fully working,
    * intentional state: it means every `cookie` action deletes the whole
-   * cookie database file outright, exactly like BleachBit's own behavior
+   * cookie database file outright, exactly like the reference cleaner's own behavior
    * when nothing is configured to survive. See cleanerActions/cookie.js.
    * No Settings-screen entry point yet -- managing this list (browsing
    * what's actually in a cookie database, picking domains to keep) is a
@@ -263,7 +263,7 @@ describe('buildKeepPredicate', () => {
     expect(sql).toBe("(host_key = 'o''brien.com' OR host_key LIKE '%.o''brien.com')");
   });
 
-  it('lowercases and strips a leading dot from each domain before building the predicate, matching BleachBit\\'s own normalization', () => {
+  it('lowercases and strips a leading dot from each domain before building the predicate, matching the reference cleaner\\'s own normalization', () => {
     const sql = buildKeepPredicate(['.Example.COM'], 'host');
     expect(sql).toBe("(host = 'example.com' OR host LIKE '%.example.com')");
   });
@@ -294,7 +294,7 @@ Expected: `FAIL` — `Cannot find module './cookieSql.js'`.
 Create `backend/src/lib/cleanerActions/cookieSql.js`:
 
 ```js
-/** The two real cookie-table shapes BleachBit's own Cookie.py detects --
+/** The two real cookie-table shapes the reference cleaner's own Cookie.py detects --
  * Chromium-family (`cookies`/`host_key`) and Firefox-family
  * (`moz_cookies`/`host`). A cookie action never needs to know which
  * browser wrote the file it's pointed at; it only needs to know which of
@@ -323,7 +323,7 @@ export function escapeSqlString(value) {
   return value.replace(/'/g, "''");
 }
 
-/** Normalizes one keep-list entry the same way BleachBit's own
+/** Normalizes one keep-list entry the same way the reference cleaner's own
  * delete_cookies() does before matching: lowercased, with any single
  * leading dot stripped (a keep-list entry of ".example.com" and
  * "example.com" must behave identically). */
@@ -333,7 +333,7 @@ function normalizeDomain(domain) {
 
 /** Builds the SQL predicate matching every row whose host is exactly one
  * of `domains`, OR a subdomain of one of them -- the same "keep this
- * domain and everything under it" rule BleachBit's own predicate
+ * domain and everything under it" rule the reference cleaner's own predicate
  * implements (`host = ? OR host LIKE '%.?'` per domain, OR'd together).
  * `domains` must be non-empty; the caller (cookie.js) never calls this
  * with an empty keep list -- an empty list means "delete the whole file",
@@ -582,7 +582,7 @@ function heldReason(expandedPath, mtimeMs, guards) {
 }
 
 /** Detects which real cookie table (see cookieSql.js's SQLITE_TABLES)
- * exists in the database at `dbPath`, mirroring BleachBit's own
+ * exists in the database at `dbPath`, mirroring the reference cleaner's own
  * detect_browser(). Returns null if neither is present (not a cookie
  * database this action understands) rather than throwing -- execute()
  * treats that the same as "not valid," a skip with a reason. */
@@ -612,7 +612,7 @@ export function scan(action) {
  *
  * - Empty keep list, OR a non-empty keep list that matches NOTHING in
  *   THIS particular file: the whole file is quarantined and removed --
- *   identical in outcome to BleachBit's own `kept_count == 0` branch,
+ *   identical in outcome to the reference cleaner's own `kept_count == 0` branch,
  *   and to a plain `delete` action.
  * - A keep list that matches at least one row in this file: the
  *   non-matching rows are deleted and the file is VACUUMed, with the
@@ -688,7 +688,7 @@ export async function execute(action, ruleName, guards = {}) {
       }
     }
     // keptCount === 0: nothing in this file matches -- fall through to
-    // the whole-file-delete path below, same as BleachBit's own behavior.
+    // the whole-file-delete path below, same as the reference cleaner's own behavior.
   }
 
   // Whole-file delete: either no keep list at all, or one that matched

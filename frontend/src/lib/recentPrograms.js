@@ -1,13 +1,12 @@
 /** How recent an install has to be to be flagged New.
  *
- * Revo splits its list into "New Programs" and "Other Programs". Its own
- * rule is not a window at all -- it remembers the list from last time and
- * calls whatever is new since then new -- which means the group empties
+ * Remembering the list from last time and calling whatever is new since
+ * then new is not a window at all -- it means the group empties
  * itself the moment you look at it twice. A fixed week is a different
  * promise and a more predictable one: this always answers "what landed on
  * this machine recently", whether or not Prune has ever run before.
  *
- * Seven days also reproduces the split Revo happens to show here: its new
+ * Seven days also gives the split seen on this machine: the new
  * group spans 27/08 to 02/09 against a clock reading 03/09, and Wuthering
  * Waves at 17/08 sits in Other.
  *

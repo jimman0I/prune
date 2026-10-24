@@ -2,7 +2,7 @@
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
-**Goal:** Add BleachBit-parity Deep Clean rules for Windows Defender (5) and WinRAR (2), plus the four small engine extensions they need.
+**Goal:** Add Deep Clean expansion rules for Windows Defender (5) and WinRAR (2), plus the four small engine extensions they need.
 
 **Spec:** `docs/superpowers/specs/2026-09-24-defender-winrar-rules-design.md`
 

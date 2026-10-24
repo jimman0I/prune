@@ -104,7 +104,7 @@ see v1.0.1 below) are documented here.
 
 ### Added
 
-**Disk Map, like WizTree**
+**Disk Map**
 
 - Choose any local drive; several NTFS drives are scanned under one
   administrator prompt. The fast scan needs no prompt when Prune already
@@ -139,7 +139,7 @@ see v1.0.1 below) are documented here.
 - The folder walk now runs to completion, shows results as it goes and has
   no time limit.
 
-**Deep Clean, like BleachBit**
+**Deep Clean**
 
 - "Overwrite files before deleting" (1 or 3 passes, off by default) for
   Delete now and an uninstall's permanent delete; a **Shred files…** tool
@@ -194,9 +194,9 @@ see v1.0.1 below) are documented here.
 - Preview lists each rule's biggest files, and the Delete-now confirmation
   names the biggest items.
 - **Custom locations**: add your own paths to Deep Clean. **Import a
-  BleachBit cleaner (.xml)**; the import reports exactly what it skipped.
+  cleaner XML file (.xml)**; the import reports exactly what it skipped.
 
-**Uninstaller, like Revo**
+**Uninstaller**
 
 - A Safe / Moderate / Advanced leftover scan in the uninstall dialog,
   remembered between uninstalls. Leftovers are tiered certain / likely /
@@ -206,7 +206,7 @@ see v1.0.1 below) are documented here.
 - **Forced uninstall** for software that isn't listed.
 - **Install with monitoring…** records an install so uninstalling it later
   is exact. **Hunter** identifies a program: drag its small crosshair onto
-  any window, as in Revo, and let go.
+  any window, and let go.
 - Quarantine gains **Backups** (restore registry and task backups) and
   **History** tabs. Browser extensions have a **Copy page address**
   button, since Prune cannot remove them itself: paste the address into
@@ -245,9 +245,9 @@ see v1.0.1 below) are documented here.
 
 **Cleaner rules**
 
-- **BleachBit parity: 16 new cleaner rules, grounded in a live scan.**
-  Rather than trust BleachBit's CleanerML XML at face value, every new
-  rule here was checked against a real `bleachbit_console.exe -p` run
+- **Deep Clean expansion: 16 new cleaner rules, grounded in a live scan.**
+  Rather than trust the cleaner XML file format at face value, every new
+  rule here was checked against a real preview run of an existing cleaner
   (265/265 cleaner options, each invoked as its own process so deletes
   could be attributed precisely) before being written. Covers
   Brave/Chrome/Edge sync data, Chrome's on-device AI models, Discord
@@ -258,37 +258,37 @@ see v1.0.1 below) are documented here.
   covered by an existing rule, anything needing a directory-whole-match
   capability Prune doesn't have yet, and every `claude.*` option, since
   that's real conversation history, not a general-purpose cache.
-- **More Deep Clean rules, found by reading what BleachBit and Revo clean.**
+- **More Deep Clean rules, found by reading what other cleaners cover.**
   20 new rules: Firefox cookies, form history, open tabs and crash reports;
   the cache of LibreWolf, Waterfox, Zen, Pale Moon and Thunderbird; the
   recent-file lists of Paint, WordPad and Windows Media Player (and its
   cache); WinZip and TortoiseSVN history; TeamViewer logs and connection
   history; FileZilla recent servers; and Windows’ program launch history
-  (UserAssist), which Revo calls Start Menu click logs, and the key Registry
+  (UserAssist), also known as Start Menu click logs, and the key Registry
   Editor reopens at. Every location was
-  checked against BleachBit’s cleaner definitions and each rule was run
+  checked against published cleaner definitions and each rule was run
   through the real engine (a planted fixture was cleaned, backed up and
   gone), and all of it is translated into the 39 other languages. The Firefox
   cookie rule uses the same cookie action as Chrome, which already reads
   Firefox’s `moz_cookies` table when a keep list is set.
 - **Exclusions can name registry keys.** Settings -> Cleanup takes a registry key
   (`HKCUSoftwareVendor`, in any spelling) in the same field as folders and file
-  types, as Revo’s RegExclude list does. A key excluded there, everything under it
+  types. A key excluded there, everything under it
   and every value inside it is never offered as a leftover, and the review says how
   many were left out. The same folder and key exclusions now also apply to a forced
   uninstall, whose scan ignored them before.
-- **`prune-cli programs`**, the counterpart of Revo’s RevoCmd. Lists the
+- **`prune-cli programs`**, a command-line program list. Lists the
   installed programs (the same list as the Applications screen), with
   `--match "Microso*"` for a whole-name match using `*` and `?` (case is
   ignored, and a part of a name with no wildcard matches nothing),
   `--install-location`, `--uninstall-command`, `--store-apps` and `--json`.
   It changes nothing and says so when the list cannot be read.
-- **Startup lists what Revo’s Autorun Manager lists.** Added the
+- **Startup lists more autorun sources.** Added the
   policy-enforced `PoliciesExplorerRun` keys (per user and all users) and
   the 32-bit RunOnce key. Policy entries are read-only and say why: Windows
   keeps no on/off record for them, so a switch would have written to the
   wrong place.
-- **The leftover scan reads more of the machine, as Revo’s does.** `SharedDLLs`
+- **The leftover scan reads more of the machine.** `SharedDLLs`
   reference counts (offered when the file sits in the program’s own folder, or
   when it matches by name and the file is gone, never while the DLL is still on
   disk); Windows Firewall rules for a program in its own folder (and, in
@@ -388,8 +388,7 @@ see v1.0.1 below) are documented here.
   exists for re-scanning after changing settings, but the
   scan-then-clean two-step for a first look is gone. (Once a scan has been
   remembered, opening the screen no longer starts one; see below.)
-- **Deep Clean scans once, remembers it, and then just cleans, like
-  BleachBit.** The last complete scan is kept across restarts, so the
+- **Deep Clean scans once, remembers it, and then just cleans.** The last complete scan is kept across restarts, so the
   screen opens already measured, with "Last measured 3 hours ago" beside
   Rescan, and Clean works straight from it with no scan first. The
   confirmation says the sizes are from the last scan; Clean still measures
@@ -599,9 +598,9 @@ see v1.0.1 below) are documented here.
   failure mode. If it still comes back empty, Applications says so
   plainly with a Retry button, instead of "Nothing matches", which used
   to blame a filter that was never set. Translated into all 39 languages.
-- **Removed competitor names from user-visible text.** The Delete now
-  label and Deep Clean's delete-mode subtitle named BleachBit in every
-  language, and the README named BleachBit, WizTree and Revo. Reworded
+- **Removed other tools' names from user-visible text.** The Delete now
+  label and Deep Clean's delete-mode subtitle named another tool in every
+  language, and the README named three more. Reworded
   without naming any of them, keeping the same facts.
 
 ## v2.9.0
@@ -610,12 +609,12 @@ A design pass over the whole app. The Dashboard now answers one question,
 the dangerous choice is never the easy one (a safer right-click menu, Clean
 that waits for a Preview, leftovers left unticked), colour is kept for what
 you click, and everything is reachable and readable from the keyboard.
-Deep Clean now works like BleachBit too: an opt-in Delete now mode that frees
+Deep Clean also gains an opt-in Delete now mode that frees
 space straight away, Deep scan rules, and a free-space wipe.
 
 ### Added
 
-- **A Delete now mode for Deep Clean, like BleachBit.** Settings › Cleanup has a
+- **A Delete now mode for Deep Clean.** Settings › Cleanup has a
   new choice, When Deep Clean removes files: Move to Quarantine (the default, and
   what Prune has always done) or Delete now, which removes files outright so the
   space is free straight away. The choice is read from your settings by the
@@ -625,15 +624,15 @@ space straight away, Deep scan rules, and a free-space wipe.
   confirm reads Delete 37 items (15.7 GB)? This can't be undone. with a red
   Delete button. Auto-Quarantine is switched off, with the reason beside it, while
   Delete now is chosen.
-- **A Deep scan category, mirroring BleachBit's.** Backup files, Office temporary
+- **A Deep scan category.** Backup files, Office temporary
   files, Vim swap files, .DS_Store files and Thumbs.db files, found anywhere
-  under your user folder with BleachBit's own patterns. The search is bounded
+  under your user folder by their usual filename patterns. The search is bounded
   (entry, depth, match and time limits), never follows a junction out of your
   profile or enters Prune's own folders, streams what it is doing while it runs,
   and stops when you press Stop. A search that hit a limit is labelled partial
   instead of being shown as a total. Backup, Office temp and Vim swap files are
   marked as losing data and none of these is ticked by default.
-- **Free disk space, BleachBit's system.empty_space.** Overwrites the drive's
+- **Free disk space wipe.** Overwrites the drive's
   free space with zeros and deletes the filler so earlier deletions cannot be
   recovered. It is never recommended, never reached by Select everything, never
   remembered from a previous session, and asks every time with the drive, how much
@@ -928,8 +927,8 @@ screen-reader access, and safer destructive actions.
   tabs is a quick 160 ms fade instead of a slide; toggle switches slide on a
   spring; the scan counters count up to their value instead of jumping. The
   background glow stops drifting while the window is unfocused or hidden.
-- **Windows Defender and WinRAR cleaners in Deep Clean**, matching what
-  BleachBit offers for both. Defender: its scan history, temporary files
+- **Windows Defender and WinRAR cleaners in Deep Clean**, covering what
+  each one leaves behind. Defender: its scan history, temporary files
   and logs, plus its Quarantine and its definition-update backups.
   Those last two are marked as losing data and are off by default --
   Quarantine is how Defender restores a file it caught by mistake, and
@@ -998,7 +997,7 @@ and a composite Dashboard health score.
   number, with a breakdown line underneath so it's never a mystery figure
   -- and it stays blank rather than guess until the real reads it depends
   on have actually come back.
-- Uninstalling now matches Revo Uninstaller's own two-step flow: a
+- Uninstalling now follows a two-step flow: a
   manual "Scan" step once the uninstaller has actually finished (instead
   of racing into a leftover scan the moment its process exits, which can
   race real background cleanup some uninstallers keep doing), and an
@@ -1029,15 +1028,15 @@ forever with no way to clear it.
 
 ## v2.6.0
 
-Deep Clean's cleaning engine rebuilt to match BleachBit's own real
-behavior instead of always deleting the whole file, plus a Disk Map
+Deep Clean's cleaning engine rebuilt to act on exactly what a rule
+targets instead of always deleting the whole file, plus a Disk Map
 freeze fixed, a locked-file uninstall gap closed, and Deep Clean's
-input/output redesigned around BleachBit's own layout.
+input/output redesigned around a single tree layout.
 
 ### Added
 
 - **A real cleaning engine, not just whole-file deletes.** Deep Clean's
-  rules can now target exactly what BleachBit itself targets instead of
+  rules can now target exactly the data of interest instead of
   removing an entire file: a database gets `VACUUM`ed to reclaim space
   with zero data loss (`sqlite.vacuum`), a single registry key is removed
   cleanly (`winreg`), one key comes out of a JSON preferences file while
@@ -1059,7 +1058,7 @@ input/output redesigned around BleachBit's own layout.
   default, needs administrator): a leftover file another program still
   has open is scheduled for deletion the next time you restart, instead
   of only being reported as skipped.
-- Deep Clean's tree now matches BleachBit's own row layout (checkbox at
+- Deep Clean's tree now uses a new row layout (checkbox at
   the right edge of each row, not the left), and starting a Clean
   narrows the list to a live receipt of exactly what's being processed
   while the output panel takes the rest of the screen -- what you were
@@ -1203,12 +1202,12 @@ built by GitHub Actions.
 
 ## v2.4.0
 
-Revo-style uninstall options, an opt-in update check, and a Prune.exe that
+Uninstall options, an opt-in update check, and a Prune.exe that
 looks like Prune.
 
 ### Added
 
-- **An Uninstall tab in Settings**, modelled on Revo Uninstaller's options:
+- **An Uninstall tab in Settings**, with leftover-handling options:
   - **Where leftover files go:** Quarantine (the default, restorable in
     Prune), the Recycle Bin, or Delete permanently. Registry keys are
     backed up before they are removed whichever you pick. Permanent
@@ -1229,7 +1228,7 @@ looks like Prune.
   does. Nothing is downloaded or installed, and it is the only request
   Prune ever makes beyond this machine.
 - **Show free space on the Disk Map** (off by default): the drive's free
-  space as one more block, like WizTree's.
+  space as one more block.
 - **Reset warning confirmations** in Settings → Cleanup, to bring back the
   "this loses data" questions you had told not to ask again.
 
@@ -1710,8 +1709,8 @@ talks to itself over stopped accepting requests from anywhere else.
 
 ### Applications
 
-- **A dense, sortable grid** in place of the card list, with the columns a
-  Revo-style uninstaller needs, and **batch uninstall** with row selection.
+- **A dense, sortable grid** in place of the card list, with the columns an
+  uninstaller needs, and **batch uninstall** with row selection.
 - **Real icons, extracted from each program's own executable** — including
   Windows Installer's own product icons, a file-type fallback for the
   rest, and a lettered tile when there is genuinely nothing to show.
@@ -1733,8 +1732,8 @@ talks to itself over stopped accepting requests from anywhere else.
 
 ### Disk Map
 
-- **Full-drive scan by reading the NTFS MFT directly**, the way WizTree
-  does — a whole drive in seconds instead of a directory walk, behind a
+- **Full-drive scan by reading the NTFS MFT directly**, so
+  a whole drive in seconds instead of a directory walk, behind a
   UAC prompt because reading the MFT requires it.
 - One screen, coloured by file type, browsable instantly at a drive root
   instead of crawling.
@@ -1792,8 +1791,8 @@ talks to itself over stopped accepting requests from anywhere else.
 
 - **Exclusions now cover file types as well as folders**, and both are
   honoured by Deep Clean, the disk scanner and the duplicate finder alike.
-- Three guards taken from what Revo and BleachBit ship enabled rather than
-  merely offer: leave recently-modified files alone, create a restore
+- Three guards enabled by default rather than
+  merely offered: leave recently-modified files alone, create a restore
   point first, and hide cleaners for software this machine does not have.
 - Controls for both quarantine limits.
 - **Two settings that did nothing are wired.** `excludeFolders` and

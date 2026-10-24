@@ -394,7 +394,7 @@ describe('scanAllRules', () => {
   it('groups every real rule from cleaners.json by category', () => {
     const grouped = scanAllRules();
     expect(Array.isArray(grouped)).toBe(true);
-    // Grouped per application now, the way BleachBit lists cleaners, so
+    // Grouped per application now, one group per cleaner, so
     // the headings are app names rather than the four broad buckets they
     // used to be.
     const categories = grouped.map(g => g.category);
@@ -1656,7 +1656,7 @@ describe('the Deep scan rules', () => {
   const deep = rules.filter((r) => r.category === 'Deep scan');
   const byId = (id) => rules.find((r) => r.id === id);
 
-  it("mirror BleachBit's five Windows options, and not the Linux-only sixth", () => {
+  it("mirror the standard five Windows options, and not the Linux-only sixth", () => {
     expect(deep.map((r) => r.id).sort()).toEqual([
       'deepscan_backup', 'deepscan_ds_store', 'deepscan_thumbs_db', 'deepscan_tmp', 'deepscan_vim_swap'
     ]);

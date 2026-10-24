@@ -2,8 +2,8 @@
  * one.
  *
  * 67 of the 129 entries on this machine record no InstallDate -- more than
- * half the list -- so the Installed column read as mostly dashes. Revo
- * fills every row, and it does it from the uninstall key's own last-write
+ * half the list -- so the Installed column read as mostly dashes. Every row is
+ * filled now, from the uninstall key's own last-write
  * time; the backend reads the same thing.
  *
  * A declared InstallDate is never overwritten. The key's write time is

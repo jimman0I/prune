@@ -1,4 +1,4 @@
-/** A small, strict XML parser, for BleachBit cleaner files and nothing else.
+/** A small, strict XML parser, for cleaner XML files and nothing else.
  *
  * A tokenizer that walks the text once, character by character -- not
  * pattern matching, which is how XML gets misread. It builds a tree of

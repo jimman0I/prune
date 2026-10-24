@@ -7,7 +7,7 @@ import { tryCreateRestorePoint } from './restorePoint.js';
 
 const execFileAsync = promisify(execFile);
 
-/** What runs before a program's own uninstaller: Revo's "Create a System
+/** What runs before a program's own uninstaller: "Create a System
  * Restore Point before uninstall" and "Create a full Registry Backup
  * before uninstall". Both are off unless the user turns them on.
  *

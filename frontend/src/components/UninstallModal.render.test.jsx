@@ -217,7 +217,7 @@ describe('the leftover scan', () => {
     expect(scanForLeftovers).not.toHaveBeenCalled();
   });
 
-  it('lands on a manual readyToScan step after a real uninstall, without scanning yet -- Revo-style, no racing the still-finishing native uninstaller', async () => {
+  it('lands on a manual readyToScan step after a real uninstall, without scanning yet -- no racing the still-finishing native uninstaller', async () => {
     await uninstall();
 
     expect(await screen.findByRole('button', { name: 'Scan for leftovers' })).toBeTruthy();

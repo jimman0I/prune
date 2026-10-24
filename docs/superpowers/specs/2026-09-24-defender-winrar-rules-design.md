@@ -2,13 +2,13 @@
 
 ## Why
 
-Compared against the user's own BleachBit setup: BleachBit ships a Windows Defender cleaner and a WinRAR cleaner (every option ticked in the user's config), and Prune's Deep Clean has no rules for either. Approved direction: **full BleachBit parity** for both. BleachBit is GPL, so only the factual locations below were taken from its `windows_defender.xml` / `winrar.xml`; every name and description here is written fresh.
+Compared against the user's own cleaner setup: the reference cleaner ships a Windows Defender cleaner and a WinRAR cleaner (every option ticked in the user's config), and Prune's Deep Clean has no rules for either. Approved direction: **full parity with the reference cleaner definitions** for both. The reference cleaner is GPL, so only the factual locations below were taken from its `windows_defender.xml` / `winrar.xml`; every name and description here is written fresh.
 
 ## Rules
 
 Two new categories, appended to the end of `backend/src/data/cleaners.json` (Deep Clean groups by first appearance, so they land at the bottom of the tree). Rule text stays English-only in cleaners.json, exactly like every other rule: `DeepCleanTree.jsx` renders `item.name`/`item.description`/`group.category` verbatim, none of it goes through `frontend/src/i18n/catalog.js`, so there are no catalog keys to add.
 
-### Windows Defender (5 rules, mirroring BleachBit's 5 options)
+### Windows Defender (5 rules, mirroring the reference cleaner's 5 options)
 
 `%CommonAppData%` is `%PROGRAMDATA%` in Prune's token set; `%WinDir%` is `%WINDIR%`. `D` below is `%PROGRAMDATA%\Microsoft\Windows Defender`.
 
@@ -63,9 +63,9 @@ Grounded by reading `cleanerRules.js`, `cleanerActions/delete.js`, `cleanerActio
 
 ### 1. Recursive `**` path segment (delete.js `resolveGlob`)
 
-BleachBit's WinRAR temp option walks the whole folder for `*.tmp`. `resolveGlob` supported one `*` wildcard per segment (so `Program Files*` already works) but no recursion: `WinRAR\*.tmp` only matched the top level. Added: a segment that is exactly `**` matches zero or more directory levels. Directory symlinks/junctions are not followed (Dirent `isDirectory()` is false for them), so a junction loop cannot recurse forever. A trailing `**` resolves to its base path (which `collectFiles` already walks recursively). Rather than silently dropping BleachBit's recursive search, this is the extension.
+The reference cleaner's WinRAR temp option walks the whole folder for `*.tmp`. `resolveGlob` supported one `*` wildcard per segment (so `Program Files*` already works) but no recursion: `WinRAR\*.tmp` only matched the top level. Added: a segment that is exactly `**` matches zero or more directory levels. Directory symlinks/junctions are not followed (Dirent `isDirectory()` is false for them), so a junction loop cannot recurse forever. A trailing `**` resolves to its base path (which `collectFiles` already walks recursively). Rather than silently dropping the reference cleaner's recursive search, this is the extension.
 
-Known imprecision, accepted: `**\*.tmp` also matches a *directory* named `something.tmp` (and would then collect its contents). BleachBit's walk matches files only. Not worth a file-only mode for a program folder that has never contained such a directory.
+Known imprecision, accepted: `**\*.tmp` also matches a *directory* named `something.tmp` (and would then collect its contents). The reference cleaner's walk matches files only. Not worth a file-only mode for a program folder that has never contained such a directory.
 
 ### 2. Access-denied means present (cleanerRules.js `rulePathsExistFor`)
 
@@ -90,12 +90,12 @@ A `winreg`-only rule still has no byte size (`sizeBytes: null`), exactly like th
 - **Windows Defender**: `%SYSTEMROOT%\System32\SecurityHealthSystray.exe` (the blue Windows Security shield -- extracted and checked on this machine), then `%PROGRAMFILES%\Windows Defender\MpCmdRun.exe` as fallback.
 - **WinRAR**: `%PROGRAMFILES%\WinRAR\WinRAR.exe`, `%PROGRAMFILES(X86)%\WinRAR\WinRAR.exe`.
 
-## BleachBit paths: support status
+## Reference cleaner paths: support status
 
-Every BleachBit path in both cleaners is supported. Deliberate differences:
+Every the reference cleaner path in both cleaners is supported. Deliberate differences:
 
-- **Superset:** `%PROGRAMFILES(X86)%\WinRAR` is added to the temp rule alongside `%PROGRAMFILES%\WinRAR`. BleachBit already wildcards `Program Files*` for the VirtualStore copy precisely because WinRAR can be the 32-bit build; the install folder gets the same treatment.
-- **Overlap, kept for parity:** `defender_temp`'s `SoftwareDistribution\Download\Install\*` files are also inside the existing `windows_update_leftovers` rule, and `MpSigStub.log`/`MpCmdRun.log` inside `windows_system_temp`; `Service\History.Log` is in both `defender_history` and `defender_logs` (as in BleachBit). Clean is safe with overlaps -- the first rule moves a file, the second finds it gone -- but a scan total can count an overlapping file twice. That was already true of `windows_cbs_logs`/`windows_servicing_logs` (both list `Logs\DISM`).
+- **Superset:** `%PROGRAMFILES(X86)%\WinRAR` is added to the temp rule alongside `%PROGRAMFILES%\WinRAR`. The reference cleaner already wildcards `Program Files*` for the VirtualStore copy precisely because WinRAR can be the 32-bit build; the install folder gets the same treatment.
+- **Overlap, kept for parity:** `defender_temp`'s `SoftwareDistribution\Download\Install\*` files are also inside the existing `windows_update_leftovers` rule, and `MpSigStub.log`/`MpCmdRun.log` inside `windows_system_temp`; `Service\History.Log` is in both `defender_history` and `defender_logs` (as in the reference cleaner). Clean is safe with overlaps -- the first rule moves a file, the second finds it gone -- but a scan total can count an overlapping file twice. That was already true of `windows_cbs_logs`/`windows_servicing_logs` (both list `Logs\DISM`).
 - **Known limitation, pre-existing, not fixed:** a glob segment under a directory that refuses listing (`Support\MPLog-*.log` unelevated) resolves to no matches without reporting a denial. It does not change any result here: the same `defender_logs` rule's `Scans\History\Service\*` files are themselves denied, so the rule still reports "needs admin".
 - **Unverified:** whether an elevated Prune can actually move files out of Defender's folders while Tamper Protection is on. Reading works elevated (measured). Moving needs a UAC prompt and touches protected files, so it is left to an end-to-end check by a person; if Tamper Protection refuses, the existing per-file "locked or inaccessible" skip path reports it rather than failing the clean.
 
@@ -103,7 +103,7 @@ Every BleachBit path in both cleaners is supported. Deliberate differences:
 
 - `%WINDIR%\Temp\MpSigStub.log` exists, 154 KB; `MpCmdRun.log` absent.
 - Every folder under `%PROGRAMDATA%\Microsoft\Windows Defender\Scans\History` is `EPERM` (stat and list); `Quarantine`, `Definition Updates\Backup`, `Support` exist but refuse listing; `Definition Updates\Updates` is listable and empty.
-- WinRAR installed at `C:\Program Files\WinRAR`. Of the 11 history targets only `HKCU\Software\WinRAR\General` : `LastFolder` exists; `DialogEditHistory` exists but holds only `DictSize` (not a BleachBit target), and `ArcHistory`, `WinRAR SFX` and `General\Info` : `CommentFile` are absent.
+- WinRAR installed at `C:\Program Files\WinRAR`. Of the 11 history targets only `HKCU\Software\WinRAR\General` : `LastFolder` exists; `DialogEditHistory` exists but holds only `DictSize` (not a reference cleaner target), and `ArcHistory`, `WinRAR SFX` and `General\Info` : `CommentFile` are absent.
 
 ## Testing
 

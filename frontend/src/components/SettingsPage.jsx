@@ -106,7 +106,7 @@ function SettingsPage({ onReportBug = null, onShowWhatsNew = null, tabRequest = 
 
   const TABS = TAB_IDS.map((id) => ({ id, label: t(`settings.tabs.${id}`) }));
 
-  /* Revo's three, in Prune's words. The descriptions avoid each other's
+  /* The three options, in Prune's words. The descriptions avoid each other's
    * key words on purpose, so each option reads as exactly one choice. */
   const LEFTOVER_OPTIONS = [
     { value: 'quarantine', label: t('settings.uninstallTab.leftoverOptions.quarantine.label'), description: t('settings.uninstallTab.leftoverOptions.quarantine.description') },
@@ -474,7 +474,7 @@ function SettingsPage({ onReportBug = null, onShowWhatsNew = null, tabRequest = 
                 {/* The one setting that decides whether Clean can be undone,
                     so it is a labelled choice with both outcomes spelled out
                     rather than a switch. Quarantine is the default; Delete
-                    now is BleachBit's behaviour and is never the side effect
+                    now is an explicit choice and is never the side effect
                     of anything else. */}
                 <div className="pb-4 mb-4 border-b border-[color:var(--border-subtle)]">
                   <div id="deep-clean-removal" className="text-[13.5px] font-medium text-[color:var(--text-primary)] mb-3">
@@ -572,7 +572,7 @@ function SettingsPage({ onReportBug = null, onShowWhatsNew = null, tabRequest = 
                 </div>
               </div>
 
-              {/* The user's own rules: Custom locations, and BleachBit
+              {/* The user's own rules: Custom locations, and the
                   cleaners they import. Two panels of their own. */}
               <CustomCleanersSettings />
 

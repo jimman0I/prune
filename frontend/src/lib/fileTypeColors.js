@@ -1,6 +1,6 @@
 /** One colour per file type, shared by the treemap and the list beside it.
  *
- * This is the part of WizTree that makes its two panels one tool rather
+ * This is the part that makes the two panels one tool rather
  * than two: every cell in the map is painted by the file's TYPE, and the
  * swatch down the left of the file-type table is the same colour. You read
  * "14.2% .pak" in the list, and the map shows you where those .pak files

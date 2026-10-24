@@ -35,7 +35,7 @@ Commands
   list                 List the Deep Clean rules.
   preview              Measure rules without changing anything.
   clean                Clean rules (moves files to Quarantine, or deletes).
-  programs             List installed programs (what Revo's RevoCmd does).
+  programs             List installed programs.
   help                 Show this text.
 
 Selecting rules
@@ -115,7 +115,7 @@ const bytes = (n) => {
   return `${parseFloat((n / 1024 ** i).toFixed(1))} ${sizes[i]}`;
 };
 
-/** `prune-cli programs`: the installed programs, as RevoCmd lists them.
+/** `prune-cli programs`: the installed programs.
  *
  * Reads the same registry list the Applications screen does (and, with
  * --store-apps, the Store packages), so the two never disagree about what is

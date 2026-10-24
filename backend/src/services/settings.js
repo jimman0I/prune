@@ -18,7 +18,7 @@ import { appVersion } from './updateCheck.js';
  * own app.getPath('userData'), which already resolves to %APPDATA%\Prune
  * now that electron/package.json's productName is "Prune". Env var names
  * themselves (UNREVO_*) are internal-only and were deliberately left
- * unrenamed in the "unrevo" -> "Prune" rebrand -- no user ever sees them. */
+ * unchanged in the rebrand to Prune -- no user ever sees them. */
 export function settingsPath() {
   return process.env.UNREVO_SETTINGS_PATH
     || join(process.env.LOCALAPPDATA || process.cwd(), 'Prune', 'settings.json');
@@ -33,19 +33,19 @@ export function settingsPath() {
  * because the user stops checking whether any of the others work either.
  * Both are wired now, and nothing goes in this object that isn't.
  *
- * The three new ones are lifted from what Revo and BleachBit ship enabled
- * rather than from what they merely offer:
+ * The three new ones are chosen for what is sensible enabled
+ * rather than for what is merely on offer:
  *
- *   skipRecentHours -- Revo's "ignore the last 24 hours", on by default
- *   there and worth copying: in a temp folder, a file being written right
+ *   skipRecentHours -- "ignore the last 24 hours", on by default
+ *   because in a temp folder, a file being written right
  *   now is indistinguishable from one abandoned two years ago.
  *
- *   createRestorePoint -- Revo's SRInCP, also on. Prune already made one
+ *   createRestorePoint -- also on. Prune already made one
  *   before every forced removal; it just made one unconditionally, which
  *   is wrong on a machine where System Protection is off and the attempt
  *   is a slow no-op.
  *
- *   hideUnavailableRules -- BleachBit's "hide irrelevant cleaners". Most
+ *   hideUnavailableRules -- "hide irrelevant cleaners". Most
  *   of a 74-rule list is for software the user does not have, so it is
  *   on by default: listed and pre-ticked, Slack or Vivaldi on a PC that
  *   never had them reads as Prune making things up. */
@@ -58,16 +58,15 @@ const DEFAULT_SETTINGS = {
      file of every scan. See lib/exclusionInput.js. */
   excludeExtensions: [],
   /* Registry keys the uninstall leftover scans never offer, with everything
-     under them (Revo's RegExclude). Stored as the person wrote them; matched
+     under them. Stored as the person wrote them; matched
      canonically in services/leftoverExclusions.js. Registry keys are not files,
      so Deep Clean and the Disk Map have nothing to do with this list. */
   excludeRegistryKeys: [],
   /** Cookie domains a `cookie` action must NEVER delete rows for -- an
    * exact-domain-or-any-subdomain match against each entry (so keeping
-   * "example.com" also keeps "sub.example.com", matching BleachBit's own
-   * predicate). Empty by default, and an empty list is a fully working,
+   * "example.com" also keeps "sub.example.com"). Empty by default, and an empty list is a fully working,
    * intentional state: it means every `cookie` action deletes the whole
-   * cookie database file outright, exactly like BleachBit's own behavior
+   * cookie database file outright, which is the behavior
    * when nothing is configured to survive. See cleanerActions/cookie.js.
    * Populated via Settings -> Cleanup's "Cookies to preserve" panel
    * (CookieKeepListSettings.jsx), which scans real cookie databases and
@@ -77,8 +76,7 @@ const DEFAULT_SETTINGS = {
   autoQuarantine: true,
   /* What Deep Clean does with the files it removes: 'quarantine' moves them
      into Prune's Quarantine (undoable, but the space is not free until the
-     Quarantine is emptied) and 'delete' removes them outright -- what
-     BleachBit does, and the only way the drive actually gets its space
+     Quarantine is emptied) and 'delete' removes them outright, which is the only way the drive actually gets its space
      back at once. Reversibility is the default; 'delete' is an explicit
      choice in Settings and never anything else's side effect. Read from
      here by the backend, never from a request. See normalizeRemoval. */
@@ -168,26 +166,25 @@ const DEFAULT_SETTINGS = {
      question too; see services/installerChoices.js. */
   updateCheck: false,
   /* Where an uninstall's leftover FILES go: 'quarantine' (restorable in
-     Prune), 'recycle' or 'permanent' -- Revo's three. Registry keys are
+     Prune), 'recycle' or 'permanent'. Registry keys are
      exported before deletion whichever it is. The dialog reads this and
      says it; the backend acts on what the dialog sent, never on this
      directly. See services/leftoverRemoval.js. */
   leftoverDestination: 'quarantine',
-  /* Whether the leftover review starts with everything ticked. Off, as Revo
-     ships it: the review opens with nothing ticked and the person chooses,
+  /* Whether the leftover review starts with everything ticked. Off: the review opens with nothing ticked and the person chooses,
      so the dangerous thing is never the easy thing. It was on until this
      changed; a settings file saved before then keeps what it had (see
      getSettings), only a NEW install starts unticked. */
   preselectLeftovers: false,
-  // Revo's "Only run the built-in uninstaller", the other way round.
+  // The inverse of "Only run the built-in uninstaller".
   scanLeftoversAfterUninstall: true,
   /* How far the leftover scan looks: 'safe', 'moderate' or 'advanced' -- see
      services/leftoverModes.js. Chosen in the uninstall dialog and remembered
      here; anything unrecognised reads as the default, 'moderate'. */
   leftoverScanMode: 'moderate',
-  // Revo's "Disable Uninstall History", the other way round.
+  // The inverse of "Disable Uninstall History".
   keepUninstallHistory: true,
-  /* Before the program's own uninstaller runs, as Revo does. Off: a
+  /* Before the program's own uninstaller runs. Off: a
      restore point needs admin and Windows allows one a day, and a full
      registry backup is about 140 MB (measured). See preUninstall.js. */
   restorePointBeforeUninstall: false,
@@ -198,7 +195,7 @@ const DEFAULT_SETTINGS = {
      it only reaches an uninstaller that runs as administrator when Prune
      does too. */
   answerUninstallWizards: false,
-  /* Revo's own "force deletion" cousin -- a file quarantine/removal
+  /* A "force deletion" cousin -- a file quarantine/removal
      couldn't move because something has it open gets scheduled for
      deletion at the next restart (MOVEFILE_DELAY_UNTIL_REBOOT's own
      mechanism -- see services/pendingReboot.js) instead of just being
@@ -212,8 +209,8 @@ const DEFAULT_SETTINGS = {
      Only matters with updateCheck on -- nothing is found to install
      otherwise. See electron/updater.cjs and components/UpdateButton.jsx. */
   autoInstallUpdates: false,
-  /* WizTree's "Show Free Space on Treemap": a block for the drive's free
-     space beside what the scan found. Off by default, as WizTree ships it. */
+  /* Showing free space on the map: a block for the drive's free
+     space beside what the scan found. Off by default. */
   showFreeSpaceOnMap: false,
   /* Whether a finished Disk Map scan of a drive is saved automatically (the
      latest two per drive; see services/savedScans.js) so the Disk Map opens on

@@ -3,7 +3,7 @@ import { existsSync, readdirSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { importBleachBitXml, ImportError, MAX_XML_BYTES } from './bleachbitImport.js';
 
-/** Importing a BleachBit cleaner file.
+/** Importing a cleaner XML file.
  *
  * Only `delete` actions are brought over -- and only the ones whose meaning
  * Prune can reproduce exactly. Everything else is skipped AND COUNTED, so the
@@ -204,7 +204,7 @@ describe('variables', () => {
     expect(cleaner.rules[0].actions[0].paths).toEqual(['~\\a\\b']);
   });
 
-  it('knows the Windows variables BleachBit uses', () => {
+  it('knows the Windows variables cleaner files use', () => {
     const vars = ['%LocalAppData%', '%AppData%', '%UserProfile%', '%Temp%', '%WinDir%', '%ProgramFiles%', '%CommonAppData%', '%LocalAppDataLow%', '%WindowsSystem%'];
     for (const v of vars) {
       const { cleaner } = importBleachBitXml(xml(`<option id="c"><label>C</label><action command="delete" search="file" path="${v}\\Demo\\f"/></option>`));
@@ -271,10 +271,10 @@ describe('does not execute anything', () => {
   });
 });
 
-/* The real thing: every cleaner BleachBit ships on this machine. Read only.
- * Skipped where BleachBit is not installed. */
-const REAL_DIR = join(process.env.LOCALAPPDATA || '', 'BleachBit', 'share', 'cleaners');
-describe.skipIf(!process.env.LOCALAPPDATA || !existsSync(REAL_DIR))('BleachBit\'s own cleaners', () => {
+/* The real thing: every cleaner file of this format installed on this machine. Read only.
+ * Skipped unless PRUNE_REFERENCE_CLEANERS_DIR points at a folder of them. */
+const REAL_DIR = process.env.PRUNE_REFERENCE_CLEANERS_DIR || '';
+describe.skipIf(!REAL_DIR || !existsSync(REAL_DIR))('the real installed cleaner files', () => {
   const files = existsSync(REAL_DIR) ? readdirSync(REAL_DIR).filter((f) => f.endsWith('.xml')) : [];
 
   it('every one imports or is refused cleanly, and its report adds up', () => {

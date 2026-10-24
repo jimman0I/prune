@@ -6,8 +6,8 @@ import { startTestServer } from '../testSupport/routeServer.js';
  * Settings -> Cleanup -> exclusions already kept Deep Clean and the Disk
  * Map out of chosen folders. The leftover scan ignored them, so a folder
  * the user had said never to touch could still be offered -- ticked by
- * default -- after an uninstall whose name happened to match it. Revo
- * excludes folders from its leftover scan for the same reason.
+ * default -- after an uninstall whose name happened to match it.
+ * The leftover scan now skips excluded folders for the same reason.
  */
 
 const scanForLeftovers = vi.fn();

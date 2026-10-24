@@ -242,7 +242,7 @@ function DeepClean({ onNavigate, shredRequest = null }) {
     categoryOf: (id) => categoryByRuleRef.current.get(id)
   }), [cleaner.ruleName, cleaner.categoryName]);
 
-  // BleachBit's "hide irrelevant cleaners". Most of a 74-rule list is for
+  // Hiding cleaners that do not apply. Most of a 74-rule list is for
   // software this machine does not have.
   const { settings, save: saveSettings } = useSettings();
 
@@ -368,7 +368,7 @@ function DeepClean({ onNavigate, shredRequest = null }) {
   //
   // Only when there is nothing to show: a scan remembered from an earlier
   // launch (and still valid for the current settings and rules) already fills
-  // the tree, and Clean works from it -- BleachBit scans once and then just
+  // the tree, and Clean works from it -- it scans once and then just
   // cleans. The hook decides that (see `autoStart` in useDeepCleanScan.js),
   // in the same step that looks for the remembered scan, so "there is none"
   // is a fact rather than a first-render default.
@@ -849,8 +849,8 @@ function DeepClean({ onNavigate, shredRequest = null }) {
             )}
           </div>
 
-          {/* Whichever is actually running takes the panel -- BleachBit's
-              own output never shows a scan and a clean at once either.
+          {/* Whichever is actually running takes the panel -- the
+              output never shows a scan and a clean at once either.
               handleClean always starts the post-clean rescan the moment
               cleaning finishes, so the panel hands itself back to the scan
               log within a render or two of Clean completing -- the same

@@ -7,7 +7,7 @@ export const NO_EXTENSION = GENERIC_FILE_KEY;
 
 /** Every file extension in the scanned tree, largest first.
  *
- * WizTree shows this beside its treemap and it answers a question the map
+ * This sits beside the treemap and it answers a question the map
  * cannot: the map tells you WHERE the space went, this tells you WHAT it
  * went to. A folder view will never reveal that 40 GB is .pak files spread
  * across six games.

@@ -29,7 +29,7 @@ describe('scanDirectory (real file I/O, async)', () => {
   let dir;
 
   beforeEach(() => {
-    dir = mkdtempSync(join(tmpdir(), 'unrevo-diskscan-'));
+    dir = mkdtempSync(join(tmpdir(), 'prune-diskscan-'));
   });
 
   afterEach(() => {
@@ -216,7 +216,7 @@ describe('scanDirectory (real file I/O, async)', () => {
 
 describe('directory timestamps', () => {
   let dir;
-  beforeEach(() => { dir = mkdtempSync(join(tmpdir(), 'unrevo-mtime-')); });
+  beforeEach(() => { dir = mkdtempSync(join(tmpdir(), 'prune-mtime-')); });
   afterEach(() => { rmSync(dir, { recursive: true, force: true }); });
 
   // Free data: scanNode already stats every entry and was discarding the

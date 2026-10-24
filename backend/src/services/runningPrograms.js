@@ -6,7 +6,7 @@ import { sizeSourceFor } from './installSize.js';
 
 /** Which installed programs are running right now.
  *
- * Revo warns before uninstalling something that is open, and the warning
+ * Warning before uninstalling something that is open
  * earns its place: an uninstaller for a running program either fails, or
  * half-succeeds and leaves files behind that the next launch recreates.
  * Prune said nothing at all.

@@ -158,7 +158,7 @@ describe('buildRegistryScript', () => {
   // imported fresh in beforeEach so the mock is in place.
   const script = () => buildRegistryScript('OldApp');
 
-  // Each of these is a place Revo Uninstaller Pro finds leftovers and the
+  // Each of these is a place leftovers turn up and the
   // original two-root scan (HKCU:\Software and HKLM:\Software, one level
   // deep, key names only) could not.
   it.each([

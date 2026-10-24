@@ -48,7 +48,7 @@ router.post('/remove', async (req, res) => {
     return;
   }
   try {
-    // Revo's SRInCP, which it ships on. Prune already made one before
+    // A System Restore point, on by default. Prune already made one before
     // every forced removal -- it just made one unconditionally, which is a
     // slow no-op on a machine where System Protection is turned off, and
     // there was no way to say so.

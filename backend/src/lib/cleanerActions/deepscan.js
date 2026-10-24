@@ -6,35 +6,35 @@ import { createTopFiles, FILE_LIST_LIMIT } from '../topFiles.js';
 import { quarantineRoot } from '../../services/quarantine.js';
 import { settingsPath } from '../../services/settings.js';
 
-/** BleachBit's "Deep scan" cleaner, for Windows.
+/** The "Deep scan" cleaner, for Windows.
  *
  * Every other rule here names a folder. These name a FILE PATTERN and look
  * for it everywhere under the user's profile -- the backup a text editor
  * left three projects deep, the Thumbs.db Explorer dropped in a photo
- * folder. That is why BleachBit warns "This option is slow", and why this
+ * folder. That is why this option is slow, and why this
  * walk is asynchronous, capped, and cancellable rather than one more
  * synchronous readdir loop: it can touch millions of entries.
  *
- * The definitions are BleachBit's own (cleaners/deepscan.xml, master,
+ * The definitions come from the standard deep-scan cleaner file (deepscan.xml, master,
  * read 2026-09): each option is a regular expression matched against the
  * FILE NAME, case-insensitively on Windows, with no other conditions.
- * BleachBit's walk (DeepScan.py) descends into every folder except links
+ * The standard walk descends into every folder except links
  * and reparse points and the user's own keep-list; it does not skip
  * node_modules or .git, and neither does this. What Prune adds is only
  * ever a refusal: its own Quarantine and data folders, and the same
  * excluded folders and file types every other rule already honours.
  *
- * `vim_swap_root` is not here. BleachBit declares it path="/" os="linux":
+ * `vim_swap_root` is not here. The standard file declares it path="/" os="linux":
  * on Windows it does not run at all, so a Windows rule for it would be a
  * checkbox that does nothing.
  */
 
-/** BleachBit's `backup` option: two actions. */
+/** The `backup` option: two actions. */
 export const BACKUP = ['\\.[Bb][Aa][Kk]$', '[a-zA-Z]{1,4}~$'];
 /** `ds_store`. */
 export const DS_STORE = ['^\\.DS_Store$'];
 /** `thumbs_db`. The second is an NTFS alternate-data-stream spelling that
- * cannot appear as a directory entry; kept because it is BleachBit's. */
+ * cannot appear as a directory entry; kept because it is in the standard definition. */
 export const THUMBS_DB = ['^Thumbs\\.db$', '^Thumbs\\.db:encryptable$'];
 /** `tmp`: Word's ~wrXNNNN.tmp and PowerPoint's pptNNNN.tmp -- not every .tmp. */
 export const TMP = ['^~wr[a-z][0-9]{4}\\.tmp$', '^ppt[0-9]{4}\\.tmp$'];

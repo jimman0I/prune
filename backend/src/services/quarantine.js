@@ -16,7 +16,7 @@ const execFileAsync = promisify(execFile);
  * env-var-override pattern Re:Route's REROUTE_DATA_DIR uses. Packaged
  * mode never hits this fallback -- electron/main.cjs sets
  * UNREVO_QUARANTINE_ROOT from app.getPath('userData') instead, which
- * resolves to %APPDATA%\Prune since the "unrevo" -> "Prune" rebrand. */
+ * resolves to %APPDATA%\Prune since the rebrand to Prune. */
 export function quarantineRoot() {
   return process.env.UNREVO_QUARANTINE_ROOT
     || join(process.env.LOCALAPPDATA || process.cwd(), 'Prune', 'quarantine');

@@ -5,7 +5,7 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { previewShred, shredRequested, refusalFor, MAX_PATHS } from './shredTool.js';
 
-/** "Shred files and folders" -- BleachBit's tool of that name. The user
+/** "Shred files and folders" -- the shred tool. The user
  * picks the targets, so the protection against a slip is the point: the
  * guards a Deep Clean rule runs under apply here too. Everything happens
  * inside a temp folder; the protected paths are only ever asked about. */

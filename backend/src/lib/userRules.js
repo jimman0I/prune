@@ -5,7 +5,7 @@ import { settingsPath } from '../services/settings.js';
 import { normalizeCustomLocations, customLocationsRule } from './customLocations.js';
 
 /** The rules that belong to the user rather than to Prune: the Custom
- * locations rule, and every imported BleachBit cleaner.
+ * locations rule, and every imported cleaner file.
  *
  * Imported cleaners are one JSON file each in a folder beside the settings
  * (so under userData, surviving upgrades): { id, label, description,

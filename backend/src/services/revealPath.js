@@ -3,8 +3,8 @@ import { existsSync, statSync } from 'node:fs';
 
 /** Opens File Explorer on a path.
  *
- * Revo puts "Open install folder" behind its More Commands button, and it
- * is the most-used thing there for a reason: the list tells you a program
+ * "Open install folder" is among the most-used actions on a program, and
+ * for a reason: the list tells you a program
  * is 55 GB and the obvious next question is where.
  *
  * Goes through the backend because the renderer cannot reach Electron's

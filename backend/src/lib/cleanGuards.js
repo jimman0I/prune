@@ -3,10 +3,10 @@ import { protectionReason } from '../services/pathGuard.js';
 
 /** The two things that stop a cleaner from taking a file it shouldn't.
  *
- * Both are lifted from Revo, which ships them as defaults rather than as
- * options nobody finds: its junk-file cleaner carries an exclusion list of
+ * Both ship as defaults rather than as
+ * options nobody finds: the junk-file cleaner carries an exclusion list of
  * about thirty path patterns and an "ignore the last 24 hours" switch that
- * is on out of the box. Prune had neither. It had an exclusion list in its
+ * is on out of the box. Prune once had neither. It had an exclusion list in its
  * settings screen that the user could add folders to, and nothing anywhere
  * in the backend ever read it -- a setting that quietly does nothing is
  * worse than no setting, because the user stops checking.
@@ -14,14 +14,14 @@ import { protectionReason } from '../services/pathGuard.js';
 
 /** Paths no cleaner may take a file from, whatever a rule says.
  *
- * Adapted from the list Revo ships enabled. These are not caches: they are
+ * Enabled by default. These are not caches: they are
  * places where something that LOOKS like junk is load-bearing -- an
  * antivirus quarantine holds live malware samples, a restore folder holds
  * the machine's own rollback data, and the component store's catalogue is
  * what Windows validates its own files against.
  *
  * Written as lowercase substrings of a forward-slash-normalised path, which
- * is the same shape Revo stores them in and is enough for the job: these
+ * is enough for the job: these
  * are directory names, not patterns that need a glob engine.
  *
  * The user's own list is added to this, never replaces it. Someone who
@@ -93,7 +93,7 @@ export function isExcluded(filePath, userFolders = [], userExtensions = []) {
 
 /** Whether a file was touched too recently to be safe to take.
  *
- * Revo's "ignore the last 24 hours", and it earns its place: the temp
+ * The "ignore the last 24 hours" guard earns its place: the temp
  * folder is the one place on the machine where a file being written RIGHT
  * NOW looks exactly like a file abandoned two years ago. An installer
  * halfway through unpacking, a game writing a shader cache, a document

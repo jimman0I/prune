@@ -1,4 +1,4 @@
-/** The two real cookie-table shapes BleachBit's own Cookie.py detects --
+/** The two real cookie-table shapes --
  * Chromium-family (`cookies`/`host_key`) and Firefox-family
  * (`moz_cookies`/`host`). A cookie action never needs to know which
  * browser wrote the file it's pointed at; it only needs to know which of
@@ -25,8 +25,8 @@ export function escapeSqlString(value) {
   return value.replace(/'/g, "''");
 }
 
-/** Normalizes one keep-list entry the same way BleachBit's own
- * delete_cookies() does before matching: lowercased, with any single
+/** Normalizes one keep-list entry the standard way
+ * before matching: lowercased, with any single
  * leading dot stripped. */
 export function normalizeDomain(domain) {
   return domain.replace(/^\./, '').toLowerCase();

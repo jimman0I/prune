@@ -30,7 +30,7 @@ export function scan(action) {
 /** Executes a chrome.autofill action: clears the `autofill` table (raw
  * form-field value history) and VACUUMs, quarantining the original
  * first. Scoped to ONLY this table -- see the design spec for why the
- * saved-profile/address tables BleachBit's own version also touches are
+ * saved-profile/address tables are
  * deliberately excluded (they don't exist under those names in the
  * current Chrome schema; the real current equivalent is a different,
  * riskier feature). A file with no `autofill` table (wrong file, or a

@@ -7,7 +7,7 @@ import { defaultSnapshotStore } from '../lib/snapshotStore.js';
  * separate mechanism with a separate removal command.
  *
  * The consequence was that 81 installed applications on this machine were
- * invisible to Prune, 6.28 GB of them, while Revo Uninstaller gives them a
+ * invisible to Prune, 6.28 GB of them, while they deserve a
  * module of their own. This is that list.
  *
  * Frameworks and system packages are filtered out in the query rather

@@ -10,7 +10,7 @@ import {
 
 const execFileAsync = promisify(execFile);
 
-/** The SharedDLLs pass and the extra Run-type roots Revo's leftover scan reads.
+/** The SharedDLLs pass and the extra Run-type roots the leftover scan reads.
  *
  * SharedDLLs lives in HKLM, which a test cannot write without elevation, so
  * the script takes its roots as a parameter and this points it at a throwaway

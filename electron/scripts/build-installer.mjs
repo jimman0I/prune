@@ -38,8 +38,8 @@ const winShell = { shell: process.platform === 'win32' };
 
 // electron-builder overwrites its OWN outputs but leaves every other
 // version's alone, so dist/ accumulates rather than reflecting the build
-// that just ran. Found live (2026-09-06): it still held "unrevo Setup
-// 1.0.0.exe" -- an installer under the app's pre-rebrand name -- beside
+// that just ran. Found live (2026-09-06): it still held an installer
+// "Setup 1.0.0.exe" under the app's pre-rebrand name -- beside
 // 1.0.0 and 1.0.1 Prune builds, 1.2 GB in total. A folder someone
 // publishes out of is the wrong place to keep three superseded releases
 // and a brand the app no longer uses: the risk is not the disk, it is

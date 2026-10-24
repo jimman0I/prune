@@ -9,7 +9,7 @@ import { useLanguage } from '../i18n/LanguageContext.jsx';
 
 const POLL_MS = 1500;
 
-/** Install with monitoring: Revo's installation monitor.
+/** Install with monitoring.
  *
  * The dialog is a window onto a monitor that lives in the backend, so it can
  * be closed while an installer runs and reopened to find it where it was: on

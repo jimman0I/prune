@@ -1,7 +1,7 @@
 import { parseXml, XmlError, childElements, firstChild, textOf } from './xmlParse.js';
 import { expandPath } from './expandPath.js';
 
-/** Importing a BleachBit cleaner file (CleanerML) as Deep Clean rules.
+/** Importing a cleaner XML file (CleanerML) as Deep Clean rules.
  *
  * A subset, on purpose: `<cleaner>`, `<var>`, `<option>` and `<action
  * command="delete">` with search file / glob / walk.files / walk.all.
@@ -21,7 +21,7 @@ import { expandPath } from './expandPath.js';
  * Deep Clean rule has -- plus the protected places (`userDefined`), because
  * nobody here curated these paths. */
 
-/** Real BleachBit cleaners are under 20 KB. */
+/** Real cleaner files are under 20 KB. */
 export const MAX_XML_BYTES = 512 * 1024;
 const MAX_OPTIONS = 200;
 const MAX_ACTIONS = 5000;
@@ -110,7 +110,7 @@ function substitute(path, vars) {
   return { missing: close > open ? stuck.slice(open, close + 2) : stuck.slice(open) };
 }
 
-/** BleachBit writes both slashes; Prune's resolver takes either, but the
+/** Cleaner files write both slashes; Prune's resolver takes either, but the
  * stored form is Windows': backslashes, no trailing separator. */
 function normalizeSlashes(path) {
   return path.replace(/\//g, '\\').replace(/\\{2,}/g, '\\').replace(/\\+$/, '');
@@ -151,7 +151,7 @@ export function importBleachBitXml(text) {
     if (err instanceof XmlError) throw new ImportError('notXml', err.message);
     throw err;
   }
-  if (root.name !== 'cleaner') throw new ImportError('notCleaner', 'This is not a BleachBit cleaner file.');
+  if (root.name !== 'cleaner') throw new ImportError('notCleaner', 'This is not a cleaner file.');
 
   const id = slug(root.attrs.id);
   if (!id) throw new ImportError('noId', 'The cleaner has no id.');

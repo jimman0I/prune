@@ -4434,7 +4434,7 @@ function Settings() {
             "x-component": "div",
             "x-id": "Settings_105_24",
             "x-dynamic": "false",
-            children: "Prune reads your NTFS Master File Table directly \u2014 the same technique WizTree uses \u2014 so scans stay under two seconds on a 2 TB drive."
+            children: "Prune reads your NTFS Master File Table directly, so scans stay under two seconds on a 2 TB drive."
           }, void 0, false, {
             fileName: _jsxFileName,
             lineNumber: 105,

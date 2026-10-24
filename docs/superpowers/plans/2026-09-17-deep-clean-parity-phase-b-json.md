@@ -1,14 +1,14 @@
-# BleachBit-Parity Engine, Phase B (`json` action) — Implementation Plan
+# Deep Clean Parity Engine, Phase B (`json` action) — Implementation Plan
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
-**Goal:** Add the `json` cleaning-engine action type — deletes one slash-addressed key from a JSON file (e.g. a Chrome Preferences file's `dns_prefetching/host_referral_list`), the 3rd-largest real BleachBit action type — with the ORIGINAL file quarantined (recoverable) before it's rewritten, since unlike Phase A's `sqlite.vacuum` this genuinely deletes data.
+**Goal:** Add the `json` cleaning-engine action type — deletes one slash-addressed key from a JSON file (e.g. a Chrome Preferences file's `dns_prefetching/host_referral_list`), the 3rd-largest action type in the reference cleaner — with the ORIGINAL file quarantined (recoverable) before it's rewritten, since unlike Phase A's `sqlite.vacuum` this genuinely deletes data.
 
 **Architecture:** A new `backend/src/lib/cleanerActions/json.js` (`scan`/`execute`, matching the 4 existing action modules' shape) wired as a 5th case into `cleanerRules.js`'s dispatcher. A new `quarantineFileEdit()` in `quarantine.js` handles the "copy original into quarantine, then overwrite the original in place" operation — deliberately NOT routed through `quarantineAndDelete()`, whose contract is "move this out of its location," a different operation. `quarantineFileEdit()` writes the EXACT same manifest shape `quarantineAndDelete()` already does, which means `restoreQuarantine()`/`listQuarantineBatches()`/`deletePermanently()` and the whole Quarantine UI work on it with ZERO changes — proven by a real empirical test (Task 1) that `fs.rename()` overwrites an existing destination file on this OS, which is exactly what `restoreQuarantine()`'s existing `rename(quarantinedPath, originalPath)` needs to do to put the edited file back to its original (pre-edit) content.
 
 **Tech Stack:** Node.js (backend, ESM), Vitest. No new dependencies — a small, purpose-built slash-path key resolver, not a general object-manipulation library.
 
-**Spec:** `docs/superpowers/specs/2026-09-17-bleachbit-parity-phase-b-json-design.md`
+**Spec:** `docs/superpowers/specs/2026-09-17-deep-clean-parity-phase-b-json-design.md`
 
 ---
 
@@ -141,7 +141,7 @@ Expected: `FAIL` — `Cannot find module './jsonAddress.js'`.
 Create `backend/src/lib/cleanerActions/jsonAddress.js`:
 
 ```js
-/** Resolves a BleachBit-style `/`-separated `address` (e.g.
+/** Resolves a cleaner-XML-style `/`-separated `address` (e.g.
  * `dns_prefetching/host_referral_list`) against a parsed JSON object.
  *
  * Returns `{ parent, key }` -- the object that directly holds the target
@@ -155,7 +155,7 @@ Create `backend/src/lib/cleanerActions/jsonAddress.js`:
  * would not).
  *
  * Purpose-built for this one shape, not a general "get/set/delete a
- * deep object path" utility -- BleachBit's own `address` values are
+ * deep object path" utility -- the reference cleaner's own `address` values are
  * always a plain `/`-joined list of plain keys, never an array index or
  * a key containing a literal `/`, so nothing more general is needed. */
 export function resolveAddress(obj, address) {
@@ -919,7 +919,7 @@ Expected: all green (backend modulo the 3 pre-existing elevation-gated failures 
 
 - [ ] **Step 2: Cross-check against the spec's own scope**
 
-Re-read `docs/superpowers/specs/2026-09-17-bleachbit-parity-phase-b-json-design.md`'s "Scope for this phase" section against what was built:
+Re-read `docs/superpowers/specs/2026-09-17-deep-clean-parity-phase-b-json-design.md`'s "Scope for this phase" section against what was built:
 - `json.js` with `scan`/`execute` — Task 4. ✓
 - Address resolution via a small purpose-built resolver, not a library — Task 2. ✓
 - Wired into the dispatcher as the 5th action type — Task 5. ✓
