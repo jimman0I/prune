@@ -151,5 +151,7 @@ export async function loadTraceFindings(trace, { runPs = (script) => runPowerShe
   }
 
   const services = (trace.services || []).map((s) => ({ name: s.name, displayName: s.displayName || s.name, pathName: s.pathName }));
-  return { files, registry, tasks, services };
+  // A trace imported from a file is not this PC's installer speaking, and the
+  // leftover scan rates what it lists accordingly (leftoverScan.js).
+  return { files, registry, tasks, services, ...(typeof trace.importedAt === 'number' ? { imported: true } : {}) };
 }

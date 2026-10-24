@@ -91,12 +91,21 @@ export async function scanForLeftovers({
      the folders, keys, tasks and services its installer created that are still
      on the machine. The installer's own record is the strongest evidence there
      is, so every one of these is certain -- and, like everything else, still
-     passes the protections below. See installTraces.js. */
+     passes the protections below. See installTraces.js.
+
+     Except a trace IMPORTED from a file (installTraceFile.js): it may have been
+     recorded on another PC, or written by someone else, so it is not this PC's
+     installer vouching for anything. Its items are still listed, but rated on
+     the scan's own evidence alone -- likely when the product's name matches,
+     possible otherwise, certain only when the program's own folder or key
+     vouches -- so the review never ticks one purely on an imported file's
+     say-so (it ticks certain and likely, never possible). */
   const trace = {
     files: traceFindings?.files ?? [], registry: traceFindings?.registry ?? [],
     tasks: traceFindings?.tasks ?? [], services: traceFindings?.services ?? []
   };
-  const extraFiles = trace.files.map((f) => f.path);
+  const traceVouches = traceFindings?.imported !== true;
+  const extraFiles = traceVouches ? trace.files.map((f) => f.path) : [];
   const scanMode = normalizeScanMode(mode);
   // For the disk, only folders that still exist. For the registry and the
   // task list, every folder the program named: an uninstaller removes the
@@ -124,10 +133,10 @@ export async function scanForLeftovers({
     ]);
     return {
       files: finishFiles(addTraceFiles(files, trace.files), ctx),
-      registryKeys: finishRegistry(addTraceRegistry(registryKeys, trace.registry), ctx),
-      scheduledTasks: finishTasks(addTraceTasks(EMPTY(), trace.tasks), ctx),
+      registryKeys: finishRegistry(addTraceRegistry(registryKeys, trace.registry, traceVouches), ctx),
+      scheduledTasks: finishTasks(addTraceTasks(EMPTY(), trace.tasks, traceVouches), ctx),
       mode: scanMode,
-      ...(trace.services.length > 0 ? { services: finishServices(addTraceServices(EMPTY(), trace.services), ctx) } : {})
+      ...(trace.services.length > 0 ? { services: finishServices(addTraceServices(EMPTY(), trace.services, traceVouches), ctx) } : {})
     };
   }
 
@@ -147,12 +156,12 @@ export async function scanForLeftovers({
   const files = await withAnchorFiles(filesFound, anchorDirs);
   const result = {
     files: finishFiles(addTraceFiles(files, trace.files), ctx),
-    registryKeys: finishRegistry(addTraceRegistry(registryKeys, trace.registry), ctx),
-    scheduledTasks: finishTasks(addTraceTasks(scheduledTasks, trace.tasks), ctx),
+    registryKeys: finishRegistry(addTraceRegistry(registryKeys, trace.registry, traceVouches), ctx),
+    scheduledTasks: finishTasks(addTraceTasks(scheduledTasks, trace.tasks, traceVouches), ctx),
     mode: scanMode
   };
   if (services || trace.services.length > 0) {
-    result.services = finishServices(addTraceServices(services || EMPTY(), trace.services), ctx);
+    result.services = finishServices(addTraceServices(services || EMPTY(), trace.services, traceVouches), ctx);
   }
   return result;
 }
@@ -163,7 +172,8 @@ const same = (a, b) => String(a).toLowerCase() === String(b).toLowerCase();
 
 /** Adds what the install trace listed to a group, without listing anything
  * twice. A failed group stays failed: a trace does not make a scan that did
- * not run into one that did. */
+ * not run into one that did. `vouches` is false for an imported trace: its
+ * items are added without the mark that makes them certain. */
 function addTraceFiles(group, traced) {
   if (!group?.ok || traced.length === 0) return group;
   const items = [...group.items];
@@ -171,28 +181,30 @@ function addTraceFiles(group, traced) {
   return { ...group, items };
 }
 
-function addTraceRegistry(group, traced) {
+function addTraceRegistry(group, traced, vouches = true) {
   if (!group?.ok || traced.length === 0) return group;
   const items = [...group.items];
   for (const entry of traced) {
     const exists = items.some((i) => canonicalKeyPath(i.path) === canonicalKeyPath(entry.path) && (i.valueName || '') === (entry.valueName || ''));
-    if (!exists) items.push({ ...entry, anchored: true });
-    else for (const i of items) if (canonicalKeyPath(i.path) === canonicalKeyPath(entry.path) && (i.valueName || '') === (entry.valueName || '')) i.anchored = true;
+    if (!exists) items.push(vouches ? { ...entry, anchored: true } : { ...entry });
+    else if (vouches) for (const i of items) if (canonicalKeyPath(i.path) === canonicalKeyPath(entry.path) && (i.valueName || '') === (entry.valueName || '')) i.anchored = true;
   }
   return { ...group, items };
 }
 
-function addTraceTasks(group, traced) {
+function addTraceTasks(group, traced, vouches = true) {
   if (!group?.ok || traced.length === 0) return group;
-  const items = group.items.map((i) => (traced.some((t) => same(t.name, i.name) && same(t.path, i.path)) ? { ...i, how: 'anchor' } : i));
-  for (const entry of traced) if (!items.some((i) => same(i.name, entry.name) && same(i.path, entry.path))) items.push({ ...entry, how: 'anchor' });
+  const items = vouches
+    ? group.items.map((i) => (traced.some((t) => same(t.name, i.name) && same(t.path, i.path)) ? { ...i, how: 'anchor' } : i))
+    : [...group.items];
+  for (const entry of traced) if (!items.some((i) => same(i.name, entry.name) && same(i.path, entry.path))) items.push(vouches ? { ...entry, how: 'anchor' } : { ...entry });
   return { ...group, items };
 }
 
-function addTraceServices(group, traced) {
+function addTraceServices(group, traced, vouches = true) {
   if (!group?.ok || traced.length === 0) return group;
-  const items = group.items.map((i) => (traced.some((t) => same(t.name, i.name)) ? { ...i, how: 'anchor' } : i));
-  for (const entry of traced) if (!items.some((i) => same(i.name, entry.name))) items.push({ ...entry, how: 'anchor' });
+  const items = vouches ? group.items.map((i) => (traced.some((t) => same(t.name, i.name)) ? { ...i, how: 'anchor' } : i)) : [...group.items];
+  for (const entry of traced) if (!items.some((i) => same(i.name, entry.name))) items.push(vouches ? { ...entry, how: 'anchor' } : { ...entry });
   return { ...group, items };
 }
 

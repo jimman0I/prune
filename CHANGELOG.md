@@ -54,7 +54,11 @@ see v1.0.1 below) are documented here.
   rejected. Imported traces link to this PC's programs the way new ones
   do, by the program's Add/Remove key, then by its name when the key
   differs; one whose program is not installed is kept and marked "Not
-  installed here".
+  installed here". An imported trace is not this PC's installer speaking,
+  so when its program is uninstalled what it lists is rated on the scan's
+  own evidence (likely for a name match, possible otherwise) rather than
+  certain, and nothing is ticked on the file's say-so alone. Traces
+  recorded here stay certain.
 
 ## v3.1.0
 

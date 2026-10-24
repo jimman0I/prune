@@ -73,3 +73,53 @@ describe('what the install monitor recorded', () => {
     expect(result.services).toBeUndefined();
   });
 });
+
+describe('what an IMPORTED trace lists', () => {
+  const imported = { ...traceFindings, imported: true };
+
+  it('is listed but never certain on the trace\'s say-so: names that do not match are possible', async () => {
+    const result = await scanForLeftovers({ name: 'Acme', traceFindings: imported });
+    expect(result.files.items.map((i) => [i.path, i.confidence])).toEqual([
+      ['D:\\Apps\\Traced', 'possible'], ['C:\\ProgramData\\TracedData', 'possible']
+    ]);
+    expect(result.registryKeys.items).toEqual([{ ...traceFindings.registry[0], confidence: 'possible' }]);
+    expect(result.scheduledTasks.items).toEqual([{ name: 'Mystery', path: '\\Odd\\', confidence: 'possible' }]);
+    expect(result.services.items[0]).toMatchObject({ name: 'OddSvc', confidence: 'possible' });
+  });
+
+  it('is at most likely, when the product\'s name vouches for it, and is never ticked on the trace alone', async () => {
+    const { preselectKeys } = await import('../../../frontend/src/lib/leftoverTiers.js');
+    const result = await scanForLeftovers({ name: 'Traced', mode: 'safe', traceFindings: imported });
+    const tiers = result.files.items.map((i) => i.confidence);
+    expect(tiers).toContain('likely');
+    expect(tiers).not.toContain('certain');
+    for (const group of ['files', 'registryKeys', 'scheduledTasks']) {
+      for (const item of result[group].items) expect(item.confidence, `${group} ${item.path}`).not.toBe('certain');
+    }
+    // The review ticks certain and likely: here only the name match is ticked.
+    const ticked = [...preselectKeys(result)];
+    expect(ticked.every((key) => {
+      const [group, index] = key.split(':');
+      return result[group].items[Number(index)].confidence === 'likely';
+    })).toBe(true);
+    expect(ticked.some((key) => key.startsWith('registryKeys') || key.startsWith('scheduledTasks'))).toBe(false);
+  });
+
+  it('does not upgrade what the name search found itself', async () => {
+    runPowerShellJsonMock
+      .mockResolvedValueOnce([{ path: 'D:\\Apps\\Traced', sizeBytes: 500 }])
+      .mockResolvedValueOnce([{ path: 'HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Run', valueName: 'WeirdName', how: 'name', text: 'WeirdName x' }])
+      .mockResolvedValueOnce([{ name: 'Mystery', path: '\\Odd\\', how: 'name' }]);
+    const result = await scanForLeftovers({ name: 'Traced', traceFindings: imported });
+    expect(result.registryKeys.items).toHaveLength(1);
+    expect(result.registryKeys.items[0].confidence).not.toBe('certain');
+    expect(result.scheduledTasks.items).toHaveLength(1);
+    expect(result.scheduledTasks.items[0].confidence).not.toBe('certain');
+  });
+
+  it('a trace recorded on this PC is still certain (no imported flag, or imported: false)', async () => {
+    const result = await scanForLeftovers({ name: 'Acme', traceFindings: { ...traceFindings, imported: false } });
+    expect(result.files.items.every((i) => i.confidence === 'certain')).toBe(true);
+    expect(result.registryKeys.items[0].confidence).toBe('certain');
+  });
+});

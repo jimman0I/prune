@@ -126,6 +126,12 @@ describe('loadTraceFindings', () => {
     expect(found.registry).toEqual([]);
   });
 
+  it('says when the trace was imported from a file, and only then', async () => {
+    const runPs = vi.fn();
+    expect(await loadTraceFindings(trace({ files: [], importedAt: 123 }), { runPs })).toMatchObject({ imported: true });
+    expect(await loadTraceFindings(trace({ files: [] }), { runPs })).not.toHaveProperty('imported');
+  });
+
   it('is empty for no trace', async () => {
     expect(await loadTraceFindings(null, {})).toEqual({ files: [], registry: [], tasks: [], services: [] });
   });
