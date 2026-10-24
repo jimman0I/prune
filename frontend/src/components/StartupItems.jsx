@@ -1,8 +1,8 @@
 import { useCallback, useMemo, useState, memo } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
 import { groupStartupItems, startupCounts } from '../lib/groupStartupItems.js';
-import { useStartupItems, useStartupToggle, useStartupRemove, useStartupRemoveInvalid } from '../hooks/useSystemQueries.js';
-import { filterStartupItems, invalidRemovalBatch, startupExport, startupActionsFor } from '../lib/startupListTools.js';
+import { useStartupItems, useStartupToggle, useStartupRemove, useStartupRemoveInvalid, useStartupRemoveDisabled } from '../hooks/useSystemQueries.js';
+import { filterStartupItems, invalidRemovalBatch, disabledRemovalBatch, startupExport, startupActionsFor } from '../lib/startupListTools.js';
 import { openStartupItem, startupItemProcess } from '../lib/api.js';
 import { saveBlob } from '../lib/download.js';
 import { keys } from '../lib/queryClient.js';
@@ -426,11 +426,13 @@ function StartupItems() {
   const [adding, setAdding] = useState(false);
   const [addBusy, setAddBusy] = useState(false);
   const removeInvalid = useStartupRemoveInvalid();
+  const removeDisabled = useStartupRemoveDisabled();
 
   const visible = useMemo(() => filterStartupItems(items || [], query), [items, query]);
   const groups = useMemo(() => groupStartupItems(visible, t('startup.groups')), [visible, t]);
   const counts = useMemo(() => startupCounts(items), [items]);
   const invalidBatch = useMemo(() => invalidRemovalBatch(items || []), [items]);
+  const disabledBatch = useMemo(() => disabledRemovalBatch(items || []), [items]);
 
   const onMenu = useCallback((item, x, y) => setMenu({ item, x, y }), []);
   const refreshSoon = () => setTimeout(() => queryClient.invalidateQueries({ queryKey: keys.startupItems }), 1200);
@@ -533,8 +535,12 @@ function StartupItems() {
           </div>
 
           {/* The screen's commands: find, clean up, add, take a copy. Remove
-              N invalid needs no confirmation -- the whole batch goes to
-              Quarantine and one Undo on the toast puts it all back. */}
+              N invalid and Remove N disabled need no confirmation -- each
+              whole batch goes to Quarantine and one Undo on the toast puts it
+              all back. Either is greyed while the other runs: an entry that
+              is dead AND switched off is in both batches, and two moves of
+              the same Run value racing each other would leave one of them
+              reporting a failure for a removal that happened. */}
           <div className="flex items-center flex-wrap gap-2 mb-4">
             {/* Wider than the Disk Map's: the placeholder names three
                 fields, and at 260 px it was cut to "…path or pu". */}
@@ -543,11 +549,24 @@ function StartupItems() {
               {invalidBatch.ids.length > 0 && (
                 <button
                   type="button"
-                  disabled={removeInvalid.isPending}
+                  disabled={removeInvalid.isPending || removeDisabled.isPending}
                   onClick={() => removeInvalid.mutate(invalidBatch)}
                   className="btn-ghost px-3 py-1.5 rounded-lg text-[12.5px] font-medium text-[color:var(--danger)] disabled:opacity-50"
                 >
                   {removeInvalid.isPending ? t('startup.removeInvalid.removing') : t('startup.removeInvalid.button', invalidBatch.ids.length)}
+                </button>
+              )}
+              {/* Only the entries this screen can delete: a switched-off
+                  scheduled task, service or Store app is still a switch, so
+                  the count can be lower than the "enabled" figure implies. */}
+              {disabledBatch.ids.length > 0 && (
+                <button
+                  type="button"
+                  disabled={removeDisabled.isPending || removeInvalid.isPending}
+                  onClick={() => removeDisabled.mutate(disabledBatch)}
+                  className="btn-ghost px-3 py-1.5 rounded-lg text-[12.5px] font-medium text-[color:var(--danger)] disabled:opacity-50"
+                >
+                  {removeDisabled.isPending ? t('startup.removeDisabled.removing') : t('startup.removeDisabled.button', disabledBatch.ids.length)}
                 </button>
               )}
               <button type="button" onClick={() => setAdding(true)} className="btn-ghost px-3 py-1.5 rounded-lg text-[12.5px] font-medium">

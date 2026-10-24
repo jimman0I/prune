@@ -13,7 +13,38 @@
  * knows how to write. */
 export function startupRemovalTarget(item) {
   if (!item || item.exists !== false) return null;
+  return entryAddress(item);
+}
 
+/** The same address for an entry that is switched OFF, whatever its file
+ * check said -- what "Remove N disabled" sends.
+ *
+ * The one place a live entry is deleted, and the reason it is not the
+ * one-way door the comment above refuses: it is never a row's own control,
+ * only the screen's bulk command, and it goes to Quarantine as one batch
+ * whose single Undo puts every value and shortcut back. Switched off is the
+ * person's own earlier "I don't want this at sign-in"; removing those
+ * entries is tidying up after that decision, not making it for them.
+ *
+ * The StartupApproved value that records the "off" is left where it is, on
+ * purpose. It is what makes Undo exact: the Run value or shortcut comes
+ * back and Windows still reads it as switched off, rather than an entry
+ * the person had disabled quietly starting again at the next sign-in. A
+ * StartupApproved value with nothing to describe is ignored by Windows.
+ *
+ * Only an exact `false`: an entry whose state could not be read is not
+ * "disabled", and tasks, services and Store apps stay switches for the
+ * reason above -- nothing here can delete one. */
+export function disabledRemovalTarget(item) {
+  if (!item || item.enabled !== false) return null;
+  return entryAddress(item);
+}
+
+/** Where a registry or Startup-folder entry lives, in removeQuarantined's
+ * shape, or null for a source this app cannot write. For a folder entry the
+ * command IS the shortcut (startupItems.js lists the .lnk itself), so the
+ * file removed is the shortcut and never the program it points at. */
+function entryAddress(item) {
   if (item.source === 'registry') {
     if (!item.registryKey || !item.approvedName) return null;
     return { files: [], registryKeys: [{ path: item.registryKey, valueName: item.approvedName }] };

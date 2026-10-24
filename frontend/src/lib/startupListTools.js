@@ -1,4 +1,4 @@
-import { startupRemovalTarget } from './startupRemovalTarget.js';
+import { startupRemovalTarget, disabledRemovalTarget } from './startupRemovalTarget.js';
 import { escapeCsvField } from './exportCsv.js';
 
 /** Pure helpers behind the startup screen's search, bulk removal, export
@@ -18,9 +18,21 @@ export function filterStartupItems(items, query) {
 /** Every invalid entry Prune can remove, as ONE Quarantine batch, so a
  * single Undo puts them all back. */
 export function invalidRemovalBatch(items) {
+  return removalBatch(items, startupRemovalTarget);
+}
+
+/** Every switched-off entry Prune can remove, as ONE Quarantine batch, the
+ * same way -- "Remove N disabled". An entry that is both dead and switched
+ * off is in this batch and the invalid one; whichever runs first removes
+ * it, and the re-read list drops it from the other. */
+export function disabledRemovalBatch(items) {
+  return removalBatch(items, disabledRemovalTarget);
+}
+
+function removalBatch(items, targetOf) {
   const batch = { ids: [], names: [], files: [], registryKeys: [] };
   for (const item of items || []) {
-    const target = startupRemovalTarget(item);
+    const target = targetOf(item);
     if (!target) continue;
     batch.ids.push(item.id);
     batch.names.push(item.name);

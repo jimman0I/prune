@@ -178,12 +178,25 @@ export function useStartupRemove() {
  * Undo on the toast puts them all back -- which is why it needs no
  * confirmation dialog (an undoable action, however destructive it looks). */
 export function useStartupRemoveInvalid() {
+  return useStartupBatchRemoval('startup.removeInvalid');
+}
+
+/** "Remove N disabled": every switched-off entry, the same way and for the
+ * same reason -- one batch, one Undo, no dialog. Undo brings each value or
+ * shortcut back still switched off (see disabledRemovalTarget). */
+export function useStartupRemoveDisabled() {
+  return useStartupBatchRemoval('startup.removeDisabled');
+}
+
+/** One bulk removal from the Startup screen, named and announced by the
+ * catalog block at `strings` (its batchName and toast). */
+function useStartupBatchRemoval(strings) {
   const { t } = useLanguage();
   const queryClient = useQueryClient();
   const offerUndo = useQuarantineUndo();
   return useMutation({
     mutationFn: async (batch) => removeQuarantined({
-      programName: t('startup.removeInvalid.batchName'),
+      programName: t(`${strings}.batchName`),
       files: batch.files,
       registryKeys: batch.registryKeys,
       destination: 'quarantine'
@@ -191,7 +204,7 @@ export function useStartupRemoveInvalid() {
     onSettled: (result, error, batch) => {
       queryClient.invalidateQueries({ queryKey: keys.startupItems });
       if (error) return;
-      offerUndo(t('startup.removeInvalid.toast', batch.ids.length), [result.batchDir]);
+      offerUndo(t(`${strings}.toast`, batch.ids.length), [result.batchDir]);
     }
   });
 }

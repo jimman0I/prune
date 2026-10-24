@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import {
-  filterStartupItems, invalidRemovalBatch, startupExport, startupActionsFor
+  filterStartupItems, invalidRemovalBatch, disabledRemovalBatch, startupExport, startupActionsFor
 } from './startupListTools.js';
 
 const discord = {
@@ -40,6 +40,24 @@ describe('invalidRemovalBatch', () => {
   });
   it('is empty when nothing is invalid', () => {
     expect(invalidRemovalBatch([discord, task]).ids).toEqual([]);
+  });
+});
+
+describe('disabledRemovalBatch', () => {
+  const off = { ...discord, id: 'r3', name: 'Helper', enabled: false, running: false, registryKey: 'HKCU:\\Run', approvedName: 'Helper' };
+  const offTask = { ...task, id: 't2', enabled: false };
+
+  it('gathers every switched-off entry Prune can remove into one Quarantine batch', () => {
+    const batch = disabledRemovalBatch([discord, gone, off, lnk, task, offTask]);
+    // The dead shortcut is switched off too, so it belongs to both batches;
+    // the switched-off task does not, because nothing here can delete one.
+    expect(batch.ids).toEqual(['r3', 'f1']);
+    expect(batch.names).toEqual(['Helper', 'Dead']);
+    expect(batch.registryKeys).toEqual([{ path: 'HKCU:\\Run', valueName: 'Helper' }]);
+    expect(batch.files).toEqual(['C:\\Startup\\Dead.lnk']);
+  });
+  it('is empty when everything is switched on', () => {
+    expect(disabledRemovalBatch([discord, gone, task]).ids).toEqual([]);
   });
 });
 

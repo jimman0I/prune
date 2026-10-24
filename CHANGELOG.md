@@ -3,6 +3,16 @@
 All notable changes to Prune (formerly named unrevo -- rebranded 2026-09-01,
 see v1.0.1 below) are documented here.
 
+## Unreleased
+
+### Added
+
+- **Startup: "Remove N disabled".** Beside "Remove N invalid", one click
+  removes every Run value and Startup-folder shortcut you have switched
+  off, as one Quarantine batch with one Undo. Undo brings each one back
+  still switched off. Switched-off scheduled tasks, services and Store
+  apps stay switches.
+
 ## v3.1.0
 
 ### Added

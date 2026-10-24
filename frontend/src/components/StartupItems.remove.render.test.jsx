@@ -134,3 +134,57 @@ describe('removing a dead registry entry', () => {
     await waitFor(() => expect(screen.getByRole('button', { name: 'Remove' })).toBeTruthy());
   });
 });
+
+describe('Remove N disabled', () => {
+  // Two switched-off entries the screen can delete, one it cannot (a task),
+  // and one that is on. Every one of them is on disk.
+  const offRun = entry({ id: 'd1', name: 'Tray Helper', approvedName: 'Tray Helper', enabled: false, exists: true });
+  const offLnk = entry({
+    id: 'd2', name: 'Notes', source: 'folder', registryKey: null, approvedName: 'Notes.lnk',
+    command: 'C:\\Users\\jim\\Startup\\Notes.lnk', enabled: false, exists: true
+  });
+  const offTask = entry({ id: 'd3', name: 'Nightly Sync', source: 'task', registryKey: null, enabled: false, exists: true });
+  const onRun = entry({ id: 'd4', name: 'Audio', approvedName: 'Audio', enabled: true, exists: true });
+
+  it('removes every switched-off Run value and shortcut as ONE batch, then offers Undo', async () => {
+    removeQuarantined.mockResolvedValue({ batchDir: 'D:\\Quarantine\\3-Disabled startup entries' });
+    fetchStartupItems.mockResolvedValue([offRun, offLnk, offTask, onRun]);
+    const user = userEvent.setup();
+    renderWithToasts();
+
+    await user.click(await screen.findByRole('button', { name: 'Remove 2 disabled' }));
+
+    expect(removeQuarantined).toHaveBeenCalledTimes(1);
+    expect(removeQuarantined).toHaveBeenCalledWith({
+      programName: 'Disabled startup entries',
+      files: ['C:\\Users\\jim\\Startup\\Notes.lnk'],
+      registryKeys: [{ path: 'HKCU:\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run', valueName: 'Tray Helper' }],
+      destination: 'quarantine'
+    });
+    expect(await screen.findByText('Removed 2 disabled entries.')).toBeTruthy();
+    expect(screen.getByRole('button', { name: 'Undo' })).toBeTruthy();
+    await waitFor(() => expect(fetchStartupItems.mock.calls.length).toBeGreaterThan(1));
+  });
+
+  it('is not offered when nothing removable is switched off', async () => {
+    fetchStartupItems.mockResolvedValue([offTask, onRun]);
+    renderWithToasts();
+    await screen.findByText('Audio');
+    expect(screen.queryByRole('button', { name: /disabled/ })).toBeNull();
+  });
+
+  it('greys both bulk removals while either is running -- a dead, switched-off entry is in both', async () => {
+    let resolveRemove;
+    removeQuarantined.mockReturnValue(new Promise((resolve) => { resolveRemove = resolve; }));
+    fetchStartupItems.mockResolvedValue([offRun, entry({ id: 'd5', name: 'Gone', approvedName: 'Gone', exists: false })]);
+    const user = userEvent.setup();
+    renderWithToasts();
+
+    await user.click(await screen.findByRole('button', { name: 'Remove 1 disabled' }));
+    expect(screen.getByRole('button', { name: 'Removing…' }).disabled).toBe(true);
+    expect(screen.getByRole('button', { name: 'Remove 1 invalid' }).disabled).toBe(true);
+
+    resolveRemove({ batchDir: 'D:\\Quarantine\\4-Disabled startup entries' });
+    await waitFor(() => expect(screen.getByRole('button', { name: 'Remove 1 invalid' }).disabled).toBe(false));
+  });
+});

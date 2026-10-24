@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { startupRemovalTarget } from './startupRemovalTarget.js';
+import { startupRemovalTarget, disabledRemovalTarget } from './startupRemovalTarget.js';
 
 describe('startupRemovalTarget', () => {
   it('removes a dead registry Run value by its key path and value name', () => {
@@ -45,5 +45,45 @@ describe('startupRemovalTarget', () => {
   it('refuses null/undefined outright', () => {
     expect(startupRemovalTarget(null)).toBeNull();
     expect(startupRemovalTarget(undefined)).toBeNull();
+  });
+});
+
+describe('disabledRemovalTarget', () => {
+  const run = {
+    source: 'registry', exists: true, enabled: false,
+    registryKey: 'HKCU:\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run',
+    approvedName: 'Helper'
+  };
+
+  it('removes a switched-off Run value by the same key path and value name', () => {
+    expect(disabledRemovalTarget(run)).toEqual({
+      files: [],
+      registryKeys: [{ path: 'HKCU:\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run', valueName: 'Helper' }]
+    });
+  });
+
+  it('removes a switched-off Startup-folder shortcut by the shortcut itself, never what it points at', () => {
+    const item = { source: 'folder', exists: true, enabled: false, command: 'C:\\Users\\jim\\Startup\\Tool.lnk' };
+    expect(disabledRemovalTarget(item)).toEqual({ files: ['C:\\Users\\jim\\Startup\\Tool.lnk'], registryKeys: [] });
+  });
+
+  it('takes a switched-off entry whatever its file check said -- gone, present or unanswerable', () => {
+    for (const exists of [true, false, null]) expect(disabledRemovalTarget({ ...run, exists })).not.toBeNull();
+  });
+
+  it('refuses an entry that is switched on, or whose state is unknown', () => {
+    expect(disabledRemovalTarget({ ...run, enabled: true })).toBeNull();
+    expect(disabledRemovalTarget({ ...run, enabled: undefined })).toBeNull();
+  });
+
+  it('refuses sources this app cannot write -- a switched-off task, service or Store app stays a switch', () => {
+    for (const source of ['task', 'service', 'appx']) {
+      expect(disabledRemovalTarget({ source, exists: true, enabled: false, registryKey: 'k', approvedName: 'n', command: 'c' })).toBeNull();
+    }
+  });
+
+  it('refuses null/undefined outright', () => {
+    expect(disabledRemovalTarget(null)).toBeNull();
+    expect(disabledRemovalTarget(undefined)).toBeNull();
   });
 });

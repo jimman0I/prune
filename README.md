@@ -192,7 +192,9 @@ dilute the score.
 
 Everything Windows launches at sign-in — Run keys, Startup folders,
 scheduled tasks, automatic services and Store startup tasks. The switch
-writes the same record Task Manager does.
+writes the same record Task Manager does. Entries whose program is gone,
+and the ones you switched off, can each be removed in one go — into
+Quarantine, with one Undo.
 
 </td>
 <td width="50%" valign="top">
