@@ -1,6 +1,7 @@
-import { Router } from 'express';
+import { Router, text } from 'express';
 import { installMonitor } from '../services/installMonitor.js';
 import { listTraces, deleteTrace } from '../services/installTraces.js';
+import { buildTraceFile, importTraceFile, TraceFileError, MAX_TRACE_FILE_BYTES } from '../services/installTraceFile.js';
 
 const router = Router();
 
@@ -41,6 +42,41 @@ router.get('/traces', async (_req, res) => {
   try {
     res.json({ traces: await listTraces() });
   } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+/** Export: the whole `.prunetraces` file as JSON, for the window to save. The
+ * window makes the file itself (lib/download.js), so nothing here writes to a
+ * path the request names. */
+router.get('/traces/export', async (_req, res) => {
+  try {
+    res.json(await buildTraceFile());
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+router.get('/traces/:id/export', async (req, res) => {
+  try {
+    const file = await buildTraceFile({ id: req.params.id });
+    if (!file) { res.status(404).json({ error: 'There is no such install trace.' }); return; }
+    res.json(file);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+/** Import: the file's text as the raw text/plain body, as Deep Clean's cleaner
+ * import does -- the app-wide JSON parser stops at 100 KB, and the importer
+ * checks the size again and trusts nothing in it (services/installTraceFile.js).
+ * A file that is not a trace file at all is a 400 with a machine-readable
+ * `code`; traces in it that do not pass are counted, not fatal. */
+router.post('/traces/import', text({ type: '*/*', limit: `${MAX_TRACE_FILE_BYTES + 1024}` }), async (req, res) => {
+  try {
+    res.json(await importTraceFile(typeof req.body === 'string' ? req.body : ''));
+  } catch (err) {
+    if (err instanceof TraceFileError) { res.status(400).json({ error: err.message, code: err.code }); return; }
     res.status(500).json({ error: err.message });
   }
 });

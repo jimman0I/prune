@@ -10,6 +10,17 @@ const deleteTrace = vi.fn();
 vi.mock('../services/installTraces.js', () => ({
   listTraces: (...a) => listTraces(...a), deleteTrace: (...a) => deleteTrace(...a)
 }));
+const traceFile = vi.hoisted(() => {
+  class TraceFileError extends Error { constructor(code, message) { super(message); this.code = code; } }
+  return { buildTraceFile: vi.fn(), importTraceFile: vi.fn(), TraceFileError };
+});
+vi.mock('../services/installTraceFile.js', () => ({
+  buildTraceFile: (...a) => traceFile.buildTraceFile(...a),
+  importTraceFile: (...a) => traceFile.importTraceFile(...a),
+  TraceFileError: traceFile.TraceFileError,
+  // Small, so the body cap can be tested without sending 16 MB.
+  MAX_TRACE_FILE_BYTES: 4096
+}));
 
 let server;
 beforeAll(async () => { server = await startTestServer(); });
@@ -67,6 +78,47 @@ describe('/install-monitor', () => {
 
     deleteTrace.mockResolvedValue(false);
     expect((await server.call('/install-monitor/traces/nope', { method: 'DELETE' })).status).toBe(404);
+  });
+
+  it('exports every trace, or one by id', async () => {
+    const file = { format: 'prune-install-traces', version: 1, traces: [] };
+    traceFile.buildTraceFile.mockResolvedValue(file);
+    expect((await server.call('/install-monitor/traces/export')).body).toEqual(file);
+    expect(traceFile.buildTraceFile).toHaveBeenCalledWith();
+
+    const id = 'b'.repeat(16);
+    expect((await server.call(`/install-monitor/traces/${id}/export`)).body).toEqual(file);
+    expect(traceFile.buildTraceFile).toHaveBeenLastCalledWith({ id });
+
+    traceFile.buildTraceFile.mockResolvedValue(null);
+    expect((await server.call('/install-monitor/traces/nope/export')).status).toBe(404);
+  });
+
+  it('imports the raw text body and answers with the counts', async () => {
+    traceFile.importTraceFile.mockResolvedValue({ imported: 2, skipped: 1, rejected: 0, notInstalled: 1 });
+    const res = await server.call('/install-monitor/traces/import', {
+      method: 'POST', headers: { 'Content-Type': 'text/plain' }, body: '{"format":"prune-install-traces"}'
+    });
+    expect(res.status).toBe(200);
+    expect(res.body).toEqual({ imported: 2, skipped: 1, rejected: 0, notInstalled: 1 });
+    expect(traceFile.importTraceFile).toHaveBeenCalledWith('{"format":"prune-install-traces"}');
+  });
+
+  it('is a 400 with the reason for a file that is not a trace file, and a 413 past the cap', async () => {
+    traceFile.importTraceFile.mockRejectedValueOnce(new traceFile.TraceFileError('notJson', 'not JSON'));
+    const bad = await server.call('/install-monitor/traces/import', { method: 'POST', headers: { 'Content-Type': 'text/plain' }, body: '{' });
+    expect(bad.status).toBe(400);
+    expect(bad.body).toEqual({ error: 'not JSON', code: 'notJson' });
+
+    traceFile.importTraceFile.mockClear();
+    const huge = await server.call('/install-monitor/traces/import', {
+      method: 'POST', headers: { 'Content-Type': 'text/plain' }, body: 'x'.repeat(4096 + 2048)
+    });
+    expect(huge.status).toBe(413);
+    expect(traceFile.importTraceFile).not.toHaveBeenCalled();
+
+    traceFile.importTraceFile.mockRejectedValueOnce(new Error('disk full'));
+    expect((await server.call('/install-monitor/traces/import', { method: 'POST', headers: { 'Content-Type': 'text/plain' }, body: '{}' })).status).toBe(500);
   });
 
   it('does not start from a GET', async () => {

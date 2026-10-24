@@ -513,6 +513,19 @@ export async function fetchInstallTraces() {
 }
 export const deleteInstallTrace = (id) => monitorCall(`/traces/${encodeURIComponent(id)}`, { method: 'DELETE' });
 
+/** The `.prunetraces` file, as an object, for one trace (by id) or for all of
+ * them. The window saves it (lib/download.js). */
+export const exportInstallTraces = (id) => monitorCall(id ? `/traces/${encodeURIComponent(id)}/export` : '/traces/export');
+
+/** Imports a `.prunetraces` file's text. Resolves { imported, skipped,
+ * rejected, notInstalled }; a file that is not one throws with `.code`
+ * (tooLarge, notJson, notTraceFile, newerVersion, tooMany). */
+export async function importInstallTraces(text) {
+  return jsonOrThrow(await fetch(`${API_URL}/install-monitor/traces/import`, {
+    method: 'POST', headers: { 'Content-Type': 'text/plain' }, body: text
+  }));
+}
+
 /** Shows a native dialog ('folder' or 'installer') and resolves { path },
  * where path is null if it was cancelled. The dialog is the backend's, not
  * the window's: the renderer has no file API. */

@@ -77,7 +77,7 @@ export default function ApplicationsTools({ programs = [], onChanged, onUninstal
       )}
       {open === 'monitor' && (
         <ModalOverlay label={t('uninstallerV3.monitor.title')} onClose={close} dismissible={!busy}>
-          <InstallMonitorDialog onClose={close} onBusyChange={setBusy} />
+          <InstallMonitorDialog onClose={close} onBusyChange={setBusy} programs={programs} />
         </ModalOverlay>
       )}
       {open === 'find' && (

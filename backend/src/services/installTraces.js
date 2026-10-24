@@ -70,7 +70,10 @@ export async function listTraces({ root = installTraceRoot() } = {}) {
       registryCount: trace.registry?.length ?? 0,
       taskCount: trace.tasks?.length ?? 0,
       serviceCount: trace.services?.length ?? 0,
-      partial: trace.partial === true
+      partial: trace.partial === true,
+      // When it came from a trace file rather than from a monitored install
+      // here (installTraceFile.js); null for one recorded on this PC.
+      importedAt: typeof trace.importedAt === 'number' ? trace.importedAt : null
     });
   }
   return summaries.sort((a, b) => b.createdAt - a.createdAt);

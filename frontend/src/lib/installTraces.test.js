@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { traceForProgram } from './installTraces.js';
+import { traceForProgram, traceInstalledHere, traceFileName } from './installTraces.js';
 
 const traces = [
   { id: 'a', programName: 'Acme', registryKey: 'HKLM:\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\Acme' },
@@ -28,5 +28,33 @@ describe('traceForProgram', () => {
     expect(traceForProgram({ name: 'Acme' }, [])).toBeNull();
     expect(traceForProgram({ name: 'Acme' }, undefined)).toBeNull();
     expect(traceForProgram({}, traces)).toBeNull();
+  });
+});
+
+describe('traceInstalledHere', () => {
+  const programs = [{ name: 'Acme', registryKey: 'HKLM:\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\Acme' }, { name: 'Portable' }];
+  it('is true when an installed program links to the trace, false when none does', () => {
+    expect(traceInstalledHere(traces[0], programs)).toBe(true);
+    expect(traceInstalledHere(traces[1], programs)).toBe(false);
+    expect(traceInstalledHere(traces[2], programs)).toBe(true);
+  });
+  it('says nothing for a trace with no program, or before the list has arrived', () => {
+    expect(traceInstalledHere({ id: 'p', programName: null }, programs)).toBeNull();
+    expect(traceInstalledHere(traces[0], [])).toBeNull();
+    expect(traceInstalledHere(traces[0], undefined)).toBeNull();
+  });
+});
+
+describe('traceFileName', () => {
+  const day = new Date(Date.UTC(2026, 9, 24, 12));
+  it('names an export of everything by the date', () => {
+    expect(traceFileName(undefined, day)).toBe('prune-install-traces-2026-10-24.prunetraces');
+  });
+  it('names one trace by its program, with nothing that could make a path', () => {
+    expect(traceFileName('Acme 1.0 (x64)', day)).toBe('prune-install-trace-Acme 1.0 x64.prunetraces');
+    expect(traceFileName('..\\..\\Windows/System32:evil*?', day)).toBe('prune-install-trace-Windows System32 evil.prunetraces');
+    expect(traceFileName('Café Ünïcode 日本', day)).toBe('prune-install-trace-Café Ünïcode 日本.prunetraces');
+    expect(traceFileName(null, day)).toBe('prune-install-trace-2026-10-24.prunetraces');
+    expect(traceFileName('***', day)).toBe('prune-install-trace-2026-10-24.prunetraces');
   });
 });

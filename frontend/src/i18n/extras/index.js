@@ -21,5 +21,6 @@ import hiddenPrograms from './hiddenPrograms.js';
 import fileProperties from './fileProperties.js';
 import sizeUnits from './sizeUnits.js';
 import windowsTools from './windowsTools.js';
+import installTraceFile from './installTraceFile.js';
 
-export const EXTRAS = [diskMap, deepClean, uninstaller, runAsAdmin, dashboardQol, diskMapQol, background, explorer, whatsNew, diskMapCounting, deepCleanRunRemoval, programSources, wizard, signatures, otherAccounts, whatsNew31, startupRemoveDisabled, hiddenPrograms, fileProperties, sizeUnits, windowsTools];
+export const EXTRAS = [diskMap, deepClean, uninstaller, runAsAdmin, dashboardQol, diskMapQol, background, explorer, whatsNew, diskMapCounting, deepCleanRunRemoval, programSources, wizard, signatures, otherAccounts, whatsNew31, startupRemoveDisabled, hiddenPrograms, fileProperties, sizeUnits, windowsTools, installTraceFile];

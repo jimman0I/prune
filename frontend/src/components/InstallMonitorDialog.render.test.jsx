@@ -6,7 +6,8 @@ import { renderScreen } from '../testSupport/renderScreen.jsx';
 
 const api = {
   pickPath: vi.fn(), startInstallMonitor: vi.fn(), fetchInstallMonitor: vi.fn(), finishInstallMonitor: vi.fn(),
-  cancelInstallMonitor: vi.fn(), deleteInstallTrace: vi.fn(), fetchInstallTraces: vi.fn(), fetchSettings: vi.fn()
+  cancelInstallMonitor: vi.fn(), deleteInstallTrace: vi.fn(), fetchInstallTraces: vi.fn(), fetchSettings: vi.fn(),
+  exportInstallTraces: vi.fn(), importInstallTraces: vi.fn()
 };
 vi.mock('../lib/api.js', () => ({
   pickPath: (...a) => api.pickPath(...a),
@@ -17,8 +18,14 @@ vi.mock('../lib/api.js', () => ({
   deleteInstallTrace: (...a) => api.deleteInstallTrace(...a),
   fetchInstallTraces: (...a) => api.fetchInstallTraces(...a),
   fetchSettings: (...a) => api.fetchSettings(...a),
+  exportInstallTraces: (...a) => api.exportInstallTraces(...a),
+  importInstallTraces: (...a) => api.importInstallTraces(...a),
   updateSettings: vi.fn(async (p) => p)
 }));
+const saveBlob = vi.fn();
+vi.mock('../lib/download.js', () => ({ saveBlob: (...a) => saveBlob(...a) }));
+const toasts = vi.hoisted(() => ({ success: vi.fn(), info: vi.fn(), warn: vi.fn(), error: vi.fn() }));
+vi.mock('../hooks/useToasts.jsx', async (importOriginal) => ({ ...(await importOriginal()), useToasts: () => toasts }));
 
 const InstallMonitorDialog = (await import('./InstallMonitorDialog.jsx')).default;
 
@@ -98,5 +105,72 @@ describe('the install monitor dialog', () => {
     expect(await screen.findByText('Acme')).toBeTruthy();
     await user.click(screen.getByRole('button', { name: 'Delete the record of Acme' }));
     await waitFor(() => expect(api.deleteInstallTrace).toHaveBeenCalledWith('a'.repeat(16)));
+  });
+
+  const file = { format: 'prune-install-traces', version: 1, traces: [] };
+  const acme = { id: 'a'.repeat(16), programName: 'Acme', registryKey: 'HKLM:\\SOFTWARE\\U\\Acme', fileCount: 3, registryCount: 1 };
+
+  it('exports one record, and all of them, as a .prunetraces file', async () => {
+    api.fetchInstallTraces.mockResolvedValue([acme]);
+    api.exportInstallTraces.mockResolvedValue(file);
+    const user = userEvent.setup();
+    renderScreen(<InstallMonitorDialog onClose={vi.fn()} />);
+
+    await user.click(await screen.findByRole('button', { name: 'Export the record of Acme' }));
+    await waitFor(() => expect(saveBlob).toHaveBeenCalledTimes(1));
+    expect(api.exportInstallTraces).toHaveBeenLastCalledWith(acme.id);
+    expect(saveBlob.mock.calls[0][1]).toBe('prune-install-trace-Acme.prunetraces');
+    expect(JSON.parse(await saveBlob.mock.calls[0][0].text())).toEqual(file);
+
+    await user.click(screen.getByRole('button', { name: 'Export all' }));
+    await waitFor(() => expect(saveBlob).toHaveBeenCalledTimes(2));
+    expect(api.exportInstallTraces).toHaveBeenLastCalledWith(undefined);
+    expect(saveBlob.mock.calls[1][1]).toMatch(/^prune-install-traces-\d{4}-\d{2}-\d{2}\.prunetraces$/);
+  });
+
+  it('offers Import with nothing recorded yet, and reports what an import did', async () => {
+    api.importInstallTraces.mockResolvedValue({ imported: 2, skipped: 1, rejected: 0, notInstalled: 1 });
+    const user = userEvent.setup();
+    renderScreen(<InstallMonitorDialog onClose={vi.fn()} />);
+    expect(await screen.findByText('No installs recorded yet.')).toBeTruthy();
+    expect(screen.queryByRole('button', { name: 'Export all' })).toBeNull();
+    expect(screen.getByRole('button', { name: 'Import…' })).toBeTruthy();
+
+    const upload = new File(['{"format":"prune-install-traces"}'], 'backup.prunetraces', { type: 'application/json' });
+    await user.upload(screen.getByTestId('import-traces-input'), upload);
+    await waitFor(() => expect(api.importInstallTraces).toHaveBeenCalledWith('{"format":"prune-install-traces"}'));
+    await waitFor(() => expect(toasts.success).toHaveBeenCalledWith('Install traces imported: 2. Already here, skipped: 1. Rejected: 0.'));
+  });
+
+  it('warns when some traces in the file were rejected, and says why a file was refused', async () => {
+    api.importInstallTraces.mockResolvedValueOnce({ imported: 1, skipped: 0, rejected: 3, notInstalled: 0 });
+    const user = userEvent.setup();
+    renderScreen(<InstallMonitorDialog onClose={vi.fn()} />);
+    const input = await screen.findByTestId('import-traces-input');
+    await user.upload(input, new File(['{}'], 'a.prunetraces'));
+    await waitFor(() => expect(toasts.warn).toHaveBeenCalledWith('Install traces imported: 1. Already here, skipped: 0. Rejected: 3.'));
+
+    api.importInstallTraces.mockRejectedValueOnce(Object.assign(new Error('x'), { code: 'notTraceFile' }));
+    await user.upload(input, new File(['{}'], 'b.prunetraces'));
+    expect(await screen.findByText("That file isn't an install trace file exported by Prune.")).toBeTruthy();
+  });
+
+  it('refuses a file over the size cap without sending it', async () => {
+    const user = userEvent.setup();
+    renderScreen(<InstallMonitorDialog onClose={vi.fn()} />);
+    const huge = new File(['x'], 'huge.prunetraces');
+    Object.defineProperty(huge, 'size', { value: 17 * 1024 * 1024 });
+    await user.upload(await screen.findByTestId('import-traces-input'), huge);
+    expect(await screen.findByText(/too large to be an install trace file/)).toBeTruthy();
+    expect(api.importInstallTraces).not.toHaveBeenCalled();
+  });
+
+  it('marks a record whose program is not installed on this PC', async () => {
+    const gone = { ...acme, id: 'b'.repeat(16), programName: 'Gone', registryKey: 'HKLM:\\SOFTWARE\\U\\Gone' };
+    api.fetchInstallTraces.mockResolvedValue([acme, gone]);
+    renderScreen(<InstallMonitorDialog onClose={vi.fn()} programs={[{ name: 'Acme', registryKey: 'HKLM:\\SOFTWARE\\U\\Acme' }]} />);
+    expect(await screen.findByText('Gone')).toBeTruthy();
+    expect(screen.getAllByText('Not installed here')).toHaveLength(1);
+    expect(screen.getByText('Not installed here').closest('li').textContent).toContain('Gone');
   });
 });

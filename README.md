@@ -120,7 +120,8 @@ Windows, Microsoft components or another program's folder. **Forced
 uninstall** for software that isn't listed, **Hunter** (drag a crosshair onto a window to
 identify its program, then uninstall it, end it or open Windows' Properties
 for its file), **Install with monitoring** so a later uninstall is
-exact, a **Backups** tab to restore registry and task backups, and a full
+exact (its records export to a `.prunetraces` file and import back, here or
+on another PC), a **Backups** tab to restore registry and task backups, and a full
 **History**.
 
 </td>

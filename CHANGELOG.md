@@ -42,6 +42,19 @@ see v1.0.1 below) are documented here.
   open an elevated Command Prompt that stays open, after Windows' own
   administrator prompt, and say so with a shield before the click. The
   window sends only a tool's id; what runs comes from a fixed list.
+- **Install traces: export, import, back up all.** In Install with
+  monitoring, each recorded install has Export, and "Export all" writes
+  every one to a single `.prunetraces` file (JSON with its format,
+  version, export date and Prune version). "Import…" brings a file back,
+  on this PC or another: the file is size-capped, its header and every
+  trace in it are checked field by field, fields Prune never writes are
+  dropped, paths stay local absolute paths kept as data, and each trace
+  gets a fresh id. Traces already here (same program, same content) are
+  skipped, and a toast says how many were imported, skipped and
+  rejected. Imported traces link to this PC's programs the way new ones
+  do, by the program's Add/Remove key, then by its name when the key
+  differs; one whose program is not installed is kept and marked "Not
+  installed here".
 
 ## v3.1.0
 
