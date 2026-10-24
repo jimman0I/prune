@@ -47,6 +47,7 @@ import scheduledCleanRoutes from './routes/scheduledClean.js';
 import startWithWindowsRoutes from './routes/startWithWindows.js';
 import explorerMenuRoutes from './routes/explorerMenu.js';
 import findProgramRoutes from './routes/findProgram.js';
+import windowsToolsRoutes from './routes/windowsTools.js';
 
 export function createApp({ port } = {}) {
   const app = express();
@@ -117,6 +118,7 @@ export function createApp({ port } = {}) {
   app.use('/api/stats', statsRoutes);
   app.use('/api/low-disk', lowDiskRoutes);
   app.use('/api/scheduled-clean', scheduledCleanRoutes);
+  app.use('/api/windows-tools', windowsToolsRoutes);
 
   /** Anything still unanswered is a path this app does not serve. After
    * every route, so it can only see what none of them matched. */

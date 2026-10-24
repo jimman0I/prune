@@ -190,6 +190,11 @@ the drive itself. A drive that reports errors lands in the red whatever its
 wear life. Free space and broken apps have their own cards; they don't
 dilute the score.
 
+**Windows tools** on the Dashboard opens Windows' own utilities in one
+place — System Restore, System File Checker and DISM (in an elevated
+console that stays open), Services, Event Viewer, Device Manager, Disk
+Management, Flush DNS and more — listing only the ones this PC has.
+
 </td>
 </tr>
 <tr>

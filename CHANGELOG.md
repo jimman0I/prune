@@ -30,6 +30,18 @@ see v1.0.1 below) are documented here.
   the tray tooltip, the low-disk notification and the command line. Only
   how numbers are written changes; the quarantine size cap stays
   1024-based and its field says GiB wherever GB would mean something else.
+- **Windows tools.** "Windows tools" beside the Dashboard heading opens
+  Windows' own tools in one place, each with a line on what it is for:
+  System Restore, System File Checker, DISM RestoreHealth, Check disk and
+  Disk Cleanup; System Information, Event Viewer, Resource Monitor and
+  DirectX diagnostics; System Properties, Services, Task Scheduler,
+  Device Manager, Disk Management, Shared folders and Group Policy;
+  Programs and Features and Windows features; Network connections and
+  Flush DNS; Windows Security and the On-screen keyboard. Only the tools
+  this PC has are listed (no Group Policy on Home). The repair commands
+  open an elevated Command Prompt that stays open, after Windows' own
+  administrator prompt, and say so with a shield before the click. The
+  window sends only a tool's id; what runs comes from a fixed list.
 
 ## v3.1.0
 

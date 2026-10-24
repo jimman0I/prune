@@ -17,6 +17,8 @@ import FreedTotal from './FreedTotal.jsx';
 import LastAutoClean from './LastAutoClean.jsx';
 import LowDiskBanner from './LowDiskBanner.jsx';
 import Page from './Page.jsx';
+import ModalOverlay from './ModalOverlay.jsx';
+import WindowsToolsDialog from './WindowsToolsDialog.jsx';
 
 /** Says something only when there is something to say.
  *
@@ -253,6 +255,7 @@ export default function Dashboard({ programs, programsMeasured = false, onNaviga
   const [history, setHistory] = useState([]);
   const [historyOpen, setHistoryOpen] = useState(true);
   const [driveOpen, setDriveOpen] = useState(false);
+  const [toolsOpen, setToolsOpen] = useState(false);
   const junk = useJunkMeasure();
 
   useEffect(() => {
@@ -322,8 +325,27 @@ export default function Dashboard({ programs, programsMeasured = false, onNaviga
     <Page>
       <div className="flex items-baseline justify-between gap-4 mb-8">
         <h1 className="display-heading text-[30px] leading-none">{t('nav.dashboard')}</h1>
-        <ScheduleBadge onNavigate={onNavigate} />
+        <div className="flex items-center gap-2">
+          <ScheduleBadge onNavigate={onNavigate} />
+          {/* Windows' own tools -- System Restore, Services, the repair
+              commands. Here because this is the screen about the PC as a
+              whole; a quiet secondary button, since nothing on this screen
+              is the one thing to do. */}
+          <button
+            type="button"
+            aria-haspopup="dialog"
+            className="btn-ghost px-3 py-1.5 rounded-lg text-[12px] font-medium min-h-[28px] shrink-0"
+            onClick={() => setToolsOpen(true)}
+          >
+            {t('windowsToolsV1.button')}
+          </button>
+        </div>
       </div>
+      {toolsOpen && (
+        <ModalOverlay label={t('windowsToolsV1.title')} onClose={() => setToolsOpen(false)} closeOnBackdrop initialFocus="[data-windows-tools-close]">
+          <WindowsToolsDialog onClose={() => setToolsOpen(false)} />
+        </ModalOverlay>
+      )}
 
       {/* A drive nearly full, said before the question of where the space went. */}
       <LowDiskBanner active={active} onNavigate={onNavigate} />

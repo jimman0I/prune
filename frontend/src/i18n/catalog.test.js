@@ -69,12 +69,18 @@ describe('CATALOG', () => {
      * prose is sentence case by construction and full of names. Functions are
      * called with placeholder arguments so template labels are checked too. */
     const PROPER = [
+      // Before 'Windows', which would otherwise take the first half of it.
+      'Windows Security',
       'Deep Clean', 'Disk Map', 'Recycle Bin', 'Prune', 'Quarantine', 'Windows', 'Defender', 'WinRAR',
       'Settings', 'Startup', 'Applications', 'Dashboard', 'Duplicates', 'Store', 'Explorer',
       'Add/Remove Programs', 'Run', 'RunOnce', 'Registry', 'Microsoft', 'Edge', 'Chrome', 'Firefox',
       'System Restore', 'Task Manager', 'StartupApproved', 'GitHub', 'Downloads', 'Chocolatey',
       // Unit symbols, written the way the standard writes them.
-      'KiB', 'MiB', 'GiB'
+      'KiB', 'MiB', 'GiB',
+      // Windows' own tools, by the names Windows gives them (Windows tools dialog).
+      'System File Checker', 'Disk Cleanup', 'System Information', 'Event Viewer', 'Resource Monitor',
+      'System Properties', 'Task Scheduler', 'Device Manager', 'Disk Management', 'Group Policy',
+      'Programs and Features'
     ];
     const leaves = (node, path = '') => {
       if (typeof node === 'function') {

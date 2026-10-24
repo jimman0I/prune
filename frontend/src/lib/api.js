@@ -25,6 +25,29 @@ export async function fetchProgramIcons() {
   return data.icons ?? {};
 }
 
+/** Windows' own tools on this PC (backend services/windowsTools.js), each
+ * { id, group, elevated, kind }: only the ones whose files exist here. */
+export async function fetchWindowsTools() {
+  const res = await fetch(`${API_URL}/windows-tools`);
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.error || `Request failed: ${res.status}`);
+  return data.tools ?? [];
+}
+
+/** Starts one by its id -- the only thing sent; what runs comes from the
+ * backend's fixed list. Never throws: { ok: true }, { ok: false, cancelled:
+ * true } for a declined UAC dialog, or { ok: false, error }. */
+export async function launchWindowsTool(id) {
+  try {
+    const res = await fetch(`${API_URL}/windows-tools/launch`, {
+      method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ id })
+    });
+    return await res.json();
+  } catch (err) {
+    return { ok: false, error: err.message };
+  }
+}
+
 /** Measured install-folder sizes for the programs whose registry entry
  * records none, as { programId: bytes }.
  *

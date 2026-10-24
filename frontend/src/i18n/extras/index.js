@@ -20,5 +20,6 @@ import startupRemoveDisabled from './startupRemoveDisabled.js';
 import hiddenPrograms from './hiddenPrograms.js';
 import fileProperties from './fileProperties.js';
 import sizeUnits from './sizeUnits.js';
+import windowsTools from './windowsTools.js';
 
-export const EXTRAS = [diskMap, deepClean, uninstaller, runAsAdmin, dashboardQol, diskMapQol, background, explorer, whatsNew, diskMapCounting, deepCleanRunRemoval, programSources, wizard, signatures, otherAccounts, whatsNew31, startupRemoveDisabled, hiddenPrograms, fileProperties, sizeUnits];
+export const EXTRAS = [diskMap, deepClean, uninstaller, runAsAdmin, dashboardQol, diskMapQol, background, explorer, whatsNew, diskMapCounting, deepCleanRunRemoval, programSources, wizard, signatures, otherAccounts, whatsNew31, startupRemoveDisabled, hiddenPrograms, fileProperties, sizeUnits, windowsTools];
