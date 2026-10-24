@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { endHuntedProcess, revealInExplorer, setStartupItemEnabled } from '../lib/api.js';
+import { endHuntedProcess, revealInExplorer, setStartupItemEnabled, showFileProperties } from '../lib/api.js';
 import { startHunter, cancelHunter, onHunterResult } from '../lib/hunterBridge.js';
 import { useAdminAccess } from '../hooks/useAdminAccess.js';
 import AdminRestartButton from './AdminRestartButton.jsx';
@@ -115,6 +115,20 @@ export default function HunterDialog({ programs = [], onClose, onUninstall, onFo
     try { await revealInExplorer(picked.exePath); } catch (err) { setError(err.message); }
   };
 
+  // Windows' own Properties sheet for the executable: version, company,
+  // signatures, compatibility -- the details this dialog does not repeat.
+  // Held busy until the sheet is up (about a second), so a second click
+  // does not open a second sheet.
+  const [openingProperties, setOpeningProperties] = useState(false);
+  const openProperties = async () => {
+    setError(null);
+    setOpeningProperties(true);
+    const outcome = await showFileProperties({ path: picked.exePath });
+    if (!alive.current) return;
+    setOpeningProperties(false);
+    if (!outcome?.ok) setError(t('propertiesV1.failed', outcome?.error || ''));
+  };
+
   return (
     <div data-modal-panel className="glass-panel rounded-2xl overflow-hidden max-w-[560px] w-full flex flex-col max-h-[85vh]">
       <div className="flex items-center justify-between gap-4 px-6 py-5 border-b border-[color:var(--border-subtle)] shrink-0">
@@ -188,6 +202,16 @@ export default function HunterDialog({ programs = [], onClose, onUninstall, onFo
                     ))}
                     {picked.exePath && (
                       <button type="button" className="btn-ghost px-3 py-1.5 rounded-lg text-[12px] font-medium" onClick={openFolder}>{t('applications.openFolder')}</button>
+                    )}
+                    {picked.exePath && (
+                      <button
+                        type="button"
+                        className="btn-ghost px-3 py-1.5 rounded-lg text-[12px] font-medium disabled:opacity-50"
+                        disabled={openingProperties}
+                        onClick={openProperties}
+                      >
+                        {openingProperties ? t('propertiesV1.opening') : t('propertiesV1.button')}
+                      </button>
                     )}
                     {!picked.endRefusal && (
                       confirmEnd ? (

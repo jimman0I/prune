@@ -17,6 +17,11 @@ see v1.0.1 below) are documented here.
   and remembers it across launches; nothing about the program changes.
   "Show hidden (N)" brings hidden programs back with a quiet Hidden badge
   and Unhide. Select all never ticks a hidden program.
+- **Properties.** Hunter's result, and an Applications row's menu, open
+  Windows' own Properties sheet for the program's executable: version,
+  company, digital signatures, compatibility. In Applications the file is
+  the program's main executable, found the same way its icon is. Only a
+  full path to a file that exists is accepted.
 
 ## v3.1.0
 

@@ -4,11 +4,12 @@ import { screen, waitFor, act } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { renderScreen } from '../testSupport/renderScreen.jsx';
 
-const api = { endHuntedProcess: vi.fn(), revealInExplorer: vi.fn(), setStartupItemEnabled: vi.fn(), fetchSettings: vi.fn(), fetchMftStatus: vi.fn() };
+const api = { endHuntedProcess: vi.fn(), revealInExplorer: vi.fn(), setStartupItemEnabled: vi.fn(), showFileProperties: vi.fn(), fetchSettings: vi.fn(), fetchMftStatus: vi.fn() };
 vi.mock('../lib/api.js', () => ({
   endHuntedProcess: (...a) => api.endHuntedProcess(...a),
   revealInExplorer: (...a) => api.revealInExplorer(...a),
   setStartupItemEnabled: (...a) => api.setStartupItemEnabled(...a),
+  showFileProperties: (...a) => api.showFileProperties(...a),
   fetchSettings: (...a) => api.fetchSettings(...a),
   fetchMftStatus: (...a) => api.fetchMftStatus(...a),
   updateSettings: vi.fn(async (p) => p)
@@ -182,6 +183,32 @@ describe('Hunter: the result of a drop', () => {
     const { user } = await hunt(picked());
     await user.click(await screen.findByRole('button', { name: 'Open folder' }));
     expect(api.revealInExplorer).toHaveBeenCalledWith('D:\\Apps\\Thing\\thing.exe');
+  });
+
+  it('opens Windows\' Properties for the executable, by its path, once at a time', async () => {
+    let resolveShown;
+    api.showFileProperties.mockReturnValue(new Promise((resolve) => { resolveShown = resolve; }));
+    const { user } = await hunt(picked());
+    await user.click(await screen.findByRole('button', { name: 'Properties' }));
+    expect(api.showFileProperties).toHaveBeenCalledWith({ path: 'D:\\Apps\\Thing\\thing.exe' });
+    // Held until the sheet is up, so a second click cannot open a second one.
+    expect(screen.getByRole('button', { name: 'Opening…' }).disabled).toBe(true);
+    await act(async () => resolveShown({ ok: true }));
+    expect(screen.getByRole('button', { name: 'Properties' }).disabled).toBe(false);
+    expect(screen.queryByRole('alert')).toBeNull();
+  });
+
+  it('says why when Properties would not open', async () => {
+    api.showFileProperties.mockResolvedValue({ ok: false, error: 'That file is no longer on disk.' });
+    const { user } = await hunt(picked());
+    await user.click(await screen.findByRole('button', { name: 'Properties' }));
+    expect((await screen.findByRole('alert')).textContent).toBe("Couldn't open Properties: That file is no longer on disk.");
+  });
+
+  it('offers no Properties when the window gave no executable path', async () => {
+    await hunt(picked({ exePath: '' }));
+    await screen.findByText(/belongs to the installed program/);
+    expect(screen.queryByRole('button', { name: 'Properties' })).toBeNull();
   });
 });
 

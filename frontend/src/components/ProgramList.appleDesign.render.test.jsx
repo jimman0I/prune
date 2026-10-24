@@ -237,7 +237,7 @@ describe('the row context menu', () => {
   it('offers Uninstall, Open folder and Copy uninstall command for an ordinary program', async () => {
     render();
     const menu = await openMenu('Steam');
-    expect(within(menu).getAllByRole('menuitem').map((b) => b.textContent)).toEqual(['Open folder', 'Copy uninstall command', 'Hide from list', 'Uninstall']);
+    expect(within(menu).getAllByRole('menuitem').map((b) => b.textContent)).toEqual(['Open folder', 'Properties', 'Copy uninstall command', 'Hide from list', 'Uninstall']);
   });
 
   it('Uninstall hands the program to the same handler as the button, and only opens the dialog (removes nothing itself)', async () => {
@@ -318,7 +318,7 @@ describe('the row context menu', () => {
   it('rowMenuItems puts the safe choices first and the destructive one last, set apart', () => {
     const t = (key) => key;
     const items = rowMenuItems(program(), { t, toasts: {}, onUninstall: vi.fn(), onRemoveStoreApp: vi.fn() });
-    expect(items.map((i) => i.label)).toEqual(['applications.openFolder', 'applications.copyUninstallCommand', 'applications.uninstall']);
+    expect(items.map((i) => i.label)).toEqual(['applications.openFolder', 'propertiesV1.button', 'applications.copyUninstallCommand', 'applications.uninstall']);
     const last = items[items.length - 1];
     expect(last.danger).toBe(true);
     expect(last.separated).toBe(true);

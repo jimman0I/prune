@@ -15,6 +15,7 @@ import { setStartupEnabled } from '../services/startupToggle.js';
 import { openStartupLocation, openContainingFolder, runStartupProcess, addStartupEntry } from '../services/startupActions.js';
 import { getStartupIcons } from '../services/startupIcons.js';
 import { revealPath, openInstalledAppsSettings } from '../services/revealPath.js';
+import { resolvePropertiesTarget, showFileProperties, mainExecutableFor } from '../services/fileProperties.js';
 import { getPackageIcons } from '../services/packageIcons.js';
 import { getRunningPrograms } from '../services/runningPrograms.js';
 import { readChocolateyPackages, chocolateyRows, managedPrograms, uninstallChocolateyPackage } from '../services/chocolateyApps.js';
@@ -325,6 +326,40 @@ router.post('/reveal', async (req, res) => {
     res.json(result);
   } catch (err) {
     res.status(500).json({ error: err.message });
+  }
+});
+
+/** Opens Windows' own Properties sheet for a program's file.
+ *
+ * Two ways to name the file, and only these two:
+ *   { path }       a full path -- Hunter's, for the executable behind the
+ *                  window it picked. Validated in the service: absolute, on
+ *                  disk, a file. Never a command line: the path is handed to
+ *                  the shell's "properties" verb as data, nothing runs it.
+ *   { programId }  an installed program, looked up again here; the file is
+ *                  the program's main executable (its DisplayIcon .exe, or
+ *                  the one findMainExecutable finds in its folder).
+ * POST for the same reason /reveal is: a window opens. Answers once the
+ * sheet is on screen, { ok: true }, or { ok: false, error }. */
+router.post('/properties', async (req, res) => {
+  try {
+    const { path, programId } = req.body || {};
+    let target = path;
+    if (typeof programId === 'string' && programId) {
+      const program = (await listInstalledPrograms()).find((p) => p.id === programId);
+      if (!program) { res.status(404).json({ ok: false, error: 'That program is no longer installed.' }); return; }
+      target = await mainExecutableFor(program);
+      if (!target) { res.status(404).json({ ok: false, error: 'No program file was found for this program.' }); return; }
+    } else if (typeof path !== 'string') {
+      res.status(400).json({ ok: false, error: 'Needs a path or a programId.' });
+      return;
+    }
+    const check = resolvePropertiesTarget(target);
+    if (!check.ok) { res.status(400).json(check); return; }
+    const result = await showFileProperties(check.path);
+    res.status(result.ok ? 200 : 500).json(result);
+  } catch (err) {
+    res.status(500).json({ ok: false, error: err.message });
   }
 });
 

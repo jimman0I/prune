@@ -436,6 +436,21 @@ export const deleteBackup = (id) => backupCall(`/${encodeURIComponent(id)}`, { m
 
 /** Ends the process Hunter named. Never throws for a refusal: resolves
  * { ok: false, error } so the screen can say why. */
+/** Windows' own Properties sheet for a file: `{ path }` (Hunter's
+ * executable) or `{ programId }` (an installed program's main executable,
+ * found on the server). Never throws: { ok: true } once the sheet is on
+ * screen, else { ok: false, error }. */
+export async function showFileProperties(target) {
+  try {
+    const res = await fetch(`${API_URL}/programs/properties`, {
+      method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(target)
+    });
+    return await res.json();
+  } catch (err) {
+    return { ok: false, error: err.message };
+  }
+}
+
 export async function endHuntedProcess(pid, exePath) {
   try {
     const res = await fetch(`${API_URL}/hunter/end-process`, {

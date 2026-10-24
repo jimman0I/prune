@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import ContextMenu from './ContextMenu.jsx';
 import { useToasts } from '../hooks/useToasts.jsx';
-import { fetchPrograms, revealInExplorer, openInstalledAppsSettings, deleteInstallTrace, fetchExtensionPageAddress } from '../lib/api.js';
+import { fetchPrograms, revealInExplorer, openInstalledAppsSettings, deleteInstallTrace, fetchExtensionPageAddress, showFileProperties } from '../lib/api.js';
 import { copyText } from '../lib/copyText.js';
 import { useQueryClient } from '@tanstack/react-query';
 import { keys } from '../lib/queryClient.js';
@@ -1180,6 +1180,23 @@ export function rowMenuItems(program, { t, toasts, onUninstall, onRemoveStoreApp
       label: t('applications.openFolder'),
       onSelect: () => revealInExplorer(program.installLocation)
         .catch((error) => toasts.error(t('applications.reveal.notFound'), { detail: error.message }))
+    });
+  }
+
+  // Windows' own Properties sheet for the program's main executable, found on
+  // the server the same way its icon and signature are. Only for a registry
+  // program that names somewhere to look -- a Store app's files are locked
+  // away, an extension has no executable, and Windows' features and updates
+  // are not files at all.
+  // (A registry program carries no `source` at all; 'registry' is accepted
+  // too, so a list that ever spells it out keeps the action.)
+  if ((!program.source || program.source === 'registry') && (program.installLocation || program.displayIcon)) {
+    items.push({
+      label: t('propertiesV1.button'),
+      onSelect: async () => {
+        const outcome = await showFileProperties({ programId: program.id });
+        if (!outcome?.ok) toasts.error(t('propertiesV1.failed', outcome?.error || ''));
+      }
     });
   }
 
