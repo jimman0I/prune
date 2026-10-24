@@ -217,6 +217,13 @@ const DEFAULT_SETTINGS = {
      it and can say what grew. On by default; only an explicit false turns it
      off. Nothing leaves the PC either way. */
   rememberDiskMapScans: true,
+  /* Programs hidden from the Applications list, by the stable key
+     frontend/src/lib/hiddenPrograms.js gives each one (a registry entry's
+     full key path, a Store app's package name, otherwise the row's own id).
+     Purely what the list shows: a hidden program is not touched, and every
+     other screen still counts it. "Show hidden" in the list brings them back.
+     See normalizeHiddenPrograms. */
+  hiddenPrograms: [],
   /* The last app version whose "What's new" notice was shown (or that was
      installed fresh, which counts as having seen it). The window compares it
      with the running version to decide whether to announce an update, once.
@@ -309,8 +316,32 @@ function normalizedChoices(settings) {
     wipePasses: normalizePasses(settings.wipePasses),
     customLocations: normalizeCustomLocations(settings.customLocations),
     rememberDiskMapScans: settings.rememberDiskMapScans !== false,
+    hiddenPrograms: normalizeHiddenPrograms(settings.hiddenPrograms),
     lastSeenVersion: normalizeLastSeenVersion(settings.lastSeenVersion)
   };
+}
+
+/** The hidden-programs list as the Applications screen can rely on it:
+ * an array of distinct, trimmed, non-blank strings. Anything else in a
+ * hand-edited or corrupted file -- a single string, an object, numbers --
+ * reads as nothing hidden, which shows MORE rather than less.
+ *
+ * Bounded both ways because the value arrives in a request body and is
+ * written back on every save: a key is a registry path or an id, never
+ * near 1024 characters, and nobody hides five thousand programs. The
+ * bounds keep a bad client from turning settings.json into megabytes. */
+const HIDDEN_KEY_MAX = 1024;
+const HIDDEN_LIST_MAX = 5000;
+export function normalizeHiddenPrograms(value) {
+  if (!Array.isArray(value)) return [];
+  const keys = new Set();
+  for (const entry of value) {
+    if (keys.size >= HIDDEN_LIST_MAX) break;
+    if (typeof entry !== 'string') continue;
+    const key = entry.trim();
+    if (key && key.length <= HIDDEN_KEY_MAX) keys.add(key);
+  }
+  return [...keys];
 }
 
 /** A plain version ("3.0.0", or "3.1.0-beta.1"), or null. Exactly that shape:

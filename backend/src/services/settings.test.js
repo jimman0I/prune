@@ -3,7 +3,7 @@ import { mkdtempSync, rmSync } from 'node:fs';
 import { mkdir, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join, dirname } from 'node:path';
-import { getSettings, updateSettings, cleanGuardsFrom, isLowSpecHardware } from './settings.js';
+import { getSettings, updateSettings, cleanGuardsFrom, isLowSpecHardware, normalizeHiddenPrograms } from './settings.js';
 
 let dir;
 beforeEach(() => {
@@ -378,6 +378,33 @@ describe('leftoverScanMode', () => {
     await mkdir(dirname(process.env.UNREVO_SETTINGS_PATH), { recursive: true });
     await writeFile(process.env.UNREVO_SETTINGS_PATH, JSON.stringify({ leftoverScanMode: 'yolo' }));
     expect((await getSettings()).leftoverScanMode).toBe('moderate');
+  });
+});
+
+describe('hiddenPrograms', () => {
+  it('starts empty', async () => {
+    expect((await getSettings()).hiddenPrograms).toEqual([]);
+  });
+
+  it('remembers the keys it was given, in order', async () => {
+    const keys = ['reg:hklm:\\software\\microsoft\\windows\\currentversion\\uninstall\\7-zip', 'store:microsoft.windowscalculator'];
+    expect((await updateSettings({ hiddenPrograms: keys })).hiddenPrograms).toEqual(keys);
+    expect((await getSettings()).hiddenPrograms).toEqual(keys);
+  });
+
+  it('keeps only non-blank strings, once each, trimmed', async () => {
+    const saved = await updateSettings({ hiddenPrograms: [' id:a ', 'id:a', '', '   ', 7, null, { k: 1 }, 'id:b'] });
+    expect(saved.hiddenPrograms).toEqual(['id:a', 'id:b']);
+  });
+
+  it('reads a hand-edited non-array, or an absurd length, back as something bounded', async () => {
+    expect(normalizeHiddenPrograms('id:a')).toEqual([]);
+    expect(normalizeHiddenPrograms(null)).toEqual([]);
+    expect(normalizeHiddenPrograms(['x'.repeat(5000)])).toEqual([]);
+    expect(normalizeHiddenPrograms(Array.from({ length: 6000 }, (_, i) => `id:${i}`))).toHaveLength(5000);
+    await mkdir(dirname(process.env.UNREVO_SETTINGS_PATH), { recursive: true });
+    await writeFile(process.env.UNREVO_SETTINGS_PATH, JSON.stringify({ hiddenPrograms: { a: 1 } }));
+    expect((await getSettings()).hiddenPrograms).toEqual([]);
   });
 });
 

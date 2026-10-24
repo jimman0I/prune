@@ -12,6 +12,11 @@ see v1.0.1 below) are documented here.
   off, as one Quarantine batch with one Undo. Undo brings each one back
   still switched off. Switched-off scheduled tasks, services and Store
   apps stay switches.
+- **Applications: hide programs from the list.** "Hide from list" in a
+  row's menu takes a program out of the rows, the count and the total,
+  and remembers it across launches; nothing about the program changes.
+  "Show hidden (N)" brings hidden programs back with a quiet Hidden badge
+  and Unhide. Select all never ticks a hidden program.
 
 ## v3.1.0
 

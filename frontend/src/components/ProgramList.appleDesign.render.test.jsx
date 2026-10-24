@@ -237,7 +237,7 @@ describe('the row context menu', () => {
   it('offers Uninstall, Open folder and Copy uninstall command for an ordinary program', async () => {
     render();
     const menu = await openMenu('Steam');
-    expect(within(menu).getAllByRole('menuitem').map((b) => b.textContent)).toEqual(['Open folder', 'Copy uninstall command', 'Uninstall']);
+    expect(within(menu).getAllByRole('menuitem').map((b) => b.textContent)).toEqual(['Open folder', 'Copy uninstall command', 'Hide from list', 'Uninstall']);
   });
 
   it('Uninstall hands the program to the same handler as the button, and only opens the dialog (removes nothing itself)', async () => {
@@ -287,8 +287,9 @@ describe('the row context menu', () => {
     await user.click(screen.getAllByRole('button').find((b) => b.textContent.trim().startsWith('Extensions')));
     const row = (await screen.findByText('uBlock')).closest('[role="row"]');
     fireEvent.contextMenu(row, { clientX: 10, clientY: 10 });
-    // Nothing to offer at all: no folder, no command.
-    expect(screen.queryByRole('menuitem')).toBeNull();
+    // Nothing about the extension itself: no folder, no command, no removal.
+    // Only hiding it, which is about the list.
+    expect(screen.getAllByRole('menuitem').map((b) => b.textContent)).toEqual(['Hide from list']);
   });
 
   it('Open folder reveals the install location', async () => {

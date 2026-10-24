@@ -5,8 +5,9 @@ import { fetchPrograms, revealInExplorer, openInstalledAppsSettings, deleteInsta
 import { copyText } from '../lib/copyText.js';
 import { useQueryClient } from '@tanstack/react-query';
 import { keys } from '../lib/queryClient.js';
-import { useInstallTraces } from '../hooks/useSystemQueries.js';
+import { useInstallTraces, useSettings } from '../hooks/useSystemQueries.js';
 import { traceForProgram } from '../lib/installTraces.js';
+import { isProgramHidden, withProgramHidden } from '../lib/hiddenPrograms.js';
 import { sizeBadgeTone } from '../lib/sizeBadgeTone.js';
 import { sortPrograms, nextSortState } from '../lib/sortPrograms.js';
 import { canBatchUninstall, batchIneligibleReason, batchSummary } from '../lib/batchSelection.js';
@@ -309,7 +310,7 @@ function ManageExtensionButton({ program }) {
   );
 }
 
-function ProgramRow({ program, iconSrc, checked, running, isNew, monitored = false, tabStop, onFocusRow, onToggle, onUninstall, onRemoveStoreApp, onRemoveSourceItem, onRemoveUnregistered, onContextMenu }) {
+function ProgramRow({ program, iconSrc, checked, running, isNew, monitored = false, hidden = false, tabStop, onFocusRow, onToggle, onUninstall, onRemoveStoreApp, onRemoveSourceItem, onRemoveUnregistered, onContextMenu }) {
   const { t } = useLanguage();
   return (
     <div
@@ -339,6 +340,14 @@ function ProgramRow({ program, iconSrc, checked, running, isNew, monitored = fal
           (Running, Unsigned) it was squeezed to "M...". The badges clip
           instead -- the name is what identifies the row. */}
       <span className="text-[12.5px] truncate min-w-[9ch] shrink">{program.name}</span>
+      {/* Only ever seen with "Show hidden" on, which is the one time a
+          hidden row is in the list. Quiet like Unsigned: it says something
+          about the list, not about the program. */}
+      {hidden && (
+        <span className="text-[11px] font-mono uppercase tracking-wider px-1 py-px rounded bg-[color:var(--surface-hover)] text-[color:var(--text-muted)] border border-[color:var(--border-subtle)] shrink-0">
+          {t('hiddenProgramsV1.badge')}
+        </span>
+      )}
       {program.health?.orphaned && (
         <span className="text-[11px] font-mono uppercase tracking-wider px-1 py-px rounded bg-[color:var(--danger-soft)] text-[color:var(--danger)] border border-[color:var(--danger)]/25 shrink-0">
           {t('applications.badges.broken')}
@@ -638,23 +647,49 @@ export default function ProgramList({ programs: initialPrograms, extensions = []
         : id === 'otherUsers' ? otherUsers
           : programs);
 
-  const filtered = useMemo(() => {
+  /* Programs the person hid from this list (Hide from list, in the row's
+   * menu), kept in settings so they stay hidden across launches. Hiding is a
+   * narrowing like the filters, with the same consequences: a hidden row is
+   * out of the rows, the footer's total and the heading's count -- which
+   * then say "showing N of M", so the number never pretends the program is
+   * gone -- and out of every selection, so a batch never reaches something
+   * nobody can see. "Show hidden (N)" puts them back, badged. */
+  const { settings, save: saveSettings } = useSettings();
+  const hiddenKeys = useMemo(() => new Set(settings?.hiddenPrograms ?? []), [settings?.hiddenPrograms]);
+  const [showHidden, setShowHidden] = useState(false);
+  const isHidden = (program) => isProgramHidden(program, hiddenKeys);
+
+  // The current source list narrowed by the filter chip, before the search.
+  const inFilter = useMemo(() => {
     // Extensions are their own list, not part of the program list. That is
     // deliberate, for the same reason: an extension is
     // not an installed program, and mixing 24 of them in would dilute
     // both the count and the total.
-    const source = listFor(filter);
-    const q = query.trim().toLowerCase();
-    let list = q
-      ? source.filter(p => p.name.toLowerCase().includes(q) || (p.publisher || '').toLowerCase().includes(q))
-      : source;
+    let list = listFor(filter);
     if (filter === 'unused') list = list.filter(p => p.unused);
     if (filter === 'broken') list = list.filter(p => p.health?.orphaned);
     if (filter === 'store') list = list.filter(p => p.source === 'store');
     if (filter === 'chocolatey') list = list.filter(p => p.source === 'chocolatey' || p.chocolateyId);
     if (filter === 'unsigned') list = list.filter(isUnsigned);
+    return list;
+  }, [programs, extensions, unregistered, windowsItems, otherUsers, filter]);
+
+  // What "Show hidden" would add back to this view: counted before the
+  // search, like the filter chips' own counts, so typing does not make the
+  // number jump around under the pointer.
+  const hiddenCount = useMemo(() => inFilter.filter(isHidden).length, [inFilter, hiddenKeys]);
+  // With nothing hidden left in view the toggle disappears, and so does its
+  // state: otherwise the next program hidden would stay on screen.
+  useEffect(() => { if (hiddenCount === 0) setShowHidden(false); }, [hiddenCount]);
+
+  const filtered = useMemo(() => {
+    const q = query.trim().toLowerCase();
+    let list = q
+      ? inFilter.filter(p => p.name.toLowerCase().includes(q) || (p.publisher || '').toLowerCase().includes(q))
+      : inFilter;
+    if (!showHidden) list = list.filter((p) => !isHidden(p));
     return sortPrograms(list, sort.column, sort.direction);
-  }, [programs, extensions, unregistered, windowsItems, otherUsers, query, sort, filter]);
+  }, [inFilter, query, sort, showHidden, hiddenKeys]);
 
   const totalBytes = useMemo(
     () => filtered.reduce((sum, p) => sum + (p.sizeBytes || 0), 0),
@@ -664,7 +699,7 @@ export default function ProgramList({ programs: initialPrograms, extensions = []
   // What the page's heading needs to say about this list. The search and the
   // filter live here, the heading does not, and a count that ignores them
   // stays at "210 installed applications" over a single visible row.
-  const isNarrowed = query.trim() !== '' || filter !== 'all';
+  const isNarrowed = query.trim() !== '' || filter !== 'all' || (!showHidden && hiddenCount > 0);
   const shownTotal = listFor(filter).length;
   useEffect(() => {
     onViewChange?.({ filtered: isNarrowed, shown: filtered.length, total: shownTotal, bytes: filter === 'windows' ? null : totalBytes });
@@ -711,7 +746,11 @@ export default function ProgramList({ programs: initialPrograms, extensions = []
     () => filtered.filter((p) => selected.has(p.id)),
     [filtered, selected]
   );
-  const selectable = useMemo(() => filtered.filter(canBatchUninstall), [filtered]);
+  // Select all never ticks a hidden row, even with Show hidden on: hiding
+  // one is "leave this out", and the header checkbox is the one control
+  // that acts on rows without anyone looking at each. Ticked one by one, a
+  // shown hidden row is a deliberate choice and counts like any other.
+  const selectable = useMemo(() => filtered.filter((p) => canBatchUninstall(p) && !isHidden(p)), [filtered, hiddenKeys]);
   const allSelected = selectable.length > 0 && selectable.every((p) => selected.has(p.id));
 
   const toggleRow = (program) => setSelected((prev) => {
@@ -731,9 +770,43 @@ export default function ProgramList({ programs: initialPrograms, extensions = []
 
   const summary = batchSummary(selectedPrograms);
 
+  /** Hides or unhides one program, saved straight away.
+   *
+   * Read from the query cache at the moment of the click rather than from
+   * this render's `settings`: two quick hides would otherwise both start
+   * from the same list and the second would put the first back. A hidden
+   * row also leaves the selection, so ticking it, hiding it and showing
+   * hidden again cannot bring back a tick nobody saw being kept.
+   *
+   * The toast carries Undo, because the row it talks about has just gone
+   * from under the pointer and "where did it go" is the next question. */
+  const setHidden = (program, hide) => {
+    const current = queryClient.getQueryData(keys.settings)?.hiddenPrograms ?? settings?.hiddenPrograms ?? [];
+    const next = withProgramHidden(current, program, hide);
+    if (hide) setSelected((prev) => {
+      if (!prev.has(program.id)) return prev;
+      const without = new Set(prev);
+      without.delete(program.id);
+      return without;
+    });
+    saveSettings.mutate({ hiddenPrograms: next }, {
+      onSuccess: () => {
+        if (hide) {
+          toasts.info(t('hiddenProgramsV1.hiddenToast', program.name), {
+            action: { label: t('dashboardQolV3.undo.action'), onClick: () => setHidden(program, false) }
+          });
+        } else {
+          toasts.info(t('hiddenProgramsV1.unhiddenToast', program.name));
+        }
+      },
+      onError: (error) => toasts.error(t('hiddenProgramsV1.saveFailed'), { detail: error.message })
+    });
+  };
+
   const menuItems = menu ? rowMenuItems(menu.program, {
     t, toasts, onUninstall, onRemoveStoreApp, onRemoveSourceItem, onRemoveUnregistered,
-    trace: traceForProgram(menu.program, traces), onDeleteTrace: deleteTrace
+    trace: traceForProgram(menu.program, traces), onDeleteTrace: deleteTrace,
+    hidden: isHidden(menu.program), onSetHidden: setHidden
   }) : [];
 
   // The shape of the table that is coming, not a line of text where it
@@ -832,6 +905,21 @@ export default function ProgramList({ programs: initialPrograms, extensions = []
             {t('otherV7.button')}
           </button>
         )] : [])])}
+        {/* Not a segment of either group: it is not one more answer to
+            "which list", it is on or off over whichever list is chosen. So
+            it gets its own frame, the same look, and states its state with
+            aria-pressed. Offered only while something in view is hidden. */}
+        {hiddenCount > 0 && (
+          <div className="flex items-center p-1 bg-[color:var(--bg-panel)] border border-[color:var(--border-subtle)] rounded-xl">
+            <button
+              aria-pressed={showHidden}
+              onClick={() => setShowHidden((on) => !on)}
+              className={`px-3 py-1.5 rounded-lg text-[12.5px] font-medium transition ${showHidden ? 'pill-selected bg-[color:var(--surface-hover)] text-[color:var(--text-primary)]' : 'text-[color:var(--text-muted)] hover:text-[color:var(--text-primary)]'}`}
+            >
+              {t('hiddenProgramsV1.showHidden', hiddenCount)}
+            </button>
+          </div>
+        )}
       </div>
 
       {/* Said while the filter is on rather than left for a tooltip: "unused"
@@ -932,6 +1020,7 @@ export default function ProgramList({ programs: initialPrograms, extensions = []
               running={Boolean(running[program.id])}
               isNew={newIds.has(program.id)}
               monitored={monitoredIds.has(program.id)}
+              hidden={showHidden && isHidden(program)}
               onToggle={() => toggleRow(program)}
               onUninstall={onUninstall}
               onRemoveStoreApp={onRemoveStoreApp}
@@ -965,6 +1054,20 @@ export default function ProgramList({ programs: initialPrograms, extensions = []
                   onClick={() => setRetryTick((n) => n + 1)}
                 >
                   {t('applications.retry')}
+                </button>
+              </div>
+            ) : query.trim() === '' && !showHidden && hiddenCount > 0 && hiddenCount === inFilter.length ? (
+              // Everything in this view is hidden. "Clear search and filters"
+              // would not bring anything back, so the way back is offered.
+              <div className="text-center py-16 px-6">
+                <p className="text-[13px] text-[color:var(--text-secondary)]">
+                  {t('hiddenProgramsV1.allHidden')}
+                </p>
+                <button
+                  className="btn-ghost mt-4 px-3.5 py-2 rounded-lg text-[12.5px] font-medium"
+                  onClick={() => setShowHidden(true)}
+                >
+                  {t('hiddenProgramsV1.showHidden', hiddenCount)}
                 </button>
               </div>
             ) : (
@@ -1069,7 +1172,7 @@ export default function ProgramList({ programs: initialPrograms, extensions = []
  * dialog and removes nothing by itself), Open folder is the Folder button,
  * and Copy is a read. An item that has nothing to act on is left out rather
  * than shown dead. */
-export function rowMenuItems(program, { t, toasts, onUninstall, onRemoveStoreApp, onRemoveSourceItem, onRemoveUnregistered, trace = null, onDeleteTrace }) {
+export function rowMenuItems(program, { t, toasts, onUninstall, onRemoveStoreApp, onRemoveSourceItem, onRemoveUnregistered, trace = null, onDeleteTrace, hidden = false, onSetHidden }) {
   const items = [];
 
   if (program.installLocation) {
@@ -1094,6 +1197,15 @@ export function rowMenuItems(program, { t, toasts, onUninstall, onRemoveStoreApp
   // machine; the program just loses its Monitored badge and its exactness.
   if (trace && onDeleteTrace) {
     items.push({ label: t('uninstallerV3.monitor.menuDelete'), onSelect: () => onDeleteTrace(trace) });
+  }
+
+  // Out of the list, not off the machine: nothing about the program changes,
+  // and Show hidden brings it back. Its own group, because it is about the
+  // list rather than the program.
+  if (onSetHidden) {
+    items.push(hidden
+      ? { label: t('hiddenProgramsV1.unhide'), separated: items.length > 0, onSelect: () => onSetHidden(program, false) }
+      : { label: t('hiddenProgramsV1.hide'), separated: items.length > 0, onSelect: () => onSetHidden(program, true) });
   }
 
   // The removal goes LAST, set apart and in the danger style: the menu opens
