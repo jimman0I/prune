@@ -158,6 +158,11 @@ function formatCount(value) {
  * for them. */
 function SmartAttributes({ smart }) {
   const { t } = useLanguage();
+  // Data written and read stay in 1000-based TB whatever the size units
+  // setting says (lib/formatBytes.js): the figure exists to be held against
+  // the drive's endurance rating, and every maker prints that rating -- "600
+  // TBW" -- in decimal terabytes. The label is the true name of the unit in
+  // every mode, so it is never a 1024-based number called TB.
   const tb = (bytes) => (typeof bytes === 'number' ? `${(bytes / 1e12).toFixed(1)} TB` : '—');
 
   const rows = [

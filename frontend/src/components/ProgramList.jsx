@@ -16,15 +16,7 @@ import TableSkeleton from './TableSkeleton.jsx';
 import { tileLetter } from '../lib/iconTileLetter.js';
 import { tileColor, TILE_INK } from '../lib/programTileColor.js';
 import { useLanguage } from '../i18n/LanguageContext.jsx';
-
-function formatBytes(bytes) {
-  if (bytes === null || bytes === undefined) return '—';
-  if (bytes === 0) return '0 B';
-  const k = 1024;
-  const sizes = ['B', 'KB', 'MB', 'GB', 'TB'];
-  const i = Math.floor(Math.log(bytes) / Math.log(k));
-  return `${parseFloat((bytes / Math.pow(k, i)).toFixed(1))} ${sizes[i]}`;
-}
+import { formatBytes } from '../lib/formatBytes.js';
 
 /** The severity bands, painted: quiet, then brighter, then amber, then
  * amber and heavier.

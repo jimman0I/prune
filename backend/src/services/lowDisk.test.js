@@ -139,4 +139,12 @@ describe('lowDiskMessage', () => {
     expect(msg.title).toBe('Low disk space on C:');
     expect(msg.body).toBe('12.4 GB free of 250 GB (5%). Open Prune to free some up.');
   });
+
+  it('writes both figures in the size units Settings names', () => {
+    const row = { drive: 'C:', freeBytes: 12.4 * GB, totalBytes: 250 * GB, percentFree: 5 };
+    expect(lowDiskMessage(row, 'windows').body).toMatch(/^12\.4 GB free of 250 GB /);
+    expect(lowDiskMessage(row, 'binary').body).toMatch(/^12\.4 GiB free of 250 GiB /);
+    expect(lowDiskMessage(row, 'decimal').body).toMatch(/^13\.3 GB free of 268\.4 GB /);
+    expect(lowDiskMessage(row, 'nonsense').body).toMatch(/^12\.4 GB free of 250 GB /);
+  });
 });

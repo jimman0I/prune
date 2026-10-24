@@ -211,6 +211,14 @@ describe('makeNotifier', () => {
     expect(shown[0].shownAt).toBe(true);
   });
 
+  it('writes the sizes in the units getUnits names at the moment of telling, and the default if it fails', async () => {
+    const { Notification, shown } = fakeElectron();
+    await makeNotifier({ Notification, showWindow: vi.fn(), getUnits: async () => 'binary' })(low('C:'));
+    expect(shown[0].options.body).toContain('10 GiB free of 250 GiB (4%)');
+    await makeNotifier({ Notification, showWindow: vi.fn(), getUnits: async () => { throw new Error('no settings'); } })(low('D:'));
+    expect(shown[1].options.body).toContain('10 GB free of 250 GB (4%)');
+  });
+
   it('brings Prune forward when the notification is clicked', async () => {
     const { Notification, shown } = fakeElectron();
     const show = vi.fn();

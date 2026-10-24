@@ -72,7 +72,9 @@ describe('CATALOG', () => {
       'Deep Clean', 'Disk Map', 'Recycle Bin', 'Prune', 'Quarantine', 'Windows', 'Defender', 'WinRAR',
       'Settings', 'Startup', 'Applications', 'Dashboard', 'Duplicates', 'Store', 'Explorer',
       'Add/Remove Programs', 'Run', 'RunOnce', 'Registry', 'Microsoft', 'Edge', 'Chrome', 'Firefox',
-      'System Restore', 'Task Manager', 'StartupApproved', 'GitHub', 'Downloads', 'Chocolatey'
+      'System Restore', 'Task Manager', 'StartupApproved', 'GitHub', 'Downloads', 'Chocolatey',
+      // Unit symbols, written the way the standard writes them.
+      'KiB', 'MiB', 'GiB'
     ];
     const leaves = (node, path = '') => {
       if (typeof node === 'function') {

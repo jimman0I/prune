@@ -15,6 +15,7 @@ import { useLanguage } from '../i18n/LanguageContext.jsx';
 import { useQuarantineUndo } from '../hooks/useQuarantineUndo.js';
 import { batchDirOfManifest } from '../lib/undoQuarantine.js';
 import WizardNote from './WizardNote.jsx';
+import { formatBytes as formatSize } from '../lib/formatBytes.js';
 
 /** Shared spinner + live-command UI for both the "running the native
  * uninstaller" and "scanning for leftovers" phases -- same treatment,
@@ -42,13 +43,8 @@ function ProgressPhase({ title, command }) {
   );
 }
 
-function formatBytes(bytes) {
-  if (!bytes) return '0 B';
-  const k = 1024;
-  const sizes = ['B', 'KB', 'MB', 'GB', 'TB'];
-  const i = Math.floor(Math.log(bytes) / Math.log(k));
-  return `${parseFloat((bytes / Math.pow(k, i)).toFixed(1))} ${sizes[i]}`;
-}
+// A size nobody measured reads 0 B in this dialog, as it always has.
+const formatBytes = (bytes) => formatSize(bytes || 0);
 
 /** One sentence for what a removal did, in the words of where it went.
  * Registry keys are backed up in Quarantine whichever destination the

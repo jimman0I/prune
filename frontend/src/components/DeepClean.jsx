@@ -26,6 +26,7 @@ import ShredDialog from './ShredDialog.jsx';
 import { biggestSelected, fileName } from '../lib/biggestFiles.js';
 import { useLanguage } from '../i18n/LanguageContext.jsx';
 import { useCleanerText } from '../i18n/cleanerText.js';
+import { formatBytes } from '../lib/formatBytes.js';
 
 const LOG_TONE = {
   size: 'text-[color:var(--text-primary)]',
@@ -160,15 +161,6 @@ const MODE_TEXT = {
  * needed administrator rights (see lib/cleanerActions/delete.js). */
 function schedulingNeedsAdmin(result) {
   return (result?.results ?? []).some((r) => (r?.skipped ?? []).some((s) => /needs administrator/.test(s?.reason ?? '')));
-}
-
-function formatBytes(bytes) {
-  if (bytes === null || bytes === undefined) return '—';
-  if (bytes === 0) return '0 B';
-  const k = 1024;
-  const sizes = ['B', 'KB', 'MB', 'GB', 'TB'];
-  const i = Math.floor(Math.log(bytes) / Math.log(k));
-  return `${parseFloat((bytes / Math.pow(k, i)).toFixed(1))} ${sizes[i]}`;
 }
 
 function DeepClean({ onNavigate, shredRequest = null }) {

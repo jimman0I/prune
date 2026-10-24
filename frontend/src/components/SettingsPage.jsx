@@ -18,6 +18,7 @@ import { useLanguage, LANGUAGES } from '../i18n/LanguageContext.jsx';
 import { readStoredSettingsTab, writeStoredSettingsTab } from '../lib/settingsTab.js';
 import { entryFor } from '../lib/whatsNew.js';
 import { APP_VERSION } from '../lib/appVersion.js';
+import { SIZE_UNITS, normalizeSizeUnits } from '../lib/formatBytes.js';
 
 // The version is NOT kept here. It used to be a hand-copied constant that
 // had to be bumped with the three package.json files, nothing failed when
@@ -336,6 +337,29 @@ function SettingsPage({ onReportBug = null, onShowWhatsNew = null, tabRequest = 
                 }
               />
 
+              {/* 1024 or 1000 to a kilobyte, and what the units are called --
+                  for every size on every screen, the tray tooltip and the
+                  low-disk notification. Instant, like the language above:
+                  LanguageContext.jsx reads this same setting and hands it to
+                  lib/formatBytes.js. Only how numbers are written; nothing
+                  is measured or limited differently. */}
+              <SettingRow
+                title={t('sizeUnitsV1.setting.title')}
+                description={t('sizeUnitsV1.setting.description')}
+                control={
+                  <select
+                    value={normalizeSizeUnits(settings.sizeUnits)}
+                    onChange={(e) => save({ sizeUnits: e.target.value })}
+                    aria-label={t('sizeUnitsV1.setting.title')}
+                    className="bg-[color:var(--bg-panel)] border border-[color:var(--border-subtle)] rounded-lg px-3 py-2 text-[12.5px] text-[color:var(--text-primary)] focus:border-[color:var(--accent-primary)] shrink-0"
+                  >
+                    {SIZE_UNITS.map((units) => (
+                      <option key={units} value={units}>{t(`sizeUnitsV1.options.${units}`)}</option>
+                    ))}
+                  </select>
+                }
+              />
+
               <SettingRow
                 title={t('settings.minimizeToTray.title')}
                 description={t('settings.minimizeToTray.description')}
@@ -633,7 +657,12 @@ function SettingsPage({ onReportBug = null, onShowWhatsNew = null, tabRequest = 
                           className={`w-[88px] ${numberFieldClass}`}
                           style={{ fontVariantNumeric: 'tabular-nums' }}
                         />
-                        <span className="text-[12.5px] text-[color:var(--text-muted)]">{t('settings.quarantineMaxSize.gbUnit')}</span>
+                        {/* The cap is 1024-based whatever the size units are
+                            (backend quarantineSizeCap.js), so the field says
+                            GiB wherever GB would mean something else. */}
+                        <span className="text-[12.5px] text-[color:var(--text-muted)]">
+                          {normalizeSizeUnits(settings.sizeUnits) === 'windows' ? t('settings.quarantineMaxSize.gbUnit') : t('sizeUnitsV1.gibUnit')}
+                        </span>
                       </div>
                     )}
                   />

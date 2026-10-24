@@ -5,18 +5,7 @@ import { quarantineEmptyBodyKey } from '../lib/quarantineEmptyState.js';
 import BackupManager from './BackupManager.jsx';
 import HistoryView from './HistoryView.jsx';
 import { useLanguage } from '../i18n/LanguageContext.jsx';
-
-// Duplicated locally rather than imported from Dashboard.jsx/DeepClean.jsx
-// (both off-limits for this task) -- matches this codebase's own existing
-// convention of a small per-component formatBytes copy.
-function formatBytes(bytes) {
-  if (bytes === null || bytes === undefined) return '—';
-  if (bytes === 0) return '0 B';
-  const k = 1024;
-  const sizes = ['B', 'KB', 'MB', 'GB', 'TB'];
-  const i = Math.floor(Math.log(bytes) / Math.log(k));
-  return `${parseFloat((bytes / Math.pow(k, i)).toFixed(1))} ${sizes[i]}`;
-}
+import { formatBytes } from '../lib/formatBytes.js';
 
 // manifest.createdAt (a real backend field -- see quarantine.js's service)
 // -- NOT `batch.timestamp`, which does not exist anywhere in the manifest.

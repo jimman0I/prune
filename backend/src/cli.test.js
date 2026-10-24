@@ -138,6 +138,27 @@ describe('preview', () => {
     expect(rule.fileCount).toBe(0);
     expect(rule.heldCount).toBe(2);
   });
+
+  it('writes sizes in the size units the settings name', () => {
+    // 2048 + 11 bytes: 2 KB the Windows way, 2 KiB in IEC names, 2.1 KB in 1000s.
+    writeFileSync(join(work, 'cache', 'a.bin'), 'x'.repeat(2048));
+    try {
+      const totalIn = (sizeUnits) => {
+        const file = join(root, `settings-units-${sizeUnits ?? 'none'}.json`);
+        writeFileSync(file, JSON.stringify({ skipRecentHours: 0, ...(sizeUnits ? { sizeUnits } : {}) }));
+        const r = spawnSync(process.execPath, [CLI, 'preview', '--rules', 'fx_cache'], {
+          encoding: 'utf8',
+          env: { ...process.env, UNREVO_CLEANERS_PATH: cleanersFile, UNREVO_SETTINGS_PATH: file, UNREVO_QUARANTINE_ROOT: quarantineDir }
+        });
+        return /Total: (.*)/.exec(r.stdout)?.[1];
+      };
+      expect(totalIn(undefined)).toBe('2 KB');
+      expect(totalIn('binary')).toBe('2 KiB');
+      expect(totalIn('decimal')).toBe('2.1 KB');
+    } finally {
+      fill();
+    }
+  });
 });
 
 describe('clean', () => {

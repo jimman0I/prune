@@ -14,7 +14,7 @@ vi.mock('../services/lowDisk.js', async (importOriginal) => ({
   findLowDrives: (...a) => findLowDrives(...a)
 }));
 
-const { startLowDiskNotifications, appIsInFront } = await import('./trayManager.js');
+const { startLowDiskNotifications, appIsInFront, buildTooltip } = await import('./trayManager.js');
 
 let dir;
 const saved = {};
@@ -58,6 +58,25 @@ describe('appIsInFront', () => {
   });
 });
 
+describe('buildTooltip', () => {
+  const readings = { ramFree: 6 * GB, ramTotal: 16 * GB, driveSpace: async () => ({ freeBytes: 120 * GB, totalBytes: 476.9 * GB }) };
+
+  it('reads as it always did by default: gigabytes with one decimal', async () => {
+    expect(await buildTooltip(readings)).toBe('Prune - System Optimizer\nRAM: 6.0 GB free / 16.0 GB\nDisk: 120.0 GB free / 476.9 GB');
+  });
+
+  it('follows the size units chosen in Settings', async () => {
+    writeFileSync(process.env.UNREVO_SETTINGS_PATH, JSON.stringify({ sizeUnits: 'binary' }), 'utf8');
+    expect(await buildTooltip(readings)).toContain('RAM: 6.0 GiB free / 16.0 GiB\nDisk: 120.0 GiB free / 476.9 GiB');
+    expect(await buildTooltip({ ...readings, units: 'decimal' })).toContain('RAM: 6.4 GB free / 17.2 GB');
+  });
+
+  it('keeps its other lines when the drive cannot be read', async () => {
+    const text = await buildTooltip({ ...readings, driveSpace: async () => { throw new Error('no'); } });
+    expect(text).toMatch(/RAM: 6\.0 GB free \/ 16\.0 GB\nDisk: unavailable$/);
+  });
+});
+
 describe('startLowDiskNotifications', () => {
   it('shows one native notification for a low drive, once, however long it keeps looking', async () => {
     const { Notification, BrowserWindow, shown } = fakes();
@@ -85,6 +104,15 @@ describe('startLowDiskNotifications', () => {
     watcher.stop();
     expect(shown).toHaveLength(0);
     expect(findLowDrives).not.toHaveBeenCalled();
+  });
+
+  it('writes the notification in the size units chosen in Settings', async () => {
+    writeFileSync(process.env.UNREVO_SETTINGS_PATH, JSON.stringify({ sizeUnits: 'binary' }), 'utf8');
+    const { Notification, BrowserWindow, shown } = fakes();
+    const watcher = startLowDiskNotifications({ Notification, BrowserWindow, showMainWindow: vi.fn(), timing });
+    await vi.waitFor(() => expect(shown).toHaveLength(1));
+    watcher.stop();
+    expect(shown[0].options.body).toContain('10 GiB free of 250 GiB (4%)');
   });
 
   it('hands the share chosen in Settings to the reading', async () => {

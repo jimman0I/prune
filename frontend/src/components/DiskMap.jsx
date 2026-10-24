@@ -47,25 +47,13 @@ import { useAdminAccess } from '../hooks/useAdminAccess.js';
 import { readScanMode, writeScanMode } from '../lib/scanMode.js';
 import { driveLetterOf, rootOfDrive, drivesFromScan } from '../lib/driveRoot.js';
 import { readFastScanMs, writeFastScanMs } from '../lib/fastScanDuration.js';
+import { formatBytes } from '../lib/formatBytes.js';
 
 const DEFAULT_ROOT = 'C:\\';
 
 /** localStorage, or null where even touching it throws (site data blocked). */
 function safeStorage() {
   try { return window.localStorage; } catch { return null; }
-}
-
-// Duplicated locally rather than imported from Dashboard.jsx/ProgramList.jsx
-// (both off-limits for this task) -- matches this codebase's own existing
-// convention of a small per-component formatBytes copy rather than one
-// shared util.
-function formatBytes(bytes) {
-  if (bytes === null || bytes === undefined) return '—';
-  if (bytes === 0) return '0 B';
-  const k = 1024;
-  const sizes = ['B', 'KB', 'MB', 'GB', 'TB'];
-  const i = Math.floor(Math.log(bytes) / Math.log(k));
-  return `${parseFloat((bytes / Math.pow(k, i)).toFixed(1))} ${sizes[i]}`;
 }
 
 /** "C:\" or "C:" -- the only place a whole-drive used-space figure is the

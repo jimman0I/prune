@@ -408,6 +408,28 @@ describe('hiddenPrograms', () => {
   });
 });
 
+describe('sizeUnits', () => {
+  it("starts as 'windows', the 1024-based KB/MB/GB Prune always printed", async () => {
+    expect((await getSettings()).sizeUnits).toBe('windows');
+  });
+
+  it('remembers each of the three choices', async () => {
+    for (const units of ['binary', 'decimal', 'windows']) {
+      expect((await updateSettings({ sizeUnits: units })).sizeUnits).toBe(units);
+      expect((await getSettings()).sizeUnits).toBe(units);
+    }
+  });
+
+  it("reads anything else back as 'windows', whether saved now or hand-edited", async () => {
+    for (const junk of ['Decimal', 'si', 'iec', '', null, 1000, { units: 'decimal' }]) {
+      expect((await updateSettings({ sizeUnits: junk })).sizeUnits).toBe('windows');
+    }
+    await mkdir(dirname(process.env.UNREVO_SETTINGS_PATH), { recursive: true });
+    await writeFile(process.env.UNREVO_SETTINGS_PATH, JSON.stringify({ sizeUnits: 'metric' }));
+    expect((await getSettings()).sizeUnits).toBe('windows');
+  });
+});
+
 describe('updateSettings under concurrency', () => {
   it('keeps every change when saves overlap, instead of the last writer erasing the rest', async () => {
     await updateSettings({ language: 'el' });

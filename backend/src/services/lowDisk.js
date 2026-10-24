@@ -1,6 +1,7 @@
 import { statfs } from 'node:fs/promises';
 import { listFixedDrives } from './localDrives.js';
 import { normalizeLowDiskPercent, PERCENT_CHOICES, DEFAULT_PERCENT } from '../lib/lowDiskChoices.js';
+import { formatGigabytes } from '../lib/sizeUnits.js';
 
 /** Which local drives are running out of room.
  *
@@ -95,15 +96,14 @@ export async function findLowDrives({
   return low;
 }
 
-function formatGB(bytes) {
-  return `${parseFloat((bytes / GB).toFixed(1))} GB`;
-}
-
 /** The notification's words. English, like the tray menu next to it: the
- * backend has no language catalog, and a notification is not a screen. */
-export function lowDiskMessage({ drive, freeBytes, totalBytes, percentFree }) {
+ * backend has no language catalog, and a notification is not a screen. Both
+ * figures in gigabytes, in the size units Settings names (`units`, see
+ * lib/sizeUnits.js): GiB when the person reads sizes in IEC units, the drive
+ * maker's 1000-based GB when they chose decimal. */
+export function lowDiskMessage({ drive, freeBytes, totalBytes, percentFree }, units) {
   return {
     title: `Low disk space on ${drive}`,
-    body: `${formatGB(freeBytes)} free of ${formatGB(totalBytes)} (${percentFree}%). Open Prune to free some up.`
+    body: `${formatGigabytes(freeBytes, units)} free of ${formatGigabytes(totalBytes, units)} (${percentFree}%). Open Prune to free some up.`
   };
 }

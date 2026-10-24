@@ -32,6 +32,7 @@ import { useSettings } from './hooks/useSystemQueries.js';
 import { useLanguage } from './i18n/LanguageContext.jsx';
 import { applicationsSummary } from './lib/applicationsSummary.js';
 import { setLastProgramsCount } from './lib/lastProgramsCount.js';
+import { formatBytes } from './lib/formatBytes.js';
 
 /* Every screen but Dashboard, loaded on first visit rather than bundled
  * into the initial chunk. Dashboard's own ~530 lines stay a static import
@@ -49,15 +50,6 @@ const SettingsPage = lazy(() => import('./components/SettingsPage.jsx'));
 const DeepClean = lazy(() => import('./components/DeepClean.jsx'));
 const Duplicates = lazy(() => import('./components/Duplicates.jsx'));
 const StartupItems = lazy(() => import('./components/StartupItems.jsx'));
-
-function formatBytes(bytes) {
-  if (bytes === null || bytes === undefined) return '—';
-  if (bytes === 0) return '0 B';
-  const k = 1024;
-  const sizes = ['B', 'KB', 'MB', 'GB', 'TB'];
-  const i = Math.floor(Math.log(bytes) / Math.log(k));
-  return `${parseFloat((bytes / Math.pow(k, i)).toFixed(1))} ${sizes[i]}`;
-}
 
 export default function App() {
   const { t } = useLanguage();

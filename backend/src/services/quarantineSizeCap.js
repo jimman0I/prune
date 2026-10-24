@@ -33,7 +33,14 @@ export const SIZE_CAP_OFF = null;
  * Not a pedantic distinction here: it is the difference between a setting
  * that agrees with the number printed above it and one that does not.
  * Someone who sets a 5 GB cap and reads "4.9 GB held" is owed those two
- * figures being in the same unit. */
+ * figures being in the same unit.
+ *
+ * And 1024-based whichever size units the person picked to READ sizes in
+ * (settings.sizeUnits). That setting only changes how a number is printed;
+ * letting it change this one would make switching to decimal quietly
+ * shrink the cap by 7% and permanently delete the oldest batches over it.
+ * The Settings field is labelled GiB in the modes where GB would mean
+ * something else, so the number typed is still the number enforced. */
 export const GIB = 1024 ** 3;
 
 /** The cap from settings, in bytes, or SIZE_CAP_OFF.

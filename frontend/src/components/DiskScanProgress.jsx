@@ -4,17 +4,7 @@ import { useLanguage } from '../i18n/LanguageContext.jsx';
 import AnimatedNumber from './AnimatedNumber.jsx';
 import { remainingSeconds } from '../lib/scanCountdown.js';
 import { fastScanEstimate } from '../lib/fastScanDuration.js';
-
-// Duplicated locally, the same convention DiskMap.jsx documents for its own
-// copy: a small per-component formatter rather than one shared util.
-function formatBytes(bytes) {
-  if (bytes === null || bytes === undefined) return '—';
-  if (bytes === 0) return '0 B';
-  const k = 1024;
-  const sizes = ['B', 'KB', 'MB', 'GB', 'TB'];
-  const i = Math.min(sizes.length - 1, Math.floor(Math.log(bytes) / Math.log(k)));
-  return `${parseFloat((bytes / Math.pow(k, i)).toFixed(1))} ${sizes[i]}`;
-}
+import { formatBytes } from '../lib/formatBytes.js';
 
 function formatElapsed(totalSeconds) {
   const m = Math.floor(totalSeconds / 60);

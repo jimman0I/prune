@@ -139,11 +139,14 @@ export function createLowDiskWatcher({ getPercent, findLow, notify, canNotify, s
 
 /** Electron's Notification wrapped as the `notify` the watcher wants. Takes the
  * pieces rather than importing 'electron', which does not exist outside it.
- * Rejects where notifications are unsupported, so that is not counted as told. */
-export function makeNotifier({ Notification, showWindow }) {
+ * Rejects where notifications are unsupported, so that is not counted as told.
+ * `getUnits` answers the size units Settings names at the moment of telling
+ * (see lib/sizeUnits.js); without it, or when it fails, the default. */
+export function makeNotifier({ Notification, showWindow, getUnits = async () => undefined }) {
   return async (row) => {
     if (!Notification.isSupported()) throw new Error('Notifications are not supported here.');
-    const { title, body } = lowDiskMessage(row);
+    const units = await Promise.resolve().then(getUnits).catch(() => undefined);
+    const { title, body } = lowDiskMessage(row, units);
     const notification = new Notification({ title, body, silent: false });
     notification.on('click', showWindow);
     notification.show();

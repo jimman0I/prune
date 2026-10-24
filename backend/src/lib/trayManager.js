@@ -5,6 +5,7 @@ import { getSystemDriveSpace } from '../services/diskSpace.js';
 import { recordFreed } from '../services/stats.js';
 import { findLowDrives } from '../services/lowDisk.js';
 import { normalizeLowDiskPercent } from './lowDiskChoices.js';
+import { normalizeSizeUnits, formatGigabytesFixed } from './sizeUnits.js';
 import { createLowDiskWatcher, fileNotifiedStore, notifiedPath, makeNotifier } from '../services/lowDiskWatch.js';
 
 const here = dirname(fileURLToPath(import.meta.url));
@@ -24,23 +25,36 @@ function iconPath(app) {
 
 const TOOLTIP_REFRESH_MS = 10_000;
 
-function formatGB(bytes) {
-  return `${(bytes / 1024 ** 3).toFixed(1)} GB`;
+/** The size units Settings says to write sizes in. Read on every refresh
+ * (one small file, every ten seconds) so changing it in Settings shows on
+ * the next tooltip without a restart; a settings read that fails is the
+ * default, never a missing tooltip. */
+async function currentSizeUnits() {
+  try {
+    const { getSettings } = await import('../services/settings.js');
+    return normalizeSizeUnits((await getSettings()).sizeUnits);
+  } catch {
+    return normalizeSizeUnits(undefined);
+  }
 }
 
-async function buildTooltip() {
-  const ramFree = freemem();
-  const ramTotal = totalmem();
+/** The tooltip's text. Exported, with its readings injectable, so the line
+ * it builds is tested without a tray or a real disk. */
+export async function buildTooltip({
+  ramFree = freemem(), ramTotal = totalmem(), driveSpace = getSystemDriveSpace, units
+} = {}) {
+  const mode = units ?? await currentSizeUnits();
+  const gb = (bytes) => formatGigabytesFixed(bytes, mode);
   let diskLine = 'Disk: unavailable';
   try {
-    const { freeBytes, totalBytes } = await getSystemDriveSpace();
-    diskLine = `Disk: ${formatGB(freeBytes)} free / ${formatGB(totalBytes)}`;
+    const { freeBytes, totalBytes } = await driveSpace();
+    diskLine = `Disk: ${gb(freeBytes)} free / ${gb(totalBytes)}`;
   } catch {
     // getSystemDriveSpace already never throws in practice, but a tray
     // tooltip is the last place that should ever crash the app -- keep
     // the fallback text rather than propagate.
   }
-  return `Prune - System Optimizer\nRAM: ${formatGB(ramFree)} free / ${formatGB(ramTotal)}\n${diskLine}`;
+  return `Prune - System Optimizer\nRAM: ${gb(ramFree)} free / ${gb(ramTotal)}\n${diskLine}`;
 }
 
 /** The tray's "Quick Clean (Temp Files)": runs the Deep Clean rule rather than
@@ -77,7 +91,7 @@ export function startLowDiskNotifications({ Notification, BrowserWindow, showMai
       return normalizeLowDiskPercent((await getSettings()).lowDiskWarning);
     },
     findLow: (percent) => findLowDrives({ percent }),
-    notify: makeNotifier({ Notification, showWindow: showMainWindow }),
+    notify: makeNotifier({ Notification, showWindow: showMainWindow, getUnits: currentSizeUnits }),
     canNotify: () => !appIsInFront(BrowserWindow),
     store: fileNotifiedStore(notifiedPath())
   });

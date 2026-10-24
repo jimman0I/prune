@@ -1,14 +1,10 @@
 import { useState } from 'react';
 import { useBackups } from '../hooks/useSystemQueries.js';
 import { useLanguage } from '../i18n/LanguageContext.jsx';
+import { formatBytes as formatSize } from '../lib/formatBytes.js';
 
-function formatBytes(bytes) {
-  if (!bytes) return '0 B';
-  const k = 1024;
-  const sizes = ['B', 'KB', 'MB', 'GB'];
-  const i = Math.min(sizes.length - 1, Math.floor(Math.log(bytes) / Math.log(k)));
-  return `${parseFloat((bytes / Math.pow(k, i)).toFixed(1))} ${sizes[i]}`;
-}
+// A size nobody measured reads 0 B in this dialog, as it always has.
+const formatBytes = (bytes) => formatSize(bytes || 0);
 
 function formatDate(ms) {
   if (!ms) return '—';

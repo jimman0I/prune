@@ -1,6 +1,7 @@
 import { parseArgs } from 'node:util';
 import { pathToFileURL, fileURLToPath } from 'node:url';
 import { packagedDefaults } from './lib/cliPaths.js';
+import { formatBytes } from './lib/sizeUnits.js';
 
 /** The Prune command line: list, preview, clean, programs.
  *
@@ -107,13 +108,10 @@ export function selectRules(all, { rules: named = [], preset = null, except = []
   return { selected: selected.filter((r) => !drop.has(r.id)), unknown, badPreset: null };
 }
 
-const bytes = (n) => {
-  if (n === null || n === undefined) return '-';
-  if (n === 0) return '0 B';
-  const sizes = ['B', 'KB', 'MB', 'GB', 'TB'];
-  const i = Math.min(sizes.length - 1, Math.floor(Math.log(n) / Math.log(1024)));
-  return `${parseFloat((n / 1024 ** i).toFixed(1))} ${sizes[i]}`;
-};
+/** A size as the app writes it, in the size units its settings name (see
+ * lib/sizeUnits.js), with a plain '-' for a value nobody measured -- every
+ * console font has that one. Built once the settings are read. */
+const bytesIn = (units) => (n) => formatBytes(n, units, { missing: '-' });
 
 /** `prune-cli programs`: the installed programs.
  *
@@ -278,6 +276,7 @@ export async function runCli(argv, io = {}) {
 
   const settings = await getSettings();
   const guards = cleanGuardsFrom(settings);
+  const bytes = bytesIn(settings.sizeUnits);
   if (command === 'clean') {
     if (values['delete-now']) guards.removal = 'delete';
     else if (values.quarantine) guards.removal = 'quarantine';

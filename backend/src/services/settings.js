@@ -6,6 +6,7 @@ import { normalizePasses } from '../lib/shredFile.js';
 import { normalizeCustomLocations } from '../lib/customLocations.js';
 import { normalizeScanMode } from './leftoverModes.js';
 import { normalizeLowDiskPercent } from '../lib/lowDiskChoices.js';
+import { normalizeSizeUnits, DEFAULT_SIZE_UNITS } from '../lib/sizeUnits.js';
 import { appVersion } from './updateCheck.js';
 
 /** Path to the settings file. A function, not a constant -- read at call
@@ -155,7 +156,11 @@ const DEFAULT_SETTINGS = {
      machine used twice a year keeps its undo for exactly as long as it
      should and never approaches any cap.
      1024-based, so it agrees with the figure the Quarantine screen
-     prints above it. */
+     prints above it -- whatever sizeUnits below says. Changing how sizes
+     are WRITTEN must never change how much is kept: read as 1000-based in
+     decimal mode, the same "5" would quietly become a 7% smaller cap and
+     permanently delete the oldest batches over it. So the field beside it
+     is labelled GiB whenever GB would mean something else. */
   quarantineMaxSizeGb: null,
   /* Whether Prune may ask GitHub, once a day, if a newer release exists.
      Off by default, because "nothing leaves the machine" is a promise the
@@ -239,6 +244,13 @@ const DEFAULT_SETTINGS = {
      installer's own answer to the same question. Change it from
      Settings -> General, same as every other choice here. */
   language: 'en',
+  /* How every size is written, app-wide: 'windows' (1024-based, KB/MB/GB --
+     what File Explorer prints, and what Prune always printed), 'binary'
+     (1024-based, KiB/MiB/GiB) or 'decimal' (1000-based, KB/MB/GB, the drive
+     maker's figure). Only ever how a number is printed -- no limit, threshold
+     or cap is measured differently because of it. See lib/sizeUnits.js and
+     the window's lib/formatBytes.js. */
+  sizeUnits: DEFAULT_SIZE_UNITS,
   /* The scheduled run. IN-APP: it catches up when Prune is running rather
      than firing with the app closed, because there is no headless entry
      point for a Windows task to invoke. lastRunAt and lastResult live here
@@ -317,6 +329,7 @@ function normalizedChoices(settings) {
     customLocations: normalizeCustomLocations(settings.customLocations),
     rememberDiskMapScans: settings.rememberDiskMapScans !== false,
     hiddenPrograms: normalizeHiddenPrograms(settings.hiddenPrograms),
+    sizeUnits: normalizeSizeUnits(settings.sizeUnits),
     lastSeenVersion: normalizeLastSeenVersion(settings.lastSeenVersion)
   };
 }

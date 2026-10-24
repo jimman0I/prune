@@ -25,6 +25,7 @@ import { useLanguage } from '../i18n/LanguageContext.jsx';
 import { useQuarantineUndo } from '../hooks/useQuarantineUndo.js';
 import { batchDirOfManifest } from '../lib/undoQuarantine.js';
 import WizardNote from './WizardNote.jsx';
+import { formatBytes } from '../lib/formatBytes.js';
 
 /** What a batch did, in the words of where its leftovers went. */
 export const DEFAULT_BATCH_SUMMARY_MESSAGES = {
@@ -43,15 +44,6 @@ function batchRemovalSummary(programCount, removal, messages = DEFAULT_BATCH_SUM
   if (removal?.destination === 'recycle') return messages.recycle(programsText, items, freed);
   if (removal?.destination === 'permanent') return messages.permanent(programsText, items, freed);
   return messages.quarantine(programsText, items, freed);
-}
-
-function formatBytes(bytes) {
-  if (bytes === null || bytes === undefined) return '—';
-  if (bytes === 0) return '0 B';
-  const k = 1024;
-  const sizes = ['B', 'KB', 'MB', 'GB', 'TB'];
-  const i = Math.floor(Math.log(bytes) / Math.log(k));
-  return `${parseFloat((bytes / Math.pow(k, i)).toFixed(1))} ${sizes[i]}`;
 }
 
 const STATUS_STYLE = {

@@ -22,6 +22,14 @@ see v1.0.1 below) are documented here.
   company, digital signatures, compatibility. In Applications the file is
   the program's main executable, found the same way its icon is. Only a
   full path to a file that exists is accepted.
+- **Size units.** Settings → General chooses how every size is written:
+  1024-based KB/MB/GB like File Explorer (the default, unchanged), the
+  same figures with their IEC names KiB/MiB/GiB, or 1000-based KB/MB/GB
+  like a drive maker, so a 1 TB drive reads 1 TB. The label always goes
+  with the arithmetic, and it applies everywhere at once: every screen,
+  the tray tooltip, the low-disk notification and the command line. Only
+  how numbers are written changes; the quarantine size cap stays
+  1024-based and its field says GiB wherever GB would mean something else.
 
 ## v3.1.0
 

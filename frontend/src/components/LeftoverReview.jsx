@@ -1,14 +1,10 @@
 import { useState } from 'react';
 import { useLanguage } from '../i18n/LanguageContext.jsx';
 import { TIERS, tierOf, hasTiers, protectedCount } from '../lib/leftoverTiers.js';
+import { formatBytes as formatSize } from '../lib/formatBytes.js';
 
-function formatBytes(bytes) {
-  if (!bytes) return null;
-  const k = 1024;
-  const sizes = ['B', 'KB', 'MB', 'GB'];
-  const i = Math.floor(Math.log(bytes) / Math.log(k));
-  return `${parseFloat((bytes / Math.pow(k, i)).toFixed(1))} ${sizes[i]}`;
-}
+// No size at all reads as nothing here: the row just leaves it out.
+const formatBytes = (bytes) => (bytes ? formatSize(bytes) : null);
 
 /** The one line a leftover needs beyond its path, or nothing.
  *

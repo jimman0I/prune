@@ -175,6 +175,10 @@ no prompt at all when Prune runs as administrator), see size *and* size on
 disk with hard links counted once, modified dates, search by text, wildcard
 or regex, export CSV and PNG, and save scans to compare later.
 
+Sizes here and on every other screen follow **Settings → Size units**:
+1024-based KB like File Explorer (the default), the same figures as KiB,
+or the drive maker's 1000-based GB.
+
 </td>
 <td width="50%" valign="top">
 

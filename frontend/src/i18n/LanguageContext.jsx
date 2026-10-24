@@ -2,6 +2,7 @@ import { createContext, useContext, useEffect, useMemo, useState } from 'react';
 import { useSettings } from '../hooks/useSystemQueries.js';
 import { CATALOG } from './catalog.js';
 import { LANGUAGES, isSupportedLanguage } from './languages.js';
+import { SIZE_UNITS, DEFAULT_SIZE_UNITS, setSizeUnits } from '../lib/formatBytes.js';
 
 const LanguageContext = createContext(null);
 
@@ -21,6 +22,26 @@ function remember(language) {
     window.localStorage.setItem(REMEMBERED_KEY, language);
   } catch {
     // Storage blocked or full: the app just falls back to asking settings.
+  }
+}
+
+// The size units, kept the same way and for the same reason as the language.
+const REMEMBERED_UNITS_KEY = 'prune.sizeUnits';
+
+function readRememberedUnits() {
+  try {
+    const value = window.localStorage.getItem(REMEMBERED_UNITS_KEY);
+    return SIZE_UNITS.includes(value) ? value : null;
+  } catch {
+    return null;
+  }
+}
+
+function rememberUnits(units) {
+  try {
+    window.localStorage.setItem(REMEMBERED_UNITS_KEY, units);
+  } catch {
+    // As above: settings still answer once the backend does.
   }
 }
 
@@ -61,12 +82,29 @@ export function LanguageProvider({ children }) {
   const fromSettings = isSupportedLanguage(settings?.language) ? settings.language : null;
   const language = fromSettings ?? remembered ?? 'en';
 
+  // How sizes are written (1024 or 1000, KB or KiB) is the other half of
+  // "how Prune writes things", so it rides on the same provider: one place
+  // reads it from settings, with the same remembered-locally fallback for
+  // the first paint, and every size on every screen follows it. Set on the
+  // module during this render -- before any screen under the provider
+  // renders -- rather than in an effect, which would paint one frame of the
+  // old units first. It is in the context value below, so changing it
+  // re-renders every screen that formats a size (each one reads useLanguage).
+  const [rememberedUnits] = useState(readRememberedUnits);
+  const unitsFromSettings = SIZE_UNITS.includes(settings?.sizeUnits) ? settings.sizeUnits : null;
+  const sizeUnits = unitsFromSettings ?? rememberedUnits ?? DEFAULT_SIZE_UNITS;
+  setSizeUnits(sizeUnits);
+
   useEffect(() => {
     if (fromSettings) remember(fromSettings);
   }, [fromSettings]);
+  useEffect(() => {
+    if (unitsFromSettings) rememberUnits(unitsFromSettings);
+  }, [unitsFromSettings]);
 
   const value = useMemo(() => ({
     language,
+    sizeUnits,
     /** `t('settings.language.title')` for a plain string; `t('update.ariaLabel', version)`
      * for a key whose catalog value is a function -- called with
      * whatever arguments follow the path. */
@@ -74,7 +112,7 @@ export function LanguageProvider({ children }) {
       const entry = translate(language, path);
       return typeof entry === 'function' ? entry(...args) : entry;
     }
-  }), [language]);
+  }), [language, sizeUnits]);
 
   return <LanguageContext.Provider value={value}>{children}</LanguageContext.Provider>;
 }

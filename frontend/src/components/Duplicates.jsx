@@ -8,6 +8,7 @@ import { useToasts } from '../hooks/useToasts.jsx';
 import { useQuarantineUndo } from '../hooks/useQuarantineUndo.js';
 import ModalOverlay from './ModalOverlay.jsx';
 import { useLanguage } from '../i18n/LanguageContext.jsx';
+import { formatBytes } from '../lib/formatBytes.js';
 
 /** Files that are byte-identical, and which copy to keep.
  *
@@ -20,15 +21,6 @@ import { useLanguage } from '../i18n/LanguageContext.jsx';
  * guarded path the Disk Map's removal uses, so a wrong answer here costs
  * a restore rather than a file.
  */
-function formatBytes(bytes) {
-  if (bytes === null || bytes === undefined) return '—';
-  if (bytes === 0) return '0 B';
-  const k = 1024;
-  const sizes = ['B', 'KB', 'MB', 'GB', 'TB'];
-  const i = Math.floor(Math.log(bytes) / Math.log(k));
-  return `${parseFloat((bytes / Math.pow(k, i)).toFixed(1))} ${sizes[i]}`;
-}
-
 /** localStorage, or null where even touching it throws (site data blocked).
  * Duplicated locally rather than imported, matching this codebase's own
  * existing convention (see DiskMap.jsx's own copy) of a small

@@ -3,7 +3,7 @@
  * Deliberately a duplicate of backend/src/services/languages.js's own
  * list rather than a shared import: the frontend and backend are
  * separate npm packages with no code path between them (the same reason
- * formatBytes is re-implemented per component rather than shared). Both
+ * lib/formatBytes.js has a backend twin in backend/src/lib/sizeUnits.js). Both
  * lists are covered by catalog.test.js, which fails if this one names a
  * code the catalog has no translations for, or the catalog has a
  * language this one doesn't offer. */
