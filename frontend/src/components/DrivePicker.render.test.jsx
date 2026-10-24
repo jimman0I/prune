@@ -76,3 +76,14 @@ describe('the drive picker', () => {
     expect(container.querySelector('[title]')).toBeNull();
   });
 });
+
+describe('choosing several drives at once', () => {
+  it('marks every drive in a Set as pressed, and shows even a single drive when asked to', async () => {
+    mount({ current: new Set(['C', 'E']) });
+    expect((await screen.findByRole('button', { name: /C:/ })).getAttribute('aria-pressed')).toBe('true');
+    expect(screen.getByRole('button', { name: /E:/ }).getAttribute('aria-pressed')).toBe('true');
+    cleanup();
+    renderScreen(<DrivePicker drives={drives.slice(0, 1)} current={new Set()} onSelect={() => {}} minDrives={1} />);
+    expect((await screen.findByRole('button', { name: /C:/ })).getAttribute('aria-pressed')).toBe('false');
+  });
+});

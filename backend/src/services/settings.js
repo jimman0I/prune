@@ -4,6 +4,7 @@ import { dirname, join } from 'node:path';
 import { matchLanguage } from './languages.js';
 import { normalizePasses } from '../lib/shredFile.js';
 import { normalizeCustomLocations } from '../lib/customLocations.js';
+import { normalizeJunkPatterns, defaultJunkPatterns } from '../lib/junkPatterns.js';
 import { normalizeScanMode } from './leftoverModes.js';
 import { normalizeLowDiskPercent } from '../lib/lowDiskChoices.js';
 import { normalizeSizeUnits, DEFAULT_SIZE_UNITS } from '../lib/sizeUnits.js';
@@ -103,6 +104,14 @@ const DEFAULT_SETTINGS = {
      never ticked by default. Only valid entries are ever kept (see
      lib/customLocations.js): a hand-edited file cannot add C:\Windows. */
   customLocations: [],
+  /* What Deep Clean's Junk files scan looks for, as [{ pattern, enabled }]:
+     Windows wildcard file names ("*.tmp", "~*.*"), edited under Settings ->
+     Cleanup with a Reset to defaults. Each default is justified where it is
+     defined (lib/junkPatterns.js); "*.bak" and "*.log" are listed but off.
+     Only valid patterns are ever kept -- nothing that matches every file,
+     programs and libraries, or desktop.ini -- so a hand-edited file cannot
+     add one. A scan only lists; nothing is removed until the person ticks it. */
+  junkPatterns: defaultJunkPatterns(),
   theme: 'dark',
   minimizeToTray: false,
   /* The low-disk warning: how small a share of a drive may be free before the
@@ -327,6 +336,7 @@ function normalizedChoices(settings) {
     wipeDrive: normalizeWipeDrive(settings.wipeDrive),
     wipePasses: normalizePasses(settings.wipePasses),
     customLocations: normalizeCustomLocations(settings.customLocations),
+    junkPatterns: normalizeJunkPatterns(settings.junkPatterns),
     rememberDiskMapScans: settings.rememberDiskMapScans !== false,
     hiddenPrograms: normalizeHiddenPrograms(settings.hiddenPrograms),
     sizeUnits: normalizeSizeUnits(settings.sizeUnits),

@@ -59,6 +59,23 @@ see v1.0.1 below) are documented here.
   own evidence (likely for a name match, possible otherwise) rather than
   certain, and nothing is ticked on the file's say-so alone. Traces
   recorded here stay certain.
+- **Deep Clean: Junk files.** "Junk files" beside the Deep Clean heading
+  looks for leftover temporary files, caches and backups by name on the
+  drives and folders you pick, using a pattern list you edit in Settings ›
+  Cleanup (with Reset to defaults): `*.tmp`, `*.temp`, `~*.*`, `*.~*`,
+  `*.chk` (only Check Disk's FILE0000.CHK fragments in FOUND.000), `*.old`,
+  `*.gid`, `*.dmp` and `thumbs.db`, plus `*.bak` and `*.log` listed but
+  off. Patterns that would match every file, name programs or libraries,
+  or reach desktop.ini are refused with the reason. Results stream in
+  grouped by pattern, with size, date and an Open folder button; only
+  scratch files and caches that rebuild themselves start ticked. The walk
+  runs on Deep Clean's worker thread, Stop works mid-scan, and it never
+  offers anything in Windows, Program Files, another installed program's
+  folder, a Windows rollback folder, a program or system file, a file
+  changed in the last 24 hours or anything you excluded; what it left
+  alone is counted. Remove takes the ticked files as one Quarantine batch
+  with Undo, or the Recycle Bin or Delete now if Settings says so, and
+  checks every file again first.
 
 ## v3.1.0
 

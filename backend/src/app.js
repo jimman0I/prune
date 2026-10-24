@@ -48,6 +48,7 @@ import startWithWindowsRoutes from './routes/startWithWindows.js';
 import explorerMenuRoutes from './routes/explorerMenu.js';
 import findProgramRoutes from './routes/findProgram.js';
 import windowsToolsRoutes from './routes/windowsTools.js';
+import junkFilesRoutes from './routes/junkFiles.js';
 
 export function createApp({ port } = {}) {
   const app = express();
@@ -81,6 +82,9 @@ export function createApp({ port } = {}) {
   // default limit. Parsed here, ahead of the global parser (which skips a body
   // that has already been read), and only for this one route.
   app.use('/api/saved-scans', express.json({ limit: '256mb' }));
+  // A Junk files removal names every ticked file: thousands of full paths can
+  // be a few megabytes, past the default.
+  app.use('/api/junk-files/remove', express.json({ limit: '16mb' }));
   app.use(express.json());
 
   app.get('/api/health', (req, res) => res.json({ ok: true }));
@@ -119,6 +123,7 @@ export function createApp({ port } = {}) {
   app.use('/api/low-disk', lowDiskRoutes);
   app.use('/api/scheduled-clean', scheduledCleanRoutes);
   app.use('/api/windows-tools', windowsToolsRoutes);
+  app.use('/api/junk-files', junkFilesRoutes);
 
   /** Anything still unanswered is a path this app does not serve. After
    * every route, so it can only see what none of them matched. */

@@ -7,6 +7,7 @@ import ThemeToggle from './ThemeToggle.jsx';
 import Toggle from './Toggle.jsx';
 import CookieKeepListSettings from './CookieKeepListSettings.jsx';
 import CustomCleanersSettings from './CustomCleanersSettings.jsx';
+import JunkPatternsSettings from './JunkPatternsSettings.jsx';
 import RunAsAdminSetting from './RunAsAdminSetting.jsx';
 import StartWithWindowsSetting from './StartWithWindowsSetting.jsx';
 import ExplorerMenuSetting from './ExplorerMenuSetting.jsx';
@@ -599,6 +600,10 @@ function SettingsPage({ onReportBug = null, onShowWhatsNew = null, tabRequest = 
               {/* The user's own rules: Custom locations, and the
                   cleaners they import. Two panels of their own. */}
               <CustomCleanersSettings />
+
+              {/* What Deep Clean's Junk files scan looks for. Beside the
+                  user's own rules because it is one: a list they edit. */}
+              <JunkPatternsSettings />
 
               {/* The two limits on the quarantine. Both empty by default,
                   and both read "blank means keep everything" -- the same

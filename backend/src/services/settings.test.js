@@ -430,6 +430,26 @@ describe('sizeUnits', () => {
   });
 });
 
+describe('junkPatterns', () => {
+  it('starts as the Junk files defaults, with .bak and .log listed but off', async () => {
+    const patterns = (await getSettings()).junkPatterns;
+    expect(patterns.find((p) => p.pattern === '*.tmp')).toEqual({ pattern: '*.tmp', enabled: true });
+    expect(patterns.find((p) => p.pattern === '*.bak')).toEqual({ pattern: '*.bak', enabled: false });
+    expect(patterns.find((p) => p.pattern === '*.log')).toEqual({ pattern: '*.log', enabled: false });
+    expect(patterns.some((p) => p.pattern.toLowerCase() === 'desktop.ini')).toBe(false);
+  });
+
+  it('keeps only valid patterns, whether saved now or hand-edited', async () => {
+    const saved = await updateSettings({ junkPatterns: ['*.tmp', { pattern: '*.exe' }, { pattern: '*' }, { pattern: 'desktop.ini' }, { pattern: '*.old', enabled: false }] });
+    expect(saved.junkPatterns).toEqual([{ pattern: '*.tmp', enabled: true }, { pattern: '*.old', enabled: false }]);
+    await mkdir(dirname(process.env.UNREVO_SETTINGS_PATH), { recursive: true });
+    await writeFile(process.env.UNREVO_SETTINGS_PATH, JSON.stringify({ junkPatterns: [{ pattern: '*.*', enabled: true }, '*.dll'] }));
+    expect((await getSettings()).junkPatterns).toEqual([]);
+    await writeFile(process.env.UNREVO_SETTINGS_PATH, JSON.stringify({ junkPatterns: 'everything' }));
+    expect((await getSettings()).junkPatterns.find((p) => p.pattern === '*.tmp')).toBeTruthy();
+  });
+});
+
 describe('updateSettings under concurrency', () => {
   it('keeps every change when saves overlap, instead of the last writer erasing the rest', async () => {
     await updateSettings({ language: 'el' });

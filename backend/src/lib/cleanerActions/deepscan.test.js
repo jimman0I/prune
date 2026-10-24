@@ -256,3 +256,28 @@ describe('scan and execute', () => {
     expect(result.freedBytes).toBe(0);
   });
 });
+
+describe('findFiles hooks (used by the Junk files scan)', () => {
+  it('asks skipDir about every folder first and stays out of the ones it refuses', async () => {
+    await touch('keep/one.bak');
+    await touch('skip/two.bak');
+    await touch('skip/deeper/three.bak');
+    const asked = [];
+    const found = await findFiles(root, {
+      patterns: BACKUP,
+      skipDir: (dir) => { asked.push(dir); return dir.endsWith('skip'); }
+    });
+    expect(names(found)).toEqual(['keep/one.bak']);
+    // The refused folder's own children were never reached.
+    expect(asked.some((d) => d.includes('deeper'))).toBe(false);
+  });
+
+  it('reports each match to onMatch as it is found', async () => {
+    await touch('a/one.bak', '123');
+    await touch('b/two.bak');
+    const seen = [];
+    const found = await findFiles(root, { patterns: BACKUP, onMatch: (file) => seen.push(file) });
+    expect(seen).toEqual(found.files);
+    expect(seen.find((f) => f.path.endsWith('one.bak')).sizeBytes).toBe(3);
+  });
+});

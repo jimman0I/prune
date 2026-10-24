@@ -66,6 +66,7 @@ export const keys = {
   backups: ['backups'],
   uninstallHistory: ['uninstall-history'],
   settings: ['settings'],
+  junkPatterns: ['junk-files', 'patterns'],
   runAsAdmin: ['settings', 'runAsAdmin'],
   startWithWindows: ['settings', 'startWithWindows'],
   explorerMenu: ['settings', 'explorerMenu'],

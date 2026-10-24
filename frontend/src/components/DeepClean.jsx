@@ -23,6 +23,7 @@ import DeepCleanTree from './DeepCleanTree.jsx';
 import CleanWarningDialog from './CleanWarningDialog.jsx';
 import WipeFreeSpaceDialog from './WipeFreeSpaceDialog.jsx';
 import ShredDialog from './ShredDialog.jsx';
+import JunkFilesDialog from './JunkFilesDialog.jsx';
 import { biggestSelected, fileName } from '../lib/biggestFiles.js';
 import { useLanguage } from '../i18n/LanguageContext.jsx';
 import { useCleanerText } from '../i18n/cleanerText.js';
@@ -163,10 +164,11 @@ function schedulingNeedsAdmin(result) {
   return (result?.results ?? []).some((r) => (r?.skipped ?? []).some((s) => /needs administrator/.test(s?.reason ?? '')));
 }
 
-function DeepClean({ onNavigate, shredRequest = null }) {
+function DeepClean({ onNavigate, onOpenSettings, shredRequest = null }) {
   const { t, language } = useLanguage();
   const cleaner = useCleanerText();
   const [selected, setSelected] = useState(new Set());
+  const [junkOpen, setJunkOpen] = useState(false);
 
   /* The application icon for each heading. Its own query, never blocking
    * the list: the headings render with lettered tiles and swap to real
@@ -651,17 +653,30 @@ function DeepClean({ onNavigate, shredRequest = null }) {
       <div className="flex-1 flex flex-col min-h-0 overflow-y-auto px-12 pt-10 pb-6 max-w-[1600px] w-full">
         <div className="flex items-start justify-between gap-4 mb-2">
           <h1 className="display-heading text-[30px] leading-none">{t('deepClean.title')}</h1>
-          {/* A tool, not a rule: it acts on what the person picks, so it
-              lives beside the title rather than in the list of presets
-              where a Select everything could reach it. */}
-          <button
-            type="button"
-            className="btn-ghost px-3.5 py-1.5 rounded-lg text-[12.5px] font-medium shrink-0 disabled:opacity-50"
-            onClick={() => setShredOpen(true)}
-            disabled={cleaning}
-          >
-            {t('deepCleanV3.shred.open')}
-          </button>
+          {/* Tools, not rules: they act on what the person picks, so they
+              live beside the title rather than in the list of presets
+              where a Select everything could reach them. Junk files is the
+              same idea as the Deep scan rules -- files found by NAME -- run
+              on the drives and folders the person chooses, with their own
+              pattern list. */}
+          <div className="flex items-center gap-2 shrink-0">
+            <button
+              type="button"
+              className="btn-ghost px-3.5 py-1.5 rounded-lg text-[12.5px] font-medium shrink-0 disabled:opacity-50"
+              onClick={() => setJunkOpen(true)}
+              disabled={cleaning}
+            >
+              {t('junkFiles.open')}
+            </button>
+            <button
+              type="button"
+              className="btn-ghost px-3.5 py-1.5 rounded-lg text-[12.5px] font-medium shrink-0 disabled:opacity-50"
+              onClick={() => setShredOpen(true)}
+              disabled={cleaning}
+            >
+              {t('deepCleanV3.shred.open')}
+            </button>
+          </div>
         </div>
         <p className="text-[13px] text-[color:var(--text-secondary)] mb-6 max-w-[110ch]">
           {removalMode === 'delete' ? t('deepClean.subtitleDelete') : t('deepClean.subtitle')}
@@ -1081,6 +1096,15 @@ function DeepClean({ onNavigate, shredRequest = null }) {
         />
       )}
 
+      {junkOpen && (
+        <JunkFilesDialog
+          onClose={() => setJunkOpen(false)}
+          // Patterns are edited where every Cleanup setting is; the dialog
+          // closes rather than sit behind Settings with a stale list.
+          onEditPatterns={onOpenSettings ? () => { setJunkOpen(false); onOpenSettings('cleanup'); } : undefined}
+        />
+      )}
+
       {warnAbout && (warnAbout.confirmEveryTime ? (
         <WipeFreeSpaceDialog onCancel={dismissWarning} onConfirm={confirmWarning} />
       ) : (
@@ -1103,8 +1127,9 @@ function DeepClean({ onNavigate, shredRequest = null }) {
  * switches, once per switch, and that cost grows with every tab the user
  * has visited.
  *
- * Safe here because its one prop, `onNavigate`, is App's own `setScreen` --
- * a state setter, whose identity never changes -- so the comparison can
+ * Safe here because its props are stable: `onNavigate` is App's own
+ * `setScreen` -- a state setter, whose identity never changes -- and
+ * `onOpenSettings` a useCallback with no dependencies, so the comparison can
  * never produce a stale screen. A component with unstable props would gain
  * nothing from this and is deliberately left alone. */
 export default memo(DeepClean);

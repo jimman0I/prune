@@ -14,23 +14,29 @@ import { driveUsage } from '../lib/driveRoot.js';
  * once; if not, the drive-root chooser offers the scan.
  *
  * Hidden when there is nothing to choose between -- a single drive, or a
- * drive list that could not be read. A one-button "chooser" is just noise. */
-export function DrivePicker({ drives, current, scanned, onSelect }) {
+ * drive list that could not be read. A one-button "chooser" is just noise.
+ *
+ * `current` is one letter for the Disk Map, which shows one drive at a time,
+ * or a Set of letters for a chooser that takes several (Deep Clean's Junk
+ * files scan), where each chip toggles. That chooser also passes
+ * `minDrives={1}`: with only C:, "scan C:" is still a choice to make. */
+export function DrivePicker({ drives, current, scanned, onSelect, minDrives = 2, className = 'mb-5', disabled = false }) {
   const { t } = useLanguage();
-  if (!Array.isArray(drives) || drives.length < 2) return null;
+  if (!Array.isArray(drives) || drives.length < minDrives) return null;
 
   return (
-    <div role="group" aria-label={t('diskMapV3.drives.label')} className="flex flex-wrap gap-2 mb-5">
+    <div role="group" aria-label={t('diskMapV3.drives.label')} className={`flex flex-wrap gap-2 ${className}`}>
       {drives.map((drive) => {
         const usage = driveUsage(drive);
-        const active = drive.letter === current;
+        const active = current instanceof Set ? current.has(drive.letter) : drive.letter === current;
         return (
           <button
             key={drive.letter}
             type="button"
             aria-pressed={active}
             onClick={() => onSelect(drive.letter)}
-            className={`flex flex-col items-stretch gap-1.5 min-w-[168px] max-w-[240px] px-3 py-2 rounded-xl border text-left transition-colors ${
+            disabled={disabled}
+            className={`flex flex-col items-stretch gap-1.5 min-w-[168px] max-w-[240px] px-3 py-2 rounded-xl border text-left transition-colors disabled:opacity-50 ${
               active
                 ? 'border-[color:var(--accent-primary)] bg-[color:var(--surface-hover)]'
                 : 'border-[color:var(--border-subtle)] hover:bg-[color:var(--surface-hover)]'

@@ -146,7 +146,11 @@ swap, .DS_Store and Thumbs.db files. A *Free disk space* wipe is there too,
 off by default and asking every time: it frees nothing, it does nothing
 useful on an SSD with TRIM, and it adds write wear.
 
-Also: an opt-in **overwrite before deleting** (1 or 3 passes), a **Shred
+Also: a **Junk files** scan that finds leftover `*.tmp`, `~*.*`, `*.old`,
+`*.dmp` and similar files by name on the drives and folders you pick (your
+own editable pattern list; only safe ones start ticked, and programs,
+Windows and installed programs' folders are never offered), an opt-in
+**overwrite before deleting** (1 or 3 passes), a **Shred
 files…** tool, a free-space wipe on any local drive, locked files deleted at
 the next restart, a per-rule list of the biggest files in Preview, your own
 **Custom locations**, a **cleaner rule import** for lists written in a common

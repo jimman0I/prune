@@ -94,7 +94,15 @@ async function isRealDirectory(path) {
  *
  * Breadth of control, all injectable so tests write a handful of files
  * rather than a million: `limits`, `signal`, `excludeFolders`, `skipDirs`,
- * `onProgress` (called at most every `progressEveryMs`). */
+ * `onProgress` (called at most every `progressEveryMs`).
+ *
+ * Two hooks for the Junk files scan (services/junkScan.js), which walks
+ * whole drives rather than one profile: `skipDir(path)` is asked about every
+ * folder before anything else and a truthy answer keeps the walk out of it --
+ * so that scan can count WHY it left a folder alone -- and `onMatch(file)`
+ * hears about each match the moment it is found, so results can be shown
+ * while the walk is still going. Neither changes anything for a caller that
+ * does not pass them. */
 export async function findFiles(root, {
   patterns,
   flags = 'i',
@@ -102,6 +110,8 @@ export async function findFiles(root, {
   limits = {},
   excludeFolders = [],
   skipDirs,
+  skipDir,
+  onMatch,
   onProgress,
   progressEveryMs = 250
 } = {}) {
@@ -148,16 +158,23 @@ export async function findFiles(root, {
       const full = join(dir, entry.name);
       if (entry.isDirectory()) {
         if (depth + 1 > cap.maxDepth) { truncated = truncated ?? 'depth'; continue; }
+        if (skipDir && skipDir(full)) continue;
         if (isUnder(full, never) || isExcluded(full, excludeFolders)) continue;
         if (!(await isRealDirectory(full))) continue;
         stack.push({ dir: full, depth: depth + 1 });
       } else if (entry.isFile()) {
         if (!regexes.some((re) => re.test(entry.name))) continue;
+        let file = null;
         try {
           const info = await lstat(full);
           if (!info.isFile()) continue;
-          files.push({ path: full, sizeBytes: info.size, mtimeMs: info.mtimeMs });
+          file = { path: full, sizeBytes: info.size, mtimeMs: info.mtimeMs };
         } catch { /* gone between listing and stat */ }
+        if (!file) continue;
+        files.push(file);
+        // Outside the try: a hook that throws is a bug to hear about, not a
+        // file that vanished.
+        onMatch?.(file);
         if (files.length >= cap.maxMatches) { truncated = 'matches'; break walk; }
       }
     }

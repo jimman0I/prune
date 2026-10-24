@@ -252,6 +252,10 @@ export default function App() {
     if (target.settingsTab) setSettingsTabRequest((current) => ({ tab: target.settingsTab, nonce: current.nonce + 1 }));
     setScreen(target.screen);
   }, []);
+  /* Settings on one of its tabs, for a screen that links to its own settings
+     (Deep Clean's Junk files -> Cleanup's pattern list). Stable, so the
+     memoised screen that receives it never re-renders for it. */
+  const openSettingsTab = useCallback((tab) => goToWhatsNewTarget({ screen: 'settings', settingsTab: tab }), [goToWhatsNewTarget]);
 
   /** The app's global chords.
    *
@@ -310,7 +314,7 @@ export default function App() {
           <Suspense fallback={null}><StartupItems /></Suspense>
         </Screen>
         <Screen active={screen === 'deepclean'} visited={visited.has('deepclean')}>
-          <Suspense fallback={null}><DeepClean onNavigate={setScreen} shredRequest={shredRequest} /></Suspense>
+          <Suspense fallback={null}><DeepClean onNavigate={setScreen} onOpenSettings={openSettingsTab} shredRequest={shredRequest} /></Suspense>
         </Screen>
         <Screen active={screen === 'duplicates'} visited={visited.has('duplicates')}>
           <Suspense fallback={null}><Duplicates /></Suspense>

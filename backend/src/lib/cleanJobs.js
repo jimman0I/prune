@@ -2,6 +2,7 @@ import {
   scanRulesProgressively, executeRulesProgressively, scanAllRules, executeRules, loadCleanerRules, executeRule
 } from './cleanerRules.js';
 import { runCleanJobInWorker } from './cleanWorkerHost.js';
+import { scanJunkFiles, removeJunkFiles } from '../services/junkScan.js';
 
 /** Where a Deep Clean scan or clean runs.
  *
@@ -52,6 +53,24 @@ export async function executeToSummary(ids, guards = {}) {
   if (inThread()) return executeRules(ids, guards);
   const { freedBytes, movedBytes, results } = await runCleanJobInWorker({ op: 'execute', ids, guards });
   return { freedBytes, movedBytes, results };
+}
+
+/** The Junk files scan (services/junkScan.js) on the worker:
+ * `job` is { roots, patterns, footprints, guards }; found files arrive at
+ * `onFiles(batch)` as the walk finds them. Stop ends the thread at once -- the
+ * scan only reads -- and resolves `{ aborted: true }`; the batches already
+ * relayed stay true. */
+export function scanJunk(job, { onFiles = () => {}, onProgress, signal } = {}) {
+  if (inThread()) return scanJunkFiles({ ...job, signal, onProgress, onFiles });
+  return runCleanJobInWorker({ op: 'junkScan', ...job }, { onItem: (item) => onFiles(item?.files ?? []), onProgress, signal });
+}
+
+/** Removing what the person ticked: `job` is { paths, patterns, footprints,
+ * guards }. No signal on purpose: a batch half-moved into Quarantine is a
+ * worse state than a finished one, so a removal that has started finishes. */
+export function removeJunk(job) {
+  if (inThread()) return removeJunkFiles(job.paths, job);
+  return runCleanJobInWorker({ op: 'junkRemove', ...job });
 }
 
 /** One rule by id -> its result, or null when there is no such rule. Passing no

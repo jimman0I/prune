@@ -806,8 +806,13 @@ async function streamSSE(url, onEvent, signal, init = {}) {
   const res = await fetch(url, { ...init, signal });
   if (!res.ok || !res.body) {
     // A refused POST carries its reason as JSON; a dropped stream has none.
-    const detail = await res.json?.().then((d) => d?.error).catch(() => null);
-    throw new Error(detail || `Request failed: ${res.status}`);
+    // The machine-readable `reason` rides along on the Error, so a screen can
+    // answer in the person's language rather than show the backend's English.
+    const data = await res.json?.().catch(() => null);
+    const error = new Error(data?.error || `Request failed: ${res.status}`);
+    if (data?.reason) error.reason = data.reason;
+    if (Array.isArray(data?.refused)) error.refused = data.refused;
+    throw error;
   }
 
   const reader = res.body.getReader();
@@ -859,6 +864,56 @@ export async function streamShred(paths, passes, onEvent, signal) {
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ paths, passes, confirmed: true })
   });
+}
+
+/** Deep Clean's Junk files scan. The patterns live in settings and are edited
+ * through their own route, which answers a refused pattern with a `reason`
+ * code (empty | long | separator | invalid | everything | executable |
+ * desktopIni | duplicate | tooMany) rather than dropping it quietly. */
+export async function fetchJunkPatterns() {
+  return jsonOrThrow(await fetch(`${API_URL}/junk-files/patterns`));
+}
+
+/** Saves the whole list: [{ pattern, enabled }]. */
+export async function saveJunkPatterns(patterns) {
+  return jsonOrThrow(await fetch(`${API_URL}/junk-files/patterns`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ patterns })
+  }));
+}
+
+export async function resetJunkPatterns() {
+  return jsonOrThrow(await fetch(`${API_URL}/junk-files/patterns/reset`, { method: 'POST' }));
+}
+
+/** The scan of `roots` (drives as "C:\", or folders), streamed.
+ *
+ * Events: 'start' { roots, refused, patterns }, 'progress' { dirs, entries,
+ * matches }, 'files' { files: [{ path, sizeBytes, mtimeMs, pattern }] } as
+ * they are found, 'done' (the summary), 'error' { message }. A refusal before
+ * anything starts throws an Error carrying `reason` (noRoots | noPatterns |
+ * noUsableRoots) and, for the last, `refused`. Aborting the signal stops the
+ * walk on the backend. */
+export async function streamJunkScan(roots, onEvent, signal) {
+  await streamSSE(`${API_URL}/junk-files/scan`, onEvent, signal, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ roots })
+  });
+}
+
+/** Removes the ticked files as one batch, the way Settings' Deep Clean choice
+ * says (Quarantine, the Recycle Bin or Delete now). Always `confirmed: true`:
+ * this is only ever called from the confirmation, and the backend refuses
+ * anything without it. Resolves to { freedBytes, movedBytes, removedCount,
+ * mode, results: [{ quarantineBatch?, recycled?, skipped, skippedCount }] }. */
+export async function removeJunkFiles(paths) {
+  return jsonOrThrow(await fetch(`${API_URL}/junk-files/remove`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ paths, confirmed: true })
+  }));
 }
 
 /** Reads a JSON reply, and on failure throws an Error that also carries the
