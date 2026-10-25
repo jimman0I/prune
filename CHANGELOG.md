@@ -3,7 +3,7 @@
 All notable changes to Prune (formerly named unrevo -- rebranded 2026-09-01,
 see v1.0.1 below) are documented here.
 
-## Unreleased
+## v3.2.0
 
 ### Added
 
@@ -76,6 +76,12 @@ see v1.0.1 below) are documented here.
   alone is counted. Remove takes the ticked files as one Quarantine batch
   with Undo, or the Recycle Bin or Delete now if Settings says so, and
   checks every file again first.
+
+### Security
+
+- body-parser 1.20.9 (through express), for an advisory about trailing
+  bytes after a compressed request body. Prune's backend only listens on
+  127.0.0.1 behind its Host check, but the fix ships anyway.
 
 ## v3.1.0
 
