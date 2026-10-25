@@ -97,7 +97,8 @@ out. Programs other accounts on the PC installed just for themselves can
 be read too, with one administrator prompt; their registry files are
 copied and read by Prune itself, never mounted. Programs you never want to
 see again can be hidden from the list (nothing about them changes), and
-*Show hidden* brings them back.
+*Show hidden* brings them back. A row's menu also opens Windows' own
+Properties sheet for the program's executable.
 
 Also what Windows' own list misses: Chocolatey packages (removed through
 Chocolatey, so its record stays true), program folders nothing registered
@@ -302,7 +303,19 @@ off. [SECURITY.md](SECURITY.md) says exactly what the updater trusts.
 
 <br/>
 
-## 📰 What's New in 3.0
+## 📰 What's New in 3.2
+
+- **Junk files** in Deep Clean — leftover `*.tmp`, `*.dmp`, `~*.*` and similar files found by name on the drives and folders you pick, from a pattern list you edit.
+- **Windows tools** on the Dashboard — System Restore, System File Checker, DISM, Event Viewer, Device Manager and more of Windows' own utilities in one place.
+- **Hide programs** from the Applications list — nothing about them changes, and *Show hidden* brings them back.
+- **Properties** — Windows' own Properties sheet for a program's executable, from an Applications row's menu or Hunter.
+- **Install traces export and import** — Install with monitoring's records go to a `.prunetraces` file and come back, here or on another PC.
+- **Size units** — 1024-based KB like File Explorer, the same figures as KiB, or 1000-based like a drive maker, on every screen at once.
+- **Startup: remove every disabled entry** in one go, into Quarantine with one Undo.
+
+Full notes: [CHANGELOG.md](CHANGELOG.md).
+
+## What's New in 3.0
 
 - **The sidebar is icons only until you point at it**, then widens over the page.
 - **Disk Map, reimagined** — any drive, size on disk, modified dates, search, export, saved scans and compare.

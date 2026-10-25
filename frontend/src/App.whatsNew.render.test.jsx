@@ -59,6 +59,7 @@ vi.mock('./hooks/usePrograms.js', () => ({
 
 const api = await import('./lib/api.js');
 const App = (await import('./App.jsx')).default;
+const WhatsNewDialog = (await import('./components/WhatsNewDialog.jsx')).default;
 
 const rail = () => within(screen.getByRole('navigation', { name: 'Main' }));
 const current = () => rail().getAllByRole('button').find((b) => b.getAttribute('aria-current') === 'page')?.getAttribute('aria-label');
@@ -80,7 +81,7 @@ describe('after an update', () => {
 
     const dialog = await screen.findByRole('dialog', NOTICE);
     expect(dialog.getAttribute('aria-modal')).toBe('true');
-    expect(within(dialog).getByText(/what's new in prune 3\.1/i)).toBeTruthy();
+    expect(within(dialog).getByText(/what's new in prune 3\.2/i)).toBeTruthy();
     expect(within(dialog).getAllByRole('listitem').length).toBeGreaterThanOrEqual(6);
     await waitFor(() => expect(document.activeElement).toBe(within(dialog).getByRole('button', { name: 'Got it' })));
   });
@@ -133,7 +134,7 @@ describe('after an update', () => {
     const dialog = await screen.findByRole('dialog', NOTICE);
     expect(current()).toBe('Dashboard');
 
-    const card = within(dialog).getByRole('heading', { name: 'Startup, fully managed' }).closest('li');
+    const card = within(dialog).getByRole('heading', { name: 'Remove every disabled entry' }).closest('li');
     await userEvent.setup().click(within(card).getByRole('button', { name: 'Show me' }));
 
     expect(noticeOpen()).toBeNull();
@@ -141,30 +142,33 @@ describe('after an update', () => {
     expect(api.updateSettings.mock.calls.map((c) => c[0])).toContainEqual({ lastSeenVersion: APP_VERSION });
   });
 
-  it('the wizards card goes to Settings', async () => {
+  it('the size units card goes to Settings', async () => {
     settingsState.lastSeenVersion = null;
     renderScreen(<App />);
     const dialog = await screen.findByRole('dialog', NOTICE);
 
-    const card = within(dialog).getByRole('heading', { name: 'Answer uninstall wizards for me' }).closest('li');
+    const card = within(dialog).getByRole('heading', { name: 'Choose how sizes are written' }).closest('li');
     await userEvent.setup().click(within(card).getByRole('button', { name: 'Show me' }));
 
     expect(current()).toBe('Settings');
   });
 
-  it('the leftovers card is information only, with no "Show me"', async () => {
+  it('the Junk files card goes to Deep Clean', async () => {
     settingsState.lastSeenVersion = null;
     renderScreen(<App />);
     const dialog = await screen.findByRole('dialog', NOTICE);
-    const card = within(dialog).getByRole('heading', { name: /leftover scans/i }).closest('li');
-    expect(within(card).queryByRole('button')).toBeNull();
+
+    const card = within(dialog).getByRole('heading', { name: 'Junk files' }).closest('li');
+    await userEvent.setup().click(within(card).getByRole('button', { name: 'Show me' }));
+
+    expect(current()).toBe('Deep Clean');
   });
 
-  it('says plainly that answering wizards is off until turned on', async () => {
+  it('says plainly that backups and logs are left alone until turned on', async () => {
     settingsState.lastSeenVersion = null;
     renderScreen(<App />);
     const dialog = await screen.findByRole('dialog', NOTICE);
-    expect(within(dialog).getByText(/off until you turn it on/i)).toBeTruthy();
+    expect(within(dialog).getByText(/alone until you turn those patterns on/i)).toBeTruthy();
   });
 });
 
@@ -207,5 +211,16 @@ describe('when it does not open', () => {
     setVisibility('visible');
     document.dispatchEvent(new Event('visibilitychange'));
     expect(await screen.findByRole('dialog', NOTICE)).toBeTruthy();
+  });
+});
+
+describe('a card with nowhere to go', () => {
+  it('is information only, with no "Show me" (the leftovers card of 3.1)', async () => {
+    // Every 3.2 card has a target, so the running version cannot show this;
+    // the dialog is drawn for 3.1 directly instead.
+    renderScreen(<WhatsNewDialog version="3.1.0" onClose={vi.fn()} onShowMe={vi.fn()} />);
+    const dialog = await screen.findByRole('dialog', NOTICE);
+    const card = within(dialog).getByRole('heading', { name: /leftover scans/i }).closest('li');
+    expect(within(card).queryByRole('button')).toBeNull();
   });
 });

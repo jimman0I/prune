@@ -35,6 +35,18 @@ export const WHATS_NEW = {
       { id: 'startup', icon: 'startup', target: { screen: 'startup' } },
       { id: 'leftovers', icon: 'deepclean' }
     ]
+  },
+  '3.2': {
+    namespace: 'whatsNewV32',
+    cards: [
+      { id: 'junkFiles', icon: 'deepclean', target: { screen: 'deepclean' } },
+      { id: 'windowsTools', icon: 'dashboard', target: { screen: 'dashboard' } },
+      { id: 'hidePrograms', icon: 'applications', target: { screen: 'applications' } },
+      { id: 'properties', icon: 'applications', target: { screen: 'applications' } },
+      { id: 'installTraces', icon: 'applications', target: { screen: 'applications' } },
+      { id: 'sizeUnits', icon: 'settings', target: { screen: 'settings', settingsTab: 'general' } },
+      { id: 'startupDisabled', icon: 'startup', target: { screen: 'startup' } }
+    ]
   }
 };
 

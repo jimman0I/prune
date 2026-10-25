@@ -53,10 +53,22 @@ describe('shouldShowWhatsNew', () => {
     expect(shouldShowWhatsNew({ current: '3.0.0', lastSeen: '2.9.2' })).toBe(true);
     expect(shouldShowWhatsNew({ current: '3.0.0', lastSeen: '3.0.0' })).toBe(false);
   });
+
+  it('announces 3.2 to someone coming from 3.1, and only once', () => {
+    expect(shouldShowWhatsNew({ current: '3.2.0', lastSeen: '3.1.0' })).toBe(true);
+    expect(shouldShowWhatsNew({ current: '3.2.1', lastSeen: '3.1.4' })).toBe(true);
+    expect(shouldShowWhatsNew({ current: '3.2.1', lastSeen: '3.2.0' })).toBe(false);
+  });
 });
 
-describe('the 3.0 entry', () => {
-  const entry = WHATS_NEW['3.0'];
+it('has an entry for every feature release since 3.0, each in its own namespace', () => {
+  expect(Object.keys(WHATS_NEW)).toEqual(['3.0', '3.1', '3.2']);
+  const namespaces = Object.values(WHATS_NEW).map((e) => e.namespace);
+  expect(new Set(namespaces).size).toBe(namespaces.length);
+});
+
+describe.each(Object.keys(WHATS_NEW))('the %s entry', (version) => {
+  const entry = WHATS_NEW[version];
   const en = CATALOG.en[entry.namespace];
 
   it('has six or seven cards with unique ids', () => {
