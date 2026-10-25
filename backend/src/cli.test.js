@@ -352,7 +352,10 @@ describe('clean --report (what Task Scheduler runs while Prune is closed)', () =
   });
 });
 
-describe('programs (the installed-programs listing)', () => {
+// Every test here spawns the CLI, which reads the real registry: on a GitHub
+// Actions runner one of those reads took over 30 s, so the default timeout
+// failed a build on a test that was only slow.
+describe('programs (the installed-programs listing)', { timeout: 120000 }, () => {
   // The real installed-programs read, on whatever machine runs the tests: the
   // assertions are about the shape and the wildcard rule, never about which
   // programs happen to be here. 7-Zip, say, may not be.
