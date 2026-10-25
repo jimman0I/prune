@@ -13,7 +13,7 @@
 
 # ✂️ Prune — The Uninstaller That Finishes the Job
 
-<img src="docs/diagrams/readme-hero.svg" width="100%" alt="Prune: uninstall it, then find what it left behind. Every leftover file, registry key and scheduled task is quarantined first, so nothing is lost by mistake. 93 cleaner rules, 32 categories, 40 languages, zero telemetry." />
+<img src="docs/diagrams/readme-hero.svg" width="100%" alt="Prune: uninstall it, then find what it left behind. Every leftover file, registry key and scheduled task is quarantined first, so nothing is lost by mistake. 129 cleaner rules, 44 categories, 40 languages, zero telemetry." />
 
 <br/>
 
@@ -26,7 +26,7 @@
 
 <br/>
 
-**93 cleaner rules** · **32 categories** · **40 languages** · **0 telemetry** · **100% local**
+**129 cleaner rules** · **44 categories** · **40 languages** · **0 telemetry** · **100% local**
 
 [**⬇️ Download for Windows**](https://github.com/jimman0I/prune/releases/latest) &nbsp;·&nbsp; [Quick start](#quick-start) &nbsp;·&nbsp; [What sets it apart](#what-sets-prune-apart) &nbsp;·&nbsp; [Report a bug](https://github.com/jimman0I/prune/issues/new)
 
