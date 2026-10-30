@@ -7,9 +7,13 @@ where, and how you get it back or get rid of it.
 
 ## What leaves your PC
 
-Nothing, with one opt-in exception.
+Nothing, unless you ask for it. There are two cases, and both start with you.
 
 - The Prune window talks only to its own backend on `127.0.0.1`, inside your PC.
+- **Report a bug** opens a prefilled GitHub issue in your browser. The address
+  carries what you wrote plus Prune's version, your Windows version and the
+  architecture, and no paths, scan results or username. Prune posts nothing:
+  you read the report on GitHub's page and submit it yourself, or don't.
 - **Settings → Check for updates** is off by default. The installer's
   Updates page offers the same choice as an unticked box. Turned on, Prune asks
   `api.github.com` once a day whether a newer release exists. The request
