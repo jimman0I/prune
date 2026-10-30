@@ -512,6 +512,16 @@ Produces an NSIS installer (`.exe`), a portable `.zip` and a generated
 
 <br/>
 
+## Code signing policy
+
+Prune has applied to [SignPath Foundation](https://signpath.org) for free code signing. Releases are unsigned until that is accepted.
+
+- Committers and reviewers: [contributors](https://github.com/jimman0I/prune/graphs/contributors)
+- Approvers: [jimman0I](https://github.com/jimman0I)
+- Privacy: see [PRIVACY.md](PRIVACY.md). Prune does not transfer information to other networked systems unless the user or the person installing or operating it specifically asks it to.
+
+<br/>
+
 ## 📖 Documentation
 
 | Doc | What's in it |
@@ -519,6 +529,7 @@ Produces an NSIS installer (`.exe`), a portable `.zip` and a generated
 | [CHANGELOG.md](CHANGELOG.md) | Release notes, newest first |
 | [CONTRIBUTING.md](CONTRIBUTING.md) | How to run it, how code is written here, and how to work on the parts that delete things without deleting your own |
 | [SECURITY.md](SECURITY.md) | Where to report a vulnerability privately, and what is in scope |
+| [PRIVACY.md](PRIVACY.md) | What stays on your PC, where, and how to restore or delete it |
 | [RELEASING.md](RELEASING.md) | The release checklist |
 | [electron/README.md](electron/README.md) | How the build pipeline works |
 
