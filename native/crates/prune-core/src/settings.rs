@@ -46,6 +46,9 @@ pub enum SizeUnits {
 }
 
 /// The settings 4.0 acts on, plus everything else in the file.
+///
+/// `language` (to one of the 40 codes, else "en") and `minimizeToTray`
+/// (strict `true`) are normalized here where 3.x passes them through.
 #[derive(Debug, Clone, PartialEq)]
 pub struct Settings {
     pub theme: ThemeChoice,
@@ -59,10 +62,12 @@ pub struct Settings {
     order: Vec<String>,
 }
 
-/// 3.x's full default settings (`DEFAULT_SETTINGS`), taken from the 3.x
-/// fixture. A fresh or corrupt file starts from these so a rollback to 3.x
+/// 3.x's full default settings (`DEFAULT_SETTINGS`), in `defaults_3x.json`.
+/// `lastSeenVersion` is null, 3.x's own default (an empty string would be
+/// normalized to null anyway), so a rollback to 3.x announces what's new
+/// rather than this profile claiming to have seen a version it never ran. A fresh or corrupt file starts from these so a rollback to 3.x
 /// finds every key written, not 3.x's migration fallbacks.
-const DEFAULTS_JSON: &str = include_str!("../tests/fixtures/settings-3.2.0.json");
+const DEFAULTS_JSON: &str = include_str!("defaults_3x.json");
 
 impl Default for Settings {
     fn default() -> Self {
@@ -117,7 +122,10 @@ fn choice<T: for<'de> Deserialize<'de> + Default>(v: Option<&Value>) -> T {
 }
 
 impl Settings {
-    /// Normalizes a parsed file the way 3.x does, remembering key order.
+    /// Normalizes a parsed file like 3.x's `getSettings`, remembering key order.
+    /// Exceptions: `language` (to one of the 40 codes, else "en") and
+    /// `minimizeToTray` (strict `true`) are normalized here where 3.x passes
+    /// them through.
     fn from_map(mut map: Map<String, Value>) -> Self {
         let order: Vec<String> = map.keys().cloned().collect();
         let language = match map.get("language") {

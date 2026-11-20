@@ -128,6 +128,7 @@ fn fresh_save_writes_every_3x_default() {
         let mut want: serde_json::Map<String, Value> =
             serde_json::from_slice(&fs::read(fixture()).unwrap()).unwrap();
         want.shift_remove("futureKey");
+        want.insert("lastSeenVersion".into(), Value::Null);
         assert_eq!(got, want);
         assert_eq!(got.keys().collect::<Vec<_>>(), want.keys().collect::<Vec<_>>());
     }
