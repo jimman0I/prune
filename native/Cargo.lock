@@ -2327,6 +2327,7 @@ version = "4.0.0"
 dependencies = [
  "iced",
  "prune-core",
+ "windows 0.62.2",
 ]
 
 [[package]]

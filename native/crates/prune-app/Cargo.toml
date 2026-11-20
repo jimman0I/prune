@@ -12,3 +12,6 @@ path = "src/main.rs"
 [dependencies]
 prune-core.workspace = true
 iced.workspace = true
+
+[target.'cfg(windows)'.dependencies]
+windows = { workspace = true, features = ["Win32_Foundation", "Win32_System_Registry"] }
