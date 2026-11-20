@@ -1,0 +1,102 @@
+{
+  "excludeFolders": [],
+  "excludeExtensions": [],
+  "excludeRegistryKeys": [],
+  "cookieKeepList": [],
+  "autoQuarantine": true,
+  "deepCleanRemoval": "quarantine",
+  "overwriteBeforeDelete": false,
+  "overwritePasses": 1,
+  "wipeDrive": null,
+  "wipePasses": 1,
+  "customLocations": [],
+  "junkPatterns": [
+    {
+      "pattern": "*.tmp",
+      "enabled": true
+    },
+    {
+      "pattern": "*.temp",
+      "enabled": true
+    },
+    {
+      "pattern": "~*.*",
+      "enabled": true
+    },
+    {
+      "pattern": "*.~*",
+      "enabled": true
+    },
+    {
+      "pattern": "*.chk",
+      "enabled": true
+    },
+    {
+      "pattern": "*.old",
+      "enabled": true
+    },
+    {
+      "pattern": "*.gid",
+      "enabled": true
+    },
+    {
+      "pattern": "*.dmp",
+      "enabled": true
+    },
+    {
+      "pattern": "thumbs.db",
+      "enabled": true
+    },
+    {
+      "pattern": "*.bak",
+      "enabled": false
+    },
+    {
+      "pattern": "*.log",
+      "enabled": false
+    }
+  ],
+  "theme": "system",
+  "themeSynced": false,
+  "minimizeToTray": false,
+  "lowDiskWarning": 10,
+  "lowPowerMode": false,
+  "skipRecentHours": 24,
+  "createRestorePoint": true,
+  "hideUnavailableRules": true,
+  "hideUnavailableDefaultApplied": true,
+  "acknowledgedCleanWarnings": [],
+  "deepCleanSelection": [],
+  "quarantineRetentionDays": null,
+  "quarantineMaxSizeGb": null,
+  "updateCheck": false,
+  "leftoverDestination": "quarantine",
+  "preselectLeftovers": false,
+  "scanLeftoversAfterUninstall": true,
+  "leftoverScanMode": "moderate",
+  "keepUninstallHistory": true,
+  "restorePointBeforeUninstall": false,
+  "registryBackupBeforeUninstall": false,
+  "answerUninstallWizards": false,
+  "deleteLockedFilesOnRestart": false,
+  "autoInstallUpdates": false,
+  "showFreeSpaceOnMap": false,
+  "rememberDiskMapScans": true,
+  "hiddenPrograms": [],
+  "lastSeenVersion": "3.2.1",
+  "language": "en",
+  "sizeUnits": "windows",
+  "automation": {
+    "enabled": false,
+    "frequency": "weekly",
+    "weekday": 0,
+    "hour": 2,
+    "minute": 0,
+    "task": "scan",
+    "lastRunAt": null,
+    "lastResult": null
+  },
+  "futureKey": {
+    "a": 1
+  }
+}
