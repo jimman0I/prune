@@ -28,6 +28,9 @@ pub struct Palette {
     pub surface_hover: Color,
     pub surface_strong: Color,
     pub scrim: Color,
+    /// `.glass-panel`'s fill and edge (the nav rail, cards, dialogs).
+    pub glass_bg: Color,
+    pub glass_border: Color,
 }
 
 /// An opaque colour from a `#rrggbb` value.
@@ -60,6 +63,8 @@ static DARK: Palette = Palette {
     surface_hover: rgba(255, 255, 255, 0.05),
     surface_strong: rgba(255, 255, 255, 0.11),
     scrim: rgba(2, 8, 20, 0.62),
+    glass_bg: rgba(9, 9, 11, 0.6),
+    glass_border: rgba(255, 255, 255, 0.06),
 };
 
 static LIGHT: Palette = Palette {
@@ -83,6 +88,8 @@ static LIGHT: Palette = Palette {
     surface_hover: rgba(28, 25, 23, 0.05),
     surface_strong: rgba(28, 25, 23, 0.09),
     scrim: rgba(28, 25, 23, 0.32),
+    glass_bg: rgba(255, 255, 255, 0.72),
+    glass_border: rgba(28, 25, 23, 0.08),
 };
 
 pub fn palette(dark: bool) -> &'static Palette {
