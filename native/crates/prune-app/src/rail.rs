@@ -23,6 +23,7 @@ use iced::{Background, Border, Color, Element, Length, Padding, Shadow, Vector, 
 
 use prune_core::i18n::Catalog;
 
+use crate::overflow::overflow;
 use crate::screen::{Screen, geist, mono};
 use crate::theme::Palette;
 
@@ -38,6 +39,10 @@ const ICON_INSET: f32 = 14.0;
 const ICON_SIZE: f32 = 20.0;
 /// `w-[118px]` label column.
 const LABEL_WIDTH: f32 = 118.0;
+/// `gap-3`: icon to label.
+const ICON_GAP: f32 = 12.0;
+/// A row's content (icon, gap, label), laid out at this width in both states.
+pub const ROW_CONTENT_WIDTH: f32 = ICON_SIZE + ICON_GAP + LABEL_WIDTH;
 /// `rounded-xl`.
 const RADIUS: f32 = 12.0;
 
@@ -248,7 +253,12 @@ fn item<'a, M: Clone + 'a>(rail: Rail<'a>, events: Events<M>, screen: Screen) ->
     // Two lines at most (3.x's line-clamp-2).
     let label = container(label).max_height(2.0 * 13.0 * 1.15 + 0.5).clip(true);
 
-    let body = row![icon, label].spacing(12).align_y(alignment::Vertical::Center);
+    // One layout in both states (3.x: the row is always its full width and
+    // the rail clips it): laid out at ROW_CONTENT_WIDTH even while the rail
+    // is 72 px, so the icon stays 20 px and the label never re-wraps, and
+    // centred in the 44 px row (3.x's h-11 items-center).
+    let body = row![icon, label].spacing(ICON_GAP).height(Length::Fill).align_y(alignment::Vertical::Center);
+    let body = overflow(body, ROW_CONTENT_WIDTH).height(Length::Fill);
     let row_button = button(body)
         .padding(Padding { top: 0.0, right: 12.0, bottom: 0.0, left: ICON_INSET })
         .width(Length::Fill)
@@ -310,6 +320,67 @@ mod tests {
         assert_eq!(COLLAPSED_WIDTH / 2.0, 36.0);
         // The label fits the expanded row.
         const { assert!(GUTTER + ICON_INSET + ICON_SIZE + 12.0 + LABEL_WIDTH <= EXPANDED_WIDTH - GUTTER) };
+    }
+
+    /// Lays one row out the way the rail does, collapsed and expanded, and
+    /// checks where its icon and label land: the icon 20×20 with its centre
+    /// at x = 36 of the panel, and both centred in the 44 px row.
+    #[test]
+    fn row_icon_is_full_size_and_centred() {
+        use iced::advanced::layout::{Limits, Node};
+        use iced::advanced::widget::Tree;
+        use iced::{Font, Pixels, Rectangle, Size};
+
+        #[derive(Clone)]
+        struct M;
+        let catalog = Catalog::load("en");
+        let renderer = iced::Renderer::new(Font::DEFAULT, Pixels(16.0));
+        // `path` walks child indices from `node`; bounds are relative to the
+        // parent, so offsets add up.
+        fn at(node: &Node, path: &[usize]) -> Rectangle {
+            let mut b = node.bounds();
+            let mut n = node;
+            for &i in path {
+                n = &n.children()[i];
+                let c = n.bounds();
+                b = Rectangle { x: b.x + c.x, y: b.y + c.y, width: c.width, height: c.height };
+            }
+            b
+        }
+
+        for width in [COLLAPSED_WIDTH, EXPANDED_WIDTH] {
+            let rail = Rail {
+                active: Screen::Dashboard,
+                focus: None,
+                hover: None,
+                width,
+                label_opacity: 1.0,
+                mark: mark_anchor(Screen::Dashboard),
+                palette: crate::theme::palette(true),
+                catalog: &catalog,
+            };
+            let events = Events { navigate: |_| M, rail_hover: |_| M, item_hover: |_, _| M };
+            let mut element: Element<'_, M> = item(rail, events, Screen::Applications);
+            let mut tree = Tree::new(element.as_widget());
+            // The row's own box: the panel less its 12 px gutters.
+            let limits = Limits::new(Size::ZERO, Size::new(width - 2.0 * GUTTER, 1000.0));
+            let node = element.as_widget_mut().layout(&mut tree, &renderer, &limits);
+            let row = node.bounds();
+            assert_eq!((row.width, row.height), (width - 2.0 * GUTTER, ROW_HEIGHT), "rail {width}");
+
+            // mouse_area (its content's node) = stack > [button > overflow >
+            // row > [svg, label], ring]
+            let icon = at(&node, &[0, 0, 0, 0]);
+            let label = at(&node, &[0, 0, 0, 1]);
+            assert_eq!((icon.width, icon.height), (ICON_SIZE, ICON_SIZE), "rail {width}: icon {icon:?}");
+            assert_eq!(GUTTER + icon.center_x(), 36.0, "rail {width}: icon centre x");
+            assert_eq!(icon.center_y(), ROW_HEIGHT / 2.0, "rail {width}: icon centred in the row");
+            assert!((label.center_y() - ROW_HEIGHT / 2.0).abs() < 0.5, "rail {width}: label {label:?}");
+            assert_eq!(label.width, LABEL_WIDTH, "rail {width}: the label keeps its width, never re-wraps");
+        }
+
+        // The mark's pill is 3×20 and centred on the row it marks.
+        assert_eq!(12.0 + 20.0 / 2.0, ROW_HEIGHT / 2.0);
     }
 
     #[test]
