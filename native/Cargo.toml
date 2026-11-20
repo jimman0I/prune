@@ -11,6 +11,8 @@ rust-version = "1.90"
 [workspace.dependencies]
 iced = "=0.14.0"
 fluent-bundle = "0.16"
+fluent-syntax = "0.12"
+unic-langid = "0.9"
 windows = "=0.62.2"
 tray-icon = "=0.26.1"
 serde = { version = "1", features = ["derive"] }

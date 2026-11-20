@@ -8,3 +8,8 @@ rust-version.workspace = true
 [dependencies]
 serde.workspace = true
 serde_json.workspace = true
+fluent-bundle.workspace = true
+unic-langid.workspace = true
+
+[dev-dependencies]
+fluent-syntax.workspace = true
