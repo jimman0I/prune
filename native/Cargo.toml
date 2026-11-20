@@ -9,7 +9,11 @@ license = "MIT"
 rust-version = "1.90"
 
 [workspace.dependencies]
-iced = "=0.14.0"
+# tiny-skia is the only renderer: no wgpu compiled in. The software
+# renderer opens in about a third of the time and a fifth of the memory,
+# and Prune's flat UI does not need a GPU. `thread-pool` is the executor
+# tasks run on; `crisp` keeps 1 px lines on the pixel grid.
+iced = { version = "=0.14.0", default-features = false, features = ["tiny-skia", "thread-pool", "crisp"] }
 fluent-bundle = "0.16"
 fluent-syntax = "0.12"
 unic-langid = "0.9"
