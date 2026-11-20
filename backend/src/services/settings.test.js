@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach, afterEach } from 'vitest';
 import { mkdtempSync, rmSync } from 'node:fs';
-import { mkdir, writeFile } from 'node:fs/promises';
+import { mkdir, writeFile, rm } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join, dirname } from 'node:path';
 import { getSettings, updateSettings, cleanGuardsFrom, isLowSpecHardware, normalizeHiddenPrograms } from './settings.js';
@@ -427,6 +427,22 @@ describe('sizeUnits', () => {
     await mkdir(dirname(process.env.UNREVO_SETTINGS_PATH), { recursive: true });
     await writeFile(process.env.UNREVO_SETTINGS_PATH, JSON.stringify({ sizeUnits: 'metric' }));
     expect((await getSettings()).sizeUnits).toBe('windows');
+  });
+});
+
+describe('theme', () => {
+  it('normalizes theme to one of the three choices', async () => {
+    expect((await updateSettings({ theme: 'light' })).theme).toBe('light');
+    expect((await updateSettings({ theme: 'solarized' })).theme).toBe('system');
+    await rm(process.env.UNREVO_SETTINGS_PATH, { force: true });
+    expect((await getSettings()).theme).toBe('system');
+  });
+
+  it('keeps themeSynced only as a real boolean', async () => {
+    expect((await updateSettings({ themeSynced: true })).themeSynced).toBe(true);
+    expect((await updateSettings({ themeSynced: 'yes' })).themeSynced).toBe(false);
+    await rm(process.env.UNREVO_SETTINGS_PATH, { force: true });
+    expect((await getSettings()).themeSynced).toBe(false);
   });
 });
 

@@ -2,6 +2,7 @@ import { createContext, useCallback, useContext, useEffect, useMemo, useState } 
 import {
   THEME_CHOICES, resolveInitialTheme, resolveChoice, readStoredTheme, writeStoredTheme
 } from '../lib/theme.js';
+import { updateSettings } from '../lib/api.js';
 
 const ThemeContext = createContext(null);
 
@@ -53,7 +54,10 @@ export function initialTheme() {
   });
 }
 
-export function ThemeProvider({ children }) {
+/** `syncSettings` is on in the app. The shared test render turns it off: it
+ * is a write to settings.json that screen tests which count their own
+ * `updateSettings` calls have no reason to know about. */
+export function ThemeProvider({ children, syncSettings = true }) {
   /* Two separate pieces of state, because they change for different
    * reasons. `choice` is what the person picked (System, Light or Dark)
    * and only they change it. `systemDark` is what Windows is doing right
@@ -66,6 +70,21 @@ export function ThemeProvider({ children }) {
   const theme = resolveInitialTheme({ stored: choice, prefersDark: systemDark });
 
   useEffect(() => { applyTheme(theme); }, [theme]);
+
+  /* Mirrors the choice into settings.json, on mount and on every change.
+   * localStorage stays what the first paint reads (see THEME_STORAGE_KEY);
+   * this copy exists because the 4.0 native shell reads the theme from the
+   * settings file, and `themeSynced` tells it the value is a real choice
+   * rather than the default. Fire and forget: a failed write costs nothing
+   * but the copy, and must never hold up or undo the theme on screen. */
+  useEffect(() => {
+    if (!syncSettings) return;
+    try {
+      Promise.resolve(updateSettings({ theme: choice, themeSynced: true })).catch(() => {});
+    } catch {
+      // A synchronous throw is equally not worth a blank window.
+    }
+  }, [choice, syncSettings]);
 
   /** Tracks the OS unconditionally and lets the derivation above decide
    * whether it matters: someone on System sees the app change when their

@@ -67,7 +67,7 @@ async function mountScanned() {
   const user = userEvent.setup();
   render(
     <QueryClientProvider client={makeTestClient()}>
-      <ThemeProvider><LanguageProvider><ToastProvider><MotionConfig reducedMotion="always">
+      <ThemeProvider syncSettings={false}><LanguageProvider><ToastProvider><MotionConfig reducedMotion="always">
         <DiskMap />
         <ToastHost />
       </MotionConfig></ToastProvider></LanguageProvider></ThemeProvider>

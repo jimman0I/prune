@@ -112,7 +112,16 @@ const DEFAULT_SETTINGS = {
      programs and libraries, or desktop.ini -- so a hand-edited file cannot
      add one. A scan only lists; nothing is removed until the person ticks it. */
   junkPatterns: defaultJunkPatterns(),
-  theme: 'dark',
+  /* The theme choice: 'system', 'light' or 'dark'. The UI still paints from
+     localStorage (it has to be on the root element before the first frame),
+     and mirrors every choice here because the 4.0 native shell reads the
+     theme from this file. 'system' is the default: it is what an install
+     that never touched the control has always done. */
+  theme: 'system',
+  /* True once the UI has written its real choice into `theme`. Without it
+     4.0 cannot tell "chose System" from "never saved", and would ignore a
+     person's Light or Dark pick made before this release. */
+  themeSynced: false,
   minimizeToTray: false,
   /* The low-disk warning: how small a share of a drive may be free before the
      Dashboard says so (and, while Prune sits in the tray, a notification does,
@@ -324,7 +333,9 @@ export function normalizeRemoval(value) {
   return value === 'delete' ? 'delete' : 'quarantine';
 }
 
-/** The settings whose value must be one of a fixed few, repaired wherever
+const THEME_CHOICES = ['system', 'light', 'dark'];
+
+/** The settings whose value must be one of a fixed few,repaired wherever
  * settings are read or written: a hand-edited or corrupted file can never
  * smuggle a destructive value past the switch that guards it. */
 function normalizedChoices(settings) {
@@ -340,6 +351,8 @@ function normalizedChoices(settings) {
     rememberDiskMapScans: settings.rememberDiskMapScans !== false,
     hiddenPrograms: normalizeHiddenPrograms(settings.hiddenPrograms),
     sizeUnits: normalizeSizeUnits(settings.sizeUnits),
+    theme: THEME_CHOICES.includes(settings.theme) ? settings.theme : 'system',
+    themeSynced: settings.themeSynced === true,
     lastSeenVersion: normalizeLastSeenVersion(settings.lastSeenVersion)
   };
 }

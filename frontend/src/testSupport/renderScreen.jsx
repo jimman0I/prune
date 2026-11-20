@@ -55,7 +55,7 @@ export function makeTestClient() {
 export function renderScreen(ui, { client = makeTestClient() } = {}) {
   const result = render(
     <QueryClientProvider client={client}>
-      <ThemeProvider>
+      <ThemeProvider syncSettings={false}>
         <LanguageProvider>
           <ToastProvider>{ui}</ToastProvider>
         </LanguageProvider>
