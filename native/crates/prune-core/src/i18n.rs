@@ -12,6 +12,7 @@
 
 use std::borrow::Cow;
 use std::fmt::Write as _;
+use std::sync::{LazyLock, OnceLock};
 
 use fluent_bundle::concurrent::FluentBundle;
 use fluent_bundle::{FluentArgs, FluentResource};
@@ -32,37 +33,59 @@ pub const LANGUAGES: [&str; 40] = [
 /// so an English path or name inside them can't reorder the sentence.
 const RIGHT_TO_LEFT: [&str; 3] = ["ar", "he", "ps"];
 
-/// One language's text, loaded and ready to format.
+type Bundle = FluentBundle<FluentResource>;
+
+/// Each embedded language's bundle, parsed the first time it is loaded and
+/// kept for the life of the process. Same order as `SOURCES`.
+static BUNDLES: LazyLock<Box<[OnceLock<Bundle>]>> =
+    LazyLock::new(|| SOURCES.iter().map(|_| OnceLock::new()).collect());
+
+/// One language's text, ready to format. Cheap to copy: the parsed bundle
+/// is shared, so loading the same language again costs a lookup, not a
+/// parse.
+///
+/// There is no per-key fallback to English: a key a non-`en` bundle lacks
+/// gives the key itself back, as an unknown key does. The completeness
+/// test (`every_language_has_every_en_key`) is what guarantees every
+/// language has every key.
+#[derive(Clone, Copy)]
 pub struct Catalog {
-    bundle: FluentBundle<FluentResource>,
+    bundle: &'static Bundle,
 }
 
 impl Catalog {
     /// The catalog for `lang` (a 3.x language code such as `"pt-BR"`), or
     /// English's when Prune has no such language.
     pub fn load(lang: &str) -> Catalog {
-        let (code, prune, cleaners) = SOURCES
+        let index = SOURCES
             .iter()
-            .find(|(code, ..)| *code == lang)
-            .or_else(|| SOURCES.iter().find(|(code, ..)| *code == "en"))
+            .position(|(code, ..)| *code == lang)
+            .or_else(|| SOURCES.iter().position(|(code, ..)| *code == "en"))
             .expect("the en locale is embedded");
-        let langid: LanguageIdentifier = code.parse().unwrap_or_default();
-        let mut bundle = FluentBundle::new_concurrent(vec![langid]);
-        bundle.set_use_isolating(RIGHT_TO_LEFT.contains(code));
-        for source in [*prune, *cleaners] {
-            // The files are tested to parse cleanly; should one ever not,
-            // the messages that did parse are still used.
-            let resource = FluentResource::try_new(source.to_owned()).unwrap_or_else(|(partial, errors)| {
-                debug_log(format_args!("{code}: syntax errors {errors:?}"));
-                partial
-            });
-            if let Err(errors) = bundle.add_resource(resource) {
-                debug_log(format_args!("{code}: {errors:?}"));
-            }
-        }
-        Catalog { bundle }
+        Catalog { bundle: BUNDLES[index].get_or_init(|| parse(SOURCES[index])) }
     }
+}
 
+/// Builds one language's bundle from its embedded files.
+fn parse((code, prune, cleaners): (&str, &str, &str)) -> Bundle {
+    let langid: LanguageIdentifier = code.parse().unwrap_or_default();
+    let mut bundle = FluentBundle::new_concurrent(vec![langid]);
+    bundle.set_use_isolating(RIGHT_TO_LEFT.contains(&code));
+    for source in [prune, cleaners] {
+        // The files are tested to parse cleanly; should one ever not, the
+        // messages that did parse are still used.
+        let resource = FluentResource::try_new(source.to_owned()).unwrap_or_else(|(partial, errors)| {
+            debug_log(format_args!("{code}: syntax errors {errors:?}"));
+            partial
+        });
+        if let Err(errors) = bundle.add_resource(resource) {
+            debug_log(format_args!("{code}: {errors:?}"));
+        }
+    }
+    bundle
+}
+
+impl Catalog {
     /// The text for `key`, a 3.x dotted path, with `args` put in its
     /// placeables. An unknown key gives the key itself back.
     pub fn t(&self, key: &str, args: &[(&str, FluentValue)]) -> String {

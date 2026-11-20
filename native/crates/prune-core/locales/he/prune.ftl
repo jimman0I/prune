@@ -845,6 +845,7 @@ app-installedApplications = אפליקציות
 app-applicationsSummary = אפליקציות מותקנות: { $count } · { $size }
 app-applicationsSummaryFiltered = { $shown } מתוך { $total } מוצגים · { $size }
 app-removeStoreApp = הסר את { $name }
+# needs-review
 diskMapV3-large-tooLarge = בכונן יש יותר קבצים ממה ש-Prune יכול להכיל בסריקה אחת. השתמשו ב“undefined” כדי לסרוק אותו תיקייה אחר תיקייה, או החריגו תיקיות גדולות בהגדרות.
 diskMapV3-large-foldedNote = כל תיקייה מציגה את { $a } הקבצים הגדולים ביותר שלה; { $b } הקבצים האחרים מסוכמים בשורה אחת לכל תיקייה. הם עדיין נספרים בכל הסכומים ובנתוני סוגי הקבצים.
 diskMapV3-large-foldedFloorNote = בכונן הזה יש כל כך הרבה קבצים שרק קבצים בגודל { $b } ומעלה מוצגים בנפרד; { $a } הקבצים האחרים מסוכמים בשורה אחת לכל תיקייה. הם עדיין נספרים בכל הסכומים ובנתוני סוגי הקבצים.

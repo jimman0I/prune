@@ -803,6 +803,7 @@ app-installedApplications = Ứng dụng
 app-applicationsSummary = { $count } ứng dụng đã cài đặt · { $size }
 app-applicationsSummaryFiltered = Hiển thị { $shown } trên { $total } · { $size }
 app-removeStoreApp = Xóa { $name }
+# needs-review
 diskMapV3-large-tooLarge = Ổ đĩa có nhiều tệp hơn mức Prune có thể xử lý trong một lần quét. Hãy dùng “undefined” để quét từng thư mục một, hoặc loại trừ các thư mục lớn trong Cài đặt.
 diskMapV3-large-foldedNote = Mỗi thư mục liệt kê { $a } tệp lớn nhất; { $b } tệp còn lại được cộng gộp thành một dòng cho mỗi thư mục. Chúng vẫn được tính vào mọi tổng số và số liệu theo loại tệp.
 diskMapV3-large-foldedFloorNote = Ổ đĩa này có nhiều tệp đến mức chỉ các tệp từ { $b } trở lên được liệt kê riêng; { $a } tệp còn lại được cộng gộp thành một dòng cho mỗi thư mục. Chúng vẫn được tính vào mọi tổng số và số liệu theo loại tệp.

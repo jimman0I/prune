@@ -42,6 +42,7 @@
     "batchUninstallModal.summary.items",
     "batchUninstallModal.failedRegistryKeys",
     "app.applicationsSummary",
+    "diskMapV3.large.tooLarge",
     "deepCleanV3.protected.banner",
     "uninstallerV3.history.restoreNotCreated",
     "junkFiles.progress",
@@ -92,10 +93,12 @@
     "batchUninstallModal.mixedIntro",
     "batchUninstallModal.storeWarning",
     "batchUninstallModal.readyToScan.body",
+    "batchUninstallModal.failedHeading",
     "batchUninstallModal.summary.programs",
     "batchUninstallModal.summary.items",
     "batchUninstallModal.failedRegistryKeys",
     "app.applicationsSummary",
+    "diskMapV3.large.tooLarge",
     "deepCleanV3.protected.banner",
     "uninstallerV3.history.restoreNotCreated"
   ],
@@ -129,6 +132,7 @@
     "batchUninstallModal.storeWarning",
     "batchUninstallModal.summary.programs",
     "batchUninstallModal.summary.items",
+    "diskMapV3.large.tooLarge",
     "deepCleanV3.protected.banner",
     "uninstallerV3.history.restoreNotCreated"
   ],
@@ -164,6 +168,7 @@
     "leftoverReview.excludedNote",
     "uninstallModal.summary.item",
     "uninstallModal.summary.registryKey",
+    "uninstallModal.summary.recycle",
     "uninstallModal.failedFilesHeading",
     "uninstallModal.failedRegistryKeysHeading",
     "batchUninstallModal.title",
@@ -176,6 +181,7 @@
     "batchUninstallModal.summary.items",
     "batchUninstallModal.failedRegistryKeys",
     "app.applicationsSummary",
+    "diskMapV3.large.tooLarge",
     "deepCleanV3.protected.banner",
     "uninstallerV3.history.restoreNotCreated"
   ],
@@ -206,6 +212,7 @@
     "batchUninstallModal.summary.programs",
     "batchUninstallModal.summary.items",
     "batchUninstallModal.failedRegistryKeys",
+    "diskMapV3.large.tooLarge",
     "deepCleanV3.protected.banner",
     "uninstallerV3.history.restoreNotCreated"
   ],
@@ -215,6 +222,7 @@
     "quarantine.summary.phrase",
     "quarantine.summary.withLimit",
     "startup.counts.total",
+    "startup.removeInvalid.toast",
     "duplicates.summarySets",
     "duplicates.footer.wouldLose",
     "deepClean.confirm.prompt",
@@ -226,6 +234,7 @@
     "batchUninstallModal.mixedIntro",
     "batchUninstallModal.storeWarning",
     "batchUninstallModal.failedHeading",
+    "diskMapV3.large.tooLarge",
     "deepCleanV3.protected.banner",
     "uninstallerV3.history.restoreNotCreated"
   ],
@@ -273,6 +282,7 @@
     "batchUninstallModal.summary.items",
     "batchUninstallModal.failedRegistryKeys",
     "app.applicationsSummary",
+    "diskMapV3.large.tooLarge",
     "deepCleanV3.protected.banner",
     "uninstallerV3.history.restoreNotCreated"
   ],
@@ -320,6 +330,7 @@
     "batchUninstallModal.summary.items",
     "batchUninstallModal.failedRegistryKeys",
     "app.applicationsSummary",
+    "diskMapV3.large.tooLarge",
     "deepCleanV3.protected.banner",
     "uninstallerV3.history.restoreNotCreated"
   ],
@@ -343,6 +354,7 @@
     "startup.counts.runningNow",
     "startup.counts.broken",
     "startup.removeInvalid.toast",
+    "duplicates.summarySets",
     "duplicates.footer.selected",
     "duplicates.footer.wouldLose",
     "duplicates.modal.heading",
@@ -361,6 +373,7 @@
     "leftoverReview.excludedNote",
     "uninstallModal.summary.item",
     "uninstallModal.summary.registryKey",
+    "uninstallModal.summary.recycle",
     "uninstallModal.failedFilesHeading",
     "uninstallModal.failedRegistryKeysHeading",
     "batchUninstallModal.title",
@@ -373,6 +386,7 @@
     "batchUninstallModal.summary.items",
     "batchUninstallModal.failedRegistryKeys",
     "app.applicationsSummary",
+    "diskMapV3.large.tooLarge",
     "deepCleanV3.protected.banner",
     "uninstallerV3.history.restoreNotCreated"
   ],
@@ -427,6 +441,7 @@
     "batchUninstallModal.summary.items",
     "batchUninstallModal.failedRegistryKeys",
     "app.applicationsSummary",
+    "diskMapV3.large.tooLarge",
     "deepCleanV3.protected.banner",
     "uninstallerV3.history.restoreNotCreated"
   ],
@@ -467,6 +482,7 @@
     "batchUninstallModal.summary.programs",
     "batchUninstallModal.summary.items",
     "batchUninstallModal.failedRegistryKeys",
+    "diskMapV3.large.tooLarge",
     "deepCleanV3.protected.banner",
     "uninstallerV3.history.restoreNotCreated"
   ],
@@ -503,6 +519,7 @@
     "batchUninstallModal.failedHeading",
     "batchUninstallModal.summary.programs",
     "batchUninstallModal.summary.items",
+    "diskMapV3.large.tooLarge",
     "deepCleanV3.protected.banner",
     "uninstallerV3.history.restoreNotCreated"
   ],
@@ -544,6 +561,7 @@
     "leftoverReview.excludedNote",
     "uninstallModal.summary.item",
     "uninstallModal.summary.registryKey",
+    "uninstallModal.summary.recycle",
     "uninstallModal.failedFilesHeading",
     "uninstallModal.failedRegistryKeysHeading",
     "batchUninstallModal.title",
@@ -557,6 +575,7 @@
     "batchUninstallModal.summary.items",
     "batchUninstallModal.failedRegistryKeys",
     "app.applicationsSummary",
+    "diskMapV3.large.tooLarge",
     "deepCleanV3.protected.banner",
     "uninstallerV3.history.restoreNotCreated"
   ],
@@ -612,6 +631,7 @@
     "batchUninstallModal.summary.programs",
     "batchUninstallModal.summary.items",
     "batchUninstallModal.failedRegistryKeys",
+    "diskMapV3.large.tooLarge",
     "deepCleanV3.protected.banner",
     "uninstallerV3.history.restoreNotCreated"
   ],
@@ -626,6 +646,7 @@
     "batchUninstallModal.mixedIntro",
     "batchUninstallModal.storeWarning",
     "batchUninstallModal.failedHeading",
+    "diskMapV3.large.tooLarge",
     "uninstallerV3.history.restoreNotCreated"
   ],
   "id": [
@@ -638,6 +659,7 @@
     "batchUninstallModal.stillWaiting",
     "batchUninstallModal.mixedIntro",
     "batchUninstallModal.storeWarning",
+    "diskMapV3.large.tooLarge",
     "uninstallerV3.history.restoreNotCreated"
   ],
   "is": [
@@ -650,6 +672,7 @@
     "startup.counts.total",
     "startup.removeInvalid.toast",
     "startup.removeDisabled.toast",
+    "duplicates.summarySets",
     "duplicates.footer.wouldLose",
     "duplicates.modal.heading",
     "duplicates.toasts.moved",
@@ -672,6 +695,7 @@
     "batchUninstallModal.failedHeading",
     "batchUninstallModal.summary.items",
     "batchUninstallModal.failedRegistryKeys",
+    "diskMapV3.large.tooLarge",
     "deepCleanV3.protected.banner",
     "uninstallerV3.history.restoreNotCreated"
   ],
@@ -725,6 +749,7 @@
     "batchUninstallModal.summary.items",
     "batchUninstallModal.failedRegistryKeys",
     "app.applicationsSummary",
+    "diskMapV3.large.tooLarge",
     "deepCleanV3.protected.banner",
     "uninstallerV3.history.restoreNotCreated"
   ],
@@ -738,6 +763,7 @@
     "batchUninstallModal.stillWaiting",
     "batchUninstallModal.mixedIntro",
     "batchUninstallModal.storeWarning",
+    "diskMapV3.large.tooLarge",
     "uninstallerV3.history.restoreNotCreated"
   ],
   "ko": [
@@ -750,6 +776,7 @@
     "batchUninstallModal.stillWaiting",
     "batchUninstallModal.mixedIntro",
     "batchUninstallModal.storeWarning",
+    "diskMapV3.large.tooLarge",
     "uninstallerV3.history.restoreNotCreated"
   ],
   "lt": [
@@ -789,6 +816,7 @@
     "batchUninstallModal.failedHeading",
     "batchUninstallModal.summary.programs",
     "batchUninstallModal.failedRegistryKeys",
+    "diskMapV3.large.tooLarge",
     "uninstallerV3.history.restoreNotCreated"
   ],
   "ms": [
@@ -801,6 +829,7 @@
     "batchUninstallModal.stillWaiting",
     "batchUninstallModal.mixedIntro",
     "batchUninstallModal.storeWarning",
+    "diskMapV3.large.tooLarge",
     "uninstallerV3.history.restoreNotCreated"
   ],
   "nb": [
@@ -848,6 +877,7 @@
     "batchUninstallModal.summary.items",
     "batchUninstallModal.failedRegistryKeys",
     "app.applicationsSummary",
+    "diskMapV3.large.tooLarge",
     "deepCleanV3.protected.banner",
     "uninstallerV3.history.restoreNotCreated"
   ],
@@ -898,6 +928,7 @@
     "batchUninstallModal.summary.items",
     "batchUninstallModal.failedRegistryKeys",
     "app.applicationsSummary",
+    "diskMapV3.large.tooLarge",
     "deepCleanV3.protected.banner",
     "uninstallerV3.history.restoreNotCreated"
   ],
@@ -929,6 +960,7 @@
     "batchUninstallModal.summary.programs",
     "batchUninstallModal.summary.items",
     "batchUninstallModal.failedRegistryKeys",
+    "diskMapV3.large.tooLarge",
     "deepCleanV3.protected.banner",
     "uninstallerV3.history.restoreNotCreated"
   ],
@@ -977,6 +1009,7 @@
     "batchUninstallModal.summary.programs",
     "batchUninstallModal.summary.items",
     "batchUninstallModal.failedRegistryKeys",
+    "diskMapV3.large.tooLarge",
     "deepCleanV3.protected.banner",
     "uninstallerV3.history.restoreNotCreated"
   ],
@@ -1034,6 +1067,7 @@
     "batchUninstallModal.summary.items",
     "batchUninstallModal.failedRegistryKeys",
     "app.applicationsSummary",
+    "diskMapV3.large.tooLarge",
     "deepCleanV3.protected.banner",
     "uninstallerV3.history.restoreNotCreated"
   ],
@@ -1091,6 +1125,7 @@
     "batchUninstallModal.summary.items",
     "batchUninstallModal.failedRegistryKeys",
     "app.applicationsSummary",
+    "diskMapV3.large.tooLarge",
     "deepCleanV3.protected.banner",
     "uninstallerV3.history.restoreNotCreated"
   ],
@@ -1153,6 +1188,7 @@
     "batchUninstallModal.summary.items",
     "batchUninstallModal.failedRegistryKeys",
     "app.applicationsSummary",
+    "diskMapV3.large.tooLarge",
     "deepCleanV3.protected.banner",
     "uninstallerV3.history.restoreNotCreated"
   ],
@@ -1175,6 +1211,7 @@
     "batchUninstallModal.summary.programs",
     "batchUninstallModal.summary.items",
     "batchUninstallModal.failedRegistryKeys",
+    "diskMapV3.large.tooLarge",
     "uninstallerV3.history.restoreNotCreated"
   ],
   "sk": [
@@ -1200,6 +1237,7 @@
     "batchUninstallModal.summary.programs",
     "batchUninstallModal.summary.items",
     "batchUninstallModal.failedRegistryKeys",
+    "diskMapV3.large.tooLarge",
     "uninstallerV3.history.restoreNotCreated"
   ],
   "sq": [
@@ -1208,6 +1246,7 @@
     "dashboard.scheduleBadge.missed",
     "dashboard.space.unsized",
     "dashboard.largest.installedCount",
+    "dashboard.quiet.junkBasis",
     "dashboard.quiet.leftCount",
     "applications.footer.uninstallCount",
     "quarantine.summary.phrase",
@@ -1238,6 +1277,7 @@
     "batchUninstallModal.failedHeading",
     "batchUninstallModal.summary.programs",
     "batchUninstallModal.failedRegistryKeys",
+    "diskMapV3.large.tooLarge",
     "deepCleanV3.protected.banner",
     "uninstallerV3.history.restoreNotCreated"
   ],
@@ -1280,6 +1320,7 @@
     "batchUninstallModal.summary.programs",
     "batchUninstallModal.summary.items",
     "batchUninstallModal.failedRegistryKeys",
+    "diskMapV3.large.tooLarge",
     "uninstallerV3.history.restoreNotCreated"
   ],
   "sv": [
@@ -1318,6 +1359,7 @@
     "batchUninstallModal.storeWarning",
     "batchUninstallModal.summary.items",
     "batchUninstallModal.failedRegistryKeys",
+    "diskMapV3.large.tooLarge",
     "uninstallerV3.history.restoreNotCreated"
   ],
   "th": [
@@ -1330,6 +1372,7 @@
     "batchUninstallModal.stillWaiting",
     "batchUninstallModal.mixedIntro",
     "batchUninstallModal.storeWarning",
+    "diskMapV3.large.tooLarge",
     "uninstallerV3.history.restoreNotCreated"
   ],
   "tr": [
@@ -1342,6 +1385,7 @@
     "batchUninstallModal.stillWaiting",
     "batchUninstallModal.mixedIntro",
     "batchUninstallModal.storeWarning",
+    "diskMapV3.large.tooLarge",
     "uninstallerV3.history.restoreNotCreated"
   ],
   "uk": [
@@ -1363,6 +1407,7 @@
     "batchUninstallModal.summary.programs",
     "batchUninstallModal.summary.items",
     "batchUninstallModal.failedRegistryKeys",
+    "diskMapV3.large.tooLarge",
     "uninstallerV3.history.restoreNotCreated"
   ],
   "vi": [
@@ -1375,6 +1420,7 @@
     "batchUninstallModal.stillWaiting",
     "batchUninstallModal.mixedIntro",
     "batchUninstallModal.storeWarning",
+    "diskMapV3.large.tooLarge",
     "uninstallerV3.history.restoreNotCreated"
   ],
   "zh-CN": [
@@ -1387,6 +1433,7 @@
     "batchUninstallModal.stillWaiting",
     "batchUninstallModal.mixedIntro",
     "batchUninstallModal.storeWarning",
+    "diskMapV3.large.tooLarge",
     "uninstallerV3.history.restoreNotCreated"
   ],
   "zh-TW": [
@@ -1399,6 +1446,7 @@
     "batchUninstallModal.stillWaiting",
     "batchUninstallModal.mixedIntro",
     "batchUninstallModal.storeWarning",
+    "diskMapV3.large.tooLarge",
     "uninstallerV3.history.restoreNotCreated"
   ]
 }

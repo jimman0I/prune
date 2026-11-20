@@ -71,12 +71,26 @@ fn placeable_args() {
 
 #[test]
 fn right_to_left_languages_keep_isolating_marks() {
-    let ar = Catalog::load("ar");
-    let text = ar.t("windowsToolsV1.loadError", &[("reason", FluentValue::from("boom"))]);
-    assert!(text.contains("\u{2068}boom\u{2069}"), "{text:?}");
+    for lang in ["ar", "he", "ps"] {
+        let catalog = Catalog::load(lang);
+        let text = catalog.t("windowsToolsV1.loadError", &[("reason", FluentValue::from("boom"))]);
+        assert!(text.contains("\u{2068}boom\u{2069}"), "{lang}: {text:?}");
+    }
     let de = Catalog::load("de");
     let text = de.t("windowsToolsV1.loadError", &[("reason", FluentValue::from("boom"))]);
     assert!(!text.contains('\u{2068}'), "{text:?}");
+}
+
+#[test]
+fn catalogs_are_shared_across_threads() {
+    // Bundles are parsed once and cached; a Catalog is Copy, Send and Sync.
+    let first = Catalog::load("de");
+    let threads: Vec<_> = (0..8)
+        .map(|_| std::thread::spawn(move || (first.t("nav.dashboard", &[]), Catalog::load("de").t("nav.dashboard", &[]))))
+        .collect();
+    for thread in threads {
+        assert_eq!(thread.join().unwrap(), ("Übersicht".to_owned(), "Übersicht".to_owned()));
+    }
 }
 
 #[test]

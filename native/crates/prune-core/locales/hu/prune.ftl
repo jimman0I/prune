@@ -804,6 +804,7 @@ app-installedApplications = Alkalmazások
 app-applicationsSummary = { $count } telepített alkalmazás · { $size }
 app-applicationsSummaryFiltered = { $total } közül { $shown } látható · { $size }
 app-removeStoreApp = { $name } eltávolítása
+# needs-review
 diskMapV3-large-tooLarge = A meghajtón több fájl van, mint amennyit a Prune egyetlen vizsgálatban kezelni tud. A „undefined” használatával mappánként végigjárhatja, vagy a Beállításokban kizárhatja a nagy mappákat.
 diskMapV3-large-foldedNote = Minden mappa a { $a } legnagyobb fájlját sorolja fel; a többi { $b } fájl mappánként egyetlen sorba van összegezve. Ezek továbbra is beleszámítanak minden összegbe és a fájltípus-adatokba.
 diskMapV3-large-foldedFloorNote = Ezen a meghajtón annyi fájl van, hogy csak a { $b } vagy annál nagyobb fájlok szerepelnek külön-külön; a többi { $a } fájl mappánként egyetlen sorba van összegezve. Ezek továbbra is beleszámítanak minden összegbe és a fájltípus-adatokba.

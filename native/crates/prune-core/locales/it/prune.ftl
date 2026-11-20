@@ -843,6 +843,7 @@ app-installedApplications = Applicazioni
 app-applicationsSummary = { $count } applicazioni installate · { $size }
 app-applicationsSummaryFiltered = { $shown } di { $total } mostrati · { $size }
 app-removeStoreApp = Rimuovi { $name }
+# needs-review
 diskMapV3-large-tooLarge = L’unità contiene più file di quanti Prune ne possa gestire in una sola scansione. Usa “undefined” per analizzarla cartella per cartella, oppure escludi le cartelle grandi dalle Impostazioni.
 diskMapV3-large-foldedNote = Ogni cartella elenca i suoi { $a } file più grandi; gli altri { $b } file sono sommati in un’unica riga per cartella. Continuano a contare in tutti i totali e nelle cifre per tipo di file.
 diskMapV3-large-foldedFloorNote = Questa unità contiene così tanti file che solo quelli di { $b } o più sono elencati singolarmente; gli altri { $a } file sono sommati in un’unica riga per cartella. Continuano a contare in tutti i totali e nelle cifre per tipo di file.

@@ -523,6 +523,7 @@ duplicates-readingNote = Πρώτα τα μεγέθη, μετά ένα δείγ�
 duplicates-empty-heading = Δεν υπάρχουν διπλότυπα αρχεία εδώ.
 duplicates-empty-scanned = { $count } αρχεία συγκρίθηκαν.
 duplicates-empty-truncatedSuffix = {" "}Η σάρωση διακόπηκε νωρίς, οπότε αυτός δεν είναι ολόκληρος ο φάκελος.
+# needs-review
 duplicates-summarySets = { $count } σετ
 duplicates-recoverable = { $formatted } ανακτήσιμα
 duplicates-keepOldest = Διατήρηση παλαιότερου
@@ -727,6 +728,7 @@ uninstallModal-done = Τέλος
 uninstallModal-summary-item = { $n } στοιχεία
 # needs-review
 uninstallModal-summary-registryKey = { $n } κλειδιά μητρώου
+# needs-review
 uninstallModal-summary-recycle = Στάλθηκαν { $files } στον Κάδο Ανακύκλωσης και αφαιρέθηκαν { $keys }, αφού πρώτα αντιγράφηκαν στην Καραντίνα. Ελευθερώθηκαν { $freed }.
 uninstallModal-summary-permanent = Διαγράφηκαν { $files } οριστικά και αφαιρέθηκαν { $keys }, αφού πρώτα αντιγράφηκαν στην Καραντίνα. Ελευθερώθηκαν { $freed }.
 uninstallModal-summary-quarantine = Μεταφέρθηκαν { $files } και { $keys } στην Καραντίνα, ελευθερώνοντας { $freed }. Επαναφέρετέ τα οποτεδήποτε από την οθόνη Καραντίνας.
@@ -843,6 +845,7 @@ app-installedApplications = Εφαρμογές
 app-applicationsSummary = { $count } εγκατεστημένες εφαρμογές · { $size }
 app-applicationsSummaryFiltered = { $shown } από { $total } εμφανίζονται · { $size }
 app-removeStoreApp = Κατάργηση { $name }
+# needs-review
 diskMapV3-large-tooLarge = Ο δίσκος έχει περισσότερα αρχεία από όσα μπορεί να χειριστεί το Prune σε μία σάρωση. Χρησιμοποιήστε το «undefined» για να τον σαρώσετε φάκελο προς φάκελο ή εξαιρέστε μεγάλους φακέλους από τις Ρυθμίσεις.
 diskMapV3-large-foldedNote = Κάθε φάκελος εμφανίζει τα { $a } μεγαλύτερα αρχεία του· τα υπόλοιπα { $b } αρχεία αθροίζονται σε μία γραμμή ανά φάκελο. Εξακολουθούν να υπολογίζονται σε όλα τα σύνολα και στα στοιχεία ανά τύπο αρχείου.
 diskMapV3-large-foldedFloorNote = Αυτός ο δίσκος έχει τόσα πολλά αρχεία που μόνο όσα έχουν μέγεθος { $b } ή μεγαλύτερο εμφανίζονται ξεχωριστά· τα υπόλοιπα { $a } αρχεία αθροίζονται σε μία γραμμή ανά φάκελο. Εξακολουθούν να υπολογίζονται σε όλα τα σύνολα και στα στοιχεία ανά τύπο αρχείου.

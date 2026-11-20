@@ -763,6 +763,7 @@ batchUninstallModal-scanningLine = Skandeer vir oorblyfsels…
 batchUninstallModal-readyToScan-body = { $n } deïnstalleerders het klaar gehardloop. Sommige — veral speletjielanseerders — hou aan om lêers in die agtergrond te verwyder nadat hul eie venster toegemaak het. Gee dit 'n oomblik as jy nie seker is nie, en klik dan Skandeer vir oorblyfsels om te kyk of iets agtergelaat is.
 batchUninstallModal-readyToScan-scanButton = Skandeer vir oorblyfsels
 batchUninstallModal-uninstalledOf = { $removed } van { $total } gedeïnstalleer.
+# needs-review
 batchUninstallModal-failedHeading = { $n } kon nie gedeïnstalleer word nie en is alleen gelaat:
 batchUninstallModal-removeLeftoversFailed = Kon nie oorblyfsels verwyder nie: { $error }
 batchUninstallModal-noScanSettingsOff = Die oorblyfsel-skandering is af in Instellings, so niks is gesoek nie.
@@ -834,6 +835,7 @@ app-installedApplications = Toepassings
 app-applicationsSummary = { $count } geïnstalleerde toepassings · { $size }
 app-applicationsSummaryFiltered = { $shown } van { $total } gewys · { $size }
 app-removeStoreApp = Verwyder { $name }
+# needs-review
 diskMapV3-large-tooLarge = Die skyf het meer lêers as wat Prune in een skandering kan hou. Gebruik “undefined” om dit een vouer op ’n slag te skandeer, of sluit groot vouers in Instellings uit.
 diskMapV3-large-foldedNote = Elke vouer wys sy { $a } grootste lêers; die ander { $b } lêers word in een ry per vouer opgetel. Hulle tel steeds in elke totaal en in die lêertipe-syfers.
 diskMapV3-large-foldedFloorNote = Hierdie skyf het soveel lêers dat net lêers van { $b } of groter individueel gelys word; die ander { $a } lêers word in een ry per vouer opgetel. Hulle tel steeds in elke totaal en in die lêertipe-syfers.

@@ -26,9 +26,17 @@
 // 0, 1, 2, 3, 5, 11, 21, 22 and 101, in one parameter at a time and in all
 // at once; if any output differs from the pattern with the number put in,
 // or a call throws, the function chose its words by the value (a plural,
-// most likely). Its pattern is still written, under a "# needs-review"
-// comment, and its key is listed in needs-review.json. Plural rules are
-// never invented here.
+// most likely). A probe can't reach a branch that tests a formatted string
+// (`files === '1 element'`), so any function whose code -- its source with
+// string and template text taken out -- has a condition (`?`, `==`, `!=`,
+// `&&`, `||`, `if`, `switch`) or calls anything is flagged too. A flagged
+// function's pattern is still written, under a "# needs-review" comment,
+// and its key is listed in needs-review.json. Plural rules are never
+// invented here.
+//
+// Output that shows 3.x printed a missing value ("undefined", "NaN",
+// "[object ...") is an error, except for the keys in KNOWN_BROKEN, which
+// are flagged for review instead: they are wrong in 3.x itself.
 
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
@@ -115,6 +123,63 @@ function parameters(fn) {
   return names.every((n) => /^[A-Za-z][A-Za-z0-9_]*$/.test(n)) ? names : null;
 }
 
+/** A function's code with the text of its string and template literals
+ * taken out (each literal leaves `""`), and the code inside `${...}` kept. */
+function codeOf(source) {
+  let i = 0;
+  const template = () => {
+    let code = '';
+    for (i++; i < source.length; i++) {
+      if (source[i] === '\\') i++;
+      else if (source[i] === '`') return code;
+      else if (source[i] === '$' && source[i + 1] === '{') {
+        i += 2;
+        code += ` ${expression(true)} `;
+      }
+    }
+    fail(`unterminated template literal in ${source.slice(0, 80)}`);
+  };
+  const expression = (inPlaceable) => {
+    let code = '';
+    let depth = 0;
+    for (; i < source.length; i++) {
+      const ch = source[i];
+      if (ch === "'" || ch === '"') {
+        for (i++; i < source.length && source[i] !== ch; i++) if (source[i] === '\\') i++;
+        code += '""';
+      } else if (ch === '`') {
+        code += `""${template()}`;
+      } else if (ch === '{') {
+        depth++;
+        code += ch;
+      } else if (ch === '}' && depth === 0 && inPlaceable) {
+        return code;
+      } else {
+        if (ch === '}') depth--;
+        code += ch;
+      }
+    }
+    return code;
+  };
+  return expression(false);
+}
+
+/** Whether a function's code (past its parameter list) has a condition or
+ * a call: a choice the numeric probes might not reach. */
+function branches(source) {
+  const code = codeOf(source);
+  const body = code.slice(code.indexOf('=>') + 2);
+  return /\?|[=!]=|&&|\|\||\bif\b|\bswitch\b|[\w$)\]]\s*\(/.test(body);
+}
+
+/** Text that shows 3.x printed a missing value. */
+const MISSING = /\bundefined\b|\bNaN\b|\[object /;
+
+/** Keys whose 3.x text prints a missing value in every language: flagged
+ * for review, not translated here. diskMapV3.large.tooLarge names a button
+ * that was never filled in (frontend/src/i18n/extras/diskMap.js). */
+const KNOWN_BROKEN = new Set(['diskMapV3.large.tooLarge']);
+
 /** { template, review } for a function value, or a reason it can't be. */
 function analyse(fn) {
   const names = parameters(fn);
@@ -134,7 +199,7 @@ function analyse(fn) {
       return false;
     }
   };
-  let review = false;
+  let review = branches(fn.toString());
   for (const n of PROBES) {
     names.forEach((name, i) => {
       const args = names.map((other, j) => (i === j ? n : sentinel(other)));
@@ -217,30 +282,37 @@ for (const file of files) {
       const value = lookup(tree, path);
       if (value === undefined || value === null || value === '') fail(`${code} is missing "${key}"`);
       if (typeof value !== typeof enValue) fail(`${code}.${key} is ${typeof value}, en is ${typeof enValue}`);
+      let text;
+      let review = false;
       if (typeof value === 'string') {
         strings++;
         if (value.includes(SENT_OPEN) || value.includes(SENT_CLOSE)) fail(`${code}.${key} contains a sentinel character`);
-        const line = message(id, value);
-        if (!line) fail(`${code}.${key} could not be written`);
-        body.push(line);
+        text = value;
       } else if (typeof value === 'function') {
         functions++;
         const result = analyse(value);
         if (result.error) fail(`${code}.${key}: ${result.error}`);
-        const line = message(id, result.template);
-        if (!line || result.review) {
-          reviewed++;
-          (needsReview[code] ??= []).push(key);
-          // A template whose sentinels didn't survive (a parameter that was
-          // transformed, not just printed) still gets a message, so every
-          // language keeps every id; the review entry says it is wrong.
-          body.push('# needs-review');
-          body.push(line ?? message(id, result.template.replace(/[\u{E000}\u{E001}]/gu, '')));
-        } else {
-          body.push(line);
-        }
+        text = result.template;
+        review = result.review;
       } else {
         fail(`${code}.${key} is a ${typeof value}`);
+      }
+      if (MISSING.test(text)) {
+        if (!KNOWN_BROKEN.has(key)) fail(`${code}.${key} prints a missing value: ${JSON.stringify(text)}`);
+        review = true;
+      }
+      const line = message(id, text);
+      if (!line && typeof value === 'string') fail(`${code}.${key} could not be written`);
+      if (!line || review) {
+        reviewed++;
+        (needsReview[code] ??= []).push(key);
+        // A template whose sentinels didn't survive (a parameter that was
+        // transformed, not just printed) still gets a message, so every
+        // language keeps every id; the review entry says it is wrong.
+        body.push('# needs-review');
+        body.push(line ?? message(id, text.replace(/[\u{E000}\u{E001}]/gu, '')));
+      } else {
+        body.push(line);
       }
     }
     mkdirSync(join(out, code), { recursive: true });

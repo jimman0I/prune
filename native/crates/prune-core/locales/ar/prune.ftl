@@ -823,6 +823,7 @@ app-installedApplications = التطبيقات
 app-applicationsSummary = التطبيقات المثبتة: { $count } · { $size }
 app-applicationsSummaryFiltered = المعروض { $shown } من { $total } · { $size }
 app-removeStoreApp = إزالة { $name }
+# needs-review
 diskMapV3-large-tooLarge = يحتوي هذا القرص على ملفات أكثر مما يستطيع Prune استيعابه في فحص واحد. استخدم “undefined” لفحصه مجلداً تلو الآخر، أو استبعد المجلدات الكبيرة من الإعدادات.
 diskMapV3-large-foldedNote = يعرض كل مجلد أكبر { $a } ملف فيه؛ أما الملفات الأخرى وعددها { $b } فتُجمع في صف واحد لكل مجلد. وتبقى محسوبة في كل إجمالي وفي أرقام أنواع الملفات.
 diskMapV3-large-foldedFloorNote = يحتوي هذا القرص على عدد كبير من الملفات بحيث لا تُعرض فرادى إلا الملفات بحجم { $b } أو أكبر؛ أما الملفات الأخرى وعددها { $a } فتُجمع في صف واحد لكل مجلد. وتبقى محسوبة في كل إجمالي وفي أرقام أنواع الملفات.

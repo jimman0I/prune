@@ -513,6 +513,7 @@ duplicates-readingNote = Stærðir fyrst, svo 64 KB sýnishorn af öllu sem deil
 duplicates-empty-heading = Engin tvítök hér.
 duplicates-empty-scanned = { $count } skrár bornar saman.
 duplicates-empty-truncatedSuffix = {" "}Skönnunin var stöðvuð fyrir tímann, svo þetta er ekki öll mappan.
+# needs-review
 duplicates-summarySets = { $count } sett
 duplicates-recoverable = { $formatted } sem hægt er að losa
 duplicates-keepOldest = Halda elsta
@@ -825,6 +826,7 @@ app-installedApplications = Forrit
 app-applicationsSummary = Uppsett forrit: { $count } · { $size }
 app-applicationsSummaryFiltered = Sýni { $shown } af { $total } · { $size }
 app-removeStoreApp = Fjarlægja { $name }
+# needs-review
 diskMapV3-large-tooLarge = Drifið inniheldur fleiri skrár en Prune getur haldið utan um í einni skönnun. Notaðu „undefined“ til að skanna það eina möppu í einu, eða útilokaðu stórar möppur í Stillingum.
 diskMapV3-large-foldedNote = Hver mappa sýnir { $a } stærstu skrárnar sínar; hinar { $b } skrárnar eru lagðar saman í eina línu fyrir hverja möppu. Þær teljast enn með í öllum heildartölum og tölum eftir skráartegund.
 diskMapV3-large-foldedFloorNote = Þetta drif inniheldur svo margar skrár að aðeins skrár sem eru { $b } eða stærri eru sýndar hver fyrir sig; hinar { $a } skrárnar eru lagðar saman í eina línu fyrir hverja möppu. Þær teljast enn með í öllum heildartölum og tölum eftir skráartegund.

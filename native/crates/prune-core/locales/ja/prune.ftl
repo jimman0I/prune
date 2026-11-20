@@ -803,6 +803,7 @@ app-installedApplications = インストール済みアプリケーション
 app-applicationsSummary = インストール済みアプリケーション { $count } 件 · { $size }
 app-applicationsSummaryFiltered = { $total } 件中 { $shown } 件を表示 · { $size }
 app-removeStoreApp = { $name } を削除
+# needs-review
 diskMapV3-large-tooLarge = このドライブには、Prune が1回のスキャンで扱える数を超えるファイルがあります。「undefined」でフォルダーごとにスキャンするか、設定で大きなフォルダーを除外してください。
 diskMapV3-large-foldedNote = 各フォルダーには大きい順に { $a } 個のファイルを表示し、残りの { $b } 個のファイルはフォルダーごとに1行にまとめています。すべての合計とファイルの種類別の数値には引き続き含まれます。
 diskMapV3-large-foldedFloorNote = このドライブはファイル数が非常に多いため、{ $b } 以上のファイルのみ個別に表示しています。残りの { $a } 個のファイルはフォルダーごとに1行にまとめています。すべての合計とファイルの種類別の数値には引き続き含まれます。

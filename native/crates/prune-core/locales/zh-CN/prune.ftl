@@ -803,6 +803,7 @@ app-installedApplications = 应用程序
 app-applicationsSummary = { $count } 个已安装的应用程序 · { $size }
 app-applicationsSummaryFiltered = 显示 { $shown } / { $total } 个 · { $size }
 app-removeStoreApp = 移除 { $name }
+# needs-review
 diskMapV3-large-tooLarge = 此驱动器上的文件数量超过了 Prune 一次扫描所能容纳的上限。请使用“undefined”逐个文件夹扫描，或在设置中排除较大的文件夹。
 diskMapV3-large-foldedNote = 每个文件夹列出其最大的 { $a } 个文件；其余 { $b } 个文件按文件夹合并为一行。它们仍计入所有合计和文件类型数据。
 diskMapV3-large-foldedFloorNote = 此驱动器上的文件太多，只有 { $b } 及以上的文件会单独列出；其余 { $a } 个文件按文件夹合并为一行。它们仍计入所有合计和文件类型数据。

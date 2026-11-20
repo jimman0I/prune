@@ -803,6 +803,7 @@ app-installedApplications = 應用程式
 app-applicationsSummary = { $count } 個已安裝的應用程式 · { $size }
 app-applicationsSummaryFiltered = 顯示 { $shown } / { $total } 個 · { $size }
 app-removeStoreApp = 移除 { $name }
+# needs-review
 diskMapV3-large-tooLarge = 此磁碟機上的檔案數量超過 Prune 一次掃描所能容納的上限。請使用「undefined」逐一資料夾掃描，或在設定中排除較大的資料夾。
 diskMapV3-large-foldedNote = 每個資料夾列出其最大的 { $a } 個檔案；其餘 { $b } 個檔案依資料夾合併為一列。它們仍計入所有總計和檔案類型數據。
 diskMapV3-large-foldedFloorNote = 此磁碟機上的檔案太多，只有 { $b } 以上的檔案會個別列出；其餘 { $a } 個檔案依資料夾合併為一列。它們仍計入所有總計和檔案類型數據。

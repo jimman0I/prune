@@ -803,6 +803,7 @@ app-installedApplications = Aplikasi
 app-applicationsSummary = { $count } aplikasi dipasang · { $size }
 app-applicationsSummaryFiltered = { $shown } daripada { $total } dipaparkan · { $size }
 app-removeStoreApp = Alih keluar { $name }
+# needs-review
 diskMapV3-large-tooLarge = Pemacu ini mempunyai lebih banyak fail daripada yang boleh dikendalikan Prune dalam satu imbasan. Gunakan “undefined” untuk mengimbasnya folder demi folder, atau kecualikan folder besar dalam Tetapan.
 diskMapV3-large-foldedNote = Setiap folder menyenaraikan { $a } fail terbesarnya; { $b } fail lain dijumlahkan dalam satu baris setiap folder. Fail-fail itu masih dikira dalam semua jumlah dan angka jenis fail.
 diskMapV3-large-foldedFloorNote = Pemacu ini mempunyai begitu banyak fail sehingga hanya fail bersaiz { $b } atau lebih disenaraikan satu persatu; { $a } fail lain dijumlahkan dalam satu baris setiap folder. Fail-fail itu masih dikira dalam semua jumlah dan angka jenis fail.

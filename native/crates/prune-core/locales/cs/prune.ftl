@@ -820,6 +820,7 @@ app-installedApplications = Aplikace
 app-applicationsSummary = Nainstalované aplikace: { $count } · { $size }
 app-applicationsSummaryFiltered = Zobrazeno { $shown } z { $total } · { $size }
 app-removeStoreApp = Odebrat { $name }
+# needs-review
 diskMapV3-large-tooLarge = Jednotka obsahuje více souborů, než kolik Prune dokáže zpracovat v jednom skenování. Použijte „undefined“ a skenujte ji složku po složce, nebo v Nastavení vyloučte velké složky.
 diskMapV3-large-foldedNote = Každá složka uvádí svých { $a } největších souborů; ostatních { $b } souborů je sečteno do jednoho řádku na složku. Do všech součtů a přehledů podle typu souboru se stále počítají.
 diskMapV3-large-foldedFloorNote = Tato jednotka má tolik souborů, že se jednotlivě uvádějí jen soubory o velikosti { $b } a větší; ostatních { $a } souborů je sečteno do jednoho řádku na složku. Do všech součtů a přehledů podle typu souboru se stále počítají.

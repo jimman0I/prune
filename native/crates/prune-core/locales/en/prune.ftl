@@ -836,6 +836,7 @@ app-installedApplications = Applications
 app-applicationsSummary = { $count } installed applications · { $size }
 app-applicationsSummaryFiltered = { $shown } of { $total } shown · { $size }
 app-removeStoreApp = Remove { $name }
+# needs-review
 diskMapV3-large-tooLarge = The drive has more files than Prune could hold in one scan. Use “undefined” to scan it a folder at a time, or exclude large folders in Settings.
 diskMapV3-large-foldedNote = Each folder lists its { $a } largest files; the other { $b } files are summed into one row per folder. They still count toward every total and the file-type figures.
 diskMapV3-large-foldedFloorNote = This drive has so many files that only files of { $b } or larger are listed individually; the other { $a } files are summed into one row per folder. They still count toward every total and the file-type figures.

@@ -453,6 +453,7 @@ startup-remove-toast = Wedi dileu { $name }.
 startup-footerNoteSystem = Mae tasg wedi'i hamserlennu yn cael ei diffodd ar y dasg ei hun, ac mae gwasanaeth yn cael ei osod i ddechrau â llaw, felly gall unrhyw beth sydd ei angen ei ddechrau o hyd. Mae'r ddau'n cael eu troi'n ôl ymlaen yr un ffordd.
 startup-removeInvalid-button = Tynnu { $n } annilys
 startup-removeInvalid-removing = Yn tynnu…
+# needs-review
 startup-removeInvalid-toast = Wedi tynnu { $n } cofnod annilys.
 startup-removeInvalid-batchName = Cofnodion cychwyn annilys
 startup-search-placeholder = Hidlo yn ôl enw, llwybr neu gyhoeddwr
@@ -810,6 +811,7 @@ app-installedApplications = Rhaglenni
 app-applicationsSummary = { $count } rhaglen wedi'u gosod · { $size }
 app-applicationsSummaryFiltered = { $shown } o { $total } yn cael eu dangos · { $size }
 app-removeStoreApp = Tynnu { $name }
+# needs-review
 diskMapV3-large-tooLarge = Mae mwy o ffeiliau ar y gyriant nag y gall Prune eu dal mewn un sgan. Defnyddiwch “undefined” i'w sganio un ffolder ar y tro, neu eithriwch ffolderi mawr yn y Gosodiadau.
 diskMapV3-large-foldedNote = Mae pob ffolder yn rhestru ei { $a } ffeil fwyaf; mae'r { $b } ffeil arall wedi'u cyfuno'n un rhes ar gyfer pob ffolder. Maen nhw'n dal i gyfrif ym mhob cyfanswm ac yn y ffigurau math o ffeil.
 diskMapV3-large-foldedFloorNote = Mae cymaint o ffeiliau ar y gyriant hwn fel mai dim ond ffeiliau o { $b } neu fwy sy'n cael eu rhestru'n unigol; mae'r { $a } ffeil arall wedi'u cyfuno'n un rhes ar gyfer pob ffolder. Maen nhw'n dal i gyfrif ym mhob cyfanswm ac yn y ffigurau math o ffeil.

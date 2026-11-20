@@ -721,6 +721,7 @@ uninstallModal-done = Fet
 uninstallModal-summary-item = { $n } elements
 # needs-review
 uninstallModal-summary-registryKey = { $n } claus del registre
+# needs-review
 uninstallModal-summary-recycle = S'han enviat { $files } a la Paperera de reciclatge i s'han eliminat { $keys }, guardats abans a la Quarantena. S'ha alliberat { $freed }.
 uninstallModal-summary-permanent = Suprimit definitivament: { $files }. Eliminat, amb còpia de seguretat prèvia a la Quarantena: { $keys }. S'ha alliberat { $freed }.
 uninstallModal-summary-quarantine = Mogut a la Quarantena: { $files } i { $keys }, alliberant { $freed }. Restaura'ls en qualsevol moment des de la pantalla de Quarantena.
@@ -837,6 +838,7 @@ app-installedApplications = Aplicacions
 app-applicationsSummary = { $count } aplicacions instal·lades · { $size }
 app-applicationsSummaryFiltered = { $shown } de { $total } mostrats · { $size }
 app-removeStoreApp = Elimina { $name }
+# needs-review
 diskMapV3-large-tooLarge = La unitat té més fitxers dels que Prune pot gestionar en una sola exploració. Feu servir “undefined” per explorar-la carpeta a carpeta, o exclogueu carpetes grans a Configuració.
 diskMapV3-large-foldedNote = Cada carpeta mostra els seus { $a } fitxers més grans; els altres { $b } fitxers se sumen en una sola fila per carpeta. Continuen comptant en tots els totals i en les xifres per tipus de fitxer.
 diskMapV3-large-foldedFloorNote = Aquesta unitat té tants fitxers que només es llisten un a un els de { $b } o més; els altres { $a } fitxers se sumen en una sola fila per carpeta. Continuen comptant en tots els totals i en les xifres per tipus de fitxer.

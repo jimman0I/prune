@@ -803,6 +803,7 @@ app-installedApplications = Aplikasi
 app-applicationsSummary = { $count } aplikasi terpasang · { $size }
 app-applicationsSummaryFiltered = { $shown } dari { $total } ditampilkan · { $size }
 app-removeStoreApp = Hapus { $name }
+# needs-review
 diskMapV3-large-tooLarge = Drive ini memiliki lebih banyak file daripada yang bisa ditampung Prune dalam satu pemindaian. Gunakan “undefined” untuk memindainya folder demi folder, atau kecualikan folder besar di Pengaturan.
 diskMapV3-large-foldedNote = Setiap folder menampilkan { $a } file terbesarnya; { $b } file lainnya dijumlahkan dalam satu baris per folder. File-file itu tetap dihitung dalam semua total dan angka jenis file.
 diskMapV3-large-foldedFloorNote = Drive ini memiliki begitu banyak file sehingga hanya file berukuran { $b } atau lebih yang ditampilkan satu per satu; { $a } file lainnya dijumlahkan dalam satu baris per folder. File-file itu tetap dihitung dalam semua total dan angka jenis file.

@@ -838,6 +838,7 @@ app-installedApplications = غوښتنلیکونه
 app-applicationsSummary = نصب شوي غوښتنلیکونه: { $count } · { $size }
 app-applicationsSummaryFiltered = { $total } څخه { $shown } ښودل شوي · { $size }
 app-removeStoreApp = { $name } لرې کول
+# needs-review
 diskMapV3-large-tooLarge = په دې ډرایو کې له هغه ډېر فایلونه دي چې Prune یې په یوه سکین کې سمبالولی شي. د فولډر په فولډر سکین لپاره “undefined” وکاروئ، یا په تنظیماتو کې لوی فولډرونه ګوښه کړئ.
 diskMapV3-large-foldedNote = هر فولډر خپل { $a } تر ټولو لوی فایلونه ښیي؛ نور { $b } فایلونه د هر فولډر لپاره په یوه کتار کې راټول شوي دي. دوی لاهم په ټولو مجموعو او د فایل ډول په شمېرو کې حسابېږي.
 diskMapV3-large-foldedFloorNote = په دې ډرایو کې دومره ډېر فایلونه دي چې یوازې { $b } یا له هغه لوی فایلونه جلا جلا ښودل کېږي؛ نور { $a } فایلونه د هر فولډر لپاره په یوه کتار کې راټول شوي دي. دوی لاهم په ټولو مجموعو او د فایل ډول په شمېرو کې حسابېږي.

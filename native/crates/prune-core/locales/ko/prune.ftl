@@ -803,6 +803,7 @@ app-installedApplications = 애플리케이션
 app-applicationsSummary = 설치된 애플리케이션 { $count }개 · { $size }
 app-applicationsSummaryFiltered = { $total }개 중 { $shown }개 표시 · { $size }
 app-removeStoreApp = { $name } 제거
+# needs-review
 diskMapV3-large-tooLarge = 이 드라이브에는 Prune이 한 번의 검사로 처리할 수 있는 것보다 많은 파일이 있습니다. “undefined”을(를) 사용해 폴더 단위로 검사하거나, 설정에서 큰 폴더를 제외하세요.
 diskMapV3-large-foldedNote = 각 폴더에는 가장 큰 { $a }개의 파일을 표시하고, 나머지 { $b }개의 파일은 폴더당 한 줄로 합산합니다. 모든 합계와 파일 형식별 수치에는 그대로 포함됩니다.
 diskMapV3-large-foldedFloorNote = 이 드라이브는 파일이 매우 많아 { $b } 이상인 파일만 개별로 표시합니다. 나머지 { $a }개의 파일은 폴더당 한 줄로 합산합니다. 모든 합계와 파일 형식별 수치에는 그대로 포함됩니다.

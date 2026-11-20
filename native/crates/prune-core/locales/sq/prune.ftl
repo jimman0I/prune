@@ -205,6 +205,7 @@ dashboard-quiet-junkNotMeasured = Pa u matur
 dashboard-quiet-junkMeasure = Mat
 dashboard-quiet-junkProgress = Duke matur… { $scanned } nga { $total }
 dashboard-quiet-junkMeasuring = Duke matur…
+# needs-review
 dashboard-quiet-junkBasis = Në { $count } pastrues të rekomanduar
 dashboard-quiet-junkError = Skedarët e panevojshëm nuk u matën dot: { $message }
 dashboard-quiet-openDeepClean = Hap Pastrimin e thellë
@@ -829,6 +830,7 @@ app-installedApplications = Aplikacionet
 app-applicationsSummary = Aplikacione të instaluara: { $count } · { $size }
 app-applicationsSummaryFiltered = { $shown } nga { $total } të shfaqura · { $size }
 app-removeStoreApp = Hiq { $name }
+# needs-review
 diskMapV3-large-tooLarge = Disku ka më shumë skedarë nga sa mund të mbajë Prune në një skanim të vetëm. Përdorni “undefined” për ta skanuar dosje pas dosjeje, ose përjashtoni dosjet e mëdha te Cilësimet.
 diskMapV3-large-foldedNote = Çdo dosje liston { $a } skedarët e saj më të mëdhenj; { $b } skedarët e tjerë mblidhen në një rresht të vetëm për dosje. Ata vazhdojnë të llogariten në të gjitha totalet dhe në shifrat sipas llojit të skedarit.
 diskMapV3-large-foldedFloorNote = Ky disk ka kaq shumë skedarë sa vetëm skedarët me madhësi { $b } ose më të mëdhenj listohen një nga një; { $a } skedarët e tjerë mblidhen në një rresht të vetëm për dosje. Ata vazhdojnë të llogariten në të gjitha totalet dhe në shifrat sipas llojit të skedarit.

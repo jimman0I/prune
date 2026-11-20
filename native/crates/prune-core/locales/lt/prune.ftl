@@ -830,6 +830,7 @@ app-installedApplications = Programos
 app-applicationsSummary = Įdiegtų programų: { $count } · { $size }
 app-applicationsSummaryFiltered = Rodoma { $shown } iš { $total } · { $size }
 app-removeStoreApp = Pašalinti { $name }
+# needs-review
 diskMapV3-large-tooLarge = Diske yra daugiau failų, nei „Prune“ gali apdoroti per vieną nuskaitymą. Naudokite „undefined“, kad nuskaitytumėte aplankas po aplanko, arba nustatymuose neįtraukite didelių aplankų.
 diskMapV3-large-foldedNote = Kiekvienas aplankas rodo { $a } didžiausių savo failų; likę { $b } failų sudėti į vieną eilutę kiekvienam aplankui. Jie vis tiek įskaičiuojami į visas sumas ir failų tipų skaičius.
 diskMapV3-large-foldedFloorNote = Šiame diske tiek daug failų, kad pavieniui rodomi tik { $b } ar didesni failai; likę { $a } failų sudėti į vieną eilutę kiekvienam aplankui. Jie vis tiek įskaičiuojami į visas sumas ir failų tipų skaičius.

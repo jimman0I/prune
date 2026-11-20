@@ -852,6 +852,7 @@ app-installedApplications = Aplicații
 app-applicationsSummary = { $count } de aplicații instalate · { $size }
 app-applicationsSummaryFiltered = { $shown } din { $total } afișate · { $size }
 app-removeStoreApp = Elimină { $name }
+# needs-review
 diskMapV3-large-tooLarge = Unitatea are mai multe fișiere decât poate gestiona Prune într-o singură scanare. Folosiți „undefined” pentru a o scana folder cu folder sau excludeți folderele mari din Setări.
 diskMapV3-large-foldedNote = Fiecare folder listează cele mai mari { $a } fișiere ale sale; celelalte { $b } fișiere sunt însumate într-un singur rând per folder. Ele continuă să conteze în toate totalurile și în cifrele pe tipuri de fișiere.
 diskMapV3-large-foldedFloorNote = Această unitate are atât de multe fișiere încât doar cele de { $b } sau mai mari sunt listate individual; celelalte { $a } fișiere sunt însumate într-un singur rând per folder. Ele continuă să conteze în toate totalurile și în cifrele pe tipuri de fișiere.

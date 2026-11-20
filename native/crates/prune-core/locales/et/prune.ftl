@@ -830,6 +830,7 @@ app-installedApplications = Rakendused
 app-applicationsSummary = Installitud rakendusi: { $count } · { $size }
 app-applicationsSummaryFiltered = Kuvatud { $shown } / { $total } · { $size }
 app-removeStoreApp = Eemalda { $name }
+# needs-review
 diskMapV3-large-tooLarge = Draivil on rohkem faile, kui Prune ühe skannimisega suudab käsitleda. Kasuta valikut „undefined“, et skannida seda kaust kausta kaupa, või jäta seadetes suured kaustad välja.
 diskMapV3-large-foldedNote = Iga kaust loetleb oma { $a } suurimat faili; ülejäänud { $b } faili on kausta kohta liidetud üheks reaks. Need lähevad endiselt arvesse kõigis kogusummades ja failitüüpide arvudes.
 diskMapV3-large-foldedFloorNote = Sellel draivil on nii palju faile, et eraldi loetletakse vaid vähemalt { $b } suurused failid; ülejäänud { $a } faili on kausta kohta liidetud üheks reaks. Need lähevad endiselt arvesse kõigis kogusummades ja failitüüpide arvudes.

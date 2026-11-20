@@ -803,6 +803,7 @@ app-installedApplications = Uygulamalar
 app-applicationsSummary = { $count } yüklü uygulama · { $size }
 app-applicationsSummaryFiltered = { $total } içinden { $shown } gösteriliyor · { $size }
 app-removeStoreApp = { $name } kaldır
+# needs-review
 diskMapV3-large-tooLarge = Sürücüde, Prune'un tek taramada işleyebileceğinden fazla dosya var. Klasör klasör taramak için “undefined” seçeneğini kullanın veya Ayarlar'da büyük klasörleri hariç tutun.
 diskMapV3-large-foldedNote = Her klasör en büyük { $a } dosyasını listeler; diğer { $b } dosya klasör başına tek satırda toplanır. Bunlar yine de tüm toplamlara ve dosya türü rakamlarına dahildir.
 diskMapV3-large-foldedFloorNote = Bu sürücüde o kadar çok dosya var ki yalnızca { $b } ve üzeri boyuttaki dosyalar tek tek listelenir; diğer { $a } dosya klasör başına tek satırda toplanır. Bunlar yine de tüm toplamlara ve dosya türü rakamlarına dahildir.

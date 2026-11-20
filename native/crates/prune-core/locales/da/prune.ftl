@@ -837,6 +837,7 @@ app-installedApplications = Programmer
 app-applicationsSummary = { $count } installerede programmer · { $size }
 app-applicationsSummaryFiltered = { $shown } af { $total } vist · { $size }
 app-removeStoreApp = Fjern { $name }
+# needs-review
 diskMapV3-large-tooLarge = Drevet har flere filer, end Prune kan rumme i én scanning. Brug “undefined” for at scanne det mappe for mappe, eller udeluk store mapper i Indstillinger.
 diskMapV3-large-foldedNote = Hver mappe viser sine { $a } største filer; de øvrige { $b } filer er lagt sammen i én række pr. mappe. De tæller stadig med i alle totaler og i filtypetallene.
 diskMapV3-large-foldedFloorNote = Dette drev har så mange filer, at kun filer på { $b } eller derover vises enkeltvis; de øvrige { $a } filer er lagt sammen i én række pr. mappe. De tæller stadig med i alle totaler og i filtypetallene.

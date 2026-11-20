@@ -826,6 +826,7 @@ app-installedApplications = Sovellukset
 app-applicationsSummary = Asennettuja sovelluksia: { $count } · { $size }
 app-applicationsSummaryFiltered = Näytetään { $shown }/{ $total } · { $size }
 app-removeStoreApp = Poista { $name }
+# needs-review
 diskMapV3-large-tooLarge = Asemassa on enemmän tiedostoja kuin Prune pystyy käsittelemään yhdellä skannauksella. Käytä toimintoa “undefined” skannataksesi sen kansio kerrallaan, tai sulje suuret kansiot pois Asetuksissa.
 diskMapV3-large-foldedNote = Jokainen kansio luettelee { $a } suurinta tiedostoaan; muut { $b } tiedostoa on laskettu yhteen yhdelle riville kansiota kohti. Ne lasketaan edelleen mukaan kaikkiin summiin ja tiedostotyyppilukuihin.
 diskMapV3-large-foldedFloorNote = Tässä asemassa on niin paljon tiedostoja, että vain { $b } tai suuremmat tiedostot luetellaan erikseen; muut { $a } tiedostoa on laskettu yhteen yhdelle riville kansiota kohti. Ne lasketaan edelleen mukaan kaikkiin summiin ja tiedostotyyppilukuihin.

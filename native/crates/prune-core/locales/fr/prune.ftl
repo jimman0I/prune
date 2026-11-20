@@ -727,6 +727,7 @@ uninstallModal-done = Terminé
 uninstallModal-summary-item = { $n } éléments
 # needs-review
 uninstallModal-summary-registryKey = { $n } clés de registre
+# needs-review
 uninstallModal-summary-recycle = { $files } envoyés vers la Corbeille et { $keys } supprimés, sauvegardés d'abord en Quarantaine. { $freed } libérés.
 uninstallModal-summary-permanent = { $files } supprimés définitivement et { $keys } supprimés, sauvegardés d'abord en Quarantaine. { $freed } libérés.
 uninstallModal-summary-quarantine = { $files } et { $keys } déplacés vers la Quarantaine, libérant { $freed }. Restaurez-les à tout moment depuis l'écran Quarantaine.
@@ -844,6 +845,7 @@ app-installedApplications = Applications
 app-applicationsSummary = { $count } applications installées · { $size }
 app-applicationsSummaryFiltered = { $shown } sur { $total } affichés · { $size }
 app-removeStoreApp = Supprimer { $name }
+# needs-review
 diskMapV3-large-tooLarge = Le lecteur contient plus de fichiers que Prune n’en peut gérer en une seule analyse. Utilisez « undefined » pour l’analyser dossier par dossier, ou excluez les gros dossiers dans les Paramètres.
 diskMapV3-large-foldedNote = Chaque dossier liste ses { $a } plus gros fichiers ; les { $b } autres fichiers sont additionnés sur une seule ligne par dossier. Ils comptent toujours dans tous les totaux et dans les chiffres par type de fichier.
 diskMapV3-large-foldedFloorNote = Ce lecteur contient tant de fichiers que seuls ceux de { $b } ou plus sont listés individuellement ; les { $a } autres fichiers sont additionnés sur une seule ligne par dossier. Ils comptent toujours dans tous les totaux et dans les chiffres par type de fichier.

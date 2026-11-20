@@ -840,6 +840,7 @@ app-installedApplications = Geïnstalleerde toepassingen
 app-applicationsSummary = { $count } geïnstalleerde toepassingen · { $size }
 app-applicationsSummaryFiltered = { $shown } van { $total } getoond · { $size }
 app-removeStoreApp = { $name } verwijderen
+# needs-review
 diskMapV3-large-tooLarge = De schijf bevat meer bestanden dan Prune in één scan kan verwerken. Gebruik “undefined” om hem map voor map te scannen, of sluit grote mappen uit in Instellingen.
 diskMapV3-large-foldedNote = Elke map toont zijn { $a } grootste bestanden; de overige { $b } bestanden zijn samengevoegd in één rij per map. Ze tellen nog steeds mee in alle totalen en in de cijfers per bestandstype.
 diskMapV3-large-foldedFloorNote = Deze schijf bevat zoveel bestanden dat alleen bestanden van { $b } of groter afzonderlijk worden getoond; de overige { $a } bestanden zijn samengevoegd in één rij per map. Ze tellen nog steeds mee in alle totalen en in de cijfers per bestandstype.
