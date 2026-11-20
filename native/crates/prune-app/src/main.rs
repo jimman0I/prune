@@ -17,6 +17,18 @@ fn view(app: &App, _window: iced::window::Id) -> iced::Element<'_, prune_app::ap
 fn main() -> iced::Result {
     let started = Instant::now();
     let args: Vec<String> = std::env::args().collect();
+    // A render needs no window and must not claim the single-instance
+    // mutex, so it runs beside a Prune that is open.
+    if let Some(parsed) = prune_app::render::parse_args(&args) {
+        let code = match parsed {
+            Ok((dir, options)) => prune_app::render::run(&dir, &options),
+            Err(e) => {
+                eprintln!("{e}");
+                2
+            }
+        };
+        std::process::exit(code);
+    }
     let later_launches = match single_instance::claim(&args) {
         Claim::First(rx) => rx,
         // The running Prune has been told; this launch is done.

@@ -5,6 +5,7 @@ pub mod app;
 pub mod listener;
 pub mod motion;
 pub mod rail;
+pub mod render;
 pub mod screen;
 pub mod shortcut;
 pub mod single_instance;

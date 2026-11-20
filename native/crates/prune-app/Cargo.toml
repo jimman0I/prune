@@ -16,6 +16,9 @@ prune-core.workspace = true
 iced = { workspace = true, features = ["advanced", "svg"] }
 serde_json.workspace = true
 png.workspace = true
+# The renderer behind iced's tiny-skia feature, for `render`: it draws a
+# view into a pixel buffer with no window.
+iced_tiny_skia = { version = "=0.14.1", default-features = false }
 
 [target.'cfg(windows)'.dependencies]
 windows = { workspace = true, features = [
@@ -33,3 +36,7 @@ windows = { workspace = true, features = [
     "Win32_UI_HiDpi",
     "Win32_UI_WindowsAndMessaging",
 ] }
+
+[dev-dependencies]
+fontdb = "0.23"
+ttf-parser = "0.25"
