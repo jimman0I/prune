@@ -3,6 +3,22 @@
 All notable changes to Prune (formerly named unrevo -- rebranded 2026-09-01,
 see v1.0.1 below) are documented here.
 
+## v3.2.1
+
+### Changed
+
+- **The theme choice is also saved in settings.json.** The theme you pick
+  is kept with your other settings, so it is part of the same file as
+  everything else instead of living only in the window's own storage.
+
+### Security
+
+- Electron 44.11.5, which carries upstream's certificate mitigation and
+  its permission-attribution fixes.
+- Patched development tooling (undici, fast-uri, vite, vitest,
+  source-map-js, electron-builder) and the backend's `qs` override raised
+  to 6.17.1. None of it ships inside the installed app.
+
 ## v3.2.0
 
 ### Added

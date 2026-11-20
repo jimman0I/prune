@@ -335,7 +335,7 @@ export function normalizeRemoval(value) {
 
 const THEME_CHOICES = ['system', 'light', 'dark'];
 
-/** The settings whose value must be one of a fixed few,repaired wherever
+/** The settings whose value must be one of a fixed few, repaired wherever
  * settings are read or written: a hand-edited or corrupted file can never
  * smuggle a destructive value past the switch that guards it. */
 function normalizedChoices(settings) {
