@@ -21,6 +21,8 @@ png.workspace = true
 iced_tiny_skia = { version = "=0.14.1", default-features = false }
 
 [target.'cfg(windows)'.dependencies]
+# Tray icon; its Win32 window is pumped by winit's event loop on the UI thread.
+tray-icon.workspace = true
 windows = { workspace = true, features = [
     "Win32_Foundation",
     "Win32_Graphics_Dwm",

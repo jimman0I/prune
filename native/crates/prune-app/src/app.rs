@@ -24,6 +24,7 @@ use crate::rail::{self, COLLAPSED_WIDTH, EXPANDED_WIDTH, Rail};
 use crate::screen::{self, Screen};
 use crate::shortcut::{KeyPress, Shortcut, match_shortcut};
 use crate::theme::{self, Palette};
+use crate::tray::{self, CloseAction, Tray, TrayCommand};
 use crate::window_state::{self, Rect, WindowState};
 use crate::zoom::{self, ZoomAction};
 
@@ -143,6 +144,8 @@ pub enum Message {
     IconReady(window::Icon),
     /// A later launch's command line.
     SecondInstance(Vec<String>),
+    /// The tray icon's click or menu.
+    Tray(TrayCommand),
 }
 
 pub struct App {
@@ -180,12 +183,21 @@ pub struct App {
     /// Ctrl+wheel travel not yet turned into a zoom step, in notches.
     wheel_travel: f32,
     first_frame_seen: bool,
+    /// `minimizeToTray`: closing hides to the tray instead of quitting.
+    minimize_to_tray: bool,
+    /// The notification-area icon, once created (after the first frame).
+    tray: Option<Tray>,
+    /// Whether a tray icon exists; the tests set it without a real one.
+    tray_present: bool,
+    /// The window is hidden, waiting in the tray.
+    hidden_to_tray: bool,
 }
 
 impl App {
     pub fn new(startup: Startup) -> Self {
         let Startup { settings, window_state, window_state_path, os_light, reduced_motion, trace_startup } = startup;
         let theme = settings::effective_theme(&settings);
+        let minimize_to_tray = settings.minimize_to_tray;
         let screen = Screen::Dashboard;
         let (top, share) = rail::mark_anchor(screen);
         App {
@@ -217,6 +229,10 @@ impl App {
             reveal_requested: false,
             wheel_travel: 0.0,
             first_frame_seen: false,
+            minimize_to_tray,
+            tray: None,
+            tray_present: false,
+            hidden_to_tray: false,
         }
     }
 
@@ -225,11 +241,14 @@ impl App {
     pub fn boot(
         startup: Startup,
         later_launches: iced::futures::channel::mpsc::UnboundedReceiver<Vec<String>>,
+        tray_commands: iced::futures::channel::mpsc::UnboundedReceiver<TrayCommand>,
     ) -> (Self, Task<Message>) {
         let mut app = App::new(startup);
         app.trace("boot");
         let open = app.open_window();
-        (app, Task::batch([open, Task::run(later_launches, Message::SecondInstance)]))
+        let launches = Task::run(later_launches, Message::SecondInstance);
+        let tray = Task::run(tray_commands, Message::Tray);
+        (app, Task::batch([open, launches, tray]))
     }
 
     /// Opens the main window hidden; it is shown once placed and painted
@@ -261,6 +280,31 @@ impl App {
     /// display's own.
     pub fn scale_factor(&self) -> f32 {
         zoom::factor(self.zoom_level) as f32
+    }
+
+    /// Whether closing hides to the tray (the `minimizeToTray` setting).
+    pub fn minimize_to_tray(&self) -> bool {
+        self.minimize_to_tray
+    }
+
+    /// For the Settings screen when the setting changes.
+    pub fn set_minimize_to_tray(&mut self, on: bool) {
+        self.minimize_to_tray = on;
+    }
+
+    /// Whether the tray icon exists. Tests stand in for it with
+    /// [`App::set_tray_present`].
+    pub fn tray_present(&self) -> bool {
+        self.tray_present
+    }
+
+    pub fn set_tray_present(&mut self, present: bool) {
+        self.tray_present = present;
+    }
+
+    /// The window is hidden, waiting in the tray.
+    pub fn hidden_to_tray(&self) -> bool {
+        self.hidden_to_tray
     }
 
     /// A later launch asked to come forward before the window was shown.
@@ -366,6 +410,15 @@ impl App {
             }
             Message::CloseRequested => {
                 self.save_window_state();
+                if tray::close_action(self.minimize_to_tray, self.tray_present) == CloseAction::HideToTray {
+                    self.hidden_to_tray = true;
+                    return self.window.map_or_else(Task::none, |id| window::set_mode(id, window::Mode::Hidden));
+                }
+                return iced::exit();
+            }
+            Message::Tray(TrayCommand::Open) => return self.reveal(),
+            Message::Tray(TrayCommand::Quit) => {
+                self.save_window_state();
                 return iced::exit();
             }
             Message::FirstFrame => {
@@ -380,6 +433,10 @@ impl App {
                 }
             }
             Message::FirstFramePresented => {
+                // Created now, not at boot, so it never delays the first frame.
+                self.tray = Tray::create();
+                self.tray_present = self.tray.is_some();
+                eprintln!("tray-created={}", self.tray_present);
                 if let Some(start) = self.trace_startup {
                     eprintln!("first-frame-ms={:.1}", start.elapsed().as_secs_f64() * 1000.0);
                 }
@@ -395,18 +452,21 @@ impl App {
                     if !self.shown {
                         // Placing and showing it will bring it forward.
                         self.reveal_requested = true;
-                    } else if let Some(id) = self.window {
-                        // 3.x's revealSteps: restore, show, focus.
-                        return Task::batch([
-                            window::minimize(id, false),
-                            window::set_mode(id, window::Mode::Windowed),
-                            window::gain_focus(id),
-                        ]);
+                    } else {
+                        return self.reveal();
                     }
                 }
             }
         }
         Task::none()
+    }
+
+    /// 3.x's revealSteps: restore, show, focus. Also brings a window back
+    /// from the tray.
+    fn reveal(&mut self) -> Task<Message> {
+        self.hidden_to_tray = false;
+        let Some(id) = self.window.filter(|_| self.shown) else { return Task::none() };
+        Task::batch([window::minimize(id, false), window::set_mode(id, window::Mode::Windowed), window::gain_focus(id)])
     }
 
     fn navigate(&mut self, screen: Screen) {
@@ -703,16 +763,8 @@ fn load_icon() -> Task<Message> {
 
 fn decode_icon() -> Option<window::Icon> {
     static PNG: &[u8] = include_bytes!("../../../../electron/build/icon.png");
-    let mut decoder = png::Decoder::new(std::io::Cursor::new(PNG));
-    decoder.set_transformations(png::Transformations::EXPAND | png::Transformations::ALPHA);
-    let mut reader = decoder.read_info().ok()?;
-    let mut buf = vec![0; reader.output_buffer_size()?];
-    let info = reader.next_frame(&mut buf).ok()?;
-    if info.color_type != png::ColorType::Rgba || info.bit_depth != png::BitDepth::Eight {
-        return None;
-    }
-    buf.truncate(info.buffer_size());
-    window::icon::from_rgba(buf, info.width, info.height).ok()
+    let (rgba, width, height) = tray::decode_png_rgba(PNG)?;
+    window::icon::from_rgba(rgba, width, height).ok()
 }
 
 #[cfg(windows)]

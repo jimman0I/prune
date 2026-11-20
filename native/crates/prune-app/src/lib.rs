@@ -12,5 +12,6 @@ pub mod shortcut;
 pub mod single_instance;
 pub mod theme;
 pub mod titlebar;
+pub mod tray;
 pub mod window_state;
 pub mod zoom;

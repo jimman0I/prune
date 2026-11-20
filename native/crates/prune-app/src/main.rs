@@ -47,14 +47,15 @@ fn main() -> iced::Result {
     };
     // iced asks for a boot function it may call more than once in
     // principle; it runs once, and takes the startup state when it does.
-    let once = Mutex::new(Some((startup, later_launches)));
+    let tray_commands = prune_app::tray::install_event_forwarding();
+    let once = Mutex::new(Some((startup, later_launches, tray_commands)));
     let boot = move || {
-        let (startup, rx) = once
+        let (startup, rx, tray_rx) = once
             .lock()
             .ok()
             .and_then(|mut g| g.take())
-            .unwrap_or_else(|| (Startup::default(), iced::futures::channel::mpsc::unbounded().1));
-        App::boot(startup, rx)
+            .unwrap_or_else(|| (Startup::default(), iced::futures::channel::mpsc::unbounded().1, iced::futures::channel::mpsc::unbounded().1));
+        App::boot(startup, rx, tray_rx)
     };
 
     let mut program = iced::daemon(boot, App::update, view)

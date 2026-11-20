@@ -484,3 +484,45 @@ fn saved_bounds_and_zoom_come_back() {
         (&serde_json::json!(120), &serde_json::json!(90), &serde_json::json!(1000), &serde_json::json!(700), &serde_json::json!(1))
     );
 }
+
+fn tray_app(minimize_to_tray: bool) -> App {
+    let mut app = App::new(Startup::default());
+    app.set_minimize_to_tray(minimize_to_tray);
+    app.set_tray_present(true);
+    let _ = app.update(Message::WindowPrepared(None, false));
+    app
+}
+
+#[test]
+fn closing_hides_to_the_tray_when_the_setting_is_on() {
+    let mut app = tray_app(true);
+    let _ = app.update(Message::CloseRequested);
+    assert!(app.hidden_to_tray());
+}
+
+#[test]
+fn closing_does_not_hide_when_the_setting_is_off_or_there_is_no_icon() {
+    let mut off = tray_app(false);
+    let _ = off.update(Message::CloseRequested);
+    assert!(!off.hidden_to_tray());
+    let mut no_icon = tray_app(true);
+    no_icon.set_tray_present(false);
+    let _ = no_icon.update(Message::CloseRequested);
+    assert!(!no_icon.hidden_to_tray(), "no icon, so the window could not come back");
+}
+
+#[test]
+fn a_hidden_window_comes_back_from_the_tray_and_from_a_second_launch() {
+    use prune_app::tray::TrayCommand;
+    let mut app = tray_app(true);
+    let _ = app.update(Message::CloseRequested);
+    let _ = app.update(Message::Tray(TrayCommand::Open));
+    assert!(!app.hidden_to_tray(), "the tray's Open shows it");
+    let _ = app.update(Message::CloseRequested);
+    assert!(app.hidden_to_tray());
+    let _ = app.update(Message::SecondInstance(vec!["Prune.exe".into()]));
+    assert!(!app.hidden_to_tray(), "a second launch reveals it");
+    let _ = app.update(Message::CloseRequested);
+    let _ = app.update(Message::SecondInstance(vec!["Prune.exe".into(), "--start-minimized".into()]));
+    assert!(app.hidden_to_tray(), "a silent launch leaves it in the tray");
+}
