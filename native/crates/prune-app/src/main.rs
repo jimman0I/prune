@@ -20,6 +20,7 @@ fn main() -> iced::Result {
     // A render needs no window and must not claim the single-instance
     // mutex, so it runs beside a Prune that is open.
     if let Some(parsed) = prune_app::render::parse_args(&args) {
+        prune_app::render::attach_console();
         let code = match parsed {
             Ok((dir, options)) => prune_app::render::run(&dir, &options),
             Err(e) => {

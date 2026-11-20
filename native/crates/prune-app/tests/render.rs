@@ -76,17 +76,74 @@ fn title_glyphs_have_a_font(screen: Screen, lang: &str) -> bool {
     !title.is_empty() && title.chars().filter(|c| !c.is_whitespace()).all(has)
 }
 
+/// Ink in the title band: for each column from x = 100, how many pixels
+/// differ from the page colour. Returns the profile trimmed to the title's
+/// own extent, plus the ink's row range.
+fn title_ink(img: &Image) -> (Vec<u32>, u32) {
+    let bg_at = |x: u32, y: u32| {
+        let i = ((y * img.width + x) * 4) as usize;
+        [img.rgba[i] as i32, img.rgba[i + 1] as i32, img.rgba[i + 2] as i32]
+    };
+    let bg = bg_at(img.width - 10, 50);
+    let (y0, y1) = (30, 90);
+    let mut cols = Vec::new();
+    let mut rows = HashSet::new();
+    for x in 100..img.width - 20 {
+        let mut n = 0;
+        for y in y0..y1 {
+            let p = bg_at(x, y);
+            if (0..3).map(|k| (p[k] - bg[k]).abs()).sum::<i32>() > 60 {
+                n += 1;
+                rows.insert(y);
+            }
+        }
+        cols.push(n);
+    }
+    let first = cols.iter().position(|&n| n > 0).unwrap_or(0);
+    let last = cols.iter().rposition(|&n| n > 0).map_or(0, |l| l + 1);
+    (cols[first..last.max(first)].to_vec(), rows.len() as u32)
+}
+
+/// Splits a column profile into runs of inked columns (glyphs, or a joined
+/// word in a connected script), separated by empty columns.
+fn runs(cols: &[u32]) -> Vec<&[u32]> {
+    cols.split(|&n| n == 0).filter(|r| !r.is_empty()).collect()
+}
+
+/// A missing glyph draws as the same box every time, so a title made of
+/// tofu is a row of identical runs. Real text of three or more runs has at
+/// least two different shapes.
+fn looks_like_tofu(cols: &[u32]) -> bool {
+    let r = runs(cols);
+    r.len() >= 3 && r.iter().all(|run| *run == r[0])
+}
+
 #[test]
 fn renders_non_latin() {
+    let en = render::render_screen(Screen::Dashboard, &opts("en", 1.0));
+    let (en_cols, _) = title_ink(&en);
+    assert!(!en_cols.is_empty(), "the English title has no ink: the band is wrong");
+    assert!(!looks_like_tofu(&en_cols), "the tofu check flags real Latin text");
     for lang in ["ar", "th", "ja", "el"] {
         let img = render::render_screen(Screen::Dashboard, &opts(lang, 1.0));
-        // The title sits 48 px in and 40 px down, 30 px tall; Arabic is
-        // right-to-left, so look across the page's width.
-        let n = distinct_colours(&img, 72, 36, img.width - 72, 44);
-        // Background plus at least two more: glyph colour and its edges.
-        assert!(n >= 3, "{lang}: title region has {n} colours");
+        let (cols, height) = title_ink(&img);
+        // There is a title, with real extent.
+        assert!(cols.len() >= 40 && height >= 10, "{lang}: title ink {}x{height}", cols.len());
+        // It is not the English title (the catalog did load).
+        assert_ne!(cols, en_cols, "{lang}: title looks like the English one");
+        // It is not a row of identical boxes.
+        assert!(!looks_like_tofu(&cols), "{lang}: title is a run of identical boxes");
+        // The title's glyphs exist in a bundled or system font.
         assert!(title_glyphs_have_a_font(Screen::Dashboard, lang), "{lang}: title glyphs have no font");
     }
+}
+
+#[test]
+fn tofu_check_catches_boxes() {
+    let boxed = [3, 5, 3, 0, 3, 5, 3, 0, 3, 5, 3];
+    assert!(looks_like_tofu(&boxed));
+    let text = [3, 5, 3, 0, 4, 6, 2, 0, 3, 5, 3, 0, 7, 1];
+    assert!(!looks_like_tofu(&text));
 }
 
 #[test]
@@ -108,17 +165,24 @@ fn light_differs_from_dark_and_rail_expands() {
 #[test]
 fn cli_writes_files_and_leaves_settings_alone() {
     let dir = scratch("cli");
+    let settings = dir.join("settings.json");
+    let before = br#"{"theme":"dark","language":"fr"}"#;
+    std::fs::write(&settings, before).unwrap();
+    let out = dir.join("out");
     let status = Command::new(env!("CARGO_BIN_EXE_Prune"))
+        .env("UNREVO_SETTINGS_PATH", &settings)
         .args(["--render-screens"])
-        .arg(&dir)
+        .arg(&out)
         .args(["--theme", "light", "--lang", "el", "--scale", "1.5", "--rail", "expanded"])
         .status()
         .unwrap();
     assert!(status.success());
     for screen in Screen::ORDER {
-        let f = dir.join(format!("{}-light-el-1.5.png", screen.key()));
+        let f = out.join(format!("{}-light-el-1.5.png", screen.key()));
         assert!(f.is_file(), "missing {}", f.display());
     }
+    assert_eq!(std::fs::read(&settings).unwrap(), before, "the settings file was changed");
+    assert!(!out.join("settings.json").exists());
     let _ = std::fs::remove_dir_all(&dir);
 }
 

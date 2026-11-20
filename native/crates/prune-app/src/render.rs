@@ -207,3 +207,35 @@ pub fn run(dir: &Path, o: &Options) -> i32 {
         }
     }
 }
+
+/// A release build is a GUI program with no console, so `println!` goes
+/// nowhere. Attach to the calling shell's console and, for each of stdout
+/// and stderr that is not already redirected, point it there. Without a
+/// parent console (double-click) this does nothing.
+#[cfg(windows)]
+pub fn attach_console() {
+    use std::os::windows::io::AsRawHandle;
+    use windows::Win32::Foundation::HANDLE;
+    use windows::Win32::System::Console::{
+        ATTACH_PARENT_PROCESS, AttachConsole, GetStdHandle, STD_ERROR_HANDLE, STD_OUTPUT_HANDLE, SetStdHandle,
+    };
+    // SAFETY: plain Win32 console calls; the handle is leaked on purpose so
+    // it stays valid for the life of the process.
+    unsafe {
+        if AttachConsole(ATTACH_PARENT_PROCESS).is_err() {
+            return;
+        }
+        let Ok(out) = fs::OpenOptions::new().write(true).open("CONOUT$") else { return };
+        let raw = HANDLE(out.as_raw_handle());
+        std::mem::forget(out);
+        for which in [STD_OUTPUT_HANDLE, STD_ERROR_HANDLE] {
+            let current = GetStdHandle(which).unwrap_or_default();
+            if current.is_invalid() || current.0.is_null() {
+                let _ = SetStdHandle(which, raw);
+            }
+        }
+    }
+}
+
+#[cfg(not(windows))]
+pub fn attach_console() {}
