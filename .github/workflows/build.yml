@@ -85,6 +85,20 @@ jobs:
       - run: npm test
         working-directory: frontend
 
+  native:
+    name: Native (Rust) checks
+    runs-on: windows-latest
+    defaults:
+      run:
+        working-directory: native
+    steps:
+      - uses: actions/checkout@v7
+      - name: Install cargo-deny
+        run: cargo install cargo-deny --locked
+      - run: cargo deny check licenses
+      - run: cargo clippy --workspace -- -D warnings
+      - run: cargo test --workspace
+
   build:
     name: Build installer
     needs: [backend-tests, frontend-tests]

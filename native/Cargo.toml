@@ -1,0 +1,19 @@
+[workspace]
+resolver = "3"
+members = ["crates/prune-core", "crates/prune-app", "crates/prune-cli"]
+
+[workspace.package]
+version = "4.0.0"
+edition = "2024"
+license = "MIT"
+rust-version = "1.90"
+
+[workspace.dependencies]
+iced = "=0.14.0"
+fluent-bundle = "0.16"
+windows = "=0.62.2"
+tray-icon = "=0.26.1"
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+png = "0.18"
+prune-core = { path = "crates/prune-core" }

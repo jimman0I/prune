@@ -1,0 +1,13 @@
+[package]
+name = "prune-cli"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+
+[[bin]]
+name = "prune-cli"
+path = "src/main.rs"
+
+[dependencies]
+prune-core.workspace = true
