@@ -46,31 +46,60 @@ pub enum SizeUnits {
 }
 
 /// The settings 4.0 acts on, plus everything else in the file.
-#[derive(Debug, Clone, PartialEq, Serialize)]
+#[derive(Debug, Clone, PartialEq)]
 pub struct Settings {
     pub theme: ThemeChoice,
-    #[serde(rename = "themeSynced")]
     pub theme_synced: bool,
     pub language: String,
-    #[serde(rename = "sizeUnits")]
     pub size_units: SizeUnits,
-    #[serde(rename = "minimizeToTray")]
     pub minimize_to_tray: bool,
-    /// Every key this version does not own, preserved verbatim.
-    #[serde(flatten)]
+    /// Every key this version does not own, preserved verbatim and in order.
     pub rest: Map<String, Value>,
+    /// Top-level key order of the file as read, so a save keeps it.
+    order: Vec<String>,
 }
+
+/// 3.x's full default settings (`DEFAULT_SETTINGS`), taken from the 3.x
+/// fixture. A fresh or corrupt file starts from these so a rollback to 3.x
+/// finds every key written, not 3.x's migration fallbacks.
+const DEFAULTS_JSON: &str = include_str!("../tests/fixtures/settings-3.2.0.json");
 
 impl Default for Settings {
     fn default() -> Self {
-        Self {
-            theme: ThemeChoice::System,
-            theme_synced: false,
-            language: "en".to_owned(),
-            size_units: SizeUnits::Windows,
-            minimize_to_tray: false,
-            rest: Map::new(),
+        let mut map: Map<String, Value> = serde_json::from_str(DEFAULTS_JSON).unwrap_or_default();
+        map.remove("futureKey");
+        Self::from_map(map)
+    }
+}
+
+impl Serialize for Settings {
+    fn serialize<S: serde::Serializer>(&self, ser: S) -> Result<S::Ok, S::Error> {
+        let owned = [
+            ("theme", serde_json::to_value(self.theme).unwrap_or_default()),
+            ("themeSynced", Value::Bool(self.theme_synced)),
+            ("language", Value::String(self.language.clone())),
+            ("sizeUnits", serde_json::to_value(self.size_units).unwrap_or_default()),
+            ("minimizeToTray", Value::Bool(self.minimize_to_tray)),
+        ];
+        let mut out = Map::new();
+        for key in &self.order {
+            if let Some((_, v)) = owned.iter().find(|(k, _)| k == key) {
+                out.insert(key.clone(), v.clone());
+            } else if let Some(v) = self.rest.get(key) {
+                out.insert(key.clone(), v.clone());
+            }
         }
+        for (k, v) in owned {
+            if !out.contains_key(k) {
+                out.insert(k.to_owned(), v);
+            }
+        }
+        for (k, v) in &self.rest {
+            if !out.contains_key(k) {
+                out.insert(k.clone(), v.clone());
+            }
+        }
+        out.serialize(ser)
     }
 }
 
@@ -87,32 +116,43 @@ fn choice<T: for<'de> Deserialize<'de> + Default>(v: Option<&Value>) -> T {
         .unwrap_or_default()
 }
 
-impl<'de> Deserialize<'de> for Settings {
-    /// Lenient on purpose: a bad value in one key is replaced by that key's
-    /// default, and a file that is not a JSON object at all gives defaults.
-    fn deserialize<D: Deserializer<'de>>(d: D) -> Result<Self, D::Error> {
-        let mut map = match Value::deserialize(d)? {
-            Value::Object(m) => m,
-            _ => return Ok(Self::default()),
-        };
+impl Settings {
+    /// Normalizes a parsed file the way 3.x does, remembering key order.
+    fn from_map(mut map: Map<String, Value>) -> Self {
+        let order: Vec<String> = map.keys().cloned().collect();
         let language = match map.get("language") {
             Some(Value::String(s)) if LANGUAGES.contains(&s.as_str()) => s.clone(),
             _ => "en".to_owned(),
         };
-        let s = Self {
-            theme: choice(map.get("theme")),
-            theme_synced: map.get("themeSynced") == Some(&Value::Bool(true)),
-            language,
-            size_units: choice(map.get("sizeUnits")),
-            // 3.x passes this through unvalidated and reads it with a
-            // truthiness test; only a real `true` counts here.
-            minimize_to_tray: map.get("minimizeToTray") == Some(&Value::Bool(true)),
-            rest: Map::new(),
-        };
+        let theme = choice(map.get("theme"));
+        let size_units = choice(map.get("sizeUnits"));
+        let theme_synced = map.get("themeSynced") == Some(&Value::Bool(true));
+        // 3.x passes this through unvalidated and reads it with a
+        // truthiness test; only a real `true` counts here.
+        let minimize_to_tray = map.get("minimizeToTray") == Some(&Value::Bool(true));
         for k in OWNED_KEYS {
-            map.remove(k);
+            map.shift_remove(k);
         }
-        Ok(Self { rest: map, ..s })
+        Self {
+            theme,
+            theme_synced,
+            language,
+            size_units,
+            minimize_to_tray,
+            rest: map,
+            order,
+        }
+    }
+}
+
+impl<'de> Deserialize<'de> for Settings {
+    /// Lenient on purpose: a bad value in one key is replaced by that key's
+    /// default, and a file that is not a JSON object at all gives defaults.
+    fn deserialize<D: Deserializer<'de>>(d: D) -> Result<Self, D::Error> {
+        match Value::deserialize(d)? {
+            Value::Object(m) => Ok(Self::from_map(m)),
+            _ => Ok(Self::default()),
+        }
     }
 }
 

@@ -104,3 +104,31 @@ fn settings_path_honours_env_override() {
     unsafe { std::env::remove_var("UNREVO_SETTINGS_PATH") };
     assert!(settings_path().ends_with("Prune\\settings.json") || settings_path().ends_with("Prune/settings.json"));
 }
+
+#[test]
+fn save_keeps_3x_key_order() {
+    let out = scratch("order");
+    save(&out, &load(&fixture())).unwrap();
+    let keys = |p: &PathBuf| -> Vec<String> {
+        let v: serde_json::Map<String, Value> = serde_json::from_slice(&fs::read(p).unwrap()).unwrap();
+        v.keys().cloned().collect()
+    };
+    assert_eq!(keys(&out), keys(&fixture()));
+}
+
+#[test]
+fn fresh_save_writes_every_3x_default() {
+    for bytes in [None, Some(&b"{ corrupt"[..])] {
+        let p = scratch("fresh");
+        if let Some(b) = bytes {
+            fs::write(&p, b).unwrap();
+        }
+        save(&p, &load(&p)).unwrap();
+        let got: serde_json::Map<String, Value> = serde_json::from_slice(&fs::read(&p).unwrap()).unwrap();
+        let mut want: serde_json::Map<String, Value> =
+            serde_json::from_slice(&fs::read(fixture()).unwrap()).unwrap();
+        want.shift_remove("futureKey");
+        assert_eq!(got, want);
+        assert_eq!(got.keys().collect::<Vec<_>>(), want.keys().collect::<Vec<_>>());
+    }
+}
