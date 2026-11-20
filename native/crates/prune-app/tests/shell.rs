@@ -7,7 +7,7 @@ use std::process::{Child, Command, Stdio};
 use std::sync::mpsc;
 use std::time::{Duration, Instant};
 
-use prune_app::app::{App, Message, Startup};
+use prune_app::app::{App, Message, Startup, Wheel, min_client_size};
 use prune_app::screen::Screen;
 use prune_app::shortcut::{KeyPress, Shortcut, match_shortcut};
 use prune_app::zoom::ZoomAction;
@@ -146,13 +146,77 @@ fn zoom_keys_and_wheel_step_the_level() {
     assert!((app.scale_factor() - 1.2).abs() < 1e-6, "level 1 is Chromium's 1.2x");
     // Ctrl+wheel up zooms in, down zooms out.
     let _ = app.update(Message::Modifiers(iced::keyboard::Modifiers::CTRL));
-    let _ = app.update(Message::Wheel(1.0));
+    let _ = app.update(Message::Wheel(Wheel::Lines(1.0)));
     assert_eq!(app.zoom_level(), 1.5);
-    let _ = app.update(Message::Wheel(-1.0));
+    let _ = app.update(Message::Wheel(Wheel::Lines(-1.0)));
     assert_eq!(app.zoom_level(), 1.0);
     let _ = app.update(Message::Modifiers(iced::keyboard::Modifiers::empty()));
-    let _ = app.update(Message::Wheel(1.0));
+    let _ = app.update(Message::Wheel(Wheel::Lines(1.0)));
     assert_eq!(app.zoom_level(), 1.0, "a plain wheel is not zoom");
+}
+
+#[test]
+fn ctrl_wheel_steps_once_per_notch_of_travel() {
+    let mut app = app();
+    let _ = app.update(Message::Modifiers(iced::keyboard::Modifiers::CTRL));
+    // A touchpad swipe: many small pixel deltas, 120 px to a notch.
+    for _ in 0..3 {
+        let _ = app.update(Message::Wheel(Wheel::Pixels(40.0)));
+    }
+    assert_eq!(app.zoom_level(), 0.5, "3 x 40 px = 120 px is one step");
+    for _ in 0..2 {
+        let _ = app.update(Message::Wheel(Wheel::Pixels(40.0)));
+    }
+    assert_eq!(app.zoom_level(), 0.5, "80 px more is not yet a step");
+    let ctrl_again = |app: &mut App| {
+        let _ = app.update(Message::Modifiers(iced::keyboard::Modifiers::empty()));
+        let _ = app.update(Message::Modifiers(iced::keyboard::Modifiers::CTRL));
+    };
+    ctrl_again(&mut app);
+    // A free-spinning wheel reporting fractions of a line.
+    for _ in 0..4 {
+        let _ = app.update(Message::Wheel(Wheel::Lines(0.25)));
+    }
+    assert_eq!(app.zoom_level(), 1.0);
+    // Turning back starts a fresh notch rather than cancelling travel.
+    ctrl_again(&mut app);
+    let _ = app.update(Message::Wheel(Wheel::Lines(0.5)));
+    let _ = app.update(Message::Wheel(Wheel::Lines(-1.0)));
+    assert_eq!(app.zoom_level(), 0.5);
+    // A big flick moves one step per notch, not straight to the limit.
+    let _ = app.update(Message::Wheel(Wheel::Pixels(240.0)));
+    assert_eq!(app.zoom_level(), 1.5);
+    // Letting go of Ctrl drops leftover travel.
+    let _ = app.update(Message::Wheel(Wheel::Pixels(100.0)));
+    let _ = app.update(Message::Modifiers(iced::keyboard::Modifiers::empty()));
+    let _ = app.update(Message::Modifiers(iced::keyboard::Modifiers::CTRL));
+    let _ = app.update(Message::Wheel(Wheel::Pixels(100.0)));
+    assert_eq!(app.zoom_level(), 1.5);
+}
+
+#[test]
+fn minimum_size_stays_900_by_560_at_any_zoom() {
+    let frame = (16.0, 39.0);
+    for level in [-2.0, -0.5, 0.0, 1.0, 3.0] {
+        let min = min_client_size(frame, level);
+        // iced multiplies the minimum by the zoom factor; the frame is added
+        // by Windows unzoomed.
+        let f = 1.2f32.powf(level as f32);
+        assert!((min.width * f + frame.0 - 900.0).abs() < 0.01, "{level}: {min:?}");
+        assert!((min.height * f + frame.1 - 560.0).abs() < 0.01, "{level}: {min:?}");
+    }
+}
+
+#[test]
+fn a_launch_before_the_window_shows_is_kept() {
+    let mut app = app();
+    let _ = app.update(Message::SecondInstance(vec!["Prune.exe".into()]));
+    assert!(app.reveal_requested(), "remembered until the window is placed");
+    let _ = app.update(Message::WindowPrepared(None, false));
+    assert!(!app.reveal_requested(), "applied when shown");
+    let mut quiet = App::new(Startup::default());
+    let _ = quiet.update(Message::SecondInstance(vec!["Prune.exe".into(), "--start-minimized".into()]));
+    assert!(!quiet.reveal_requested(), "a silent start never asks to come forward");
 }
 
 #[test]

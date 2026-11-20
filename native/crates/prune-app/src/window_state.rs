@@ -81,6 +81,18 @@ pub fn resolve_window_state(saved: Option<&Value>, displays: &[Rect]) -> Resolve
     Resolved { bounds: None, width: DEFAULT_WIDTH, height: DEFAULT_HEIGHT, is_maximized: false }
 }
 
+/// `resolved` with its size raised to at least 3.x's 900x560 minimum.
+pub fn at_least_minimum(resolved: Resolved) -> Resolved {
+    let width = resolved.width.max(f64::from(MIN_WIDTH));
+    let height = resolved.height.max(f64::from(MIN_HEIGHT));
+    Resolved {
+        bounds: resolved.bounds.map(|b| Rect { width: b.width.max(f64::from(MIN_WIDTH)), height: b.height.max(f64::from(MIN_HEIGHT)), ..b }),
+        width,
+        height,
+        ..resolved
+    }
+}
+
 /// What gets written.
 #[derive(Debug, Clone, Copy, PartialEq)]
 pub struct WindowState {
@@ -146,6 +158,7 @@ pub mod win32 {
     use windows::Win32::Foundation::{HWND, LPARAM, POINT, RECT};
     use windows::Win32::Graphics::Gdi::{
         EnumDisplayMonitors, GetMonitorInfoW, HDC, HMONITOR, MONITOR_DEFAULTTONEAREST, MONITORINFO, MonitorFromPoint,
+        MonitorFromWindow,
     };
     use windows::Win32::UI::HiDpi::{GetDpiForMonitor, GetDpiForWindow, MDT_EFFECTIVE_DPI};
     use windows::Win32::UI::WindowsAndMessaging::{
@@ -211,6 +224,9 @@ pub mod win32 {
     /// Moves and sizes the (still hidden) window to where `resolved` says,
     /// as an outer rectangle like Electron's bounds.
     pub fn place(hwnd: HWND, resolved: &Resolved, displays: &[Display]) {
+        // A hand-edited or 3.x-era file can hold any size; never open below
+        // the 900x560 minimum.
+        let resolved = &super::at_least_minimum(*resolved);
         let target = match resolved.bounds {
             Some(b) => displays
                 .iter()
@@ -256,10 +272,14 @@ pub mod win32 {
             GetWindowPlacement(hwnd, &mut placement).ok()?;
             let maximized = if iconic { placement.flags.contains(WPF_RESTORETOMAXIMIZED) } else { zoomed };
             let rect = if iconic || zoomed {
-                // The restored rectangle, in workspace coordinates: shift it
-                // by its monitor's work-area offset to get screen ones.
+                // The restored rectangle is in workspace coordinates, which
+                // are offset from screen ones by the window's monitor's
+                // work area (a taskbar on the left or top). The monitor is
+                // the window's own: maximized there, or, when minimized,
+                // where it will restore to (MonitorFromWindow's rule for an
+                // iconic window), so no lookup by a workspace point is needed.
                 let r = placement.rcNormalPosition;
-                let d = display_of(MonitorFromPoint(POINT { x: r.left, y: r.top }, MONITOR_DEFAULTTONEAREST))?;
+                let d = display_of(MonitorFromWindow(hwnd, MONITOR_DEFAULTTONEAREST))?;
                 let (dx, dy) = (d.work.left - d.monitor.left, d.work.top - d.monitor.top);
                 RECT { left: r.left + dx, top: r.top + dy, right: r.right + dx, bottom: r.bottom + dy }
             } else {
@@ -323,6 +343,16 @@ mod tests {
         // a second display to the right counts
         let two = [ONE_DISPLAY[0], rect(1920.0, 0.0, 1280.0, 1024.0)];
         assert!(resolve_window_state(Some(&gone), &two).bounds.is_some());
+    }
+
+    #[test]
+    fn tiny_saved_sizes_open_at_the_minimum() {
+        let saved = json!({ "width": 10, "height": -5, "x": 100, "y": 100, "isMaximized": false });
+        let resolved = at_least_minimum(resolve_window_state(Some(&saved), &ONE_DISPLAY));
+        assert_eq!(resolved.bounds, Some(rect(100.0, 100.0, 900.0, 560.0)));
+        assert_eq!((resolved.width, resolved.height), (900.0, 560.0));
+        let big = at_least_minimum(DEFAULT);
+        assert_eq!(big, DEFAULT, "the default is already above the minimum");
     }
 
     #[test]

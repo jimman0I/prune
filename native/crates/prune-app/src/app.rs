@@ -103,6 +103,18 @@ impl KeyInput {
     }
 }
 
+/// One wheel event's vertical movement.
+#[derive(Debug, Clone, Copy, PartialEq)]
+pub enum Wheel {
+    /// Notches (a mouse wheel: 1.0 per click).
+    Lines(f32),
+    /// Pixels (touchpads, free-spinning wheels).
+    Pixels(f32),
+}
+
+/// Pixels that count as one wheel notch (Windows' WHEEL_DELTA).
+pub const PIXELS_PER_NOTCH: f32 = 120.0;
+
 #[derive(Debug, Clone)]
 pub enum Message {
     Navigate(Screen),
@@ -116,7 +128,7 @@ pub enum Message {
     Key(KeyInput),
     Modifiers(Modifiers),
     /// A wheel turn; positive is away from the person. Zoom only with Ctrl.
-    Wheel(f32),
+    Wheel(Wheel),
     PointerPressed,
     WindowOpened(window::Id),
     /// The window is placed and painted; carries its HWND and whether to
@@ -162,6 +174,11 @@ pub struct App {
     trace_startup: Option<Instant>,
     /// The window has been placed and asked to show.
     shown: bool,
+    /// A later launch asked to come forward before the window was shown
+    /// (3.x's `revealRequested`).
+    reveal_requested: bool,
+    /// Ctrl+wheel travel not yet turned into a zoom step, in notches.
+    wheel_travel: f32,
     first_frame_seen: bool,
 }
 
@@ -197,6 +214,8 @@ impl App {
             last_change: None,
             trace_startup,
             shown: false,
+            reveal_requested: false,
+            wheel_travel: 0.0,
             first_frame_seen: false,
         }
     }
@@ -208,6 +227,7 @@ impl App {
         later_launches: iced::futures::channel::mpsc::UnboundedReceiver<Vec<String>>,
     ) -> (Self, Task<Message>) {
         let mut app = App::new(startup);
+        app.trace("boot");
         let open = app.open_window();
         (app, Task::batch([open, Task::run(later_launches, Message::SecondInstance)]))
     }
@@ -218,7 +238,9 @@ impl App {
     fn open_window(&mut self) -> Task<Message> {
         let (id, open) = window::open(window::Settings {
             size: Size::new(window_state::DEFAULT_WIDTH as f32, window_state::DEFAULT_HEIGHT as f32),
-            min_size: Some(Size::new(window_state::MIN_WIDTH, window_state::MIN_HEIGHT)),
+            // Set once placed (`min_size_task`): a client-area minimum of
+            // 900x560 now would push a saved 900x560 outer window larger.
+            min_size: None,
             visible: false,
             exit_on_close_request: false,
             ..window::Settings::default()
@@ -239,6 +261,11 @@ impl App {
     /// display's own.
     pub fn scale_factor(&self) -> f32 {
         zoom::factor(self.zoom_level) as f32
+    }
+
+    /// A later launch asked to come forward before the window was shown.
+    pub fn reveal_requested(&self) -> bool {
+        self.reveal_requested
     }
 
     pub fn focused(&self) -> Option<Screen> {
@@ -298,32 +325,45 @@ impl App {
                 }
             }
             Message::Key(key) => return self.key(&key),
-            Message::Modifiers(m) => self.modifiers = m,
-            Message::Wheel(y) => {
-                // Electron's `zoom-changed`: Ctrl+wheel, nothing else held.
-                let m = self.modifiers;
-                if m.control() && !m.alt() && !m.logo() && y != 0.0 {
-                    return self.zoom(if y > 0.0 { ZoomAction::In } else { ZoomAction::Out });
+            Message::Modifiers(m) => {
+                if !m.control() {
+                    self.wheel_travel = 0.0;
                 }
+                self.modifiers = m;
             }
+            Message::Wheel(wheel) => return self.wheel(wheel),
             Message::PointerPressed => {
                 // A click is not keyboard focus (`:focus-visible`).
                 if self.focus.take().is_some() {
                     self.sync_rail();
                 }
             }
-            Message::WindowOpened(id) => return self.prepare_window(id),
+            Message::WindowOpened(id) => {
+                self.trace("window-created");
+                return self.prepare_window(id);
+            }
             Message::WindowPrepared(hwnd, maximized) => {
                 self.hwnd = hwnd;
                 self.shown = true;
+                self.trace("window-shown");
+                let reveal = std::mem::take(&mut self.reveal_requested);
                 let Some(id) = self.window else { return Task::none() };
-                let show = window::set_mode(id, window::Mode::Windowed);
-                let min = self.min_size_task(id);
-                return if maximized { Task::batch([min, show.chain(window::maximize(id, true))]) } else { Task::batch([min, show]) };
+                let mut show = window::set_mode(id, window::Mode::Windowed);
+                if maximized {
+                    show = show.chain(window::maximize(id, true));
+                }
+                if reveal {
+                    show = show.chain(window::gain_focus(id));
+                }
+                return Task::batch([self.min_size_task(id), show]);
             }
             Message::WindowChanged => return self.window_changed(Instant::now()),
             Message::SaveTimer => return self.save_timer(Instant::now()),
-            Message::WindowFocused => self.recheck_os_theme(),
+            Message::WindowFocused => {
+                // Both are Windows settings the person may have just changed.
+                self.recheck_os_theme();
+                self.reduced_motion = crate::motion::reduced_motion();
+            }
             Message::CloseRequested => {
                 self.save_window_state();
                 return iced::exit();
@@ -352,7 +392,10 @@ impl App {
             Message::SecondInstance(args) => {
                 if crate::single_instance::should_reveal(&args) {
                     eprintln!("focus-request");
-                    if let Some(id) = self.window {
+                    if !self.shown {
+                        // Placing and showing it will bring it forward.
+                        self.reveal_requested = true;
+                    } else if let Some(id) = self.window {
                         // 3.x's revealSteps: restore, show, focus.
                         return Task::batch([
                             window::minimize(id, false),
@@ -397,7 +440,52 @@ impl App {
         }
         self.zoom_level = level;
         // 3.x saves the level with the bounds, debounced like a resize.
-        self.window_changed(Instant::now())
+        let save = self.window_changed(Instant::now());
+        // iced scales the minimum by the zoom; keep it 900x560 regardless.
+        match self.window.filter(|_| self.shown) {
+            Some(id) => Task::batch([save, self.min_size_task(id)]),
+            None => save,
+        }
+    }
+
+    /// Electron's `zoom-changed`: Ctrl+wheel with nothing else held, one
+    /// step per notch. Movement is added up so a touchpad swipe or a
+    /// free-spinning wheel steps once per notch's worth, not once per event.
+    fn wheel(&mut self, wheel: Wheel) -> Task<Message> {
+        let m = self.modifiers;
+        if !m.control() || m.alt() || m.logo() {
+            self.wheel_travel = 0.0;
+            return Task::none();
+        }
+        let notches = match wheel {
+            Wheel::Lines(y) => y,
+            Wheel::Pixels(y) => y / PIXELS_PER_NOTCH,
+        };
+        if notches == 0.0 {
+            return Task::none();
+        }
+        if self.wheel_travel != 0.0 && notches.signum() != self.wheel_travel.signum() {
+            // Turning back starts a fresh notch.
+            self.wheel_travel = 0.0;
+        }
+        self.wheel_travel += notches;
+        let mut tasks = Vec::new();
+        while self.wheel_travel.abs() >= 1.0 - 1e-4 {
+            let action = if self.wheel_travel > 0.0 { ZoomAction::In } else { ZoomAction::Out };
+            self.wheel_travel -= self.wheel_travel.signum();
+            if self.wheel_travel.abs() < 1e-4 {
+                self.wheel_travel = 0.0;
+            }
+            tasks.push(self.zoom(action));
+        }
+        Task::batch(tasks)
+    }
+
+    /// `PRUNE_TRACE_STARTUP=1`: how long since the process started.
+    fn trace(&self, phase: &str) {
+        if let Some(start) = self.trace_startup {
+            eprintln!("trace {phase}-ms={:.1}", start.elapsed().as_secs_f64() * 1000.0);
+        }
     }
 
     fn key(&mut self, k: &KeyInput) -> Task<Message> {
@@ -495,9 +583,7 @@ impl App {
     /// 3.x's minimum is the outer window (900×560 DIP); the window's own
     /// minimum is its client area, so the frame is taken off.
     fn min_size_task(&self, id: window::Id) -> Task<Message> {
-        let (fw, fh) = self.frame_size();
-        let min = Size::new(window_state::MIN_WIDTH - fw, window_state::MIN_HEIGHT - fh);
-        window::set_min_size(id, Some(min))
+        window::set_min_size(id, Some(min_client_size(self.frame_size(), self.zoom_level)))
     }
 
     #[cfg(windows)]
@@ -563,16 +649,28 @@ impl App {
     }
 }
 
+/// The window's minimum client size in iced's units, so that the outer
+/// window stays 3.x's 900x560 DIP. iced multiplies a minimum by the display
+/// scale and the app's scale factor (the zoom), so the zoom is divided out;
+/// `frame` (caption and borders, in DIP) is not zoomed.
+pub fn min_client_size(frame: (f32, f32), zoom_level: f64) -> Size {
+    let f = zoom::factor(zoom_level) as f32;
+    Size::new(
+        (window_state::MIN_WIDTH - frame.0).max(1.0) / f,
+        (window_state::MIN_HEIGHT - frame.1).max(1.0) / f,
+    )
+}
+
 /// The runtime events the app acts on.
 fn map_event(event: &Event, first_frame_seen: bool) -> Option<Message> {
     match event {
         Event::Keyboard(keyboard::Event::ModifiersChanged(m)) => Some(Message::Modifiers(*m)),
         Event::Keyboard(k) => KeyInput::from_event(k).map(Message::Key),
         Event::Mouse(mouse::Event::WheelScrolled { delta }) => {
-            let y = match delta {
-                mouse::ScrollDelta::Lines { y, .. } | mouse::ScrollDelta::Pixels { y, .. } => *y,
-            };
-            Some(Message::Wheel(y))
+            Some(Message::Wheel(match delta {
+                mouse::ScrollDelta::Lines { y, .. } => Wheel::Lines(*y),
+                mouse::ScrollDelta::Pixels { y, .. } => Wheel::Pixels(*y),
+            }))
         }
         Event::Mouse(mouse::Event::ButtonPressed(_)) => Some(Message::PointerPressed),
         Event::Window(window::Event::Moved(_) | window::Event::Resized(_)) => Some(Message::WindowChanged),
