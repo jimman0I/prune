@@ -84,8 +84,8 @@ fn title_ink(img: &Image) -> (Vec<u32>, u32) {
         let i = ((y * img.width + x) * 4) as usize;
         [img.rgba[i] as i32, img.rgba[i + 1] as i32, img.rgba[i + 2] as i32]
     };
-    let bg = bg_at(img.width - 10, 50);
-    let (y0, y1) = (30, 90);
+    let bg = bg_at(img.width - 10, 90);
+    let (y0, y1) = (70, 130); // below the 40 px title bar
     let mut cols = Vec::new();
     let mut rows = HashSet::new();
     for x in 100..img.width - 20 {
@@ -159,6 +159,74 @@ fn renders_the_default_windows_client_area_at_each_scale() {
     assert!(near(two.width, one.width * 2) && near(two.height, one.height * 2), "{}x{}", two.width, two.height);
     // The outer window is 1280x860 DIP; the frame comes off it.
     assert!(one.width < 1280 && one.height < 860 && one.width >= 1200 && one.height >= 780);
+}
+
+fn pixel(img: &Image, x: u32, y: u32) -> [u8; 3] {
+    let i = ((y * img.width + x) * 4) as usize;
+    [img.rgba[i], img.rgba[i + 1], img.rgba[i + 2]]
+}
+
+fn near(got: [u8; 3], want: iced::Color, what: &str) {
+    let [r, g, b, _] = want.into_rgba8();
+    let ok = got.iter().zip([r, g, b]).all(|(a, b)| a.abs_diff(b) <= 2);
+    assert!(ok, "{what}: {got:?}, want {:?}", [r, g, b]);
+}
+
+/// Pixels in the box that differ clearly from `bg`.
+fn ink(img: &Image, (x0, y0, x1, y1): (u32, u32, u32, u32), bg: iced::Color) -> usize {
+    let [r, g, b, _] = bg.into_rgba8();
+    let mut n = 0;
+    for y in y0..y1 {
+        for x in x0..x1 {
+            let p = pixel(img, x, y);
+            let d = p[0].abs_diff(r) as u32 + p[1].abs_diff(g) as u32 + p[2].abs_diff(b) as u32;
+            n += usize::from(d > 60);
+        }
+    }
+    n
+}
+
+/// 3.x's title bar (TitleBar.jsx): 40 px of --bg-base whose last row is the
+/// 1 px --border-subtle line (Tailwind's border-box h-10, so the line is
+/// y = 39 and the page starts at y = 40), the logo at x = 26..46, "PRUNE"
+/// 10 px after it, and the three caption buttons over the right end, at
+/// rest (their ground is --bg-base, covering the line, as 3.x's overlay).
+#[test]
+fn draws_the_3x_title_bar() {
+    use prune_app::titlebar::over;
+    for theme in [ThemeChoice::Dark, ThemeChoice::Light] {
+        let img = render::render_screen(Screen::Dashboard, &Options { theme, ..opts("en", 1.0) });
+        let p = prune_app::theme::palette(theme == ThemeChoice::Dark);
+        let border = over(p.border_subtle, p.bg_base);
+        let w = img.width;
+        let t = format!("{theme:?}");
+        near(pixel(&img, 600, 20), p.bg_base, &format!("{t}: bar ground"));
+        near(pixel(&img, 600, 38), p.bg_base, &format!("{t}: bar ground, last row above the line"));
+        near(pixel(&img, 600, 39), border, &format!("{t}: the bottom border"));
+        near(pixel(&img, 200, 39), border, &format!("{t}: the border runs across"));
+        near(pixel(&img, 600, 40), p.bg_base, &format!("{t}: the page below the bar"));
+        near(pixel(&img, w - 20, 39), p.bg_base, &format!("{t}: the buttons cover the line"));
+        assert_ne!(border.into_rgba8(), p.bg_base.into_rgba8(), "{t}: the line is visible");
+
+        // The logo (a dark disc with a teal leaf) and the name have ink.
+        assert!(ink(&img, (26, 10, 46, 30), p.bg_base) >= 100, "{t}: no logo");
+        let name = ink(&img, (56, 10, 130, 30), p.bg_base);
+        assert!(name >= 60, "{t}: no PRUNE ({name} px of ink)");
+        // ...and stop where the name does: the middle of the bar is empty.
+        assert_eq!(ink(&img, (130, 0, w - 3 * 46 - 4, 38), p.bg_base), 0, "{t}: stray ink in the drag area");
+        // A glyph in each 46 px button, centred, nothing at its edges.
+        for k in 1..=3 {
+            let right = w - 46 * (k - 1);
+            assert!(ink(&img, (right - 46 + 15, 13, right - 15, 27), p.bg_base) >= 8, "{t}: button {k} has no glyph");
+            assert_eq!(ink(&img, (right - 46, 0, right - 46 + 12, 39), p.bg_base), 0, "{t}: button {k} edge");
+        }
+    }
+    // Twice the pixels at 2x: the line is the 80 px bar's last two rows.
+    let two = render::render_screen(Screen::Dashboard, &opts("en", 2.0));
+    let p = prune_app::theme::palette(true);
+    near(pixel(&two, 1200, 77), p.bg_base, "2x: ground");
+    near(pixel(&two, 1200, 79), prune_app::titlebar::over(p.border_subtle, p.bg_base), "2x: line");
+    near(pixel(&two, 1200, 80), p.bg_base, "2x: page");
 }
 
 #[test]

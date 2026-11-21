@@ -111,6 +111,16 @@ pub fn minimum_on(work: &Rect) -> (f64, f64) {
     (f64::from(MIN_WIDTH).min(work.width), f64::from(MIN_HEIGHT).min(work.height))
 }
 
+/// The minimum outer size in physical pixels at `dpi` on a display whose
+/// work area is `work` (DIP): [`minimum_on`], scaled. The title bar's
+/// window procedure answers `WM_GETMINMAXINFO` with it, so it bounds the
+/// outer window directly and the zoom never enters into it.
+pub fn min_track_px(work: &Rect, dpi: u32) -> (i32, i32) {
+    let (w, h) = minimum_on(work);
+    let s = f64::from(dpi.max(96)) / 96.0;
+    ((w * s).round() as i32, (h * s).round() as i32)
+}
+
 /// What gets written.
 #[derive(Debug, Clone, Copy, PartialEq)]
 pub struct WindowState {
@@ -277,19 +287,22 @@ pub mod win32 {
         }
     }
 
-    /// The frame (caption and borders) Windows puts around the window's
-    /// client area at `dpi`, as `(width, height)` in physical pixels.
-    /// winit's decorated, resizable window has `WS_OVERLAPPEDWINDOW`'s
-    /// frame. Needs no window, so the headless render can use it.
+    /// The frame Windows keeps around the window's client area at `dpi`,
+    /// as `(width, height)` in physical pixels: `WS_OVERLAPPEDWINDOW`'s
+    /// left, right and bottom borders (winit's decorated, resizable
+    /// window). The caption and top border are client area: the app draws
+    /// its own title bar there (see [`crate::titlebar`]). Needs no window,
+    /// so the headless render can use it.
     pub fn frame_px(dpi: u32) -> (u32, u32) {
         use windows::Win32::UI::HiDpi::AdjustWindowRectExForDpi;
         use windows::Win32::UI::WindowsAndMessaging::{WINDOW_EX_STYLE, WS_OVERLAPPEDWINDOW};
+        // A zero-size client: the frame is what the call puts around it.
         let mut r = RECT::default();
         // SAFETY: `r` is a local the call fills in.
         if unsafe { AdjustWindowRectExForDpi(&mut r, WS_OVERLAPPEDWINDOW, false, WINDOW_EX_STYLE(0), dpi) }.is_err() {
             return (0, 0);
         }
-        ((r.right - r.left).max(0) as u32, (r.bottom - r.top).max(0) as u32)
+        ((r.right - r.left).max(0) as u32, r.bottom.max(0) as u32)
     }
 
     /// The work area (DIP) of the monitor the window is on.

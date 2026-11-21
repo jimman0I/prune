@@ -11,7 +11,7 @@ use std::path::PathBuf;
 use std::time::{Duration, Instant};
 
 use iced::keyboard::{self, Key, Modifiers, key::Named};
-use iced::widget::{container, row, space, stack};
+use iced::widget::{column, container, row, space, stack};
 use iced::{Background, Element, Event, Length, Size, Subscription, Task, mouse, window};
 use serde_json::Value;
 
@@ -24,6 +24,7 @@ use crate::rail::{self, COLLAPSED_WIDTH, EXPANDED_WIDTH, Rail};
 use crate::screen::{self, Screen};
 use crate::shortcut::{KeyPress, Shortcut, match_shortcut};
 use crate::theme::{self, Palette};
+use crate::titlebar::{self, Bar, Button, CaptionEvent};
 use crate::tray::{self, CloseAction, Tray, TrayCommand};
 use crate::window_state::{self, Rect, WindowState};
 use crate::zoom::{self, ZoomAction};
@@ -146,6 +147,9 @@ pub enum Message {
     SecondInstance(Vec<String>),
     /// The tray icon's click or menu.
     Tray(TrayCommand),
+    /// The title bar's buttons and the window's maximized state, from the
+    /// window procedure.
+    Caption(CaptionEvent),
 }
 
 pub struct App {
@@ -191,6 +195,11 @@ pub struct App {
     tray_present: bool,
     /// The window is hidden, waiting in the tray.
     hidden_to_tray: bool,
+    /// The caption button under the pointer, and the one held down.
+    caption_hover: Option<Button>,
+    caption_pressed: Option<Button>,
+    /// Maximized: the maximize button shows the restore glyph.
+    maximized: bool,
 }
 
 impl App {
@@ -233,6 +242,9 @@ impl App {
             tray: None,
             tray_present: false,
             hidden_to_tray: false,
+            caption_hover: None,
+            caption_pressed: None,
+            maximized: false,
         }
     }
 
@@ -248,17 +260,21 @@ impl App {
         let open = app.open_window();
         let launches = Task::run(later_launches, Message::SecondInstance);
         let tray = Task::run(tray_commands, Message::Tray);
-        (app, Task::batch([open, launches, tray]))
+        let caption = Task::run(titlebar::events(), Message::Caption);
+        (app, Task::batch([open, launches, tray, caption]))
     }
 
-    /// Opens the main window hidden; it is shown once placed and painted
-    /// (see `WindowPrepared`), so it never flashes at the wrong place or in
-    /// the system's caption colour.
+    /// Opens the main window hidden; it is shown once placed and given its
+    /// own title bar (see `WindowPrepared`), so it never flashes at the
+    /// wrong place or with the system's caption.
     fn open_window(&mut self) -> Task<Message> {
         let (id, open) = window::open(window::Settings {
             size: Size::new(window_state::DEFAULT_WIDTH as f32, window_state::DEFAULT_HEIGHT as f32),
-            // Set once placed (`min_size_task`): a client-area minimum of
-            // 900x560 now would push a saved 900x560 outer window larger.
+            // None, ever: 3.x's minimum is the outer window, and the title
+            // bar's window procedure enforces it as one (WM_GETMINMAXINFO).
+            // winit would turn a client-area minimum into an outer one with
+            // the standard caption's height added, and grow the window by
+            // that much whenever the minimum was set.
             min_size: None,
             visible: false,
             exit_on_close_request: false,
@@ -340,6 +356,11 @@ impl App {
         self.dark
     }
 
+    /// The caption button under the pointer.
+    pub fn caption_hover(&self) -> Option<Button> {
+        self.caption_hover
+    }
+
     fn is_animating(&self) -> bool {
         [&self.rail_width, &self.label_opacity, &self.mark_top, &self.mark_share].iter().any(|t| t.is_moving())
     }
@@ -389,6 +410,7 @@ impl App {
             Message::WindowPrepared(hwnd, maximized) => {
                 self.hwnd = hwnd;
                 self.shown = true;
+                self.maximized = maximized;
                 self.trace("window-shown");
                 let reveal = std::mem::take(&mut self.reveal_requested);
                 let Some(id) = self.window else { return Task::none() };
@@ -401,7 +423,7 @@ impl App {
                 if reveal {
                     show = show.chain(window::gain_focus(id));
                 }
-                return Task::batch([self.min_size_task(id), show]);
+                return show;
             }
             Message::WindowChanged => return self.window_changed(Instant::now()),
             Message::SaveTimer => return self.save_timer(Instant::now()),
@@ -448,6 +470,9 @@ impl App {
                     return window::set_icon(id, icon);
                 }
             }
+            Message::Caption(CaptionEvent::Hover(b)) => self.caption_hover = b,
+            Message::Caption(CaptionEvent::Pressed(b)) => self.caption_pressed = b,
+            Message::Caption(CaptionEvent::Maximized(m)) => self.maximized = m,
             Message::SecondInstance(args) => {
                 if crate::single_instance::should_reveal(&args) {
                     eprintln!("focus-request");
@@ -501,13 +526,11 @@ impl App {
             return Task::none();
         }
         self.zoom_level = level;
+        // The bar's height and buttons follow the zoom, so hit-testing does.
+        titlebar::set_zoom_level(level);
         // 3.x saves the level with the bounds, debounced like a resize.
-        let save = self.window_changed(Instant::now());
-        // iced scales the minimum by the zoom; keep it 900x560 regardless.
-        match self.window.filter(|_| self.shown) {
-            Some(id) => Task::batch([save, self.min_size_task(id)]),
-            None => save,
-        }
+        // The minimum is the outer window's, so the zoom leaves it alone.
+        self.window_changed(Instant::now())
     }
 
     /// Electron's `zoom-changed`: Ctrl+wheel with nothing else held, one
@@ -642,43 +665,10 @@ impl App {
     #[cfg(not(windows))]
     fn read_bounds(&mut self) {}
 
-    /// 3.x's minimum is the outer window (900×560 DIP); the window's own
-    /// minimum is its client area, so the frame is taken off.
-    fn min_size_task(&self, id: window::Id) -> Task<Message> {
-        window::set_min_size(id, Some(min_client_size(self.min_outer(), self.frame_size(), self.zoom_level)))
-    }
-
-    /// 3.x's 900x560, or the work area of the window's monitor where that
-    /// is smaller (see [`window_state::minimum_on`]).
-    #[cfg(windows)]
-    fn min_outer(&self) -> (f32, f32) {
-        match self.hwnd.and_then(|h| window_state::win32::work_of(hwnd(h))) {
-            Some(work) => {
-                let (w, h) = window_state::minimum_on(&work);
-                (w as f32, h as f32)
-            }
-            None => (window_state::MIN_WIDTH, window_state::MIN_HEIGHT),
-        }
-    }
-
-    #[cfg(not(windows))]
-    fn min_outer(&self) -> (f32, f32) {
-        (window_state::MIN_WIDTH, window_state::MIN_HEIGHT)
-    }
-
-    #[cfg(windows)]
-    fn frame_size(&self) -> (f32, f32) {
-        self.hwnd.map_or((0.0, 0.0), |h| platform::frame_size(hwnd(h)))
-    }
-
-    #[cfg(not(windows))]
-    fn frame_size(&self) -> (f32, f32) {
-        (0.0, 0.0)
-    }
-
     fn prepare_window(&mut self, id: window::Id) -> Task<Message> {
         let saved = self.saved_window.take();
         let dark = self.dark;
+        titlebar::set_zoom_level(self.zoom_level);
         window::run(id, move |w| platform::prepare(w, saved.as_ref(), dark))
             .map(|(hwnd, maximized)| Message::WindowPrepared(hwnd, maximized))
     }
@@ -690,15 +680,24 @@ impl App {
         let dark = theme::is_dark(self.theme, theme::os_prefers_light());
         if dark != self.dark {
             self.dark = dark;
+            // The bar repaints from the palette; DWM's border follows too.
             #[cfg(windows)]
             if let Some(h) = self.hwnd {
-                crate::titlebar::paint(hwnd(h), dark, self.palette());
+                titlebar::win32::set_dark_frame(hwnd(h), dark);
             }
         }
     }
 
     pub fn view(&self) -> Element<'_, Message> {
         let p = self.palette();
+        let bar = titlebar::view(Bar {
+            palette: p,
+            dark: self.dark,
+            zoom_level: self.zoom_level,
+            hover: self.caption_hover,
+            pressed: self.caption_pressed,
+            maximized: self.maximized,
+        });
         let page = row![space().width(COLLAPSED_WIDTH), screen::view(self.screen, &self.catalog, p)]
             .width(Length::Fill)
             .height(Length::Fill);
@@ -720,7 +719,9 @@ impl App {
             },
             self.dark,
         );
-        let root = container(stack![page, rail].width(Length::Fill).height(Length::Fill))
+        // 3.x: the bar spans the window above everything, the rail too.
+        let body = stack![page, rail].width(Length::Fill).height(Length::Fill);
+        let root = container(column![bar, body].width(Length::Fill).height(Length::Fill))
             .width(Length::Fill)
             .height(Length::Fill)
             .style(move |_| container::Style {
@@ -731,16 +732,6 @@ impl App {
         let first_frame_seen = self.first_frame_seen;
         listener(root, move |event, _captured| map_event(event, first_frame_seen)).into()
     }
-}
-
-/// The window's minimum client size in iced's units, so that the outer
-/// window stays at least `min_outer` DIP (3.x's 900x560, less on a smaller
-/// work area). iced multiplies a minimum by the display scale and the app's
-/// scale factor (the zoom), so the zoom is divided out; `frame` (caption
-/// and borders, in DIP) is not zoomed.
-pub fn min_client_size(min_outer: (f32, f32), frame: (f32, f32), zoom_level: f64) -> Size {
-    let f = zoom::factor(zoom_level) as f32;
-    Size::new((min_outer.0 - frame.0).max(1.0) / f, (min_outer.1 - frame.1).max(1.0) / f)
 }
 
 /// The runtime events the app acts on.
@@ -796,9 +787,9 @@ fn hwnd(h: isize) -> windows::Win32::Foundation::HWND {
 mod platform {
     use serde_json::Value;
 
-    /// Places the hidden window where window-state.json says (or the 3.x
-    /// default, centred) and paints its caption. Gives back the HWND and
-    /// whether to show it maximized.
+    /// Gives the hidden window Prune's own title bar, then places it where
+    /// window-state.json says (or the 3.x default, centred). Gives back the
+    /// HWND and whether to show it maximized.
     #[cfg(windows)]
     pub fn prepare(w: &dyn iced::window::Window, saved: Option<&Value>, dark: bool) -> (Option<isize>, bool) {
         use crate::window_state::{resolve_window_state, win32};
@@ -808,6 +799,10 @@ mod platform {
         let RawWindowHandle::Win32(h) = handle.as_raw() else { return (None, false) };
         let raw = h.hwnd.get();
         let hwnd = super::hwnd(raw);
+        // Before placing: the frame changes the client area, not the
+        // window's outer bounds, which are what is placed.
+        crate::titlebar::win32::install(hwnd);
+        crate::titlebar::win32::set_dark_frame(hwnd, dark);
         let displays = win32::displays();
         let areas: Vec<_> = displays.iter().map(win32::Display::work_dip).collect();
         let resolved = resolve_window_state(saved, &areas);
@@ -815,7 +810,6 @@ mod platform {
         if resolved.is_maximized {
             maximize_hidden(hwnd);
         }
-        crate::titlebar::paint(hwnd, dark, crate::theme::palette(dark));
         (Some(raw), resolved.is_maximized)
     }
 
@@ -850,24 +844,5 @@ mod platform {
     #[cfg(not(windows))]
     pub fn prepare(_: &dyn iced::window::Window, _: Option<&Value>, _: bool) -> (Option<isize>, bool) {
         (None, false)
-    }
-
-    /// The frame around the client area (caption and borders), in DIP.
-    #[cfg(windows)]
-    pub fn frame_size(hwnd: windows::Win32::Foundation::HWND) -> (f32, f32) {
-        use windows::Win32::Foundation::RECT;
-        use windows::Win32::UI::HiDpi::GetDpiForWindow;
-        use windows::Win32::UI::WindowsAndMessaging::{GetClientRect, GetWindowRect};
-        let (mut outer, mut inner) = (RECT::default(), RECT::default());
-        // SAFETY: `hwnd` is this process's live window; out-pointers are locals.
-        unsafe {
-            if GetWindowRect(hwnd, &mut outer).is_err() || GetClientRect(hwnd, &mut inner).is_err() {
-                return (0.0, 0.0);
-            }
-            let scale = GetDpiForWindow(hwnd).max(96) as f32 / 96.0;
-            let w = (outer.right - outer.left) - (inner.right - inner.left);
-            let h = (outer.bottom - outer.top) - (inner.bottom - inner.top);
-            (w.max(0) as f32 / scale, h.max(0) as f32 / scale)
-        }
     }
 }

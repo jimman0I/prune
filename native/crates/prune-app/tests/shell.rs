@@ -7,10 +7,9 @@ use std::process::{Child, Command, Stdio};
 use std::sync::mpsc;
 use std::time::{Duration, Instant};
 
-use prune_app::app::{App, Message, Startup, Wheel, min_client_size};
+use prune_app::app::{App, Message, Startup, Wheel};
 use prune_app::screen::Screen;
 use prune_app::shortcut::{KeyPress, Shortcut, match_shortcut};
-#[cfg(windows)]
 use prune_app::window_state;
 use prune_app::zoom::ZoomAction;
 
@@ -198,18 +197,22 @@ fn ctrl_wheel_steps_once_per_notch_of_travel() {
 
 #[test]
 fn minimum_size_stays_900_by_560_at_any_zoom() {
-    let frame = (16.0, 39.0);
-    // 3.x's minimum, and the smaller one a small work area gives.
-    for outer in [(900.0, 560.0), (800.0, 520.0)] {
-        for level in [-2.0, -0.5, 0.0, 1.0, 3.0] {
-            let min = min_client_size(outer, frame, level);
-            // iced multiplies the minimum by the zoom factor; the frame is
-            // added by Windows unzoomed.
-            let f = 1.2f32.powf(level as f32);
-            assert!((min.width * f + frame.0 - outer.0).abs() < 0.01, "{level}: {min:?}");
-            assert!((min.height * f + frame.1 - outer.1).abs() < 0.01, "{level}: {min:?}");
-        }
-    }
+    use window_state::{Rect, min_track_px};
+    // The minimum is the outer window's, in the monitor's pixels; the zoom
+    // is not an input at all, so no zoom level can move it.
+    let big = Rect { x: 0.0, y: 0.0, width: 1920.0, height: 1040.0 };
+    assert_eq!(min_track_px(&big, 96), (900, 560));
+    assert_eq!(min_track_px(&big, 120), (1125, 700));
+    assert_eq!(min_track_px(&big, 144), (1350, 840));
+    // A work area smaller than 3.x's minimum caps it.
+    let small = Rect { x: 0.0, y: 0.0, width: 800.0, height: 520.0 };
+    assert_eq!(min_track_px(&small, 96), (800, 520));
+    assert_eq!(min_track_px(&small, 192), (1600, 1040));
+    // Zooming leaves the window alone.
+    let mut app = app();
+    let _ = app.update(Message::Zoom(ZoomAction::In));
+    let _ = app.update(Message::Zoom(ZoomAction::In));
+    assert_eq!(app.zoom_level(), 1.0);
 }
 
 #[test]
@@ -530,6 +533,151 @@ fn closing_saves_window_state_in_3x_shape() {
     assert_eq!(state["isMaximized"], false);
     assert_eq!(state["zoomLevel"], 0);
     assert!(!profile.settings().exists(), "opening and closing never writes settings.json");
+}
+
+/// `pid`'s main window: visible, top-level, not a tool window.
+#[cfg(windows)]
+fn main_window_of(pid: u32) -> Option<windows::Win32::Foundation::HWND> {
+    use windows::Win32::Foundation::{HWND, LPARAM};
+    use windows::Win32::UI::WindowsAndMessaging::{
+        EnumWindows, GWL_EXSTYLE, GetWindowLongW, GetWindowThreadProcessId, IsWindowVisible, WS_EX_TOOLWINDOW,
+    };
+    use windows::core::BOOL;
+
+    struct Probe {
+        pid: u32,
+        found: Option<HWND>,
+    }
+    unsafe extern "system" fn each(hwnd: HWND, lparam: LPARAM) -> BOOL {
+        // SAFETY: `lparam` is the `&mut Probe` below, alive for the call.
+        let probe = unsafe { &mut *(lparam.0 as *mut Probe) };
+        let mut owner = 0u32;
+        // SAFETY: out-pointer to a local; `hwnd` comes from EnumWindows.
+        unsafe {
+            GetWindowThreadProcessId(hwnd, Some(&mut owner));
+            let tool = GetWindowLongW(hwnd, GWL_EXSTYLE) as u32 & WS_EX_TOOLWINDOW.0 != 0;
+            if owner == probe.pid && !tool && IsWindowVisible(hwnd).as_bool() {
+                probe.found = Some(hwnd);
+            }
+        }
+        true.into()
+    }
+    let mut probe = Probe { pid, found: None };
+    // SAFETY: the callback only touches `probe`, which outlives the call.
+    let _ = unsafe { EnumWindows(Some(each), LPARAM(&raw mut probe as isize)) };
+    probe.found
+}
+
+/// The real window has no system caption: its client area starts at the
+/// window's top edge (the left, right and bottom borders stay), and
+/// Windows' own WM_NCHITTEST answers with the title bar's regions,
+/// HTMAXBUTTON included, which is what Snap Layouts keys on.
+#[cfg(windows)]
+#[test]
+fn the_real_window_has_prunes_own_title_bar() {
+    use prune_app::titlebar::{HTCAPTION, HTCLIENT, HTCLOSE, HTMAXBUTTON, HTMINBUTTON, HTTOP};
+    use windows::Win32::Foundation::{LPARAM, POINT, RECT, WPARAM};
+    use windows::Win32::Graphics::Gdi::ClientToScreen;
+    use windows::Win32::UI::HiDpi::GetDpiForWindow;
+    use windows::Win32::UI::WindowsAndMessaging::{GetClientRect, GetWindowRect, SendMessageW, WM_NCHITTEST};
+
+    use windows::Win32::Foundation::HWND;
+    use windows::Win32::Graphics::Gdi::{GetMonitorInfoW, MONITOR_DEFAULTTONEAREST, MONITORINFO, MonitorFromWindow};
+    use windows::Win32::UI::WindowsAndMessaging::{SC_MAXIMIZE, SendMessageW as Send, WM_SYSCOMMAND};
+
+    /// Window rect, client rect, client origin on screen, DPI, and the
+    /// hit-test answers at the named client points (DIP from the client's
+    /// top-left; negative x counts from the right edge).
+    struct Look {
+        outer: RECT,
+        client: RECT,
+        origin: POINT,
+        dpi: u32,
+        hits: Vec<(&'static str, u32)>,
+    }
+    fn look(hwnd: HWND, points: &[(&'static str, f32, f32)]) -> Look {
+        let (mut outer, mut client, mut origin) = (RECT::default(), RECT::default(), POINT::default());
+        // SAFETY: out-pointers to locals; reading another process's window.
+        unsafe {
+            let _ = GetWindowRect(hwnd, &mut outer);
+            let _ = GetClientRect(hwnd, &mut client);
+            let _ = ClientToScreen(hwnd, &mut origin);
+            let dpi = GetDpiForWindow(hwnd);
+            let s = dpi as f32 / 96.0;
+            let hits = points
+                .iter()
+                .map(|&(name, x, y)| {
+                    let px = if x < 0.0 { client.right + (x * s) as i32 } else { (x * s) as i32 };
+                    let (sx, sy) = (origin.x + px, origin.y + (y * s) as i32);
+                    let lparam = LPARAM(((sy as u16 as isize) << 16) | sx as u16 as isize);
+                    (name, SendMessageW(hwnd, WM_NCHITTEST, Some(WPARAM(0)), Some(lparam)).0 as u32)
+                })
+                .collect();
+            Look { outer, client, origin, dpi, hits }
+        }
+    }
+
+    let profile = Profile::new("titlebar");
+    let (mut child, log) = spawn_logged(&profile);
+    let framed = wait_for_line(&log, "first-frame-ms=", Duration::from_secs(30)).is_some();
+    let hwnd = main_window_of(child.id());
+    let restored = hwnd.map(|h| {
+        look(
+            h,
+            &[
+                ("top edge", 400.0, 1.0),
+                ("drag area", 400.0, 20.0),
+                ("logo", 36.0, 20.0),
+                ("minimize", -115.0, 20.0),
+                ("maximize", -69.0, 20.0),
+                ("close", -23.0, 20.0),
+                ("page", 400.0, 60.0),
+            ],
+        )
+    });
+    // Maximized: no top band, the client area is the work area, and the
+    // buttons reach the screen's top-right corner.
+    let maximized = hwnd.map(|h| {
+        // SAFETY: a system command to another process's window.
+        unsafe { Send(h, WM_SYSCOMMAND, Some(WPARAM(SC_MAXIMIZE as usize)), None) };
+        std::thread::sleep(Duration::from_millis(300));
+        let mut info = MONITORINFO { cbSize: size_of::<MONITORINFO>() as u32, ..Default::default() };
+        // SAFETY: `info` is a local with its size set.
+        let _ = unsafe { GetMonitorInfoW(MonitorFromWindow(h, MONITOR_DEFAULTTONEAREST), &mut info) };
+        let l = look(h, &[("top edge", 400.0, 0.0), ("corner", -1.0, 0.0), ("page", 400.0, 60.0)]);
+        (l, info.rcWork)
+    });
+    close_windows_of(child.id());
+    let status = wait_exit(&mut child, Duration::from_secs(10));
+    if status.is_none() {
+        let _ = child.kill();
+    }
+
+    assert!(framed, "never drew a frame");
+    let r = restored.expect("the main window");
+    assert_eq!(r.origin.y, r.outer.top, "the client area starts at the window's top: no caption strip");
+    assert!(r.origin.x > r.outer.left, "the left resize border is kept");
+    assert!(r.client.bottom < r.outer.bottom - r.outer.top, "the bottom resize border is kept");
+    assert_eq!(
+        r.hits.iter().map(|(_, h)| *h).collect::<Vec<_>>(),
+        [HTTOP, HTCAPTION, HTCAPTION, HTMINBUTTON, HTMAXBUTTON, HTCLOSE, HTCLIENT],
+        "{:?} at {} dpi",
+        r.hits,
+        r.dpi
+    );
+    let (m, work) = maximized.unwrap();
+    let client_on_screen = (m.origin.x, m.origin.y, m.origin.x + m.client.right, m.origin.y + m.client.bottom);
+    // An auto-hide taskbar leaves its edge 2 px short; allow that.
+    let near = |a: i32, b: i32| (a - b).abs() <= 2;
+    assert!(
+        near(client_on_screen.0, work.left)
+            && near(client_on_screen.1, work.top)
+            && near(client_on_screen.2, work.right)
+            && near(client_on_screen.3, work.bottom),
+        "maximized client {client_on_screen:?} is not the work area {work:?}"
+    );
+    assert_eq!(m.hits.iter().map(|(_, h)| *h).collect::<Vec<_>>(), [HTCAPTION, HTCLOSE, HTCLIENT], "{:?}", m.hits);
+    assert!(status.is_some_and(|s| s.success()), "exit on close: {status:?}");
 }
 
 #[cfg(windows)]

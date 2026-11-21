@@ -82,7 +82,8 @@ fn register_fonts() {
 
 /// The client area of the default window at `scale`, in physical pixels:
 /// the 1280x860 DIP window (3.x's bounds, and so the app's, are the outer
-/// rectangle) less the frame Windows draws around it at that DPI. That is
+/// rectangle) less the borders Windows keeps around it at that DPI (the
+/// caption is the app's own title bar, drawn in the client area). That is
 /// the size the real window's content has on a display with room for the
 /// default (on a smaller one the window is fitted to the work area, see
 /// [`crate::window_state::centred_in`]). Off Windows there is no frame to
