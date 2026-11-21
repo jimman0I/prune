@@ -438,7 +438,37 @@ mod tests {
             let _ = windows::Win32::Foundation::CloseHandle(handle);
             s
         };
-        assert!(dacl.contains(&sid), "the pipe's DACL names this user: {dacl}");
+        // Windows writes some users with a short alias instead of the SID (the
+        // built-in Administrator, which CI runs as, becomes "LA"). Put the SID
+        // through the same conversion as the owner of a descriptor to get the
+        // form the DACL text uses.
+        let trustee = {
+            let mut owner_sd = PSECURITY_DESCRIPTOR::default();
+            let mut owner_text = PWSTR::null();
+            // SAFETY: out-pointers; both freed below.
+            unsafe {
+                windows::Win32::Security::Authorization::ConvertStringSecurityDescriptorToSecurityDescriptorW(
+                    &HSTRING::from(format!("O:{sid}")),
+                    SDDL_REVISION_1,
+                    &mut owner_sd,
+                    None,
+                )
+                .unwrap();
+                ConvertSecurityDescriptorToStringSecurityDescriptorW(
+                    owner_sd,
+                    SDDL_REVISION_1,
+                    windows::Win32::Security::OWNER_SECURITY_INFORMATION,
+                    &mut owner_text,
+                    None,
+                )
+                .unwrap();
+                let s = owner_text.to_string().unwrap();
+                let _ = LocalFree(Some(HLOCAL(owner_text.0.cast())));
+                let _ = LocalFree(Some(HLOCAL(owner_sd.0)));
+                s.trim_start_matches("O:").to_owned()
+            }
+        };
+        assert!(dacl.contains(&format!(";;;{trustee})")), "the pipe's DACL names this user ({trustee}): {dacl}");
         assert!(dacl.starts_with("D:P"), "protected, not inherited: {dacl}");
 
         // And a client can still hand over through it.
