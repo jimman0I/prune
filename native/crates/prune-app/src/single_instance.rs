@@ -69,7 +69,9 @@ mod imp {
     use windows::Win32::Security::Authorization::{
         ConvertSidToStringSidW, ConvertStringSecurityDescriptorToSecurityDescriptorW, SDDL_REVISION_1,
     };
-    use windows::Win32::Security::{GetTokenInformation, PSECURITY_DESCRIPTOR, SECURITY_ATTRIBUTES, TOKEN_QUERY, TOKEN_USER, TokenUser};
+    use windows::Win32::Security::{
+        GetTokenInformation, PSECURITY_DESCRIPTOR, SECURITY_ATTRIBUTES, TOKEN_QUERY, TOKEN_USER, TokenUser,
+    };
     use windows::Win32::Storage::FileSystem::{FILE_FLAG_FIRST_PIPE_INSTANCE, PIPE_ACCESS_INBOUND};
     use windows::Win32::System::Pipes::{
         ConnectNamedPipe, CreateNamedPipeW, PIPE_READMODE_BYTE, PIPE_REJECT_REMOTE_CLIENTS, PIPE_TYPE_BYTE,
@@ -356,7 +358,10 @@ mod tests {
     }
 
     #[cfg(windows)]
-    fn next_within(rx: &mut iced::futures::channel::mpsc::UnboundedReceiver<Vec<String>>, timeout: std::time::Duration) -> Option<Vec<String>> {
+    fn next_within(
+        rx: &mut iced::futures::channel::mpsc::UnboundedReceiver<Vec<String>>,
+        timeout: std::time::Duration,
+    ) -> Option<Vec<String>> {
         let deadline = std::time::Instant::now() + timeout;
         loop {
             if let Ok(v) = rx.try_recv() {
@@ -401,14 +406,31 @@ mod tests {
             )
             .unwrap();
         }
-        let handle = imp::create(&HSTRING::from(path.as_str()), false, Some(sd.0 as usize)).expect("pipe with the explicit descriptor");
+        let handle = imp::create(&HSTRING::from(path.as_str()), false, Some(sd.0 as usize))
+            .expect("pipe with the explicit descriptor");
         let mut got = PSECURITY_DESCRIPTOR::default();
         let mut text = PWSTR::null();
         // SAFETY: out-pointers; everything is freed or closed below.
         let dacl = unsafe {
-            let err = GetSecurityInfo(handle, SE_KERNEL_OBJECT, DACL_SECURITY_INFORMATION, None, None, None, None, Some(&mut got));
+            let err = GetSecurityInfo(
+                handle,
+                SE_KERNEL_OBJECT,
+                DACL_SECURITY_INFORMATION,
+                None,
+                None,
+                None,
+                None,
+                Some(&mut got),
+            );
             assert!(err.is_ok(), "{err:?}");
-            ConvertSecurityDescriptorToStringSecurityDescriptorW(got, SDDL_REVISION_1, DACL_SECURITY_INFORMATION, &mut text, None).unwrap();
+            ConvertSecurityDescriptorToStringSecurityDescriptorW(
+                got,
+                SDDL_REVISION_1,
+                DACL_SECURITY_INFORMATION,
+                &mut text,
+                None,
+            )
+            .unwrap();
             let s = text.to_string().unwrap();
             let _ = LocalFree(Some(HLOCAL(text.0.cast())));
             let _ = LocalFree(Some(HLOCAL(got.0)));
@@ -441,7 +463,10 @@ mod tests {
             client.write_all(&encode(&["Prune.exe".to_owned(), "--x".to_owned()])).unwrap();
         }
         assert!(imp::accept(handle), "connected, even though the client already left");
-        assert_eq!(imp::serve(handle.0 as usize, imp::READ_TIMEOUT), Some(vec!["Prune.exe".to_owned(), "--x".to_owned()]));
+        assert_eq!(
+            imp::serve(handle.0 as usize, imp::READ_TIMEOUT),
+            Some(vec!["Prune.exe".to_owned(), "--x".to_owned()])
+        );
     }
 
     /// A client that connects and never closes does not keep the next
@@ -464,7 +489,11 @@ mod tests {
         // After the timeout the stuck client's end is closed under it.
         std::thread::sleep(imp::READ_TIMEOUT + std::time::Duration::from_millis(300));
         assert!(stuck.write_all(b"more").and_then(|_| stuck.flush()).is_err(), "dropped");
-        assert_eq!(next_within(&mut rx, std::time::Duration::from_millis(100)), None, "its half message is not delivered");
+        assert_eq!(
+            next_within(&mut rx, std::time::Duration::from_millis(100)),
+            None,
+            "its half message is not delivered"
+        );
     }
 
     #[test]

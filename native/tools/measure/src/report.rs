@@ -140,7 +140,8 @@ mod tests {
 
     #[test]
     fn json_has_fields() {
-        let runs = [run(100.0, 40.0, 0.1, Some(90.0)), run(120.0, 50.0, 0.3, Some(110.0)), run(110.0, 45.0, 0.2, Some(100.0))];
+        let runs =
+            [run(100.0, 40.0, 0.1, Some(90.0)), run(120.0, 50.0, 0.3, Some(110.0)), run(110.0, 45.0, 0.2, Some(100.0))];
         let j = build_report("C:\\x\\Prune.exe", "4.0.0", &runs, &[], &meta());
         assert_eq!(j["exe"], "C:\\x\\Prune.exe");
         assert_eq!(j["version"], "4.0.0");

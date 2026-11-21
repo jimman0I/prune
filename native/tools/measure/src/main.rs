@@ -48,7 +48,9 @@ pub fn parse_args<I: IntoIterator<Item = String>>(it: I) -> Result<Args, String>
             "--exe" => a.exe = val("--exe")?,
             "--runs" => a.runs = val("--runs")?.parse().map_err(|_| "--runs must be a number")?,
             "--settle" => a.settle = val("--settle")?.parse().map_err(|_| "--settle must be seconds")?,
-            "--cpu-window" => a.cpu_window = val("--cpu-window")?.parse().map_err(|_| "--cpu-window must be seconds")?,
+            "--cpu-window" => {
+                a.cpu_window = val("--cpu-window")?.parse().map_err(|_| "--cpu-window must be seconds")?
+            }
             "--out" => a.out = Some(val("--out")?),
             "--env" => {
                 let kv = val("--env")?;
@@ -183,7 +185,11 @@ mod measure {
             // visible, and nothing of our tree is alive.
             sleep(Duration::from_millis(100));
         }
-        bad(run, "exited_early", format!("the launched process exited ({status}) {phase}, and no other instance of it could be seen"))
+        bad(
+            run,
+            "exited_early",
+            format!("the launched process exited ({status}) {phase}, and no other instance of it could be seen"),
+        )
     }
 
     fn one_run(ctx: &Ctx, run: u32) -> Result<Run, Invalid> {
@@ -248,7 +254,9 @@ mod measure {
                         return Err(bad(
                             run,
                             "relaunched_elevated",
-                            format!("no visible window in the launched tree within 60 s, but another instance of the same exe (pid {p}) is running outside it: it most likely relaunched itself elevated. That instance was not measured and was left running"),
+                            format!(
+                                "no visible window in the launched tree within 60 s, but another instance of the same exe (pid {p}) is running outside it: it most likely relaunched itself elevated. That instance was not measured and was left running"
+                            ),
                         ));
                     }
                     return Err(bad(run, "no_window", "no visible window within 60 s".into()));
@@ -362,7 +370,10 @@ mod measure {
 
         let ctx = Ctx { args, exe: exe.clone(), exe_lower, cpus };
         let version = win::file_version(&exe).unwrap_or_else(|| "unknown".into());
-        eprintln!("prune-measure: {exe} (version {version}), {} runs after 1 warm-up, settle {} s", args.runs, args.settle);
+        eprintln!(
+            "prune-measure: {exe} (version {version}), {} runs after 1 warm-up, settle {} s",
+            args.runs, args.settle
+        );
 
         let mut runs = Vec::new();
         let mut invalid = Vec::new();
@@ -385,7 +396,8 @@ mod measure {
                 }
                 Err(inv) => {
                     eprintln!("  {label}: INVALID ({}): {}", inv.kind, inv.reason);
-                    let stop = matches!(inv.kind.as_str(), "elevation_required" | "relaunched_elevated" | "launch_failed");
+                    let stop =
+                        matches!(inv.kind.as_str(), "elevation_required" | "relaunched_elevated" | "launch_failed");
                     invalid.push(inv);
                     if stop {
                         break; // every further run would fail the same way
@@ -395,7 +407,12 @@ mod measure {
             sleep(Duration::from_secs(1));
         }
 
-        let meta = Meta { settle_s: args.settle, cpu_window_s: args.cpu_window, logical_cpus: cpus, existing_instances_closed: closed };
+        let meta = Meta {
+            settle_s: args.settle,
+            cpu_window_s: args.cpu_window,
+            logical_cpus: cpus,
+            existing_instances_closed: closed,
+        };
         let json = build_report(&exe, &version, &runs, &invalid, &meta);
         let text = serde_json::to_string_pretty(&json).expect("report is plain data");
         match &args.out {
@@ -428,7 +445,21 @@ mod tests {
     fn defaults_and_flags() {
         let a = p(&["--exe", "x.exe"]).unwrap();
         assert_eq!((a.runs, a.settle, a.cpu_window), (5, 30, 10));
-        let a = p(&["--exe", "x.exe", "--runs", "3", "--settle", "5", "--out", "o.json", "--env", "A=b=c", "--kill-existing", "--restore"]).unwrap();
+        let a = p(&[
+            "--exe",
+            "x.exe",
+            "--runs",
+            "3",
+            "--settle",
+            "5",
+            "--out",
+            "o.json",
+            "--env",
+            "A=b=c",
+            "--kill-existing",
+            "--restore",
+        ])
+        .unwrap();
         assert_eq!((a.runs, a.settle, a.out.as_deref()), (3, 5, Some("o.json")));
         assert_eq!(a.env, vec![("A".to_string(), "b=c".to_string())]);
         assert!(a.kill_existing && a.restore);

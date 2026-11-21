@@ -693,7 +693,11 @@ impl App {
                 palette: p,
                 catalog: &self.catalog,
             },
-            rail::Events { navigate: Message::Navigate, rail_hover: Message::RailHover, item_hover: Message::ItemHover },
+            rail::Events {
+                navigate: Message::Navigate,
+                rail_hover: Message::RailHover,
+                item_hover: Message::ItemHover,
+            },
             self.dark,
         );
         let root = container(stack![page, rail].width(Length::Fill).height(Length::Fill))
@@ -715,10 +719,7 @@ impl App {
 /// `frame` (caption and borders, in DIP) is not zoomed.
 pub fn min_client_size(frame: (f32, f32), zoom_level: f64) -> Size {
     let f = zoom::factor(zoom_level) as f32;
-    Size::new(
-        (window_state::MIN_WIDTH - frame.0).max(1.0) / f,
-        (window_state::MIN_HEIGHT - frame.1).max(1.0) / f,
-    )
+    Size::new((window_state::MIN_WIDTH - frame.0).max(1.0) / f, (window_state::MIN_HEIGHT - frame.1).max(1.0) / f)
 }
 
 /// The runtime events the app acts on.
@@ -726,12 +727,10 @@ fn map_event(event: &Event, first_frame_seen: bool) -> Option<Message> {
     match event {
         Event::Keyboard(keyboard::Event::ModifiersChanged(m)) => Some(Message::Modifiers(*m)),
         Event::Keyboard(k) => KeyInput::from_event(k).map(Message::Key),
-        Event::Mouse(mouse::Event::WheelScrolled { delta }) => {
-            Some(Message::Wheel(match delta {
-                mouse::ScrollDelta::Lines { y, .. } => Wheel::Lines(*y),
-                mouse::ScrollDelta::Pixels { y, .. } => Wheel::Pixels(*y),
-            }))
-        }
+        Event::Mouse(mouse::Event::WheelScrolled { delta }) => Some(Message::Wheel(match delta {
+            mouse::ScrollDelta::Lines { y, .. } => Wheel::Lines(*y),
+            mouse::ScrollDelta::Pixels { y, .. } => Wheel::Pixels(*y),
+        })),
         Event::Mouse(mouse::Event::ButtonPressed(_)) => Some(Message::PointerPressed),
         Event::Window(window::Event::Moved(_) | window::Event::Resized(_)) => Some(Message::WindowChanged),
         Event::Window(window::Event::Focused) => Some(Message::WindowFocused),
@@ -781,8 +780,8 @@ mod platform {
     /// whether to show it maximized.
     #[cfg(windows)]
     pub fn prepare(w: &dyn iced::window::Window, saved: Option<&Value>, dark: bool) -> (Option<isize>, bool) {
-        use iced::window::raw_window_handle::RawWindowHandle;
         use crate::window_state::{resolve_window_state, win32};
+        use iced::window::raw_window_handle::RawWindowHandle;
 
         let Ok(handle) = w.window_handle() else { return (None, false) };
         let RawWindowHandle::Win32(h) = handle.as_raw() else { return (None, false) };

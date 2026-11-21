@@ -2,9 +2,7 @@ use std::fs;
 use std::path::PathBuf;
 use std::sync::atomic::{AtomicUsize, Ordering};
 
-use prune_core::settings::{
-    SizeUnits, Settings, ThemeChoice, effective_theme, load, save, settings_path,
-};
+use prune_core::settings::{Settings, SizeUnits, ThemeChoice, effective_theme, load, save, settings_path};
 use serde_json::{Value, json};
 
 fn fixture() -> PathBuf {
@@ -125,8 +123,7 @@ fn fresh_save_writes_every_3x_default() {
         }
         save(&p, &load(&p)).unwrap();
         let got: serde_json::Map<String, Value> = serde_json::from_slice(&fs::read(&p).unwrap()).unwrap();
-        let mut want: serde_json::Map<String, Value> =
-            serde_json::from_slice(&fs::read(fixture()).unwrap()).unwrap();
+        let mut want: serde_json::Map<String, Value> = serde_json::from_slice(&fs::read(fixture()).unwrap()).unwrap();
         want.shift_remove("futureKey");
         want.insert("lastSeenVersion".into(), Value::Null);
         assert_eq!(got, want);

@@ -42,10 +42,7 @@ impl Rect {
     /// 3.x's `isOnAnyDisplay` test for one display: inclusive on the low
     /// edge, exclusive on the high one.
     fn contains_origin_of(&self, bounds: &Rect) -> bool {
-        bounds.x >= self.x
-            && bounds.x < self.x + self.width
-            && bounds.y >= self.y
-            && bounds.y < self.y + self.height
+        bounds.x >= self.x && bounds.x < self.x + self.width && bounds.y >= self.y && bounds.y < self.y + self.height
     }
 }
 
@@ -86,7 +83,11 @@ pub fn at_least_minimum(resolved: Resolved) -> Resolved {
     let width = resolved.width.max(f64::from(MIN_WIDTH));
     let height = resolved.height.max(f64::from(MIN_HEIGHT));
     Resolved {
-        bounds: resolved.bounds.map(|b| Rect { width: b.width.max(f64::from(MIN_WIDTH)), height: b.height.max(f64::from(MIN_HEIGHT)), ..b }),
+        bounds: resolved.bounds.map(|b| Rect {
+            width: b.width.max(f64::from(MIN_WIDTH)),
+            height: b.height.max(f64::from(MIN_HEIGHT)),
+            ..b
+        }),
         width,
         height,
         ..resolved
@@ -323,7 +324,12 @@ mod tests {
         let saved = json!({ "width": 1000, "height": 700, "x": 100, "y": 100, "isMaximized": false });
         assert_eq!(
             resolve_window_state(Some(&saved), &ONE_DISPLAY),
-            Resolved { bounds: Some(rect(100.0, 100.0, 1000.0, 700.0)), width: 1000.0, height: 700.0, is_maximized: false }
+            Resolved {
+                bounds: Some(rect(100.0, 100.0, 1000.0, 700.0)),
+                width: 1000.0,
+                height: 700.0,
+                is_maximized: false
+            }
         );
         // the default when the saved position is on no connected display
         let gone = json!({ "width": 1000, "height": 700, "x": 2200, "y": 100, "isMaximized": false });
@@ -337,7 +343,13 @@ mod tests {
         let max = json!({ "width": 1000, "height": 700, "x": 100, "y": 100, "isMaximized": true });
         assert!(resolve_window_state(Some(&max), &ONE_DISPLAY).is_maximized);
         // treats a malformed saved value as absent
-        for junk in [json!({}), json!({ "width": "nope" }), json!({ "width": 1000, "height": 700 }), json!("not an object"), json!(null)] {
+        for junk in [
+            json!({}),
+            json!({ "width": "nope" }),
+            json!({ "width": 1000, "height": 700 }),
+            json!("not an object"),
+            json!(null),
+        ] {
             assert_eq!(resolve_window_state(Some(&junk), &ONE_DISPLAY), DEFAULT, "{junk}");
         }
         // a second display to the right counts

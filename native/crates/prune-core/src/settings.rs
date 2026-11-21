@@ -17,9 +17,9 @@ use serde_json::{Map, Value};
 
 /// The 40 language codes 3.x ships (`frontend/src/i18n/languages.js`).
 pub const LANGUAGES: [&str; 40] = [
-    "en", "af", "ar", "ca", "cs", "cy", "da", "de", "el", "es", "et", "fi", "fr", "he", "hu", "id",
-    "is", "it", "ja", "ko", "lt", "ms", "nb", "nl", "pl", "ps", "pt-BR", "pt", "ro", "ru", "sk",
-    "sq", "sr", "sv", "th", "tr", "uk", "vi", "zh-CN", "zh-TW",
+    "en", "af", "ar", "ca", "cs", "cy", "da", "de", "el", "es", "et", "fi", "fr", "he", "hu", "id", "is", "it", "ja",
+    "ko", "lt", "ms", "nb", "nl", "pl", "ps", "pt-BR", "pt", "ro", "ru", "sk", "sq", "sr", "sv", "th", "tr", "uk",
+    "vi", "zh-CN", "zh-TW",
 ];
 
 /// The theme choice, as stored in `theme`.
@@ -108,17 +108,10 @@ impl Serialize for Settings {
     }
 }
 
-const OWNED_KEYS: [&str; 5] = [
-    "theme",
-    "themeSynced",
-    "language",
-    "sizeUnits",
-    "minimizeToTray",
-];
+const OWNED_KEYS: [&str; 5] = ["theme", "themeSynced", "language", "sizeUnits", "minimizeToTray"];
 
 fn choice<T: for<'de> Deserialize<'de> + Default>(v: Option<&Value>) -> T {
-    v.and_then(|v| serde_json::from_value(v.clone()).ok())
-        .unwrap_or_default()
+    v.and_then(|v| serde_json::from_value(v.clone()).ok()).unwrap_or_default()
 }
 
 impl Settings {
@@ -141,15 +134,7 @@ impl Settings {
         for k in OWNED_KEYS {
             map.shift_remove(k);
         }
-        Self {
-            theme,
-            theme_synced,
-            language,
-            size_units,
-            minimize_to_tray,
-            rest: map,
-            order,
-        }
+        Self { theme, theme_synced, language, size_units, minimize_to_tray, rest: map, order }
     }
 }
 
@@ -170,19 +155,14 @@ pub fn settings_path() -> PathBuf {
     if let Some(p) = std::env::var_os("UNREVO_SETTINGS_PATH").filter(|p| !p.is_empty()) {
         return PathBuf::from(p);
     }
-    let base = std::env::var_os("APPDATA")
-        .filter(|p| !p.is_empty())
-        .map_or_else(|| PathBuf::from("."), PathBuf::from);
+    let base = std::env::var_os("APPDATA").filter(|p| !p.is_empty()).map_or_else(|| PathBuf::from("."), PathBuf::from);
     base.join("Prune").join("settings.json")
 }
 
 /// Reads the file. A missing or corrupt file gives defaults; nothing is
 /// written, so a corrupt file is left for the person to look at.
 pub fn load(path: &Path) -> Settings {
-    fs::read(path)
-        .ok()
-        .and_then(|b| serde_json::from_slice(&b).ok())
-        .unwrap_or_default()
+    fs::read(path).ok().and_then(|b| serde_json::from_slice(&b).ok()).unwrap_or_default()
 }
 
 /// Writes the file the way 3.x does: two-space JSON, no trailing newline, to
@@ -205,9 +185,5 @@ pub fn save(path: &Path, s: &Settings) -> io::Result<()> {
 /// The theme to paint. 3.x only trusts `theme` once the UI has written its
 /// real choice (`themeSynced`); before that it is System.
 pub fn effective_theme(s: &Settings) -> ThemeChoice {
-    if s.theme_synced {
-        s.theme
-    } else {
-        ThemeChoice::System
-    }
+    if s.theme_synced { s.theme } else { ThemeChoice::System }
 }

@@ -481,7 +481,13 @@ fn saved_bounds_and_zoom_come_back() {
     let state = read_json(&path);
     assert_eq!(
         (&state["x"], &state["y"], &state["width"], &state["height"], &state["zoomLevel"]),
-        (&serde_json::json!(120), &serde_json::json!(90), &serde_json::json!(1000), &serde_json::json!(700), &serde_json::json!(1))
+        (
+            &serde_json::json!(120),
+            &serde_json::json!(90),
+            &serde_json::json!(1000),
+            &serde_json::json!(700),
+            &serde_json::json!(1)
+        )
     );
 }
 

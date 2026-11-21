@@ -88,9 +88,5 @@ pub fn view<'a, M: 'a>(screen: Screen, catalog: &Catalog, palette: &'static Pale
         .line_height(1.0)
         .font(geist(font::Weight::Semibold))
         .color(palette.text_primary);
-    container(title)
-        .padding([40, 48])
-        .width(Length::Fill)
-        .height(Length::Fill)
-        .into()
+    container(title).padding([40, 48]).width(Length::Fill).height(Length::Fill).into()
 }

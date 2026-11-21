@@ -63,10 +63,7 @@ fn plain_string_matches_3x() {
 #[test]
 fn placeable_args() {
     let en = Catalog::load("en");
-    assert_eq!(
-        en.t("windowsToolsV1.loadError", &[("reason", "boom".into())]),
-        "Couldn't list the tools: boom"
-    );
+    assert_eq!(en.t("windowsToolsV1.loadError", &[("reason", "boom".into())]), "Couldn't list the tools: boom");
 }
 
 #[test]
@@ -86,7 +83,9 @@ fn catalogs_are_shared_across_threads() {
     // Bundles are parsed once and cached; a Catalog is Copy, Send and Sync.
     let first = Catalog::load("de");
     let threads: Vec<_> = (0..8)
-        .map(|_| std::thread::spawn(move || (first.t("nav.dashboard", &[]), Catalog::load("de").t("nav.dashboard", &[]))))
+        .map(|_| {
+            std::thread::spawn(move || (first.t("nav.dashboard", &[]), Catalog::load("de").t("nav.dashboard", &[])))
+        })
         .collect();
     for thread in threads {
         assert_eq!(thread.join().unwrap(), ("Übersicht".to_owned(), "Übersicht".to_owned()));
@@ -116,10 +115,7 @@ fn keys_with_spaces_and_pipes_resolve() {
 #[test]
 fn cleaner_text_resolves() {
     assert_eq!(Catalog::load("en").t("cleaner.rules.brave_cache.name", &[]), "Cache");
-    assert_eq!(
-        Catalog::load("de").t("cleaner.categories.Developer tools", &[]),
-        "Entwicklertools"
-    );
+    assert_eq!(Catalog::load("de").t("cleaner.categories.Developer tools", &[]), "Entwicklertools");
 }
 
 #[test]

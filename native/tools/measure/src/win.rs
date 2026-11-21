@@ -8,7 +8,9 @@ use windows::Win32::Storage::FileSystem::{GetFileVersionInfoSizeW, GetFileVersio
 use windows::Win32::System::Diagnostics::ToolHelp::{
     CreateToolhelp32Snapshot, PROCESSENTRY32W, Process32FirstW, Process32NextW, TH32CS_SNAPPROCESS,
 };
-use windows::Win32::System::ProcessStatus::{GetProcessMemoryInfo, PROCESS_MEMORY_COUNTERS, PROCESS_MEMORY_COUNTERS_EX};
+use windows::Win32::System::ProcessStatus::{
+    GetProcessMemoryInfo, PROCESS_MEMORY_COUNTERS, PROCESS_MEMORY_COUNTERS_EX,
+};
 use windows::Win32::System::Threading::{
     GetProcessTimes, OpenProcess, PROCESS_NAME_WIN32, PROCESS_QUERY_LIMITED_INFORMATION, PROCESS_TERMINATE,
     QueryFullProcessImageNameW, TerminateProcess,
@@ -113,11 +115,7 @@ pub fn image_path(pid: u32) -> Option<String> {
 
 /// Every running process whose image is exactly `exe` (lower-cased).
 pub fn pids_with_image(exe_lower: &str) -> Vec<u32> {
-    snapshot()
-        .into_iter()
-        .map(|(p, _)| p)
-        .filter(|&p| image_path(p).is_some_and(|i| i == exe_lower))
-        .collect()
+    snapshot().into_iter().map(|(p, _)| p).filter(|&p| image_path(p).is_some_and(|i| i == exe_lower)).collect()
 }
 
 struct Probe<'a> {
@@ -165,7 +163,8 @@ fn ft(f: FILETIME) -> u64 {
 /// Kernel + user time in 100 ns units.
 pub fn cpu_time(pid: u32) -> Option<u64> {
     let h = open(pid, PROCESS_QUERY_LIMITED_INFORMATION)?;
-    let (mut c, mut e, mut k, mut u) = (FILETIME::default(), FILETIME::default(), FILETIME::default(), FILETIME::default());
+    let (mut c, mut e, mut k, mut u) =
+        (FILETIME::default(), FILETIME::default(), FILETIME::default(), FILETIME::default());
     unsafe { GetProcessTimes(h.0, &mut c, &mut e, &mut k, &mut u).ok()? };
     Some(ft(k) + ft(u))
 }

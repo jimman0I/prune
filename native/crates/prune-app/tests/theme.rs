@@ -17,11 +17,7 @@ fn block(css: &str, selector: &str) -> String {
 
 fn var(block: &str, name: &str) -> String {
     let key = format!("--{name}:");
-    let line = block
-        .lines()
-        .map(str::trim)
-        .find(|l| l.starts_with(&key))
-        .unwrap_or_else(|| panic!("no --{name}"));
+    let line = block.lines().map(str::trim).find(|l| l.starts_with(&key)).unwrap_or_else(|| panic!("no --{name}"));
     line[key.len()..].trim().trim_end_matches(';').trim().to_string()
 }
 

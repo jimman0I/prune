@@ -24,9 +24,9 @@ include!(concat!(env!("OUT_DIR"), "/locales.rs"));
 
 /// Every language Prune can be shown in, in 3.x's `languages.js` order.
 pub const LANGUAGES: [&str; 40] = [
-    "en", "af", "ar", "ca", "cs", "cy", "da", "de", "el", "es", "et", "fi", "fr", "he", "hu",
-    "id", "is", "it", "ja", "ko", "lt", "ms", "nb", "nl", "pl", "ps", "pt-BR", "pt", "ro", "ru",
-    "sk", "sq", "sr", "sv", "th", "tr", "uk", "vi", "zh-CN", "zh-TW",
+    "en", "af", "ar", "ca", "cs", "cy", "da", "de", "el", "es", "et", "fi", "fr", "he", "hu", "id", "is", "it", "ja",
+    "ko", "lt", "ms", "nb", "nl", "pl", "ps", "pt-BR", "pt", "ro", "ru", "sk", "sq", "sr", "sv", "th", "tr", "uk",
+    "vi", "zh-CN", "zh-TW",
 ];
 
 /// Right-to-left languages: their placeables keep Fluent's isolating marks,
@@ -37,8 +37,7 @@ type Bundle = FluentBundle<FluentResource>;
 
 /// Each embedded language's bundle, parsed the first time it is loaded and
 /// kept for the life of the process. Same order as `SOURCES`.
-static BUNDLES: LazyLock<Box<[OnceLock<Bundle>]>> =
-    LazyLock::new(|| SOURCES.iter().map(|_| OnceLock::new()).collect());
+static BUNDLES: LazyLock<Box<[OnceLock<Bundle>]>> = LazyLock::new(|| SOURCES.iter().map(|_| OnceLock::new()).collect());
 
 /// One language's text, ready to format. Cheap to copy: the parsed bundle
 /// is shared, so loading the same language again costs a lookup, not a

@@ -136,7 +136,12 @@ fn with_alpha(c: Color, a: f32) -> Color {
 /// `src` painted over opaque `dst`.
 fn over(src: Color, dst: Color) -> Color {
     let a = src.a;
-    Color { r: src.r * a + dst.r * (1.0 - a), g: src.g * a + dst.g * (1.0 - a), b: src.b * a + dst.b * (1.0 - a), a: 1.0 }
+    Color {
+        r: src.r * a + dst.r * (1.0 - a),
+        g: src.g * a + dst.g * (1.0 - a),
+        b: src.b * a + dst.b * (1.0 - a),
+        a: 1.0,
+    }
 }
 
 /// `.glass-panel` without the backdrop blur: iced has none, so the glass is
@@ -184,10 +189,11 @@ fn layer<'a, M: Clone + 'a>(rail: Rail<'a>, events: Events<M>, dark: bool, heigh
         border: Border { radius: 1.5.into(), ..Border::default() },
         ..container::Style::default()
     });
-    let mark = pin(stack![container(tint).padding([0.0, GUTTER]).height(ROW_HEIGHT), pin(pill).x(4).y(12)].height(ROW_HEIGHT))
-        .y(mark_y)
-        .width(Length::Fill)
-        .height(Length::Fill);
+    let mark =
+        pin(stack![container(tint).padding([0.0, GUTTER]).height(ROW_HEIGHT), pin(pill).x(4).y(12)].height(ROW_HEIGHT))
+            .y(mark_y)
+            .width(Length::Fill)
+            .height(Length::Fill);
 
     let panel = container(stack![
         container(space().width(Length::Fill).height(Length::Fill)).style(move |_| glass(p, dark)),
@@ -215,10 +221,8 @@ fn layer<'a, M: Clone + 'a>(rail: Rail<'a>, events: Events<M>, dark: bool, heigh
 }
 
 fn chip<'a, M: 'a>(screen: Screen, p: &'static Palette) -> Element<'a, M> {
-    let label = text(format!("Ctrl+{}", screen.index() + 1))
-        .size(11)
-        .font(mono(font::Weight::Normal))
-        .color(p.text_muted);
+    let label =
+        text(format!("Ctrl+{}", screen.index() + 1)).size(11).font(mono(font::Weight::Normal)).color(p.text_muted);
     let boxed = container(label).padding([4, 8]).style(move |_| container::Style {
         background: Some(Background::Color(p.bg_panel)),
         border: Border { color: p.border_subtle, width: 1.0, radius: 6.0.into() },
@@ -284,10 +288,7 @@ fn item<'a, M: Clone + 'a>(rail: Rail<'a>, events: Events<M>, screen: Screen) ->
         ..container::Style::default()
     });
     let cell = stack![row_button, ring].width(Length::Fill).height(ROW_HEIGHT);
-    mouse_area(cell)
-        .on_enter((events.item_hover)(screen, true))
-        .on_exit((events.item_hover)(screen, false))
-        .into()
+    mouse_area(cell).on_enter((events.item_hover)(screen, true)).on_exit((events.item_hover)(screen, false)).into()
 }
 
 #[cfg(test)]
@@ -407,7 +408,8 @@ mod tests {
             let found = ours[at..].find(shape.as_str()).unwrap_or_else(|| panic!("missing {shape}"));
             at += found + shape.len();
         }
-        let ours_count = ours.matches("<path ").count() + ours.matches("<rect ").count() + ours.matches("<circle ").count();
+        let ours_count =
+            ours.matches("<path ").count() + ours.matches("<rect ").count() + ours.matches("<circle ").count();
         assert_eq!(ours_count, theirs.len());
         for s in icon_sources() {
             assert!(s.starts_with("<svg") && s.contains("stroke-width=\"1.8\""));

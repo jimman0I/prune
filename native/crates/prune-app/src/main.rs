@@ -50,11 +50,13 @@ fn main() -> iced::Result {
     let tray_commands = prune_app::tray::install_event_forwarding();
     let once = Mutex::new(Some((startup, later_launches, tray_commands)));
     let boot = move || {
-        let (startup, rx, tray_rx) = once
-            .lock()
-            .ok()
-            .and_then(|mut g| g.take())
-            .unwrap_or_else(|| (Startup::default(), iced::futures::channel::mpsc::unbounded().1, iced::futures::channel::mpsc::unbounded().1));
+        let (startup, rx, tray_rx) = once.lock().ok().and_then(|mut g| g.take()).unwrap_or_else(|| {
+            (
+                Startup::default(),
+                iced::futures::channel::mpsc::unbounded().1,
+                iced::futures::channel::mpsc::unbounded().1,
+            )
+        });
         App::boot(startup, rx, tray_rx)
     };
 
