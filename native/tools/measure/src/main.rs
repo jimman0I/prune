@@ -142,14 +142,13 @@ mod measure {
         Invalid { run, kind: kind.into(), reason }
     }
 
-    /// Kill the whole tree under `root` until nothing is left.
-    fn kill_tree(root: u32) {
+    /// Kill everything in the job and wait until nothing of it is left.
+    fn kill_tree(job: &win::Job) {
         for _ in 0..8 {
-            let live = win::alive(&win::tree(root));
-            if live.is_empty() {
+            job.terminate();
+            if job.active() == 0 {
                 return;
             }
-            win::kill(&live);
             sleep(Duration::from_millis(150));
         }
     }
@@ -167,10 +166,10 @@ mod measure {
 
     /// The root exited. Was it a relaunch into a process we cannot see
     /// (elevated), or did it just exit?
-    fn diagnose_exit(ctx: &Ctx, run: u32, root: u32, status: String, phase: &str) -> Invalid {
+    fn diagnose_exit(ctx: &Ctx, run: u32, job: &win::Job, status: String, phase: &str) -> Invalid {
         // An elevated relaunch can take a moment to appear.
         for _ in 0..30 {
-            let tree = win::tree(root);
+            let tree = job.pids();
             if let Some(p) = foreign_instance(ctx, &tree) {
                 return bad(
                     run,
@@ -203,8 +202,14 @@ mod measure {
             .stdin(Stdio::null())
             .stdout(Stdio::null())
             .stderr(Stdio::piped());
+        // The app and everything it starts run in this job: the tree is
+        // read from it and killed through it (see win.rs).
+        let job = match win::Job::new() {
+            Ok(j) => j,
+            Err(e) => return Err(bad(run, "launch_failed", format!("could not create a job object: {e}"))),
+        };
         let start = Instant::now();
-        let mut child: Child = match cmd.spawn() {
+        let (mut child, held): (Child, Duration) = match job.spawn(&mut cmd) {
             Ok(c) => c,
             Err(e) if e.raw_os_error() == Some(ERROR_ELEVATION_REQUIRED) => {
                 return Err(bad(
@@ -215,7 +220,6 @@ mod measure {
             }
             Err(e) => return Err(bad(run, "launch_failed", e.to_string())),
         };
-        let root = child.id();
 
         // Drain stderr for the whole run (an undrained pipe would stall the
         // app) and keep the startup trace line when there is one.
@@ -243,11 +247,12 @@ mod measure {
             // First visible window owned by the tree.
             let first_window = loop {
                 if let Ok(Some(st)) = child.try_wait() {
-                    return Err(diagnose_exit(ctx, run, root, st.to_string(), "before showing a window"));
+                    return Err(diagnose_exit(ctx, run, &job, st.to_string(), "before showing a window"));
                 }
-                let t = win::tree(root);
+                let t = job.pids();
                 if win::has_visible_window(&t) {
-                    break start.elapsed();
+                    // Not counting the time it was held suspended.
+                    break start.elapsed().saturating_sub(held);
                 }
                 if start.elapsed() > FIRST_WINDOW_TIMEOUT {
                     if let Some(p) = foreign_instance(ctx, &t) {
@@ -268,34 +273,25 @@ mod measure {
             let settled = Instant::now() + Duration::from_secs(a.settle);
             while Instant::now() < settled {
                 if let Ok(Some(st)) = child.try_wait() {
-                    return Err(diagnose_exit(ctx, run, root, st.to_string(), "while settling"));
+                    return Err(diagnose_exit(ctx, run, &job, st.to_string(), "while settling"));
                 }
                 sleep(Duration::from_millis(100));
             }
 
-            let t = win::tree(root);
-            let (mut ws, mut private) = (0u64, 0u64);
-            for &p in &t {
-                if let Some((w, pr)) = win::memory(p) {
-                    ws += w;
-                    private += pr;
-                }
-            }
-            let procs = win::alive(&t).len() as u32;
-            let cpu0 = win::cpu_times(&t);
-            let since_launch: u64 = cpu0.values().sum();
+            let (ws, private) = job.memory();
+            let procs = job.active();
+            let cpu0 = job.cpu_time();
+            let since_launch = cpu0;
             let w0 = Instant::now();
             let end = w0 + Duration::from_secs(a.cpu_window);
             while Instant::now() < end {
                 if let Ok(Some(st)) = child.try_wait() {
-                    return Err(diagnose_exit(ctx, run, root, st.to_string(), "during the CPU window"));
+                    return Err(diagnose_exit(ctx, run, &job, st.to_string(), "during the CPU window"));
                 }
                 sleep(Duration::from_millis(100));
             }
             let wall_100ns = w0.elapsed().as_secs_f64() * 1e7;
-            let cpu1 = win::cpu_times(&win::tree(root));
-            let used: u64 = cpu1.iter().map(|(p, c)| c.saturating_sub(cpu0.get(p).copied().unwrap_or(0))).sum();
-            let used = used as f64;
+            let used = job.cpu_time().saturating_sub(cpu0) as f64;
             let mb = |b: u64| b as f64 / (1024.0 * 1024.0);
             Ok(Run {
                 first_window_ms: first_window.as_secs_f64() * 1000.0,
@@ -309,7 +305,7 @@ mod measure {
             })
         })();
 
-        kill_tree(root);
+        kill_tree(&job);
         let _ = child.wait();
         sleep(Duration::from_millis(300)); // let the stderr thread see EOF
         outcome.map(|mut r| {
@@ -348,16 +344,13 @@ mod measure {
                 return ExitCode::from(2);
             }
             restore.armed = args.restore;
-            let mut all = HashSet::new();
-            for &p in &existing {
-                all.extend(win::tree(p));
-            }
+            // Only processes whose image is this exe: 3.x's helper processes
+            // (renderer, GPU, crash handler) are the same exe, and nothing
+            // else is ever touched.
             for _ in 0..8 {
-                let live = win::alive(&all);
-                if live.is_empty() {
+                if win::kill_image(&exe_lower).0 == 0 {
                     break;
                 }
-                win::kill(&live);
                 sleep(Duration::from_millis(250));
             }
             if !win::pids_with_image(&exe_lower).is_empty() {

@@ -12,21 +12,33 @@ prune-measure --exe <path> [--runs 5] [--settle 30] [--cpu-window 10]
 
 Per run, after one discarded warm-up run:
 
-1. Launch the exe and start a clock.
-2. `first_window_ms`: the time until the first visible top-level window
-   owned by the process tree (`EnumWindows` + `IsWindowVisible`, polled
-   every 5 ms; the tree is walked from parent process ids each poll, so
-   Electron's renderer, GPU and utility processes count).
+1. Launch the exe inside a new job object and start a clock. It is
+   started suspended, put in the job and then resumed, so it and everything
+   it starts (Electron's renderer, GPU and utility processes) are in the
+   job from their first instruction; the time it is held suspended (a
+   thread snapshot to find its thread, about 85 ms) is not counted. The
+   job is the process tree: membership is kept by the kernel, so a reused
+   process id can never pull in, or get killed as, an unrelated process,
+   as a tree built from parent process ids could.
+2. `first_window_ms`: the time until the first top-level window of the job
+   a person can see: visible, not cloaked, and not a tool window
+   (`EnumWindows`, polled every 5 ms). winit's message window is a
+   visible, transparent 16x16 tool window that exists from the first
+   moments of startup; before this rule it was the window timed, which is
+   why earlier 4.0 numbers had the first window well before the first
+   frame.
 3. Wait `--settle` seconds after that window (default 30).
 4. `working_set_mb` / `private_mb`: `GetProcessMemoryInfo` summed over the
-   whole tree. Working set counts shared pages once per process, so it
+   job's processes. Working set counts shared pages once per process, so it
    over-states a multi-process app; `private_mb` is the honest companion.
-5. `cpu_pct`: kernel + user time (`GetProcessTimes`) summed over the tree
-   across a 10 s window, as a share of the whole machine (Task Manager's
+5. `cpu_pct`: kernel + user time of the job (its accounting counts
+   processes that exited too) across a 10 s window, as a share of the whole machine (Task Manager's
    convention: 100 is every logical core busy). `cpu_ms` is the same in
    milliseconds, `cpu_since_launch_ms` the CPU used since launch (it shows
    the counter reads, and what starting up costs).
-6. Kill the whole tree and wait until nothing of it is left.
+6. Kill the job and wait until nothing of it is left. The job is also set
+   to kill its processes when the tool lets go of it, so a crashed or
+   stopped tool never leaves the app running.
 
 The median of the runs is written as `median`. For 4.0 the tool also sets
 `PRUNE_TRACE_STARTUP=1` and reads `first-frame-ms=` from stderr; that is
@@ -45,8 +57,9 @@ tool stops at the first elevation problem and exits 1.
 (a failed result write, a failed close, a panic), through a drop guard.
 
 The tool will not launch into a running instance (it would hand off and
-exit). It refuses unless `--kill-existing` is given, which closes instances
-of that exact image path only, and `--restore` starts one again at the end.
+exit). It refuses unless `--kill-existing` is given, which closes processes
+whose image is that exact path and nothing else (3.x's helper processes
+are the same exe; the path is read from the handle that terminates), and `--restore` starts one again at the end.
 
 ## Measuring 3.x
 
