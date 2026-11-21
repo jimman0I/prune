@@ -393,6 +393,8 @@ impl App {
                 let reveal = std::mem::take(&mut self.reveal_requested);
                 let Some(id) = self.window else { return Task::none() };
                 let mut show = window::set_mode(id, window::Mode::Windowed);
+                // `prepare` already maximized it while hidden, so it shows
+                // maximized; this only keeps winit's own state in step.
                 if maximized {
                     show = show.chain(window::maximize(id, true));
                 }
@@ -810,8 +812,39 @@ mod platform {
         let areas: Vec<_> = displays.iter().map(win32::Display::work_dip).collect();
         let resolved = resolve_window_state(saved, &areas);
         win32::place(hwnd, &resolved, &displays);
+        if resolved.is_maximized {
+            maximize_hidden(hwnd);
+        }
         crate::titlebar::paint(hwnd, dark, crate::theme::palette(dark));
         (Some(raw), resolved.is_maximized)
+    }
+
+    /// Maximizes the still-hidden window and leaves it hidden, so showing
+    /// it later shows it maximized at once instead of restored first (a
+    /// visible jump). Windows only maximizes a window by showing it, so it
+    /// is cloaked meanwhile: DWM draws nothing of a cloaked window. The
+    /// restored bounds `place` set are kept as the restore position, and
+    /// winit learns the maximized state from the WM_SIZE this sends.
+    #[cfg(windows)]
+    fn maximize_hidden(hwnd: windows::Win32::Foundation::HWND) {
+        use windows::Win32::Graphics::Dwm::{DWMWA_CLOAK, DwmSetWindowAttribute};
+        use windows::Win32::UI::WindowsAndMessaging::{SW_HIDE, SW_MAXIMIZE, ShowWindow};
+        use windows::core::BOOL;
+        let cloak = |on: bool| {
+            let v = BOOL::from(on);
+            // SAFETY: `hwnd` is this process's live window; `v` outlives the call.
+            unsafe { DwmSetWindowAttribute(hwnd, DWMWA_CLOAK, (&raw const v).cast(), size_of::<BOOL>() as u32) }
+        };
+        // Without the cloak the maximize would be seen; do not risk it.
+        if cloak(true).is_err() {
+            return;
+        }
+        // SAFETY: as above.
+        unsafe {
+            let _ = ShowWindow(hwnd, SW_MAXIMIZE);
+            let _ = ShowWindow(hwnd, SW_HIDE);
+        }
+        let _ = cloak(false);
     }
 
     #[cfg(not(windows))]

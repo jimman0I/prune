@@ -514,6 +514,86 @@ fn saved_bounds_and_zoom_come_back() {
     );
 }
 
+/// `(shown, maximized)` for each top-level window of `pid`. Shown is
+/// visible and not cloaked; tool windows are left out (winit's message
+/// window is a visible but transparent 16x16 tool window).
+#[cfg(windows)]
+fn window_states_of(pid: u32) -> Vec<(bool, bool)> {
+    use windows::Win32::Foundation::{HWND, LPARAM};
+    use windows::Win32::Graphics::Dwm::{DWMWA_CLOAKED, DwmGetWindowAttribute};
+    use windows::Win32::UI::WindowsAndMessaging::{
+        EnumWindows, GWL_EXSTYLE, GetWindowLongW, GetWindowThreadProcessId, IsWindowVisible, IsZoomed, WS_EX_TOOLWINDOW,
+    };
+    use windows::core::BOOL;
+
+    struct Probe {
+        pid: u32,
+        seen: Vec<(bool, bool)>,
+    }
+    unsafe extern "system" fn each(hwnd: HWND, lparam: LPARAM) -> BOOL {
+        // SAFETY: `lparam` is the `&mut Probe` below, alive for the call.
+        let probe = unsafe { &mut *(lparam.0 as *mut Probe) };
+        let mut owner = 0u32;
+        let mut cloaked = 0u32;
+        // SAFETY: out-pointers to locals; `hwnd` comes from EnumWindows.
+        unsafe {
+            GetWindowThreadProcessId(hwnd, Some(&mut owner));
+            let tool = GetWindowLongW(hwnd, GWL_EXSTYLE) as u32 & WS_EX_TOOLWINDOW.0 != 0;
+            if owner == probe.pid && !tool {
+                let _ = DwmGetWindowAttribute(hwnd, DWMWA_CLOAKED, (&raw mut cloaked).cast(), 4);
+                let shown = IsWindowVisible(hwnd).as_bool() && cloaked == 0;
+                probe.seen.push((shown, IsZoomed(hwnd).as_bool()));
+            }
+        }
+        true.into()
+    }
+    let mut probe = Probe { pid, seen: Vec::new() };
+    // SAFETY: the callback only touches `probe`, which outlives the call.
+    let _ = unsafe { EnumWindows(Some(each), LPARAM(&raw mut probe as isize)) };
+    probe.seen
+}
+
+#[cfg(windows)]
+#[test]
+fn a_maximized_window_is_never_seen_restored() {
+    let profile = Profile::new("maximized");
+    let path = profile.0.join("window-state.json");
+    std::fs::write(&path, r#"{"x":100,"y":100,"width":1000,"height":700,"isMaximized":true,"zoomLevel":0}"#).unwrap();
+    let (mut child, log) = spawn_logged(&profile);
+    // Watch from launch until well after the first frame: every look at
+    // the shown window must find it maximized.
+    let (mut looks, mut restored) = (0, 0);
+    let mut framed: Option<Instant> = None;
+    let deadline = Instant::now() + Duration::from_secs(30);
+    while Instant::now() < deadline && framed.is_none_or(|t| t.elapsed() < Duration::from_millis(500)) {
+        for (shown, zoomed) in window_states_of(child.id()) {
+            if shown {
+                looks += 1;
+                restored += usize::from(!zoomed);
+            }
+        }
+        if framed.is_none() && log.try_iter().any(|l| l.contains("first-frame-ms=")) {
+            framed = Some(Instant::now());
+        }
+    }
+    close_windows_of(child.id());
+    let status = wait_exit(&mut child, Duration::from_secs(10));
+    if status.is_none() {
+        let _ = child.kill();
+    }
+    assert!(framed.is_some(), "never drew a frame");
+    assert!(looks > 0, "the window was never seen");
+    assert_eq!(restored, 0, "seen restored {restored} times out of {looks}");
+    assert!(status.is_some_and(|s| s.success()));
+    let state = read_json(&path);
+    assert_eq!(state["isMaximized"], true);
+    assert_eq!(
+        (&state["x"], &state["y"], &state["width"], &state["height"]),
+        (&serde_json::json!(100), &serde_json::json!(100), &serde_json::json!(1000), &serde_json::json!(700)),
+        "the restored bounds are kept"
+    );
+}
+
 fn tray_app(minimize_to_tray: bool) -> App {
     let mut app = App::new(Startup::default());
     app.set_minimize_to_tray(minimize_to_tray);
