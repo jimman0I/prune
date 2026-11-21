@@ -643,7 +643,25 @@ impl App {
     /// 3.x's minimum is the outer window (900×560 DIP); the window's own
     /// minimum is its client area, so the frame is taken off.
     fn min_size_task(&self, id: window::Id) -> Task<Message> {
-        window::set_min_size(id, Some(min_client_size(self.frame_size(), self.zoom_level)))
+        window::set_min_size(id, Some(min_client_size(self.min_outer(), self.frame_size(), self.zoom_level)))
+    }
+
+    /// 3.x's 900x560, or the work area of the window's monitor where that
+    /// is smaller (see [`window_state::minimum_on`]).
+    #[cfg(windows)]
+    fn min_outer(&self) -> (f32, f32) {
+        match self.hwnd.and_then(|h| window_state::win32::work_of(hwnd(h))) {
+            Some(work) => {
+                let (w, h) = window_state::minimum_on(&work);
+                (w as f32, h as f32)
+            }
+            None => (window_state::MIN_WIDTH, window_state::MIN_HEIGHT),
+        }
+    }
+
+    #[cfg(not(windows))]
+    fn min_outer(&self) -> (f32, f32) {
+        (window_state::MIN_WIDTH, window_state::MIN_HEIGHT)
     }
 
     #[cfg(windows)]
@@ -714,12 +732,13 @@ impl App {
 }
 
 /// The window's minimum client size in iced's units, so that the outer
-/// window stays 3.x's 900x560 DIP. iced multiplies a minimum by the display
-/// scale and the app's scale factor (the zoom), so the zoom is divided out;
-/// `frame` (caption and borders, in DIP) is not zoomed.
-pub fn min_client_size(frame: (f32, f32), zoom_level: f64) -> Size {
+/// window stays at least `min_outer` DIP (3.x's 900x560, less on a smaller
+/// work area). iced multiplies a minimum by the display scale and the app's
+/// scale factor (the zoom), so the zoom is divided out; `frame` (caption
+/// and borders, in DIP) is not zoomed.
+pub fn min_client_size(min_outer: (f32, f32), frame: (f32, f32), zoom_level: f64) -> Size {
     let f = zoom::factor(zoom_level) as f32;
-    Size::new((window_state::MIN_WIDTH - frame.0).max(1.0) / f, (window_state::MIN_HEIGHT - frame.1).max(1.0) / f)
+    Size::new((min_outer.0 - frame.0).max(1.0) / f, (min_outer.1 - frame.1).max(1.0) / f)
 }
 
 /// The runtime events the app acts on.

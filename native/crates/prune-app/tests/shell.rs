@@ -197,13 +197,16 @@ fn ctrl_wheel_steps_once_per_notch_of_travel() {
 #[test]
 fn minimum_size_stays_900_by_560_at_any_zoom() {
     let frame = (16.0, 39.0);
-    for level in [-2.0, -0.5, 0.0, 1.0, 3.0] {
-        let min = min_client_size(frame, level);
-        // iced multiplies the minimum by the zoom factor; the frame is added
-        // by Windows unzoomed.
-        let f = 1.2f32.powf(level as f32);
-        assert!((min.width * f + frame.0 - 900.0).abs() < 0.01, "{level}: {min:?}");
-        assert!((min.height * f + frame.1 - 560.0).abs() < 0.01, "{level}: {min:?}");
+    // 3.x's minimum, and the smaller one a small work area gives.
+    for outer in [(900.0, 560.0), (800.0, 520.0)] {
+        for level in [-2.0, -0.5, 0.0, 1.0, 3.0] {
+            let min = min_client_size(outer, frame, level);
+            // iced multiplies the minimum by the zoom factor; the frame is
+            // added by Windows unzoomed.
+            let f = 1.2f32.powf(level as f32);
+            assert!((min.width * f + frame.0 - outer.0).abs() < 0.01, "{level}: {min:?}");
+            assert!((min.height * f + frame.1 - outer.1).abs() < 0.01, "{level}: {min:?}");
+        }
     }
 }
 
@@ -408,6 +411,22 @@ fn close_windows_of(pid: u32) {
     let _ = unsafe { EnumWindows(Some(each), LPARAM(pid as isize)) };
 }
 
+/// The default window size (DIP) on this machine's primary display: 3.x's
+/// 1280x860 fitted to its work area, read the way the app reads it.
+#[cfg(windows)]
+fn default_size_here() -> (f64, f64) {
+    use prune_app::window_state::{self, win32};
+    use windows::Win32::UI::HiDpi::{DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2, SetThreadDpiAwarenessContext};
+    // The app is per-monitor aware; a test thread is not, and would read a
+    // scaled work area.
+    // SAFETY: changes only this thread's DPI awareness.
+    unsafe { SetThreadDpiAwarenessContext(DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2) };
+    let displays = win32::displays();
+    let primary = displays.iter().find(|d| d.primary).or(displays.first()).expect("a display");
+    let r = window_state::centred_in(&primary.work_dip(), window_state::DEFAULT_WIDTH, window_state::DEFAULT_HEIGHT);
+    (r.width, r.height)
+}
+
 fn read_json(path: &Path) -> serde_json::Value {
     serde_json::from_slice(&std::fs::read(path).expect("window-state.json written")).expect("valid JSON")
 }
@@ -457,8 +476,12 @@ fn closing_saves_window_state_in_3x_shape() {
     let state = read_json(&profile.0.join("window-state.json"));
     let keys: Vec<_> = state.as_object().unwrap().keys().cloned().collect();
     assert_eq!(keys, ["x", "y", "width", "height", "isMaximized", "zoomLevel"]);
-    assert_eq!(state["width"], 1280, "the 3.x default size, saved as DIP");
-    assert_eq!(state["height"], 860);
+    // The 3.x default size, saved as DIP, fitted to the primary display's
+    // work area (a 1024x768 CI runner has less room than 1280x860).
+    let (w, h) = default_size_here();
+    let near = |v: &serde_json::Value, want: f64| v.as_f64().is_some_and(|v| (v - want).abs() <= 1.0);
+    assert!(near(&state["width"], w), "width {} for a default of {w}", state["width"]);
+    assert!(near(&state["height"], h), "height {} for a default of {h}", state["height"]);
     assert_eq!(state["isMaximized"], false);
     assert_eq!(state["zoomLevel"], 0);
     assert!(!profile.settings().exists(), "opening and closing never writes settings.json");

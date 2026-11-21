@@ -94,6 +94,23 @@ pub fn at_least_minimum(resolved: Resolved) -> Resolved {
     }
 }
 
+/// The default window on a display whose work area is `work` (DIP):
+/// `width` x `height`, shrunk to fit the work area, centred in it. 3.x got
+/// this from Electron, which centres a window that has no saved position
+/// and fits it to the work area (Chromium's `AdjustToFit`), so the caption
+/// stays on screen on a 1366x768 display or a 1080p one at 150 %.
+pub fn centred_in(work: &Rect, width: f64, height: f64) -> Rect {
+    let (w, h) = (width.min(work.width), height.min(work.height));
+    Rect { x: work.x + (work.width - w) / 2.0, y: work.y + (work.height - h) / 2.0, width: w, height: h }
+}
+
+/// The outer minimum on a display whose work area is `work` (DIP): 3.x's
+/// 900x560, or the work area where that is smaller, so the minimum never
+/// pushes the window off a small display.
+pub fn minimum_on(work: &Rect) -> (f64, f64) {
+    (f64::from(MIN_WIDTH).min(work.width), f64::from(MIN_HEIGHT).min(work.height))
+}
+
 /// What gets written.
 #[derive(Debug, Clone, Copy, PartialEq)]
 pub struct WindowState {
@@ -241,10 +258,8 @@ pub mod win32 {
                 }),
             None => displays.iter().find(|d| d.primary).or(displays.first()).map(|d| {
                 let s = d.scale;
-                let (w, h) = (resolved.width * s, resolved.height * s);
-                let work_w = f64::from(d.work.right - d.work.left);
-                let work_h = f64::from(d.work.bottom - d.work.top);
-                (f64::from(d.work.left) + (work_w - w) / 2.0, f64::from(d.work.top) + (work_h - h) / 2.0, w, h)
+                let r = super::centred_in(&d.work_dip(), resolved.width, resolved.height);
+                (r.x * s, r.y * s, r.width * s, r.height * s)
             }),
         };
         let Some((x, y, w, h)) = target else { return };
@@ -260,6 +275,12 @@ pub mod win32 {
         if unsafe { GetDpiForWindow(hwnd) } != before {
             let _ = unsafe { SetWindowPos(hwnd, None, x, y, w, h, flags) };
         }
+    }
+
+    /// The work area (DIP) of the monitor the window is on.
+    pub fn work_of(hwnd: HWND) -> Option<Rect> {
+        // SAFETY: `hwnd` is this process's live window.
+        display_of(unsafe { MonitorFromWindow(hwnd, MONITOR_DEFAULTTONEAREST) }).map(|d| d.work_dip())
     }
 
     /// The window's restored bounds in DIP and whether it is maximized, or
@@ -365,6 +386,28 @@ mod tests {
         assert_eq!((resolved.width, resolved.height), (900.0, 560.0));
         let big = at_least_minimum(DEFAULT);
         assert_eq!(big, DEFAULT, "the default is already above the minimum");
+    }
+
+    #[test]
+    fn the_default_window_fits_the_work_area_and_is_centred() {
+        // 1080p at 100 % with a 40 px taskbar: room enough, centred.
+        assert_eq!(centred_in(&rect(0.0, 0.0, 1920.0, 1040.0), 1280.0, 860.0), rect(320.0, 90.0, 1280.0, 860.0));
+        // 1366x768: as tall as the work area, caption at its top edge.
+        assert_eq!(centred_in(&rect(0.0, 0.0, 1366.0, 728.0), 1280.0, 860.0), rect(43.0, 0.0, 1280.0, 728.0));
+        // 1080p at 150 % (1280x688 DIP of work area): fills it.
+        assert_eq!(centred_in(&rect(0.0, 0.0, 1280.0, 688.0), 1280.0, 860.0), rect(0.0, 0.0, 1280.0, 688.0));
+        // A work area that does not start at 0 (taskbar on the left or top).
+        assert_eq!(centred_in(&rect(60.0, 40.0, 1024.0, 728.0), 1280.0, 860.0), rect(60.0, 40.0, 1024.0, 728.0));
+        // Below the 900x560 minimum, fit wins: the frame stays on screen.
+        let small = rect(0.0, 0.0, 800.0, 560.0);
+        assert_eq!(centred_in(&small, 900.0, 560.0), small);
+    }
+
+    #[test]
+    fn the_minimum_shrinks_only_for_a_smaller_work_area() {
+        assert_eq!(minimum_on(&rect(0.0, 0.0, 1366.0, 728.0)), (900.0, 560.0));
+        assert_eq!(minimum_on(&rect(0.0, 0.0, 800.0, 560.0)), (800.0, 560.0));
+        assert_eq!(minimum_on(&rect(0.0, 0.0, 1024.0, 500.0)), (900.0, 500.0));
     }
 
     #[test]
