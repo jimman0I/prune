@@ -12,65 +12,65 @@
   },
   "runs": [
     {
-      "first_window_ms": 272.4,
+      "first_window_ms": 321.8,
       "working_set_mb": 41.9,
       "private_mb": 13.1,
-      "cpu_pct": 0.107,
-      "cpu_ms": 171.9,
-      "cpu_since_launch_ms": 484.4,
+      "cpu_pct": 0.0,
+      "cpu_ms": 0.0,
+      "cpu_since_launch_ms": 359.4,
       "processes": 1,
-      "first_frame_ms": 462.5
+      "first_frame_ms": 331.1
     },
     {
-      "first_window_ms": 197.7,
-      "working_set_mb": 41.9,
-      "private_mb": 13.0,
+      "first_window_ms": 324.9,
+      "working_set_mb": 42.4,
+      "private_mb": 13.1,
+      "cpu_pct": 0.0,
+      "cpu_ms": 0.0,
+      "cpu_since_launch_ms": 359.4,
+      "processes": 1,
+      "first_frame_ms": 334.4
+    },
+    {
+      "first_window_ms": 360.4,
+      "working_set_mb": 42.4,
+      "private_mb": 13.1,
       "cpu_pct": 0.0,
       "cpu_ms": 0.0,
       "cpu_since_launch_ms": 328.1,
       "processes": 1,
-      "first_frame_ms": 352.6
+      "first_frame_ms": 368.6
     },
     {
-      "first_window_ms": 224.6,
-      "working_set_mb": 42.3,
-      "private_mb": 13.1,
+      "first_window_ms": 303.4,
+      "working_set_mb": 42.0,
+      "private_mb": 13.2,
       "cpu_pct": 0.0,
       "cpu_ms": 0.0,
-      "cpu_since_launch_ms": 343.8,
+      "cpu_since_launch_ms": 375.0,
       "processes": 1,
-      "first_frame_ms": 357.8
+      "first_frame_ms": 301.2
     },
     {
-      "first_window_ms": 249.7,
-      "working_set_mb": 42.4,
-      "private_mb": 13.0,
-      "cpu_pct": 0.0,
-      "cpu_ms": 0.0,
-      "cpu_since_launch_ms": 343.8,
-      "processes": 1,
-      "first_frame_ms": 407.7
-    },
-    {
-      "first_window_ms": 224.2,
+      "first_window_ms": 394.6,
       "working_set_mb": 41.9,
-      "private_mb": 13.1,
+      "private_mb": 13.4,
       "cpu_pct": 0.0,
       "cpu_ms": 0.0,
-      "cpu_since_launch_ms": 312.5,
+      "cpu_since_launch_ms": 437.5,
       "processes": 1,
-      "first_frame_ms": 363.6
+      "first_frame_ms": 426.0
     }
   ],
   "median": {
-    "first_window_ms": 224.6,
-    "working_set_mb": 41.9,
+    "first_window_ms": 324.9,
+    "working_set_mb": 42.0,
     "private_mb": 13.1,
     "cpu_pct": 0.0,
     "cpu_ms": 0.0,
-    "cpu_since_launch_ms": 343.8,
+    "cpu_since_launch_ms": 359.4,
     "processes": 1.0,
-    "first_frame_ms": 363.6
+    "first_frame_ms": 334.4
   },
   "invalid_runs": []
 }

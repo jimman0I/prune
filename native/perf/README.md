@@ -83,24 +83,32 @@ owner's go-ahead.
 ## Phase 1 numbers
 
 Measured on the development machine (16 logical processors), release
-build, `UNREVO_SETTINGS_PATH` pointing at a scratch profile.
+build, `UNREVO_SETTINGS_PATH` pointing at a scratch profile, with the
+job-object method above and the system font scan moved off the UI thread
+(the earlier numbers, 224.6 ms first window and 363.6 ms first frame,
+timed winit's invisible message window and had the scan on the UI thread).
 
 | | 3.2.0 (Electron) | 4.0 (native) |
 |---|---|---|
-| first window | not yet measured | 224.6 ms |
-| first frame | n/a | 363.6 ms |
-| working set | not yet measured | 41.9 MB (private 13.1 MB) |
-| idle CPU | not yet measured | 0.000 % (about 344 ms CPU spent starting up) |
+| first window | not yet measured | 324.9 ms |
+| first frame | n/a | 334.4 ms |
+| working set | not yet measured | 42.0 MB (private 13.1 MB) |
+| idle CPU | not yet measured | 0.000 % (about 359 ms CPU spent starting up) |
 | processes | not yet measured | 1 |
 
 ### Against the 4.0 targets
 
-- **First frame: misses the 300 ms target.** 363.6 ms median (range 353 to
-  462 ms), about 64 ms over. The first window is visible at 224.6 ms, but
-  the spec's target is a painted window, which is the first frame. This is
-  a Phase 1 finding to act on, not a pass.
+- **First frame: misses the 300 ms target.** 334.4 ms median (range 301 to
+  426 ms), about 34 ms over. The window a person can see appears about
+  10 ms before its first frame. Moving the font scan to a thread took
+  about 70 ms off (A/B, 5 runs each, twice: 449 and 439 ms before, 370
+  and 377 ms after, on a busier machine than this run). The largest cost
+  left is inside iced's `run` before the app's boot is called (about
+  190 ms: winit's event loop and the executor); `PRUNE_TRACE_STARTUP=1`
+  prints `font-scan-start`, `font-scan-done`, `daemon`, `boot`,
+  `window-created`, `window-shown` and `first-frame-ms`.
 - **Idle memory: meets the 60 MB target** on the working-set basis (the
-  spec says working set, and it is the larger, stricter number): 41.9 MB.
+  spec says working set, and it is the larger, stricter number): 42.0 MB.
   Private bytes are 13.1 MB, so it passes on either basis.
 - **Idle CPU: meets 0 %** (0.000 % over 10 s; the timer ticks about every
   15 ms, so read it with `cpu_ms`).
