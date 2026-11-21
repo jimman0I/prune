@@ -13,6 +13,7 @@
 import express from 'express';
 import cors from 'cors';
 import { localOnly } from './lib/localOnly.js';
+import { identityRoute } from './lib/instanceIdentity.js';
 import { jsonErrors, notFound } from './lib/jsonErrors.js';
 import programsRoutes from './routes/programs.js';
 import uninstallRoutes from './routes/uninstall.js';
@@ -50,7 +51,7 @@ import findProgramRoutes from './routes/findProgram.js';
 import windowsToolsRoutes from './routes/windowsTools.js';
 import junkFilesRoutes from './routes/junkFiles.js';
 
-export function createApp({ port } = {}) {
+export function createApp({ port, instanceToken = null } = {}) {
   const app = express();
 
   /** Only Prune's own window may call this API.
@@ -88,6 +89,8 @@ export function createApp({ port } = {}) {
   app.use(express.json());
 
   app.get('/api/health', (req, res) => res.json({ ok: true }));
+  // Which Prune this is, proved with the per-launch token (lib/instanceIdentity.js).
+  app.get('/api/identity', identityRoute(instanceToken));
   app.use('/api/programs', programsRoutes);
   app.use('/api/uninstall', uninstallRoutes);
   app.use('/api/leftovers', leftoversRoutes);

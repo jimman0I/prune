@@ -15,12 +15,12 @@ import { createApp } from '../app.js';
  * app as a request listener afterwards resolves that without guessing a
  * port and hoping it is free -- an Express app is just a request handler.
  */
-export async function startTestServer() {
+export async function startTestServer({ instanceToken = null } = {}) {
   const server = createServer();
   await new Promise((resolve) => server.listen(0, '127.0.0.1', resolve));
 
   const { port } = server.address();
-  server.on('request', createApp({ port }));
+  server.on('request', createApp({ port, instanceToken }));
 
   const base = `http://127.0.0.1:${port}/api`;
 

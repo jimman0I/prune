@@ -71,10 +71,13 @@ module.exports = {
   // installerQuit.cjs is the thirteenth: main.cjs requires it so the app quits
   // when the installer asks (an elevated Prune cannot be closed from outside),
   // and installerQuit.test.cjs catches its absence.
+  // backendPort.cjs is the fourteenth: main.cjs requires it to choose the
+  // backend's port and prove the window is talking to its own backend, and
+  // installerLanguages.test.cjs catches its absence.
   files: [
     'main.cjs', 'preload.cjs', 'updater.cjs', 'windowState.cjs', 'zoom.cjs', 'relaunchAdmin.cjs', 'pathPicker.cjs',
     'hunterWidget.cjs', 'hunterWidgetPreload.cjs', 'hunterWidget.html', 'startMinimized.cjs', 'explorerRequests.cjs',
-    'installerQuit.cjs'
+    'installerQuit.cjs', 'backendPort.cjs'
   ],
   extraResources: [
     // NOTE the source: this copies from ../backend/src DIRECTLY, not from

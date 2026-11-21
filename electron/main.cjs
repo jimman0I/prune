@@ -19,7 +19,15 @@ const {
   OPEN_REQUEST_CHANNEL, OPEN_REQUEST_READY_CHANNEL, parseOpenRequest, createOpenRequestRelay
 } = require('./explorerRequests.cjs');
 
-const BACKEND_PORT = 3101;
+const {
+  PREFERRED_BACKEND_PORT, chooseBackendPort, createInstanceToken, waitForBackend, isPrunePageUrl
+} = require('./backendPort.cjs');
+
+/* Where this launch's backend listens and the token it proves itself with (see
+ * backendPort.cjs). Development keeps 3101 and no token, as it always had: the
+ * window there talks to whatever backend `npm run dev` started. A packaged
+ * build fills both in before the window is made (decideBackend). */
+let backend = { port: PREFERRED_BACKEND_PORT, token: null };
 
 // Prune's one window, for the Hunter crosshair to minimise and bring back (see
 // registerHunterHandlers). Set when the window is created, cleared when it closes.
@@ -114,27 +122,46 @@ async function startBackend() {
   // reaches electron/build/sqlite3.exe directly by relative path when
   // this isn't set, the same packaged-vs-dev split iconPath() above uses.
   if (app.isPackaged) process.env.UNREVO_SQLITE3_PATH = path.join(process.resourcesPath, 'sqlite3.exe');
+  // Packaged: the port decideBackend() chose and this launch's token. index.js
+  // reads the token once and removes it from the environment. Development
+  // leaves both alone, as before.
+  if (app.isPackaged) {
+    process.env.UNREVO_BACKEND_PORT = String(backend.port);
+    if (backend.token) process.env.UNREVO_INSTANCE_TOKEN = backend.token;
+  }
   const entry = pathToFileURL(backendEntryPath()).href;
   await import(entry); // side effect: calls server.listen()
 }
 
-/** Polls the backend until it answers, so the window doesn't load before
- * it's up. */
-function waitForBackend(timeoutMs = 15000) {
-  const deadline = Date.now() + timeoutMs;
-  return new Promise((resolve, reject) => {
-    const tryOnce = () => {
-      const req = http.get({ host: '127.0.0.1', port: BACKEND_PORT, path: '/api/health', timeout: 1500 }, (res) => {
-        res.resume();
-        resolve();
-      });
-      req.on('error', () => {
-        if (Date.now() > deadline) { reject(new Error('Backend did not start in time.')); return; }
-        setTimeout(tryOnce, 300);
-      });
-      req.on('timeout', () => req.destroy());
-    };
-    tryOnce();
+/** The packaged app's port and token, decided before the window exists so
+ * its preload can be told them (registerBackendInfoHandler). 3101 when it is
+ * free; when another program has it -- the 2026-11-20 bug, a dev server on
+ * 3101 answering every request with 401 -- a free port instead. */
+async function decideBackend() {
+  if (!app.isPackaged) return backend;
+  const token = createInstanceToken();
+  try {
+    const { port, fallback, reason } = await chooseBackendPort();
+    if (fallback) console.log(`Port ${PREFERRED_BACKEND_PORT} is not available (${reason}); Prune's backend uses ${port} instead.`);
+    backend = { port, token };
+  } catch (err) {
+    // Not even a free port could be bound. 3101 is tried as before, and the
+    // token still stops the window loading from anything else.
+    console.error('Could not choose a port for the backend:', err?.message ?? err);
+    backend = { port: PREFERRED_BACKEND_PORT, token };
+  }
+  return backend;
+}
+
+/* The window's preload asks, once and synchronously, where its backend is
+ * (preload.cjs `backend`). Answered only for a page Prune itself loaded, in one
+ * of its own windows; anything else gets null. Registered before the window is
+ * created, and after decideBackend, so the answer is never a guess. */
+function registerBackendInfoHandler() {
+  ipcMain.on('prune:backend', (event) => {
+    const url = event.senderFrame?.url || event.sender.getURL();
+    const ours = BrowserWindow.fromWebContents(event.sender) && isPrunePageUrl(url, { isPackaged: app.isPackaged });
+    event.returnValue = ours ? { port: backend.port, token: backend.token } : null;
   });
 }
 
@@ -511,7 +538,7 @@ const hunter = createHunterWidget({
   BrowserWindow,
   screen,
   getMainWindow: () => mainWindow,
-  askBackend: (point) => postJson({ http, port: BACKEND_PORT, path: '/api/hunter/at-point', body: point }),
+  askBackend: (point) => postJson({ http, port: backend.port, path: '/api/hunter/at-point', body: point }),
   send: (result) => {
     if (mainWindow && !mainWindow.isDestroyed()) mainWindow.webContents.send(RESULT_CHANNEL, result);
   },
@@ -531,7 +558,7 @@ app.whenReady().then(async () => {
    * happened until the backend was not just started but confirmed
    * healthy. Nothing about creating a BrowserWindow or loading its page
    * touches the backend at all; only the RENDERER's own fetch calls hit
-   * 127.0.0.1:3101, over a network stack that already retries once (see
+   * the backend's port on 127.0.0.1, over a network stack that already retries once (see
    * lib/queryClient.js) and whose screens already render a loading state
    * before their first answer arrives (Dashboard's "Reading drive
    * health…" placeholders, for one). Running the two in parallel instead
@@ -555,10 +582,17 @@ app.whenReady().then(async () => {
   app.on(TRAY_READY_EVENT, () => { trayReady = true; }); // before the backend can create it
   const gotLock = (relaunchedFrom ? waitForParentExit(relaunchedFrom) : Promise.resolve())
     .then(() => app.requestSingleInstanceLock());
-  const backendReady = gotLock
-    .then((acquired) => (acquired ? startBackend().then(() => waitForBackend()) : undefined));
+  // The port and token come first (a few milliseconds): the window's preload
+  // is told them, and the backend is started on that port with that token.
+  const backendDecided = gotLock.then((acquired) => (acquired ? decideBackend() : null));
+  const backendReady = backendDecided
+    .then((decided) => (decided
+      ? startBackend().then(() => waitForBackend({ http, port: decided.port, token: decided.token }))
+      : undefined));
   backendReady.catch(() => {});
   if (!(await gotLock)) { app.quit(); return; }
+  await backendDecided;
+  registerBackendInfoHandler();
   app.on('second-instance', (_event, argv) => {
     // A right-click entry launched Prune while it was running: show the window
     // and pass the request on. A request that fails the strict reading is
@@ -581,7 +615,9 @@ app.whenReady().then(async () => {
   if (app.isPackaged) createInstallerQuitWatcher({ dir: app.getPath('userData'), onQuit: () => app.quit() });
 
   await createWindow();
-  await backendReady;
+  // A backend that never came up, or a port some other program answers on, is
+  // logged here; the window says so itself, from its own identity check.
+  await backendReady.catch((err) => console.error('Prune backend:', err?.message ?? err));
 
   app.on('activate', () => {
     if (BrowserWindow.getAllWindows().length === 0) createWindow();

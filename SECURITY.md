@@ -49,10 +49,14 @@ These are the parts where a bug does real damage. All of them are things
 Prune does on purpose, so the vulnerability would be in the guard rather
 than in the capability.
 
-- **The local API.** The backend listens on `127.0.0.1:3101`, and
+- **The local API.** The backend listens on `127.0.0.1:3101` (or, when
+  another program already has that port, a free one chosen at start), and
   loopback is not the protection it sounds like: every web page the user
   has open can reach it too. A `localOnly` guard checks the `Host` header
   before the body is parsed, and CORS reflects rather than wildcards.
+  Before its first request the window checks it reached its own backend:
+  the backend must answer a random nonce with an HMAC of a token made for
+  that launch, and the token itself is never sent.
   Anything that gets a request past that guard is in scope — it would let
   any site the user is browsing list their installed programs, toggle
   startup entries, run a Deep Clean, or empty the quarantine and destroy
@@ -108,7 +112,7 @@ machine unless you turn on the update check.** There is no telemetry, no
 crash reporting and no analytics.
 
 The only HTTP in the app is the window talking to its own backend on
-`127.0.0.1:3101`, with one opt-in exception: **Settings → Check for
+`127.0.0.1` (port 3101 unless another program has it), with one opt-in exception: **Settings → Check for
 updates**, off by default — the installer asks too, on a fresh install,
 with the box unticked. When it is on, the backend asks
 `https://api.github.com/repos/jimman0I/prune/releases/latest` at most once

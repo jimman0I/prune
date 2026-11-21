@@ -47,8 +47,25 @@ const { contextBridge, ipcRenderer, webUtils } = require('electron');
  * path strings back. pathForFile turns a dropped File into its real path
  * (a sandboxed page cannot read it any other way); it only reads, and
  * what is done with the path is decided by the backend's own guards.
+ *
+ * backend -- where this launch's backend listens, and the token it proves
+ * itself with (backendPort.cjs). Asked once, synchronously, before the page's
+ * own scripts run, so the very first request already goes to the right port.
+ * The port is 3101 unless another program had it; the token is null in
+ * development. Only plain values: a port number and a string.
  */
+const backend = readBackend();
+
+function readBackend() {
+  let info = null;
+  try { info = ipcRenderer.sendSync('prune:backend'); } catch { /* no answer: the defaults */ }
+  const port = Number.isInteger(info?.port) && info.port > 0 && info.port < 65536 ? info.port : null;
+  const token = typeof info?.token === 'string' && /^[0-9a-f]{64}$/.test(info.token) ? info.token : null;
+  return { port, token };
+}
+
 contextBridge.exposeInMainWorld('pruneWindow', {
+  backend,
   setTheme: (theme) => ipcRenderer.send('prune:theme', theme),
   admin: {
     canRelaunch: () => ipcRenderer.invoke('prune:admin:can-relaunch'),

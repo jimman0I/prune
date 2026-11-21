@@ -1,8 +1,10 @@
 import { isScanTooLarge, SCAN_TOO_LARGE } from './scanTooLarge.js';
-const API_URL = 'http://127.0.0.1:3101/api';
+// The port the main process chose, behind the check that it is Prune's own
+// backend (backendConnection.js).
+import { API_URL, apiFetch } from './backendConnection.js';
 
 export async function fetchPrograms() {
-  const res = await fetch(`${API_URL}/programs`);
+  const res = await apiFetch(`${API_URL}/programs`);
   const data = await res.json();
   if (!res.ok) throw new Error(data.error || `Request failed: ${res.status}`);
   return data.programs ?? [];
@@ -19,7 +21,7 @@ export async function fetchPrograms() {
  * 35 of 129 on this machine, mostly MSI redistributables that register
  * no icon at all -- and keeps its lettered tile. */
 export async function fetchProgramIcons() {
-  const res = await fetch(`${API_URL}/programs/icons`);
+  const res = await apiFetch(`${API_URL}/programs/icons`);
   const data = await res.json();
   if (!res.ok) throw new Error(data.error || `Request failed: ${res.status}`);
   return data.icons ?? {};
@@ -28,7 +30,7 @@ export async function fetchProgramIcons() {
 /** Windows' own tools on this PC (backend services/windowsTools.js), each
  * { id, group, elevated, kind }: only the ones whose files exist here. */
 export async function fetchWindowsTools() {
-  const res = await fetch(`${API_URL}/windows-tools`);
+  const res = await apiFetch(`${API_URL}/windows-tools`);
   const data = await res.json();
   if (!res.ok) throw new Error(data.error || `Request failed: ${res.status}`);
   return data.tools ?? [];
@@ -39,7 +41,7 @@ export async function fetchWindowsTools() {
  * true } for a declined UAC dialog, or { ok: false, error }. */
 export async function launchWindowsTool(id) {
   try {
-    const res = await fetch(`${API_URL}/windows-tools/launch`, {
+    const res = await apiFetch(`${API_URL}/windows-tools/launch`, {
       method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ id })
     });
     return await res.json();
@@ -56,7 +58,7 @@ export async function launchWindowsTool(id) {
  * not wait on it. A program that can't be measured safely is absent and
  * keeps its blank. */
 export async function fetchProgramSizes() {
-  const res = await fetch(`${API_URL}/programs/sizes`);
+  const res = await apiFetch(`${API_URL}/programs/sizes`);
   const data = await res.json();
   if (!res.ok) throw new Error(data.error || `Request failed: ${res.status}`);
   return data.sizes ?? {};
@@ -70,7 +72,7 @@ export async function fetchProgramSizes() {
  * before it can read anything. A program whose binary reports nothing
  * usable is absent and keeps its blank. */
 export async function fetchProgramVersions() {
-  const res = await fetch(`${API_URL}/programs/versions`);
+  const res = await apiFetch(`${API_URL}/programs/versions`);
   const data = await res.json();
   if (!res.ok) throw new Error(data.error || `Request failed: ${res.status}`);
   return data.versions ?? {};
@@ -82,7 +84,7 @@ export async function fetchProgramVersions() {
  * every key in three hives -- quick (~1.6s) but still not something the
  * program list should wait behind. */
 export async function fetchProgramInstallDates() {
-  const res = await fetch(`${API_URL}/programs/install-dates`);
+  const res = await apiFetch(`${API_URL}/programs/install-dates`);
   const data = await res.json();
   if (!res.ok) throw new Error(data.error || `Request failed: ${res.status}`);
   return data.installDates ?? {};
@@ -94,7 +96,7 @@ export async function fetchProgramInstallDates() {
  * 81 package folders to build it (~5s). They arrive shaped like programs,
  * marked with source: 'store'. */
 export async function fetchStoreApps() {
-  const res = await fetch(`${API_URL}/programs/store`);
+  const res = await apiFetch(`${API_URL}/programs/store`);
   const data = await res.json();
   if (!res.ok) throw new Error(data.error || `Request failed: ${res.status}`);
   return data.apps ?? [];
@@ -105,7 +107,7 @@ export async function fetchStoreApps() {
  * the list stays as it was. */
 export async function requestStoreRefresh() {
   try {
-    await fetch(`${API_URL}/programs/store/refresh`, { method: 'POST' });
+    await apiFetch(`${API_URL}/programs/store/refresh`, { method: 'POST' });
   } catch { /* the list stays as it was */ }
 }
 
@@ -114,7 +116,7 @@ export async function requestStoreRefresh() {
  * Separate again: they live in browser profile folders rather than the
  * registry, and Prune reads them straight off disk. */
 export async function fetchBrowserExtensions() {
-  const res = await fetch(`${API_URL}/programs/extensions`);
+  const res = await apiFetch(`${API_URL}/programs/extensions`);
   const data = await res.json();
   if (!res.ok) throw new Error(data.error || `Request failed: ${res.status}`);
   return data.extensions ?? [];
@@ -122,7 +124,7 @@ export async function fetchBrowserExtensions() {
 
 /** Everything Windows launches at sign-in. */
 export async function fetchStartupItems() {
-  const res = await fetch(`${API_URL}/programs/startup`);
+  const res = await apiFetch(`${API_URL}/programs/startup`);
   const data = await res.json();
   if (!res.ok) throw new Error(data.error || `Request failed: ${res.status}`);
   return data.items ?? [];
@@ -140,7 +142,7 @@ export async function fetchStartupItems() {
  * no icon is simply absent from the map. */
 export async function fetchStartupIcons() {
   try {
-    const res = await fetch(`${API_URL}/programs/startup/icons`);
+    const res = await apiFetch(`${API_URL}/programs/startup/icons`);
     if (!res.ok) return {};
     const data = await res.json();
     return data?.icons || {};
@@ -152,7 +154,7 @@ export async function fetchStartupIcons() {
 /** The scheduled run's status: when it next fires, when it last did, and
  * how many windows went by while the machine was off. */
 export async function fetchAutomation() {
-  const res = await fetch(`${API_URL}/automation`);
+  const res = await apiFetch(`${API_URL}/automation`);
   const data = await res.json();
   if (!res.ok) throw new Error(data.error || `Request failed: ${res.status}`);
   return data;
@@ -163,7 +165,7 @@ export async function fetchAutomation() {
  * { supported, reason, exists, inSync, nextRun, lastRun, lastTaskResult,
  * canEnable, lastClean }. See backend/src/services/scheduledCleanTask.js. */
 export async function fetchScheduledClean() {
-  const res = await fetch(`${API_URL}/scheduled-clean`);
+  const res = await apiFetch(`${API_URL}/scheduled-clean`);
   const data = await res.json();
   if (!res.ok) throw new Error(data.error || `Request failed: ${res.status}`);
   return data;
@@ -172,7 +174,7 @@ export async function fetchScheduledClean() {
 /** Creates (true) or removes (false) that task. The backend decides what it
  * runs and when; only the boolean is sent. Resolves the task's new state. */
 export async function setScheduledClean(enabled) {
-  const res = await fetch(`${API_URL}/scheduled-clean`, {
+  const res = await apiFetch(`${API_URL}/scheduled-clean`, {
     method: 'PUT',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ enabled })
@@ -186,7 +188,7 @@ export async function setScheduledClean(enabled) {
  * { at, ok, mode, movedBytes, freedBytes, rulesCleaned, rulesFailed }.
  * Reading it also adds what that run really freed to the lifetime total. */
 export async function fetchLastAutoClean() {
-  const res = await fetch(`${API_URL}/scheduled-clean/last`);
+  const res = await apiFetch(`${API_URL}/scheduled-clean/last`);
   const data = await res.json();
   if (!res.ok) throw new Error(data.error || `Request failed: ${res.status}`);
   return data?.lastClean ?? null;
@@ -197,7 +199,7 @@ export async function fetchLastAutoClean() {
  * by the backend, which counts only space that is really back -- never a move
  * into Quarantine. A reply that is not numbers reads as nothing counted. */
 export async function fetchStats() {
-  const res = await fetch(`${API_URL}/stats`);
+  const res = await apiFetch(`${API_URL}/stats`);
   const data = await res.json();
   if (!res.ok) throw new Error(data.error || `Request failed: ${res.status}`);
   const freed = Number(data?.freedBytes);
@@ -212,7 +214,7 @@ export async function fetchStats() {
  * freeBytes, totalBytes, percentFree }] }. The share is the backend's, read from
  * Settings (0 is Off, and answers with no drives). */
 export async function fetchLowDisk() {
-  const res = await fetch(`${API_URL}/low-disk`);
+  const res = await apiFetch(`${API_URL}/low-disk`);
   const data = await res.json();
   if (!res.ok) throw new Error(data.error || `Request failed: ${res.status}`);
   return { percent: Number(data?.percent) || 0, drives: Array.isArray(data?.drives) ? data.drives : [] };
@@ -222,7 +224,7 @@ export async function fetchLowDisk() {
  * that ignored the schedule would be a second, hidden way to clean, and
  * the Deep Clean screen already exists for that. */
 export async function checkAutomation() {
-  const res = await fetch(`${API_URL}/automation/check`, { method: 'POST' });
+  const res = await apiFetch(`${API_URL}/automation/check`, { method: 'POST' });
   const data = await res.json();
   if (!res.ok) throw new Error(data.error || `Request failed: ${res.status}`);
   return data;
@@ -234,7 +236,7 @@ export async function checkAutomation() {
  * Stop closes the connection -- and the route watches for that, which is
  * what actually halts the hashing rather than abandoning its result. */
 export async function fetchDuplicates(path, signal) {
-  const res = await fetch(`${API_URL}/duplicates?path=${encodeURIComponent(path)}`, { signal });
+  const res = await apiFetch(`${API_URL}/duplicates?path=${encodeURIComponent(path)}`, { signal });
   const data = await res.json();
   if (!res.ok) throw new Error(data.error || `Request failed: ${res.status}`);
   return data;
@@ -248,7 +250,7 @@ export async function fetchDuplicates(path, signal) {
  * information worth showing. */
 export async function quarantineDiskPath(path, reportedSizeBytes) {
   try {
-    const res = await fetch(`${API_URL}/quarantine/path`, {
+    const res = await apiFetch(`${API_URL}/quarantine/path`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ path, reportedSizeBytes })
@@ -272,7 +274,7 @@ export async function quarantineDiskPath(path, reportedSizeBytes) {
  * crash. */
 export async function setStartupItemEnabled(id, enabled) {
   try {
-    const res = await fetch(`${API_URL}/programs/startup/toggle`, {
+    const res = await apiFetch(`${API_URL}/programs/startup/toggle`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ id, enabled })
@@ -298,7 +300,7 @@ export async function setStartupItemEnabled(id, enabled) {
  * { ok: false, cancelled: true }, not as an exception. */
 async function startupCommand(path, body) {
   try {
-    const res = await fetch(`${API_URL}/programs/startup/${path}`, {
+    const res = await apiFetch(`${API_URL}/programs/startup/${path}`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(body)
@@ -325,7 +327,7 @@ export const addStartupItem = (entry) => startupCommand('add', entry);
  * shell -- contextIsolation is on, nodeIntegration off, no preload, and
  * that is the right way round. */
 export async function revealInExplorer(path) {
-  const res = await fetch(`${API_URL}/programs/reveal`, {
+  const res = await apiFetch(`${API_URL}/programs/reveal`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ path })
@@ -340,7 +342,7 @@ export async function revealInExplorer(path) {
  * Read from files inside each package rather than extracted from a
  * binary, and merged into the same icon map the registry programs use. */
 export async function fetchPackageIcons() {
-  const res = await fetch(`${API_URL}/programs/package-icons`);
+  const res = await apiFetch(`${API_URL}/programs/package-icons`);
   const data = await res.json();
   if (!res.ok) throw new Error(data.error || `Request failed: ${res.status}`);
   return data.icons ?? {};
@@ -353,7 +355,7 @@ export async function fetchPackageIcons() {
  * this sends. Windows-marked non-removable packages are refused there
  * too, not just hidden here. */
 export async function removeStoreApp(packageFullName) {
-  const res = await fetch(`${API_URL}/programs/store/remove`, {
+  const res = await apiFetch(`${API_URL}/programs/store/remove`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ packageFullName })
@@ -366,7 +368,7 @@ export async function removeStoreApp(packageFullName) {
 /** Opens Windows' own Installed apps page, for the Store apps Windows
  * will not let Prune remove. */
 export async function openInstalledAppsSettings() {
-  const res = await fetch(`${API_URL}/programs/apps-settings`, { method: 'POST' });
+  const res = await apiFetch(`${API_URL}/programs/apps-settings`, { method: 'POST' });
   const data = await res.json();
   if (!res.ok) throw new Error(data.error || `Request failed: ${res.status}`);
   return data;
@@ -377,7 +379,7 @@ export async function openInstalledAppsSettings() {
  * Not cached anywhere -- it is the one answer that is only true at the
  * moment it is asked. */
 export async function fetchRunningPrograms() {
-  const res = await fetch(`${API_URL}/programs/running`);
+  const res = await apiFetch(`${API_URL}/programs/running`);
   const data = await res.json();
   if (!res.ok) throw new Error(data.error || `Request failed: ${res.status}`);
   return data.running ?? {};
@@ -387,7 +389,7 @@ export async function fetchRunningPrograms() {
  * (the program's own install location and registry key) are optional: left
  * out, the backend uses the remembered mode and searches by name alone. */
 export async function scanForLeftovers(name, publisher, { mode, anchors, programId, traceId } = {}) {
-  const res = await fetch(`${API_URL}/leftovers/scan`, {
+  const res = await apiFetch(`${API_URL}/leftovers/scan`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
@@ -410,7 +412,7 @@ export async function scanForLeftovers(name, publisher, { mode, anchors, program
  * Scans only. Removal is removeQuarantined below, the same call the
  * ordinary flow makes. */
 export async function scanForcedUninstall({ name, publisher, registryKey, mode, anchors }) {
-  const res = await fetch(`${API_URL}/forced-uninstall/scan`, {
+  const res = await apiFetch(`${API_URL}/forced-uninstall/scan`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ name, publisher, registryKey, ...(mode ? { mode } : {}), ...(anchors ? { anchors } : {}) })
@@ -425,7 +427,7 @@ export async function scanForcedUninstall({ name, publisher, registryKey, mode, 
  * again) and resolves { ok, browser, address }. Launches nothing: Prune never
  * starts a browser, and cannot remove an extension itself. */
 export async function fetchExtensionPageAddress(id) {
-  const res = await fetch(`${API_URL}/programs/extensions/page-address`, {
+  const res = await apiFetch(`${API_URL}/programs/extensions/page-address`, {
     method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ id })
   });
   const data = await res.json();
@@ -436,7 +438,7 @@ export async function fetchExtensionPageAddress(id) {
 /* ------------------------------------------------------------ backups */
 
 async function backupCall(path, options) {
-  const res = await fetch(`${API_URL}/backups${path}`, options);
+  const res = await apiFetch(`${API_URL}/backups${path}`, options);
   const data = await res.json();
   if (!res.ok) throw new Error(data.error || `Request failed: ${res.status}`);
   return data;
@@ -465,7 +467,7 @@ export const deleteBackup = (id) => backupCall(`/${encodeURIComponent(id)}`, { m
  * screen, else { ok: false, error }. */
 export async function showFileProperties(target) {
   try {
-    const res = await fetch(`${API_URL}/programs/properties`, {
+    const res = await apiFetch(`${API_URL}/programs/properties`, {
       method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(target)
     });
     return await res.json();
@@ -476,7 +478,7 @@ export async function showFileProperties(target) {
 
 export async function endHuntedProcess(pid, exePath) {
   try {
-    const res = await fetch(`${API_URL}/hunter/end-process`, {
+    const res = await apiFetch(`${API_URL}/hunter/end-process`, {
       method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ pid, exePath })
     });
     return await res.json();
@@ -488,7 +490,7 @@ export async function endHuntedProcess(pid, exePath) {
 /* ---------------------------------------------------- install monitor */
 
 async function monitorCall(path, options) {
-  const res = await fetch(`${API_URL}/install-monitor${path}`, options);
+  const res = await apiFetch(`${API_URL}/install-monitor${path}`, options);
   const data = await res.json();
   if (!res.ok) throw new Error(data.error || `Request failed: ${res.status}`);
   return data;
@@ -521,7 +523,7 @@ export const exportInstallTraces = (id) => monitorCall(id ? `/traces/${encodeURI
  * rejected, notInstalled }; a file that is not one throws with `.code`
  * (tooLarge, notJson, notTraceFile, newerVersion, tooMany). */
 export async function importInstallTraces(text) {
-  return jsonOrThrow(await fetch(`${API_URL}/install-monitor/traces/import`, {
+  return jsonOrThrow(await apiFetch(`${API_URL}/install-monitor/traces/import`, {
     method: 'POST', headers: { 'Content-Type': 'text/plain' }, body: text
   }));
 }
@@ -530,14 +532,14 @@ export async function importInstallTraces(text) {
  * where path is null if it was cancelled. The dialog is the backend's, not
  * the window's: the renderer has no file API. */
 export async function pickPath(kind) {
-  const res = await fetch(`${API_URL}/picker/${encodeURIComponent(kind)}`, { method: 'POST' });
+  const res = await apiFetch(`${API_URL}/picker/${encodeURIComponent(kind)}`, { method: 'POST' });
   const data = await res.json();
   if (!res.ok) throw new Error(data.error || `Request failed: ${res.status}`);
   return data;
 }
 
 export async function removeQuarantined({ programName, files, registryKeys, scheduledTasks, destination }) {
-  const res = await fetch(`${API_URL}/quarantine/remove`, {
+  const res = await apiFetch(`${API_URL}/quarantine/remove`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     // Only when the dialog chose one. The backend reads its absence as
@@ -562,7 +564,7 @@ export async function removeQuarantined({ programName, files, registryKeys, sche
  * disagree with it about what an unmeasured batch is worth, and then the
  * figure above the list would not be the figure the purge acts on. */
 export async function fetchQuarantineBatches() {
-  const res = await fetch(`${API_URL}/quarantine`);
+  const res = await apiFetch(`${API_URL}/quarantine`);
   const data = await res.json();
   if (!res.ok) throw new Error(data.error || `Request failed: ${res.status}`);
   return {
@@ -576,35 +578,35 @@ export async function fetchQuarantineBatches() {
 }
 
 export async function restoreQuarantineBatch(batchDirName) {
-  const res = await fetch(`${API_URL}/quarantine/${encodeURIComponent(batchDirName)}/restore`, { method: 'POST' });
+  const res = await apiFetch(`${API_URL}/quarantine/${encodeURIComponent(batchDirName)}/restore`, { method: 'POST' });
   const data = await res.json();
   if (!res.ok) throw new Error(data.error || `Request failed: ${res.status}`);
   return data;
 }
 
 export async function deleteQuarantineBatch(batchDirName) {
-  const res = await fetch(`${API_URL}/quarantine/${encodeURIComponent(batchDirName)}`, { method: 'DELETE' });
+  const res = await apiFetch(`${API_URL}/quarantine/${encodeURIComponent(batchDirName)}`, { method: 'DELETE' });
   const data = await res.json();
   if (!res.ok) throw new Error(data.error || `Request failed: ${res.status}`);
   return data;
 }
 
 export async function emptyQuarantine() {
-  const res = await fetch(`${API_URL}/quarantine/empty`, { method: 'POST' });
+  const res = await apiFetch(`${API_URL}/quarantine/empty`, { method: 'POST' });
   const data = await res.json();
   if (!res.ok) throw new Error(data.error || `Request failed: ${res.status}`);
   return data;
 }
 
 export async function fetchSettings() {
-  const res = await fetch(`${API_URL}/settings`);
+  const res = await apiFetch(`${API_URL}/settings`);
   const data = await res.json();
   if (!res.ok) throw new Error(data.error || `Request failed: ${res.status}`);
   return data;
 }
 
 export async function updateSettings(partial) {
-  const res = await fetch(`${API_URL}/settings`, {
+  const res = await apiFetch(`${API_URL}/settings`, {
     method: 'PUT',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(partial)
@@ -619,7 +621,7 @@ export async function updateSettings(partial) {
  * { supported, enabled, elevatedNow, startsWithWindows } -- see
  * backend/src/services/runAsAdmin.js. */
 export async function fetchRunAsAdmin() {
-  const res = await fetch(`${API_URL}/settings/run-as-admin`);
+  const res = await apiFetch(`${API_URL}/settings/run-as-admin`);
   const data = await res.json();
   if (!res.ok) throw new Error(data.error || `Request failed: ${res.status}`);
   return data;
@@ -628,7 +630,7 @@ export async function fetchRunAsAdmin() {
 /** Sets or clears that flag; resolves the new state. It takes effect from the
  * next start of Prune, and the backend refuses it in a development build. */
 export async function setRunAsAdmin(enabled) {
-  const res = await fetch(`${API_URL}/settings/run-as-admin`, {
+  const res = await apiFetch(`${API_URL}/settings/run-as-admin`, {
     method: 'PUT',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ enabled })
@@ -642,7 +644,7 @@ export async function setRunAsAdmin(enabled) {
  * { supported, enabled, minimized, stale, foreign, disabledByWindows,
  * runAsAdmin } -- see backend/src/services/startWithWindows.js. */
 export async function fetchStartWithWindows() {
-  const res = await fetch(`${API_URL}/settings/start-with-windows`);
+  const res = await apiFetch(`${API_URL}/settings/start-with-windows`);
   const data = await res.json();
   if (!res.ok) throw new Error(data.error || `Request failed: ${res.status}`);
   return data;
@@ -652,7 +654,7 @@ export async function fetchStartWithWindows() {
  * minimised). Only booleans are sent; the backend decides what is written, and
  * refuses it in a development build. Resolves the new state. */
 export async function setStartWithWindows({ enabled, minimized }) {
-  const res = await fetch(`${API_URL}/settings/start-with-windows`, {
+  const res = await apiFetch(`${API_URL}/settings/start-with-windows`, {
     method: 'PUT',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(minimized === undefined ? { enabled } : { enabled, minimized })
@@ -668,7 +670,7 @@ export async function setStartWithWindows({ enabled, minimized }) {
  * `captions` are the two menu texts in use -- see
  * backend/src/services/explorerMenu.js. */
 export async function fetchExplorerMenu() {
-  const res = await fetch(`${API_URL}/settings/explorer-menu`);
+  const res = await apiFetch(`${API_URL}/settings/explorer-menu`);
   const data = await res.json();
   if (!res.ok) throw new Error(data.error || `Request failed: ${res.status}`);
   return data;
@@ -678,7 +680,7 @@ export async function fetchExplorerMenu() {
  * decides what is written, and refuses it in a development build. Resolves the
  * new state. */
 export async function setExplorerMenu(enabled) {
-  const res = await fetch(`${API_URL}/settings/explorer-menu`, {
+  const res = await apiFetch(`${API_URL}/settings/explorer-menu`, {
     method: 'PUT',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ enabled })
@@ -693,7 +695,7 @@ export async function setExplorerMenu(enabled) {
  * { status: 'matched' | 'unmatched' | 'windows' | 'unresolved', ... } -- see
  * backend/src/services/programFinder.js. */
 export async function findProgramByFile(path) {
-  const res = await fetch(`${API_URL}/find-program`, {
+  const res = await apiFetch(`${API_URL}/find-program`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ path })
@@ -707,7 +709,7 @@ export async function findProgramByFile(path) {
  * check on -- whether GitHub has a newer release. With the setting off the
  * backend answers from this machine alone. */
 export async function fetchUpdateCheck() {
-  const res = await fetch(`${API_URL}/update-check`);
+  const res = await apiFetch(`${API_URL}/update-check`);
   const data = await res.json();
   if (!res.ok) throw new Error(data.error || `Request failed: ${res.status}`);
   return data;
@@ -716,7 +718,7 @@ export async function fetchUpdateCheck() {
 /** Opens the newer release's page in the browser. Sends no address: the
  * backend opens the page its own last check found, and nothing else. */
 export async function openUpdatePage() {
-  const res = await fetch(`${API_URL}/update-check/open`, { method: 'POST' });
+  const res = await apiFetch(`${API_URL}/update-check/open`, { method: 'POST' });
   const data = await res.json();
   if (!res.ok) throw new Error(data.error || `Request failed: ${res.status}`);
   return data;
@@ -726,7 +728,7 @@ export async function openUpdatePage() {
  * Windows' version and the architecture. The dialog lists these so the user
  * sees exactly what goes along with their text. */
 export async function fetchBugReportInfo() {
-  const res = await fetch(`${API_URL}/bug-report/info`);
+  const res = await apiFetch(`${API_URL}/bug-report/info`);
   const data = await res.json();
   if (!res.ok) throw new Error(data.error || `Request failed: ${res.status}`);
   return data;
@@ -737,7 +739,7 @@ export async function fetchBugReportInfo() {
  * -- see lib/lastProgramsCount.js) and no address: the backend builds the
  * URL itself. */
 export async function openBugReport({ title, description, programsFound }) {
-  const res = await fetch(`${API_URL}/bug-report/open`, {
+  const res = await apiFetch(`${API_URL}/bug-report/open`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ title, description, programsFound })
@@ -748,7 +750,7 @@ export async function openBugReport({ title, description, programsFound }) {
 }
 
 export async function runSandboxTest() {
-  const res = await fetch(`${API_URL}/sandbox-test`, { method: 'POST' });
+  const res = await apiFetch(`${API_URL}/sandbox-test`, { method: 'POST' });
   const data = await res.json();
   if (!res.ok) throw new Error(data.error || `Request failed: ${res.status}`);
   return data;
@@ -803,7 +805,7 @@ export async function streamDeepCleanExecute(ruleIds, onEvent, signal, removalOv
  * (a chunk boundary lands mid-event often enough that parsing whatever
  * arrived would drop rules at random), same signal-driven cancellation. */
 async function streamSSE(url, onEvent, signal, init = {}) {
-  const res = await fetch(url, { ...init, signal });
+  const res = await apiFetch(url, { ...init, signal });
   if (!res.ok || !res.body) {
     // A refused POST carries its reason as JSON; a dropped stream has none.
     // The machine-readable `reason` rides along on the Error, so a screen can
@@ -841,7 +843,7 @@ async function streamSSE(url, onEvent, signal, init = {}) {
  * anything: { files, bytes, refused: [{path, reason}], refusedCount,
  * truncated }. The confirmation step shows it before anything is shredded. */
 export async function previewShred(paths) {
-  const res = await fetch(`${API_URL}/shred/preview`, {
+  const res = await apiFetch(`${API_URL}/shred/preview`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ paths })
@@ -871,12 +873,12 @@ export async function streamShred(paths, passes, onEvent, signal) {
  * code (empty | long | separator | invalid | everything | executable |
  * desktopIni | duplicate | tooMany) rather than dropping it quietly. */
 export async function fetchJunkPatterns() {
-  return jsonOrThrow(await fetch(`${API_URL}/junk-files/patterns`));
+  return jsonOrThrow(await apiFetch(`${API_URL}/junk-files/patterns`));
 }
 
 /** Saves the whole list: [{ pattern, enabled }]. */
 export async function saveJunkPatterns(patterns) {
-  return jsonOrThrow(await fetch(`${API_URL}/junk-files/patterns`, {
+  return jsonOrThrow(await apiFetch(`${API_URL}/junk-files/patterns`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ patterns })
@@ -884,7 +886,7 @@ export async function saveJunkPatterns(patterns) {
 }
 
 export async function resetJunkPatterns() {
-  return jsonOrThrow(await fetch(`${API_URL}/junk-files/patterns/reset`, { method: 'POST' }));
+  return jsonOrThrow(await apiFetch(`${API_URL}/junk-files/patterns/reset`, { method: 'POST' }));
 }
 
 /** The scan of `roots` (drives as "C:\", or folders), streamed.
@@ -909,7 +911,7 @@ export async function streamJunkScan(roots, onEvent, signal) {
  * anything without it. Resolves to { freedBytes, movedBytes, removedCount,
  * mode, results: [{ quarantineBatch?, recycled?, skipped, skippedCount }] }. */
 export async function removeJunkFiles(paths) {
-  return jsonOrThrow(await fetch(`${API_URL}/junk-files/remove`, {
+  return jsonOrThrow(await apiFetch(`${API_URL}/junk-files/remove`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ paths, confirmed: true })
@@ -935,19 +937,19 @@ async function jsonOrThrow(res) {
  * { locations: [path], imported: [{id, label, source, importedAt,
  * ruleCount, report}] }. */
 export async function fetchCustomCleaners() {
-  return jsonOrThrow(await fetch(`${API_URL}/custom-cleaners`));
+  return jsonOrThrow(await apiFetch(`${API_URL}/custom-cleaners`));
 }
 
 /** Adds a Custom location. Refused ones throw with `.reason` (empty |
  * relative | climb | protected | wildcard | long). */
 export async function addCustomLocation(path) {
-  return jsonOrThrow(await fetch(`${API_URL}/custom-cleaners/locations`, {
+  return jsonOrThrow(await apiFetch(`${API_URL}/custom-cleaners/locations`, {
     method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ path })
   }));
 }
 
 export async function removeCustomLocation(path) {
-  return jsonOrThrow(await fetch(`${API_URL}/custom-cleaners/locations/remove`, {
+  return jsonOrThrow(await apiFetch(`${API_URL}/custom-cleaners/locations/remove`, {
     method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ path })
   }));
 }
@@ -956,13 +958,13 @@ export async function removeCustomLocation(path) {
  * plain text (it can be bigger than the JSON body limit). Resolves
  * { imported, cleaner, report }; a refused file throws with `.code`. */
 export async function importCleaner(name, text) {
-  return jsonOrThrow(await fetch(`${API_URL}/custom-cleaners/import?name=${encodeURIComponent(name)}`, {
+  return jsonOrThrow(await apiFetch(`${API_URL}/custom-cleaners/import?name=${encodeURIComponent(name)}`, {
     method: 'POST', headers: { 'Content-Type': 'text/plain' }, body: text
   }));
 }
 
 export async function removeImportedCleaner(id) {
-  return jsonOrThrow(await fetch(`${API_URL}/custom-cleaners/imported/${encodeURIComponent(id)}`, { method: 'DELETE' }));
+  return jsonOrThrow(await apiFetch(`${API_URL}/custom-cleaners/imported/${encodeURIComponent(id)}`, { method: 'DELETE' }));
 }
 
 /** The rule list, grouped, with no sizes.
@@ -972,7 +974,7 @@ export async function removeImportedCleaner(id) {
  * the tab opens instead of an empty panel, with the half-minute
  * measurement filling the sizes in afterwards. */
 export async function fetchDeepCleanRules() {
-  const res = await fetch(`${API_URL}/deep-clean/rules`);
+  const res = await apiFetch(`${API_URL}/deep-clean/rules`);
   const data = await res.json();
   if (!res.ok) throw new Error(data.error || `Request failed: ${res.status}`);
   return data.categories ?? [];
@@ -986,7 +988,7 @@ export async function fetchWipeEstimate({ drive, passes } = {}) {
   if (drive) params.set('drive', drive);
   if (passes) params.set('passes', String(passes));
   const query = params.toString();
-  const res = await fetch(`${API_URL}/deep-clean/wipe-estimate${query ? `?${query}` : ''}`);
+  const res = await apiFetch(`${API_URL}/deep-clean/wipe-estimate${query ? `?${query}` : ''}`);
   const data = await res.json();
   if (!res.ok) throw new Error(data.error || `Request failed: ${res.status}`);
   return data;
@@ -996,7 +998,7 @@ export async function fetchWipeEstimate({ drive, passes } = {}) {
  * it uses when none is chosen: { drives: [{drive, label, totalBytes,
  * freeBytes}], profileDrive }. */
 export async function fetchWipeDrives() {
-  const res = await fetch(`${API_URL}/deep-clean/wipe-drives`);
+  const res = await apiFetch(`${API_URL}/deep-clean/wipe-drives`);
   const data = await res.json();
   if (!res.ok) throw new Error(data.error || `Request failed: ${res.status}`);
   return data;
@@ -1010,7 +1012,7 @@ export async function fetchWipeDrives() {
  * from the map. */
 export async function fetchCleanerCategoryIcons() {
   try {
-    const res = await fetch(`${API_URL}/deep-clean/category-icons`);
+    const res = await apiFetch(`${API_URL}/deep-clean/category-icons`);
     if (!res.ok) return {};
     const data = await res.json();
     return data?.icons ?? {};
@@ -1020,7 +1022,7 @@ export async function fetchCleanerCategoryIcons() {
 }
 
 export async function fetchDeepCleanScan() {
-  const res = await fetch(`${API_URL}/deep-clean/scan`);
+  const res = await apiFetch(`${API_URL}/deep-clean/scan`);
   const data = await res.json();
   if (!res.ok) throw new Error(data.error || `Request failed: ${res.status}`);
   return data.categories ?? [];
@@ -1033,14 +1035,14 @@ export async function fetchDeepCleanScan() {
  * look identical to "this machine truly has no cookies anywhere", which
  * is never true. */
 export async function fetchCookieDomains() {
-  const res = await fetch(`${API_URL}/deep-clean/cookie-domains`);
+  const res = await apiFetch(`${API_URL}/deep-clean/cookie-domains`);
   const data = await res.json();
   if (!res.ok) throw new Error(data.error || `Request failed: ${res.status}`);
   return { domains: data.domains ?? [], errors: data.errors ?? [] };
 }
 
 export async function executeDeepClean(ruleIds, removalOverride) {
-  const res = await fetch(`${API_URL}/deep-clean/execute`, {
+  const res = await apiFetch(`${API_URL}/deep-clean/execute`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(removalOverride ? { ruleIds, removal: removalOverride } : { ruleIds })
@@ -1059,7 +1061,7 @@ export async function executeDeepClean(ruleIds, removalOverride) {
  * prompt is a normal outcome, not a thrown error, so this never throws
  * on `cancelled`. */
 export async function executeDeepCleanElevated(ruleIds, removalOverride) {
-  const res = await fetch(`${API_URL}/deep-clean/execute-elevated`, {
+  const res = await apiFetch(`${API_URL}/deep-clean/execute-elevated`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(removalOverride ? { ruleIds, removal: removalOverride } : { ruleIds })
@@ -1070,7 +1072,7 @@ export async function executeDeepCleanElevated(ruleIds, removalOverride) {
 }
 
 export async function fetchDiskHealth() {
-  const res = await fetch(`${API_URL}/disk-health`);
+  const res = await apiFetch(`${API_URL}/disk-health`);
   const data = await res.json();
   if (!res.ok) throw new Error(data.error || `Request failed: ${res.status}`);
   return data;
@@ -1079,7 +1081,7 @@ export async function fetchDiskHealth() {
 /** Raises a real UAC prompt on the user's machine, so it must only ever be
  * called from an explicit click -- never a mount effect or a refresh. */
 export async function unlockDiskWear() {
-  const res = await fetch(`${API_URL}/disk-health/elevated`, { method: 'POST' });
+  const res = await apiFetch(`${API_URL}/disk-health/elevated`, { method: 'POST' });
   const data = await res.json();
   if (!res.ok) throw new Error(data.error || `Request failed: ${res.status}`);
   return data;
@@ -1092,7 +1094,7 @@ export async function unlockDiskWear() {
  * the shell can't resolve is simply absent and the caller keeps drawing
  * its plain coloured cell. */
 export async function fetchFileTypeIcons(extensions) {
-  const res = await fetch(`${API_URL}/file-icons`, {
+  const res = await apiFetch(`${API_URL}/file-icons`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ extensions })
@@ -1103,7 +1105,7 @@ export async function fetchFileTypeIcons(extensions) {
 }
 
 export async function fetchDiskSpace() {
-  const res = await fetch(`${API_URL}/disk-space`);
+  const res = await apiFetch(`${API_URL}/disk-space`);
   const data = await res.json();
   if (!res.ok) throw new Error(data.error || `Request failed: ${res.status}`);
   return data;
@@ -1128,7 +1130,7 @@ export async function scanDriveFast(driveLetters = ['C']) {
   // Every drive in ONE request: the backend hands them to a single helper,
   // so choosing C: and D: is one consent prompt rather than two.
   const letters = Array.isArray(driveLetters) ? driveLetters : [driveLetters];
-  const res = await fetch(`${API_URL}/mft-scan`, {
+  const res = await apiFetch(`${API_URL}/mft-scan`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ driveLetters: letters })
@@ -1149,7 +1151,7 @@ export async function scanDriveFast(driveLetters = ['C']) {
 /** Whether the fast scan can run without a prompt, i.e. whether Prune itself
  * was started as administrator: { elevated: boolean }. */
 export async function fetchMftStatus() {
-  const res = await fetch(`${API_URL}/mft-scan/status`);
+  const res = await apiFetch(`${API_URL}/mft-scan/status`);
   const data = await res.json();
   if (!res.ok) throw new Error(data.error || `Request failed: ${res.status}`);
   return data;
@@ -1158,7 +1160,7 @@ export async function fetchMftStatus() {
 /* ---- saved Disk Map scans (backend/src/routes/savedScans.js) ----------- */
 
 async function savedScansRequest(path, options) {
-  const res = await fetch(`${API_URL}/saved-scans${path}`, options);
+  const res = await apiFetch(`${API_URL}/saved-scans${path}`, options);
   const data = await res.json();
   if (!res.ok) throw new Error(data.error || `Request failed: ${res.status}`);
   return data;
@@ -1219,7 +1221,7 @@ export async function deleteAutoScans() {
  * { systemDrive: 'C', drives: [{ letter, label, fileSystem, totalBytes,
  * freeBytes, removable, system, ntfs }] }. */
 export async function fetchDrives() {
-  const res = await fetch(`${API_URL}/drives`);
+  const res = await apiFetch(`${API_URL}/drives`);
   const data = await res.json();
   if (!res.ok) throw new Error(data.error || `Request failed: ${res.status}`);
   return data;
@@ -1231,7 +1233,7 @@ export async function fetchDrives() {
  * Without it this is the original single request, unchanged. */
 export async function fetchDiskScan(path, signal, { onProgress } = {}) {
   if (typeof onProgress === 'function') return fetchDiskScanStreamed(path, signal, onProgress);
-  const res = await fetch(`${API_URL}/disk-scan?path=${encodeURIComponent(path)}`, { signal });
+  const res = await apiFetch(`${API_URL}/disk-scan?path=${encodeURIComponent(path)}`, { signal });
   const data = await res.json();
   if (!res.ok) throw new Error(data.error || `Request failed: ${res.status}`);
   return data;
@@ -1245,7 +1247,7 @@ export async function fetchDiskScan(path, signal, { onProgress } = {}) {
  * finished is not an error worth showing. */
 export async function stopDiskScan(scanId) {
   try {
-    const res = await fetch(`${API_URL}/disk-scan/stop/${encodeURIComponent(scanId)}`, { method: 'POST' });
+    const res = await apiFetch(`${API_URL}/disk-scan/stop/${encodeURIComponent(scanId)}`, { method: 'POST' });
     return res.ok;
   } catch {
     return false;
@@ -1264,7 +1266,7 @@ async function fetchDiskScanStreamed(path, signal, onProgress) {
   if (failure) throw new Error(failure);
   if (!done) throw new Error('The scan ended before it finished');
 
-  const res = await fetch(`${API_URL}/disk-scan/result/${encodeURIComponent(done.resultId)}`, { signal });
+  const res = await apiFetch(`${API_URL}/disk-scan/result/${encodeURIComponent(done.resultId)}`, { signal });
   const data = await res.json();
   if (!res.ok) throw new Error(data.error || `Request failed: ${res.status}`);
   return data;
@@ -1273,7 +1275,7 @@ async function fetchDiskScanStreamed(path, signal, onProgress) {
 /** The five latest entries (the Dashboard), or every one with { all: true }
  * (the History view). */
 export async function fetchUninstallHistory({ all = false } = {}) {
-  const res = await fetch(`${API_URL}/uninstall-history${all ? '?all=1' : ''}`);
+  const res = await apiFetch(`${API_URL}/uninstall-history${all ? '?all=1' : ''}`);
   const data = await res.json();
   if (!res.ok) throw new Error(data.error || `Request failed: ${res.status}`);
   return data.entries ?? [];
@@ -1283,7 +1285,7 @@ export async function fetchUninstallHistory({ all = false } = {}) {
  * keeps only the fields it recognises -- and resolves { ok, id }, or
  * { ok, skipped } when the history is turned off. */
 export async function appendHistoryEntry(fields) {
-  const res = await fetch(`${API_URL}/uninstall-history`, {
+  const res = await apiFetch(`${API_URL}/uninstall-history`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(fields)
@@ -1296,7 +1298,7 @@ export async function appendHistoryEntry(fields) {
 /** Adds what became known after the entry was written (how the leftover
  * review went). */
 export async function updateHistoryEntry(id, fields) {
-  const res = await fetch(`${API_URL}/uninstall-history/${encodeURIComponent(id)}`, {
+  const res = await apiFetch(`${API_URL}/uninstall-history/${encodeURIComponent(id)}`, {
     method: 'PATCH',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(fields)
@@ -1308,7 +1310,7 @@ export async function updateHistoryEntry(id, fields) {
 
 /** Deletes the whole history. */
 export async function clearUninstallHistory() {
-  const res = await fetch(`${API_URL}/uninstall-history`, { method: 'DELETE' });
+  const res = await apiFetch(`${API_URL}/uninstall-history`, { method: 'DELETE' });
   const data = await res.json();
   if (!res.ok) throw new Error(data.error || `Request failed: ${res.status}`);
   return data;
@@ -1333,7 +1335,7 @@ export function parseSSELine(line) {
  * of the uninstall registry by the backend, which will not run a string
  * a client sent it -- see routes/uninstall.js. */
 export async function streamUninstall(programId, onEvent) {
-  const res = await fetch(`${API_URL}/uninstall`, {
+  const res = await apiFetch(`${API_URL}/uninstall`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ programId })

@@ -2,10 +2,12 @@
  * packages, program folders nothing registered claims, Windows' optional
  * features and installed Windows updates. Their own file so api.js, which
  * every screen imports, does not grow with them. */
-const API_URL = 'http://127.0.0.1:3101/api';
+// The port the main process chose, behind the check that it is Prune's own
+// backend (backendConnection.js).
+import { API_URL, apiFetch } from './backendConnection.js';
 
 async function getJson(path) {
-  const res = await fetch(`${API_URL}${path}`);
+  const res = await apiFetch(`${API_URL}${path}`);
   const data = await res.json();
   if (!res.ok) throw new Error(data.error || `Request failed: ${res.status}`);
   return data;
@@ -54,7 +56,7 @@ export async function fetchWindowsUpdates() {
 }
 
 async function postRemoval(path, body) {
-  const res = await fetch(`${API_URL}${path}`, {
+  const res = await apiFetch(`${API_URL}${path}`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(body)

@@ -18,7 +18,16 @@ import {
   HOUSEKEEPING_DELAY_MS, SCHEDULE_CATCHUP_DELAY_MS, runLater, scheduleHousekeeping
 } from './lib/startupTasks.js';
 
+// The packaged app's main process chooses the port (3101 unless another
+// program already has it) and passes it here; on its own this is 3101.
 const PORT = process.env.UNREVO_BACKEND_PORT || 3101;
+
+// This launch's identity token, from the packaged app's main process (see
+// lib/instanceIdentity.js and electron/backendPort.cjs). Read once and taken
+// out of the environment straight away, so no program this backend starts
+// later inherits it.
+const INSTANCE_TOKEN = process.env.UNREVO_INSTANCE_TOKEN || null;
+delete process.env.UNREVO_INSTANCE_TOKEN;
 
 // A rejection escaping every route's own try/catch would otherwise crash
 // the whole process — this is loaded in-process inside Electron's main
@@ -31,7 +40,7 @@ process.on('unhandledRejection', (err) => {
 // Built in app.js so the routes can be tested without binding a port or
 // starting the scheduler. This file keeps everything that is about
 // RUNNING the server rather than about what it serves.
-const app = createApp({ port: PORT });
+const app = createApp({ port: PORT, instanceToken: INSTANCE_TOKEN });
 
 // The schedule catches up on start as well as on its timer: the window
 // most likely to have been missed is one that passed while the machine

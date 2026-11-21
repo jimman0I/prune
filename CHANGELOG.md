@@ -11,6 +11,16 @@ see v1.0.1 below) are documented here.
   is kept with your other settings, so it is part of the same file as
   everything else instead of living only in the window's own storage.
 
+### Fixed
+
+- **Prune keeps working when another program has its port.** The window
+  always called 127.0.0.1:3101, so when another local server was already
+  listening there, Prune talked to that server instead of its own and
+  showed errors such as "Couldn't load programs: Unauthorized". Prune now
+  uses a free port when 3101 is taken, and checks it is talking to its own
+  background service before loading anything; if something else answers,
+  it says so plainly instead of showing that program's replies.
+
 ### Security
 
 - Electron 44.11.5, which carries upstream's certificate mitigation and
