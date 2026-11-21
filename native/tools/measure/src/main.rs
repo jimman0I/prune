@@ -111,13 +111,28 @@ mod measure {
     const ERROR_ELEVATION_REQUIRED: i32 = 740;
     const DETACHED_PROCESS: u32 = 0x0000_0008;
 
+    /// Starts the owner's app again when dropped, on every exit path after
+    /// it was closed (early return, write failure, panic).
+    struct Restore<'a> {
+        exe: &'a str,
+        armed: bool,
+    }
+
+    impl Drop for Restore<'_> {
+        fn drop(&mut self) {
+            if self.armed {
+                // Through the shell so it is not a child of this process (and
+                // so not of a scheduled task's job, which would keep the task
+                // "running" for as long as the app lives).
+                let _ = Command::new("explorer.exe").arg(self.exe).creation_flags(DETACHED_PROCESS).spawn();
+            }
+        }
+    }
+
     struct Ctx<'a> {
         args: &'a Args,
         exe: String,
         exe_lower: String,
-        /// Instances that were running before we started (we never launch
-        /// into or measure those).
-        preexisting: HashSet<u32>,
         cpus: usize,
     }
 
@@ -137,17 +152,24 @@ mod measure {
         }
     }
 
+    /// A process running this exe that is not in our tree. By image path
+    /// when it can be read, else by file name: an elevated process cannot be
+    /// opened from a limited one, so its path is invisible. Any instance of
+    /// the exe that existed before the run was closed or refused at start.
+    fn foreign_instance(ctx: &Ctx, tree: &HashSet<u32>) -> Option<u32> {
+        let by_path = win::pids_with_image(&ctx.exe_lower);
+        let name = std::path::Path::new(&ctx.exe_lower).file_name()?.to_string_lossy().into_owned();
+        let by_name = win::pids_named(&name);
+        by_path.into_iter().chain(by_name).find(|p| !tree.contains(p))
+    }
+
     /// The root exited. Was it a relaunch into a process we cannot see
     /// (elevated), or did it just exit?
     fn diagnose_exit(ctx: &Ctx, run: u32, root: u32, status: String, phase: &str) -> Invalid {
         // An elevated relaunch can take a moment to appear.
         for _ in 0..30 {
             let tree = win::tree(root);
-            let new: Vec<u32> = win::pids_with_image(&ctx.exe_lower)
-                .into_iter()
-                .filter(|p| !tree.contains(p) && !ctx.preexisting.contains(p))
-                .collect();
-            if let Some(p) = new.first() {
+            if let Some(p) = foreign_instance(ctx, &tree) {
                 return bad(
                     run,
                     "relaunched_elevated",
@@ -222,6 +244,13 @@ mod measure {
                     break start.elapsed();
                 }
                 if start.elapsed() > FIRST_WINDOW_TIMEOUT {
+                    if let Some(p) = foreign_instance(ctx, &t) {
+                        return Err(bad(
+                            run,
+                            "relaunched_elevated",
+                            format!("no visible window in the launched tree within 60 s, but another instance of the same exe (pid {p}) is running outside it: it most likely relaunched itself elevated. That instance was not measured and was left running"),
+                        ));
+                    }
                     return Err(bad(run, "no_window", "no visible window within 60 s".into()));
                 }
                 sleep(POLL);
@@ -300,6 +329,8 @@ mod measure {
         // and exit. Closing it is opt-in, by the exact image path only.
         let existing = win::pids_with_image(&exe_lower);
         let mut closed = 0;
+        // Armed before the first kill, so a half-finished close is restored too.
+        let mut restore = Restore { exe: &exe, armed: false };
         if !existing.is_empty() {
             if !args.kill_existing {
                 eprintln!(
@@ -308,6 +339,7 @@ mod measure {
                 );
                 return ExitCode::from(2);
             }
+            restore.armed = args.restore;
             let mut all = HashSet::new();
             for &p in &existing {
                 all.extend(win::tree(p));
@@ -328,7 +360,7 @@ mod measure {
             sleep(Duration::from_secs(2));
         }
 
-        let ctx = Ctx { args, exe: exe.clone(), exe_lower, preexisting: HashSet::new(), cpus };
+        let ctx = Ctx { args, exe: exe.clone(), exe_lower, cpus };
         let version = win::file_version(&exe).unwrap_or_else(|| "unknown".into());
         eprintln!("prune-measure: {exe} (version {version}), {} runs after 1 warm-up, settle {} s", args.runs, args.settle);
 
@@ -380,12 +412,6 @@ mod measure {
             None => println!("{text}"),
         }
 
-        if closed > 0 && args.restore {
-            // Through the shell so it is not a child of this process (and
-            // so not of a scheduled task's job, which would keep the task
-            // "running" for as long as the app lives).
-            let _ = Command::new("explorer.exe").arg(&exe).creation_flags(DETACHED_PROCESS).spawn();
-        }
         if runs.len() as u32 == args.runs && invalid.is_empty() { ExitCode::SUCCESS } else { ExitCode::from(1) }
     }
 }

@@ -41,6 +41,9 @@ an "always run as administrator" relaunch looks like
 (`relaunched_elevated`), or it exited on its own (`exited_early`). The
 tool stops at the first elevation problem and exits 1.
 
+`--restore` runs on every way out once the running instance was closed
+(a failed result write, a failed close, a panic), through a drop guard.
+
 The tool will not launch into a running instance (it would hand off and
 exit). It refuses unless `--kill-existing` is given, which closes instances
 of that exact image path only, and `--restore` starts one again at the end.
@@ -52,7 +55,12 @@ task for the current user (so it runs in the real desktop session, not in a
 sandboxed shell with a virtualized view of the system), runs
 `prune-measure --exe %LOCALAPPDATA%\Programs\Prune\Prune.exe --runs 5
 --settle 30 --kill-existing --restore --out native\perf\baseline-3.2.0.json`,
-waits, prints the progress log, and unregisters the task. Build the tool
+waits until the task has really started and then ended (a task that is
+still queued is not treated as finished; if the script is stopped the task
+is stopped too), prints the progress log, and unregisters the task. The
+result is written to a temporary file and moved over `baseline-3.2.0.json`
+only when the run was clean; otherwise it is kept as
+`baseline-3.2.0.partial.json` and any earlier baseline is left alone. Build the tool
 first (`cargo build --release -p prune-measure` in `native`).
 
 It closes the running Prune and launches then kills it 6 times (about 45 s
@@ -71,5 +79,17 @@ build, `UNREVO_SETTINGS_PATH` pointing at a scratch profile.
 | working set | not yet measured | 41.9 MB (private 13.1 MB) |
 | idle CPU | not yet measured | 0.000 % (about 344 ms CPU spent starting up) |
 | processes | not yet measured | 1 |
+
+### Against the 4.0 targets
+
+- **First frame: misses the 300 ms target.** 363.6 ms median (range 353 to
+  462 ms), about 64 ms over. The first window is visible at 224.6 ms, but
+  the spec's target is a painted window, which is the first frame. This is
+  a Phase 1 finding to act on, not a pass.
+- **Idle memory: meets the 60 MB target** on the working-set basis (the
+  spec says working set, and it is the larger, stricter number): 41.9 MB.
+  Private bytes are 13.1 MB, so it passes on either basis.
+- **Idle CPU: meets 0 %** (0.000 % over 10 s; the timer ticks about every
+  15 ms, so read it with `cpu_ms`).
 
 4.0 runs: `phase1-4.0.json`. 3.x runs (when measured): `baseline-3.2.0.json`.

@@ -37,6 +37,32 @@ pub fn snapshot() -> Vec<(u32, u32)> {
     out
 }
 
+/// Pids whose executable file name is `name` (lower-case compare), however
+/// privileged the process is.
+pub fn pids_named(name: &str) -> Vec<u32> {
+    let mut out = Vec::new();
+    unsafe {
+        let Ok(h) = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0) else {
+            return out;
+        };
+        let mut e = PROCESSENTRY32W { dwSize: size_of::<PROCESSENTRY32W>() as u32, ..Default::default() };
+        if Process32FirstW(h, &mut e).is_ok() {
+            loop {
+                let n = &e.szExeFile;
+                let len = n.iter().position(|&c| c == 0).unwrap_or(n.len());
+                if String::from_utf16_lossy(&n[..len]).to_lowercase() == name {
+                    out.push(e.th32ProcessID);
+                }
+                if Process32NextW(h, &mut e).is_err() {
+                    break;
+                }
+            }
+        }
+        let _ = CloseHandle(h);
+    }
+    out
+}
+
 /// `root` and every descendant, by parent links. Works after `root` has
 /// exited: its children keep the parent id they were started with.
 pub fn tree(root: u32) -> HashSet<u32> {
