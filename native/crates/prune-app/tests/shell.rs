@@ -10,6 +10,8 @@ use std::time::{Duration, Instant};
 use prune_app::app::{App, Message, Startup, Wheel, min_client_size};
 use prune_app::screen::Screen;
 use prune_app::shortcut::{KeyPress, Shortcut, match_shortcut};
+#[cfg(windows)]
+use prune_app::window_state;
 use prune_app::zoom::ZoomAction;
 
 fn app() -> App {
@@ -415,7 +417,7 @@ fn close_windows_of(pid: u32) {
 /// 1280x860 fitted to its work area, read the way the app reads it.
 #[cfg(windows)]
 fn default_size_here() -> (f64, f64) {
-    use prune_app::window_state::{self, win32};
+    use prune_app::window_state::win32;
     use windows::Win32::UI::HiDpi::{DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2, SetThreadDpiAwarenessContext};
     // The app is per-monitor aware; a test thread is not, and would read a
     // scaled work area.
@@ -425,6 +427,43 @@ fn default_size_here() -> (f64, f64) {
     let primary = displays.iter().find(|d| d.primary).or(displays.first()).expect("a display");
     let r = window_state::centred_in(&primary.work_dip(), window_state::DEFAULT_WIDTH, window_state::DEFAULT_HEIGHT);
     (r.width, r.height)
+}
+
+/// The client size (physical pixels) and DPI of `pid`'s main window: its
+/// visible top-level window that is not a tool window.
+#[cfg(windows)]
+fn main_window_client(pid: u32) -> Option<((u32, u32), u32)> {
+    use windows::Win32::Foundation::{HWND, LPARAM, RECT};
+    use windows::Win32::UI::HiDpi::GetDpiForWindow;
+    use windows::Win32::UI::WindowsAndMessaging::{
+        EnumWindows, GWL_EXSTYLE, GetClientRect, GetWindowLongW, GetWindowThreadProcessId, IsWindowVisible,
+        WS_EX_TOOLWINDOW,
+    };
+    use windows::core::BOOL;
+
+    struct Probe {
+        pid: u32,
+        found: Option<((u32, u32), u32)>,
+    }
+    unsafe extern "system" fn each(hwnd: HWND, lparam: LPARAM) -> BOOL {
+        // SAFETY: `lparam` is the `&mut Probe` below, alive for the call.
+        let probe = unsafe { &mut *(lparam.0 as *mut Probe) };
+        let mut owner = 0u32;
+        let mut r = RECT::default();
+        // SAFETY: out-pointers to locals; `hwnd` comes from EnumWindows.
+        unsafe {
+            GetWindowThreadProcessId(hwnd, Some(&mut owner));
+            let tool = GetWindowLongW(hwnd, GWL_EXSTYLE) as u32 & WS_EX_TOOLWINDOW.0 != 0;
+            if owner == probe.pid && !tool && IsWindowVisible(hwnd).as_bool() && GetClientRect(hwnd, &mut r).is_ok() {
+                probe.found = Some((((r.right - r.left) as u32, (r.bottom - r.top) as u32), GetDpiForWindow(hwnd)));
+            }
+        }
+        true.into()
+    }
+    let mut probe = Probe { pid, found: None };
+    // SAFETY: the callback only touches `probe`, which outlives the call.
+    let _ = unsafe { EnumWindows(Some(each), LPARAM(&raw mut probe as isize)) };
+    probe.found
 }
 
 fn read_json(path: &Path) -> serde_json::Value {
@@ -465,6 +504,12 @@ fn closing_saves_window_state_in_3x_shape() {
     assert!(frame.is_some(), "never drew a frame");
     let ms: f64 = frame.unwrap().trim().trim_start_matches("first-frame-ms=").parse().expect("a number");
     assert!(ms > 0.0);
+    // The headless render draws what this window's content really is.
+    let (client, dpi) = main_window_client(child.id()).expect("the main window");
+    if default_size_here() == (window_state::DEFAULT_WIDTH, window_state::DEFAULT_HEIGHT) {
+        let want = prune_app::render::default_client_px(dpi as f32 / 96.0);
+        assert_eq!(client, (want.width, want.height), "client area at {dpi} dpi");
+    }
 
     close_windows_of(child.id());
     let status = wait_exit(&mut child, Duration::from_secs(10));

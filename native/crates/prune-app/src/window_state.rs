@@ -277,6 +277,21 @@ pub mod win32 {
         }
     }
 
+    /// The frame (caption and borders) Windows puts around the window's
+    /// client area at `dpi`, as `(width, height)` in physical pixels.
+    /// winit's decorated, resizable window has `WS_OVERLAPPEDWINDOW`'s
+    /// frame. Needs no window, so the headless render can use it.
+    pub fn frame_px(dpi: u32) -> (u32, u32) {
+        use windows::Win32::UI::HiDpi::AdjustWindowRectExForDpi;
+        use windows::Win32::UI::WindowsAndMessaging::{WINDOW_EX_STYLE, WS_OVERLAPPEDWINDOW};
+        let mut r = RECT::default();
+        // SAFETY: `r` is a local the call fills in.
+        if unsafe { AdjustWindowRectExForDpi(&mut r, WS_OVERLAPPEDWINDOW, false, WINDOW_EX_STYLE(0), dpi) }.is_err() {
+            return (0, 0);
+        }
+        ((r.right - r.left).max(0) as u32, (r.bottom - r.top).max(0) as u32)
+    }
+
     /// The work area (DIP) of the monitor the window is on.
     pub fn work_of(hwnd: HWND) -> Option<Rect> {
         // SAFETY: `hwnd` is this process's live window.

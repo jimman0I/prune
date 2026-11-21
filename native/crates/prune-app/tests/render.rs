@@ -147,10 +147,18 @@ fn tofu_check_catches_boxes() {
 }
 
 #[test]
-fn scale_2_doubles_size() {
+fn renders_the_default_windows_client_area_at_each_scale() {
     let one = render::render_screen(Screen::Dashboard, &opts("en", 1.0));
     let two = render::render_screen(Screen::Dashboard, &opts("en", 2.0));
-    assert_eq!((two.width, two.height), (one.width * 2, one.height * 2));
+    for (img, scale) in [(&one, 1.0), (&two, 2.0)] {
+        let want = render::default_client_px(scale);
+        assert_eq!((img.width, img.height), (want.width, want.height), "at {scale}x");
+    }
+    // About double: the frame Windows takes off does not scale exactly.
+    let near = |a: u32, b: u32| a.abs_diff(b) <= 40;
+    assert!(near(two.width, one.width * 2) && near(two.height, one.height * 2), "{}x{}", two.width, two.height);
+    // The outer window is 1280x860 DIP; the frame comes off it.
+    assert!(one.width < 1280 && one.height < 860 && one.width >= 1200 && one.height >= 780);
 }
 
 #[test]

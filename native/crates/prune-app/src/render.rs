@@ -80,8 +80,24 @@ fn register_fonts() {
     });
 }
 
-/// One screen, drawn at the default window size (1280x860 DIP) times the
-/// scale.
+/// The client area of the default window at `scale`, in physical pixels:
+/// the 1280x860 DIP window (3.x's bounds, and so the app's, are the outer
+/// rectangle) less the frame Windows draws around it at that DPI. That is
+/// the size the real window's content has on a display with room for the
+/// default (on a smaller one the window is fitted to the work area, see
+/// [`crate::window_state::centred_in`]). Off Windows there is no frame to
+/// take off, so the render is the outer size.
+pub fn default_client_px(scale: f32) -> Size<u32> {
+    #[cfg(windows)]
+    let (fw, fh) = crate::window_state::win32::frame_px((96.0 * scale).round() as u32);
+    #[cfg(not(windows))]
+    let (fw, fh) = (0, 0);
+    let outer = |dip: f64| (dip * f64::from(scale)).round() as u32;
+    Size::new(outer(DEFAULT_WIDTH).saturating_sub(fw), outer(DEFAULT_HEIGHT).saturating_sub(fh))
+}
+
+/// One screen, drawn at the default window's client size (see
+/// [`default_client_px`]) at the scale.
 pub fn render_screen(screen: Screen, o: &Options) -> Image {
     register_fonts();
     let mut settings = Settings::default();
@@ -95,8 +111,7 @@ pub fn render_screen(screen: Screen, o: &Options) -> Image {
         let _ = app.update(Message::RailHover(true));
     }
 
-    let logical = Size::new(DEFAULT_WIDTH as f32, DEFAULT_HEIGHT as f32);
-    let physical = Size::new((logical.width * o.scale).round() as u32, (logical.height * o.scale).round() as u32);
+    let physical = default_client_px(o.scale);
     let viewport = Viewport::with_physical_size(physical, o.scale);
     let logical = viewport.logical_size();
 
