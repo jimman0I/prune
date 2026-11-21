@@ -436,8 +436,8 @@ impl App {
                 // Created now, not at boot, so it never delays the first frame.
                 self.tray = Tray::create();
                 self.tray_present = self.tray.is_some();
-                eprintln!("tray-created={}", self.tray_present);
                 if let Some(start) = self.trace_startup {
+                    eprintln!("tray-created={}", self.tray_present);
                     eprintln!("first-frame-ms={:.1}", start.elapsed().as_secs_f64() * 1000.0);
                 }
             }
