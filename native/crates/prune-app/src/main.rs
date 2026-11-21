@@ -14,8 +14,25 @@ fn view(app: &App, _window: iced::window::Id) -> iced::Element<'_, prune_app::ap
     app.view()
 }
 
+/// `PRUNE_TRACE_STARTUP=1`: how long since the process started.
+fn trace(started: Option<Instant>, phase: &str) {
+    if let Some(start) = started {
+        eprintln!("trace {phase}-ms={:.1}", start.elapsed().as_secs_f64() * 1000.0);
+    }
+}
+
 fn main() -> iced::Result {
     let started = Instant::now();
+    let traced = std::env::var_os("PRUNE_TRACE_STARTUP").is_some_and(|v| v == "1").then_some(started);
+    // The system font scan (cosmic-text reading every installed font) is
+    // the largest single cost before the first frame. Started here, on its
+    // own thread, it runs while the window is made; whoever needs the font
+    // system first waits for this one scan rather than starting its own.
+    std::thread::spawn(move || {
+        trace(traced, "font-scan-start");
+        let _ = iced::advanced::graphics::text::font_system();
+        trace(traced, "font-scan-done");
+    });
     let args: Vec<String> = std::env::args().collect();
     // A render needs no window and must not claim the single-instance
     // mutex, so it runs beside a Prune that is open.
@@ -43,7 +60,7 @@ fn main() -> iced::Result {
         window_state_path: Some(state_path),
         os_light: prune_app::theme::os_prefers_light(),
         reduced_motion: motion::reduced_motion(),
-        trace_startup: (std::env::var_os("PRUNE_TRACE_STARTUP").is_some_and(|v| v == "1")).then_some(started),
+        trace_startup: traced,
     };
     // iced asks for a boot function it may call more than once in
     // principle; it runs once, and takes the startup state when it does.
@@ -60,6 +77,7 @@ fn main() -> iced::Result {
         App::boot(startup, rx, tray_rx)
     };
 
+    trace(traced, "daemon");
     let mut program = iced::daemon(boot, App::update, view)
         .title(|_: &App, _| String::from("Prune"))
         .subscription(App::subscription)
