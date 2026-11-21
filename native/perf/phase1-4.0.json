@@ -1,0 +1,76 @@
+{
+  "exe": "C:\\Games\\shortcuts\\lol\\prune\\native\\target\\release\\Prune.exe",
+  "version": "unknown",
+  "method": {
+    "warmup_runs_discarded": 1,
+    "settle_s": 30,
+    "cpu_window_s": 10,
+    "logical_cpus": 16,
+    "existing_instances_closed": 0,
+    "cpu_pct_is": "share of the whole machine, summed over the process tree",
+    "working_set_is": "summed over the process tree; shared pages count once per process"
+  },
+  "runs": [
+    {
+      "first_window_ms": 272.4,
+      "working_set_mb": 41.9,
+      "private_mb": 13.1,
+      "cpu_pct": 0.107,
+      "cpu_ms": 171.9,
+      "cpu_since_launch_ms": 484.4,
+      "processes": 1,
+      "first_frame_ms": 462.5
+    },
+    {
+      "first_window_ms": 197.7,
+      "working_set_mb": 41.9,
+      "private_mb": 13.0,
+      "cpu_pct": 0.0,
+      "cpu_ms": 0.0,
+      "cpu_since_launch_ms": 328.1,
+      "processes": 1,
+      "first_frame_ms": 352.6
+    },
+    {
+      "first_window_ms": 224.6,
+      "working_set_mb": 42.3,
+      "private_mb": 13.1,
+      "cpu_pct": 0.0,
+      "cpu_ms": 0.0,
+      "cpu_since_launch_ms": 343.8,
+      "processes": 1,
+      "first_frame_ms": 357.8
+    },
+    {
+      "first_window_ms": 249.7,
+      "working_set_mb": 42.4,
+      "private_mb": 13.0,
+      "cpu_pct": 0.0,
+      "cpu_ms": 0.0,
+      "cpu_since_launch_ms": 343.8,
+      "processes": 1,
+      "first_frame_ms": 407.7
+    },
+    {
+      "first_window_ms": 224.2,
+      "working_set_mb": 41.9,
+      "private_mb": 13.1,
+      "cpu_pct": 0.0,
+      "cpu_ms": 0.0,
+      "cpu_since_launch_ms": 312.5,
+      "processes": 1,
+      "first_frame_ms": 363.6
+    }
+  ],
+  "median": {
+    "first_window_ms": 224.6,
+    "working_set_mb": 41.9,
+    "private_mb": 13.1,
+    "cpu_pct": 0.0,
+    "cpu_ms": 0.0,
+    "cpu_since_launch_ms": 343.8,
+    "processes": 1.0,
+    "first_frame_ms": 363.6
+  },
+  "invalid_runs": []
+}

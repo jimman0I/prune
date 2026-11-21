@@ -1,6 +1,6 @@
 [workspace]
 resolver = "3"
-members = ["crates/prune-core", "crates/prune-app", "crates/prune-cli"]
+members = ["crates/prune-core", "crates/prune-app", "crates/prune-cli", "tools/measure"]
 
 [workspace.package]
 version = "4.0.0"
