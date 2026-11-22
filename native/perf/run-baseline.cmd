@@ -12,14 +12,19 @@ rem killed 6 times (1 discarded warm-up + 5 measured), about 45 s each,
 rem roughly 5 minutes in all, and one Prune is started again at the end
 rem (--restore). Do not touch Prune during the run.
 rem
-rem Run it with no arguments. Optional: set PRUNE_EXE to a different exe.
+rem Run it with no arguments, or "run-baseline.cmd elevated" when Prune is set
+rem to always run as administrator (one UAC prompt; the task then runs at the
+rem highest level). Optional: set PRUNE_EXE to a different exe, OUT to a
+rem different result file.
 
 setlocal
 set "HERE=%~dp0"
 set "MEASURE=%HERE%..\target\release\prune-measure.exe"
 if not defined PRUNE_EXE set "PRUNE_EXE=%LOCALAPPDATA%\Programs\Prune\Prune.exe"
-set "OUT=%HERE%baseline-3.2.0.json"
+if not defined OUT set "OUT=%HERE%baseline-3.2.0.json"
 set "TASK=PruneMeasureBaseline"
+set "LEVEL=Limited"
+if /i "%~1"=="elevated" set "LEVEL=Highest"
 
 if not exist "%MEASURE%" (
     echo Build the tool first: cargo build --release -p prune-measure   ^(in native^)
@@ -34,5 +39,5 @@ rem Resolve the tool path fully; the task's working directory is not ours.
 for %%I in ("%MEASURE%") do set "MEASURE=%%~fI"
 for %%I in ("%OUT%") do set "OUT=%%~fI"
 
-powershell -NoProfile -ExecutionPolicy Bypass -File "%HERE%run-baseline.ps1" -Measure "%MEASURE%" -Exe "%PRUNE_EXE%" -Out "%OUT%" -TaskName "%TASK%"
+powershell -NoProfile -ExecutionPolicy Bypass -File "%HERE%run-baseline.ps1" -Measure "%MEASURE%" -Exe "%PRUNE_EXE%" -Out "%OUT%" -TaskName "%TASK%" -RunLevel %LEVEL%
 exit /b %ERRORLEVEL%

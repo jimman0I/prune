@@ -1,0 +1,70 @@
+{
+  "exe": "C:\\Users\\jimmanol\\AppData\\Local\\Programs\\Prune\\Prune.exe",
+  "version": "3.2.1",
+  "method": {
+    "warmup_runs_discarded": 1,
+    "settle_s": 30,
+    "cpu_window_s": 10,
+    "logical_cpus": 16,
+    "existing_instances_closed": 0,
+    "cpu_pct_is": "share of the whole machine, summed over the process tree",
+    "working_set_is": "summed over the process tree; shared pages count once per process"
+  },
+  "runs": [
+    {
+      "first_window_ms": 540.0,
+      "working_set_mb": 451.9,
+      "private_mb": 319.6,
+      "cpu_pct": 3.583,
+      "cpu_ms": 5750.0,
+      "cpu_since_launch_ms": 49250.0,
+      "processes": 6
+    },
+    {
+      "first_window_ms": 540.9,
+      "working_set_mb": 473.3,
+      "private_mb": 347.4,
+      "cpu_pct": 3.812,
+      "cpu_ms": 6125.0,
+      "cpu_since_launch_ms": 53031.3,
+      "processes": 6
+    },
+    {
+      "first_window_ms": 543.1,
+      "working_set_mb": 454.0,
+      "private_mb": 322.4,
+      "cpu_pct": 3.329,
+      "cpu_ms": 5343.8,
+      "cpu_since_launch_ms": 47656.3,
+      "processes": 6
+    },
+    {
+      "first_window_ms": 521.1,
+      "working_set_mb": 448.3,
+      "private_mb": 326.1,
+      "cpu_pct": 3.581,
+      "cpu_ms": 5750.0,
+      "cpu_since_launch_ms": 48484.4,
+      "processes": 6
+    },
+    {
+      "first_window_ms": 597.4,
+      "working_set_mb": 471.2,
+      "private_mb": 349.7,
+      "cpu_pct": 3.764,
+      "cpu_ms": 6046.9,
+      "cpu_since_launch_ms": 50156.3,
+      "processes": 6
+    }
+  ],
+  "median": {
+    "first_window_ms": 540.9,
+    "working_set_mb": 454.0,
+    "private_mb": 326.1,
+    "cpu_pct": 3.583,
+    "cpu_ms": 5750.0,
+    "cpu_since_launch_ms": 49250.0,
+    "processes": 6.0
+  },
+  "invalid_runs": []
+}

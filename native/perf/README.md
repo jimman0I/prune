@@ -77,8 +77,11 @@ only when the run was clean; otherwise it is kept as
 first (`cargo build --release -p prune-measure` in `native`).
 
 It closes the running Prune and launches then kills it 6 times (about 45 s
-each, about 5 minutes), then starts Prune again. Not yet run: it needs the
-owner's go-ahead.
+each, about 5 minutes), then starts Prune again if one was running. When
+Prune is set to always run as administrator, run `run-baseline.cmd elevated`:
+it asks for administrator rights once and registers the task at the highest
+run level, so the launches inherit the rights instead of each needing a prompt.
+`OUT` picks a different result file.
 
 ## Phase 1 numbers
 
@@ -88,13 +91,23 @@ job-object method above and the system font scan moved off the UI thread
 (the earlier numbers, 224.6 ms first window and 363.6 ms first frame,
 timed winit's invisible message window and had the scan on the UI thread).
 
-| | 3.2.0 (Electron) | 4.0 (native) |
-|---|---|---|
-| first window | not yet measured | 324.9 ms |
-| first frame | n/a | 334.4 ms |
-| working set | not yet measured | 42.0 MB (private 13.1 MB) |
-| idle CPU | not yet measured | 0.000 % (about 359 ms CPU spent starting up) |
-| processes | not yet measured | 1 |
+| | 3.2.1 (Electron) | 4.0 (native) | 4.0 against 3.2.1 |
+|---|---|---|---|
+| first window | 540.9 ms | 324.9 ms | 40 % sooner |
+| first frame | n/a | 334.4 ms | |
+| working set | 454.0 MB (private 326.1 MB) | 42.0 MB (private 13.1 MB) | about 11x less (25x private) |
+| idle CPU | 3.583 % (5.75 s CPU in 10 s; 49 s CPU spent in its first 30 s) | 0.000 % (about 359 ms CPU spent starting up) | |
+| processes | 6 | 1 | |
+
+3.2.1 was measured on 2026-11-22 as installed on the development machine
+(`baseline-3.2.1.json`, 5 of 5 runs valid; runs 521 to 597 ms), elevated,
+because that copy is set to **Always run as administrator** and a limited
+session cannot start it (`run-baseline.cmd elevated`, one UAC prompt). 3.2.1
+carries the same Electron and app code as 3.2.0 for startup; the version in
+the plan's file name was simply the one installed when the plan was written.
+4.0 was measured not elevated. Idle CPU uses the same 10 s window for both;
+3.x is still busy 30 s after its window appears (the backend's first scans),
+which a person feels too, so it is counted as is.
 
 ### Against the 4.0 targets
 
@@ -113,4 +126,4 @@ timed winit's invisible message window and had the scan on the UI thread).
 - **Idle CPU: meets 0 %** (0.000 % over 10 s; the timer ticks about every
   15 ms, so read it with `cpu_ms`).
 
-4.0 runs: `phase1-4.0.json`. 3.x runs (when measured): `baseline-3.2.0.json`.
+4.0 runs: `phase1-4.0.json`. 3.x runs: `baseline-3.2.1.json`.

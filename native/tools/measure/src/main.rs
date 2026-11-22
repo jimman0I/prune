@@ -215,7 +215,7 @@ mod measure {
                 return Err(bad(
                     run,
                     "elevation_required",
-                    "the exe's manifest requires administrator rights, so it cannot be launched from a limited session; nothing was measured".into(),
+                    "Windows requires administrator rights to start this exe (its manifest, or the \"Run this program as administrator\" compatibility flag, which is what 3.x's Always run as administrator sets), so it cannot be launched from a limited session; run elevated (run-baseline.cmd elevated); nothing was measured".into(),
                 ));
             }
             Err(e) => return Err(bad(run, "launch_failed", e.to_string())),

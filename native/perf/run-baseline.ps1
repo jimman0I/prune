@@ -2,9 +2,13 @@ param(
     [Parameter(Mandatory)] [string] $Measure,
     [Parameter(Mandatory)] [string] $Exe,
     [Parameter(Mandatory)] [string] $Out,
-    [string] $TaskName = 'PruneMeasureBaseline'
+    [string] $TaskName = 'PruneMeasureBaseline',
+    # Highest when Prune is set to always run as administrator: a limited task
+    # cannot start it (ERROR_ELEVATION_REQUIRED). Registering a Highest task
+    # needs this script itself to be elevated; run-baseline.cmd elevated does that.
+    [ValidateSet('Limited', 'Highest')] [string] $RunLevel = 'Limited'
 )
-# Registers a one-shot Interactive / Limited scheduled task for the current
+# Registers a one-shot Interactive scheduled task (Limited, or Highest) for the current
 # user that runs prune-measure in the real desktop session, waits until the
 # task has run AND finished, prints the result, and unregisters the task.
 # The result is written beside $Out and moved into place only on success, so
@@ -12,14 +16,37 @@ param(
 # while the task is still running, the task is stopped too.
 
 $ErrorActionPreference = 'Stop'
-$me  = [System.Security.Principal.WindowsIdentity]::GetCurrent().Name
+
+# Highest needs an elevated caller. Ask once (one UAC prompt), run this same
+# script elevated with the same arguments, wait for it, and show what it wrote.
+$elevated = ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole(
+    [Security.Principal.WindowsBuiltInRole]::Administrator)
+if ($RunLevel -eq 'Highest' -and -not $elevated) {
+    $q = { param($v) '"' + $v + '"' }
+    $argv = @('-NoProfile', '-ExecutionPolicy', 'Bypass', '-File', (& $q $PSCommandPath),
+        '-Measure', (& $q $Measure), '-Exe', (& $q $Exe), '-Out', (& $q $Out),
+        '-TaskName', $TaskName, '-RunLevel', 'Highest')
+    Write-Host 'Asking Windows for administrator rights once (Prune is set to always run as administrator) ...'
+    try {
+        $p = Start-Process powershell.exe -Verb RunAs -ArgumentList $argv -WindowStyle Minimized -Wait -PassThru
+    } catch {
+        Write-Host 'The administrator prompt was declined; nothing was measured.'
+        exit 1
+    }
+    $logFile = [System.IO.Path]::ChangeExtension($Out, '.log')
+    if (Test-Path $logFile) { Get-Content $logFile }
+    if (Test-Path $Out) { Write-Host "Result: $Out" }
+    exit $p.ExitCode
+}
+
+$me  =[System.Security.Principal.WindowsIdentity]::GetCurrent().Name
 $log = [System.IO.Path]::ChangeExtension($Out, '.log')
 $tmp = "$Out.tmp"
 
 # cmd /c so stderr (the progress lines) lands in a file we can show.
 $arg = '/c ""{0}" --exe "{1}" --runs 5 --settle 30 --kill-existing --restore --out "{2}" 2> "{3}""' -f $Measure, $Exe, $tmp, $log
 $action    = New-ScheduledTaskAction -Execute 'cmd.exe' -Argument $arg
-$principal = New-ScheduledTaskPrincipal -UserId $me -LogonType Interactive -RunLevel Limited
+$principal = New-ScheduledTaskPrincipal -UserId $me -LogonType Interactive -RunLevel $RunLevel
 $settings  = New-ScheduledTaskSettingsSet -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries -ExecutionTimeLimit (New-TimeSpan -Minutes 20)
 
 # 267009 = running, 267011 = never run yet, 267010 = disabled, 267008 = ready.
