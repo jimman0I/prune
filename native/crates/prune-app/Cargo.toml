@@ -13,7 +13,7 @@ path = "src/main.rs"
 prune-core.workspace = true
 # `advanced` for the root event listener (keyboard, wheel and window events
 # reach the app without a subscription), `svg` for the rail's line icons.
-iced = { workspace = true, features = ["advanced", "svg"] }
+iced = { workspace = true, features = ["advanced", "svg", "image-without-codecs"] }
 serde_json.workspace = true
 png.workspace = true
 # The renderer behind iced's tiny-skia feature, for `render`: it draws a

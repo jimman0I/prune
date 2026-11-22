@@ -2,6 +2,7 @@
 //! it runs on lives here so tests can reach it.
 
 pub mod app;
+pub mod aurora;
 pub mod listener;
 pub mod motion;
 pub mod overflow;

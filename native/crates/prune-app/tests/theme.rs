@@ -61,6 +61,9 @@ fn fields(p: &Palette) -> Vec<(&'static str, Color)> {
         ("scrim", p.scrim),
         ("glass-bg", p.glass_bg),
         ("glass-border", p.glass_border),
+        ("aurora-1", p.aurora_1),
+        ("aurora-2", p.aurora_2),
+        ("aurora-3", p.aurora_3),
     ]
 }
 
@@ -70,7 +73,7 @@ fn palette_matches_index_css() {
     for (dark, selector) in [(true, ":root"), (false, ":root[data-theme='light']")] {
         let b = block(&css, selector);
         let fs = fields(palette(dark));
-        assert_eq!(fs.len(), 22);
+        assert_eq!(fs.len(), 25);
         for (name, got) in fs {
             let want = parse(&var(&b, name));
             assert!(close(got, want), "{selector} --{name}: rust {got:?} != css {want:?}");

@@ -126,4 +126,14 @@ which a person feels too, so it is counted as is.
 - **Idle CPU: meets 0 %** (0.000 % over 10 s; the timer ticks about every
   15 ms, so read it with `cpu_ms`).
 
+### The background washes (2026-11-22)
+
+3.x's teal washes behind every screen were added after these numbers
+(`crates/prune-app/src/aurora.rs`). A/B against the same build without them,
+5 runs each, rounds interleaved on one scratch profile, settle 15 s: first
+frame 254 ms with, 256 ms without (the machine's own speed moved more than
+that between rounds: the same exes gave 177 to 192 ms in a quiet round), and
+private bytes up 1.5 to 2.2 MB (13.9 to 15.4-16.1 MB) for the pixels. Idle
+CPU stays 0 %.
+
 4.0 runs: `phase1-4.0.json`. 3.x runs: `baseline-3.2.1.json`.

@@ -18,6 +18,7 @@ use serde_json::Value;
 use prune_core::i18n::Catalog;
 use prune_core::settings::{self, Settings, ThemeChoice};
 
+use crate::aurora;
 use crate::listener::listener;
 use crate::motion::{STANDARD, Tween};
 use crate::rail::{self, COLLAPSED_WIDTH, EXPANDED_WIDTH, Rail};
@@ -721,7 +722,10 @@ impl App {
         );
         // 3.x: the bar spans the window above everything, the rail too.
         let body = stack![page, rail].width(Length::Fill).height(Length::Fill);
-        let root = container(column![bar, body].width(Length::Fill).height(Length::Fill))
+        // 3.x's washes are fixed to the whole window, under the bar as well
+        // (which is opaque, so they show below it only).
+        let washes = aurora::aurora(p.bg_base, [p.aurora_1, p.aurora_2, p.aurora_3]);
+        let root = container(stack![washes, column![bar, body].width(Length::Fill).height(Length::Fill)])
             .width(Length::Fill)
             .height(Length::Fill)
             .style(move |_| container::Style {

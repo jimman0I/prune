@@ -204,7 +204,17 @@ fn draws_the_3x_title_bar() {
         near(pixel(&img, 600, 38), p.bg_base, &format!("{t}: bar ground, last row above the line"));
         near(pixel(&img, 600, 39), border, &format!("{t}: the bottom border"));
         near(pixel(&img, 200, 39), border, &format!("{t}: the border runs across"));
-        near(pixel(&img, 600, 40), p.bg_base, &format!("{t}: the page below the bar"));
+        // Below the bar the page shows 3.x's teal washes over the ground.
+        let size = iced::Size::new(img.width as f32, img.height as f32);
+        let washes = [p.aurora_1, p.aurora_2, p.aurora_3];
+        for (x, y) in [(600, 40), (140, 120), (w - 60, img.height - 60), (w / 2, img.height / 2)] {
+            let want = prune_app::aurora::colour_at(p.bg_base, size, (x as f32 + 0.5, y as f32 + 0.5), washes);
+            near(pixel(&img, x, y), want, &format!("{t}: the page at ({x}, {y})"));
+        }
+        if theme == ThemeChoice::Dark {
+            let tl = pixel(&img, 140, 120);
+            assert!(tl[2] > tl[0] + 10, "{t}: the top-left wash is teal: {tl:?}");
+        }
         near(pixel(&img, w - 20, 39), p.bg_base, &format!("{t}: the buttons cover the line"));
         assert_ne!(border.into_rgba8(), p.bg_base.into_rgba8(), "{t}: the line is visible");
 
@@ -226,7 +236,9 @@ fn draws_the_3x_title_bar() {
     let p = prune_app::theme::palette(true);
     near(pixel(&two, 1200, 77), p.bg_base, "2x: ground");
     near(pixel(&two, 1200, 79), prune_app::titlebar::over(p.border_subtle, p.bg_base), "2x: line");
-    near(pixel(&two, 1200, 80), p.bg_base, "2x: page");
+    let logical = iced::Size::new(two.width as f32 / 2.0, two.height as f32 / 2.0);
+    let washes = [p.aurora_1, p.aurora_2, p.aurora_3];
+    near(pixel(&two, 1200, 80), prune_app::aurora::colour_at(p.bg_base, logical, (600.25, 40.25), washes), "2x: page");
 }
 
 #[test]

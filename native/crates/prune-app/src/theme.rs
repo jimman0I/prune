@@ -31,6 +31,10 @@ pub struct Palette {
     /// `.glass-panel`'s fill and edge (the nav rail, cards, dialogs).
     pub glass_bg: Color,
     pub glass_border: Color,
+    /// The three teal washes behind every screen (`body::before/::after`).
+    pub aurora_1: Color,
+    pub aurora_2: Color,
+    pub aurora_3: Color,
 }
 
 /// An opaque colour from a `#rrggbb` value.
@@ -65,6 +69,9 @@ static DARK: Palette = Palette {
     scrim: rgba(2, 8, 20, 0.62),
     glass_bg: rgba(9, 9, 11, 0.6),
     glass_border: rgba(255, 255, 255, 0.06),
+    aurora_1: rgba(24, 169, 194, 0.16),
+    aurora_2: rgba(24, 169, 194, 0.1),
+    aurora_3: rgba(24, 169, 194, 0.14),
 };
 
 static LIGHT: Palette = Palette {
@@ -90,6 +97,9 @@ static LIGHT: Palette = Palette {
     scrim: rgba(28, 25, 23, 0.32),
     glass_bg: rgba(255, 255, 255, 0.72),
     glass_border: rgba(28, 25, 23, 0.08),
+    aurora_1: rgba(17, 114, 141, 0.05),
+    aurora_2: rgba(17, 114, 141, 0.04),
+    aurora_3: rgba(17, 114, 141, 0.05),
 };
 
 pub fn palette(dark: bool) -> &'static Palette {
