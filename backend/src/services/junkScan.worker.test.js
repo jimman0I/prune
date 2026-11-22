@@ -27,7 +27,8 @@ beforeEach(() => {
   process.env.UNREVO_QUARANTINE_ROOT = join(root, 'data', 'quarantine');
   delete process.env.UNREVO_CLEAN_IN_THREAD;
 });
-afterEach(() => { rmSync(root, { recursive: true, force: true }); });
+// Deleting the trees is slow on CI's Windows runners; the default 30 s is not enough.
+afterEach(() => { rmSync(root, { recursive: true, force: true }); }, 120000);
 
 const OLD = new Date(Date.now() - 100 * 3600_000);
 function tree(name, count) {
@@ -60,14 +61,25 @@ describe('the Junk files scan on the worker', () => {
   });
 
   it('ends the walk promptly on Stop and says it was stopped', async () => {
-    const dir = tree('big', 30000);
+    // Stop the moment the first batch arrives, so the walk is certainly
+    // mid-way however fast the machine is. (It used to stop on a 50 ms timer
+    // over 30,000 files, which took a minute just to create and delete on
+    // CI's Windows runners and timed out there.)
+    const dir = tree('big', 4000);
     const controller = new AbortController();
-    const started = Date.now();
-    const promise = scanJunk(job([dir]), { signal: controller.signal });
-    setTimeout(() => controller.abort(), 50);
-    const summary = await promise;
+    let stoppedAt = 0;
+    let relayed = 0;
+    const summary = await scanJunk(job([dir]), {
+      signal: controller.signal,
+      onFiles: (batch) => {
+        relayed += batch.length;
+        if (!stoppedAt) { stoppedAt = Date.now(); controller.abort(); }
+      }
+    });
     expect(summary).toEqual({ aborted: true });
-    expect(Date.now() - started).toBeLessThan(2500);
+    expect(stoppedAt).toBeGreaterThan(0);
+    expect(relayed).toBeLessThan(2000);
+    expect(Date.now() - stoppedAt).toBeLessThan(2500);
   }, 60000);
 
   it('removes the ticked files on the worker, into the Quarantine folder it was told about', async () => {

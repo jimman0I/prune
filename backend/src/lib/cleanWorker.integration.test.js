@@ -37,7 +37,8 @@ beforeEach(() => {
   // These tests are about the worker: the suite-wide in-thread switch is off here.
   delete process.env.UNREVO_CLEAN_IN_THREAD;
 });
-afterEach(() => { rmSync(root, { recursive: true, force: true }); });
+// Deleting the 20,000-file trees is slow on CI's Windows runners.
+afterEach(() => { rmSync(root, { recursive: true, force: true }); }, 120000);
 
 /** `count` small files spread over a few folders, `bytes` each. */
 function tree(name, count, bytes = 10) {
@@ -175,7 +176,8 @@ describe('Stop', () => {
     expect(summary.aborted).toBe(true);
     // The synchronous walk of 20,000 files takes seconds; Stop did not wait for it.
     expect(Date.now() - started).toBeLessThan(2500);
-  }, 20000);
+    // Making 20,000 files takes most of a minute on CI's Windows runners.
+  }, 120000);
 
   it('lets the rule in flight finish and does not start the next one', async () => {
     rules(rule('first', tree('first', 8000, 1)), rule('second', tree('second', 400, 1)));
